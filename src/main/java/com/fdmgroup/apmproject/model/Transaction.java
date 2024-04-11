@@ -26,6 +26,14 @@ public class Transaction {
 	private String merchantCategoryCode;
 	@Column(name = "Transaction Date")
 	private Date transactionDate;
+	@Column(name = "Transaction Type")
+	private String transactionType;
+	@Column(name = "Transaction Amount")
+	private long transactionAmount;
+	@Column(name = "Recipient Account Number")
+	private String recipientAccountNumber;
+	@Column(name = "Cashback")
+	private double cashback;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -40,7 +48,7 @@ public class Transaction {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Reward ID")
-	private Reward transactionReward;
+	private MerchantCategoryCode transactionReward;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -68,6 +76,38 @@ public class Transaction {
 		this.merchantCategoryCode = merchantCategoryCode;
 	}
 
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
+	}
+	
+	public long getTransactionAmount() {
+		return transactionAmount;
+	}
+
+	public void setTransactionAmount(long transactionAmount) {
+		this.transactionAmount = transactionAmount;
+	}
+	
+	public String getRecipientAccountNumber() {
+		return recipientAccountNumber;
+	}
+
+	public void setRecipientAccountNumber(String recipientAccountNumber) {
+		this.recipientAccountNumber = recipientAccountNumber;
+	}
+	
+	public double getCashback() {
+		return cashback;
+	}
+
+	public void setCashback(double cashback) {
+		this.cashback = cashback;
+	}
+	
 	public Date getTransactionDate() {
 		return transactionDate;
 	}
@@ -92,11 +132,11 @@ public class Transaction {
 		this.transactionAccount = transactionAccount;
 	}
 
-	public Reward getTransactionReward() {
+	public MerchantCategoryCode getTransactionReward() {
 		return transactionReward;
 	}
 
-	public void setTransactionReward(Reward transactionReward) {
+	public void setTransactionReward(MerchantCategoryCode transactionReward) {
 		this.transactionReward = transactionReward;
 	}
 

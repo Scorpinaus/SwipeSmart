@@ -32,6 +32,8 @@ public class CreditCard {
 	private int cardLimit;
 	@Column(name = "Card Type")
 	private String cardType;
+	@Column(name = "Amount Used")
+	private double amountUsed;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -91,6 +93,14 @@ public class CreditCard {
 
 	public void setCardType(String cardType) {
 		this.cardType = cardType;
+	}
+	
+	public double getAmountUsed() {
+		return amountUsed;
+	}
+
+	public void setAmountUsed(double amountUsed) {
+		this.amountUsed = amountUsed;
 	}
 
 	public User getCreditCardUser() {

@@ -22,10 +22,10 @@ public class Status {
 	@Column(name = "Status Name")
 	private String statusName;
 
-	@OneToMany(mappedBy = "accountStatusId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "accountStatus", fetch = FetchType.EAGER)
 	private List<Account> accounts = new ArrayList<>();
 
-	@OneToMany(mappedBy = "creditCardStatusId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "creditCardStatus", fetch = FetchType.EAGER)
 	private List<CreditCard> creditCards = new ArrayList<>();
 
 	public Status(String statusName) {

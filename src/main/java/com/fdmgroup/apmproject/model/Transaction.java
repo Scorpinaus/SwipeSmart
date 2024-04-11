@@ -30,12 +30,12 @@ public class Transaction {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Credit Card ID")
-	private long transactionCreditCardId;
+	private CreditCard transactionCreditCard;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Account ID")
-	private long transactionAccountId;
+	private Account transactionAccount;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -76,20 +76,20 @@ public class Transaction {
 		this.transactionDate = transactionDate;
 	}
 
-	public long getTransactionCreditCardId() {
-		return transactionCreditCardId;
+	public CreditCard getTransactionCreditCard() {
+		return transactionCreditCard;
 	}
 
-	public void setTransactionCreditCardId(long transactionCreditCardId) {
-		this.transactionCreditCardId = transactionCreditCardId;
+	public void setTransactionCreditCard(CreditCard transactionCreditCard) {
+		this.transactionCreditCard = transactionCreditCard;
 	}
 
-	public long getTransactionAccountId() {
-		return transactionAccountId;
+	public Account getTransactionAccount() {
+		return transactionAccount;
 	}
 
-	public void setTransactionAccountId(long transactionAccountId) {
-		this.transactionAccountId = transactionAccountId;
+	public void setTransactionAccount(Account transactionAccount) {
+		this.transactionAccount = transactionAccount;
 	}
 
 	public Reward getTransactionReward() {

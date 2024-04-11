@@ -32,14 +32,14 @@ public class Account {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK User ID")
-	private long accountUserId;
+	private User accountUser;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Status ID")
-	private int accountStatusId;
+	private Status accountStatus;
 
-	@OneToMany(mappedBy = "transactionAccountId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "transactionAccount", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
 
 	public Account(String accountName, double balance) {
@@ -71,20 +71,20 @@ public class Account {
 		this.balance = balance;
 	}
 
-	public long getAccountUserId() {
-		return accountUserId;
+	public User getAccountUser() {
+		return accountUser;
 	}
 
-	public void setAccountUserId(long accountUserId) {
-		this.accountUserId = accountUserId;
+	public void setAccountUser(User accountUser) {
+		this.accountUser = accountUser;
 	}
 
-	public int getAccountStatusId() {
-		return accountStatusId;
+	public Status getAccountStatus() {
+		return accountStatus;
 	}
 
-	public void setAccountStatusId(int accountStatusId) {
-		this.accountStatusId = accountStatusId;
+	public void setAccountStatus(Status accountStatus) {
+		this.accountStatus = accountStatus;
 	}
 
 	public List<Transaction> getTransactions() {

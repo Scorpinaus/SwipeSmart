@@ -30,10 +30,10 @@ public class User {
 	@Column(name = "Last Name")
 	private String lastName;
 
-	@OneToMany(mappedBy = "creditCardUserId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "creditCardUser", fetch = FetchType.EAGER)
 	private List<CreditCard> creditCards = new ArrayList<>();
 
-	@OneToMany(mappedBy = "accountUserId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "accountUser", fetch = FetchType.EAGER)
 	private List<Account> accounts = new ArrayList<>();
 
 	public User(String username, String password, String address, String firstName, String lastName) {

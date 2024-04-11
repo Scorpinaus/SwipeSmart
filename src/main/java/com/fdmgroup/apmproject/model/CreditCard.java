@@ -36,14 +36,14 @@ public class CreditCard {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK User ID")
-	private long creditCardUserId;
+	private User creditCardUser;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Status ID")
-	private int creditCardStatusId;
+	private Status creditCardStatus;
 
-	@OneToMany(mappedBy = "transactionCreditCardId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "transactionCreditCard", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
 
 	public CreditCard(String creditCardNumber, String pin, int cardLimit, String cardType) {
@@ -93,20 +93,20 @@ public class CreditCard {
 		this.cardType = cardType;
 	}
 
-	public long getCreditCardUserId() {
-		return creditCardUserId;
+	public User getCreditCardUser() {
+		return creditCardUser;
 	}
 
-	public void setCreditCardUserId(long creditCardUserId) {
-		this.creditCardUserId = creditCardUserId;
+	public void setCreditCardUserId(User creditCardUser) {
+		this.creditCardUser = creditCardUser;
 	}
 
-	public int getCreditCardStatusId() {
-		return creditCardStatusId;
+	public Status getCreditCardStatus() {
+		return creditCardStatus;
 	}
 
-	public void setCreditCardStatusId(int creditCardStatusId) {
-		this.creditCardStatusId = creditCardStatusId;
+	public void setCreditCardStatus(Status creditCardStatus) {
+		this.creditCardStatus = creditCardStatus;
 	}
 
 	public List<Transaction> getTransactions() {

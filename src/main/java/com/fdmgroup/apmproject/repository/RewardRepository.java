@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.fdmgroup.apmproject.model.Reward;
 
 @Repository
-public interface RewardRepository extends JpaRepository<Reward, Long> {
+public interface RewardRepository extends JpaRepository<Reward, Integer> {
 
 }

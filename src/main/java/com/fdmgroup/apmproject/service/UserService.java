@@ -26,29 +26,29 @@ public class UserService {
 		Optional<User> returnedUser = userRepo.findByUsername(user.getUsername());
 		if (returnedUser.isEmpty()) {
 			userRepo.save(user);
-			logger.info("Customer successfully registered");
+			logger.info("User successfully registered");
 		} else {
-			logger.warn("Customer already exists");
+			logger.warn("User already exists");
 		}
 	}
 	
 	public void update(User user) {
 		Optional<User> returnedUser = userRepo.findByUsername(user.getUsername());
 		if (returnedUser.isEmpty()) {
-			logger.warn("Customer does not exist in database");
+			logger.warn("User does not exist in database");
 		} else {
 			userRepo.save(user);
-			logger.info("Customer successfully updated");
+			logger.info("User successfully updated");
 		}
 	}
 	
 	public User findCustomerById(long customerId) {
 		Optional<User> returnedUser = userRepo.findById(customerId);
 		if (returnedUser.isEmpty()) {
-			logger.warn("Could not find Customer in Database");
+			logger.warn("Could not find User in Database");
 			return null;
 		} else {
-			logger.info("Returning customer's details");
+			logger.info("Returning user's details");
 			return returnedUser.get();
 		}
 	}
@@ -56,22 +56,21 @@ public class UserService {
 	public User findCustomerByUsername(String username) {
 		Optional<User> returnedUser = userRepo.findByUsername(username);
 		if (returnedUser.isEmpty()) {
-			logger.warn("Could not find Customer in Database");
+			logger.warn("Could not find User in Database");
 			return null;
 		} else {
-			logger.info("Returning customer's details");
+			logger.info("Returning user's details");
 			return returnedUser.get();
 		}
 	}
 	
-	public void deleteById(long id) {
-		Optional<User> returnedUser = userRepo.findById(id);
-
+	public void deleteById(long userId) {
+		Optional<User> returnedUser = userRepo.findById(userId);
 		if (returnedUser.isEmpty()) {
-			logger.warn("Customer does not exist in database");
+			logger.warn("User does not exist in database");
 		} else {
-			userRepo.deleteById(id);
-			logger.info("Customer deleted from Database");
+			userRepo.deleteById(userId);
+			logger.info("User deleted from Database");
 		}
 	}
 }

@@ -53,11 +53,11 @@ public class CreditCard {
 		setCardType(cardType);
 	}
 
-	public long getCreditCard() {
+	public long getCreditCardId() {
 		return creditCardId;
 	}
 
-	public void setCreditCard(long creditCardId) {
+	public void setCreditCardId(long creditCardId) {
 		this.creditCardId = creditCardId;
 	}
 

@@ -28,6 +28,8 @@ public class Account {
 	private String accountName;
 	@Column(name = "Account Balance")
 	private double balance;
+	@Column(name = "Account Number")
+	private String accountNumber;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -42,9 +44,10 @@ public class Account {
 	@OneToMany(mappedBy = "transactionAccount", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
 
-	public Account(String accountName, double balance) {
+	public Account(String accountName, double balance, String accountNumber) {
 		setAccountName(accountName);
 		setBalance(balance);
+		setAccountNumber(accountNumber);
 	}
 
 	public long getAccountId() {
@@ -70,7 +73,15 @@ public class Account {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
+	
+	public String getAccountNumber() {
+		return accountName;
+	}
 
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+	
 	public User getAccountUser() {
 		return accountUser;
 	}

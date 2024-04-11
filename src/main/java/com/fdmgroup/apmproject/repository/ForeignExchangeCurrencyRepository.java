@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 
 @Repository
-public interface ForeignExchangeCurrencyRepository extends JpaRepository<ForeignExchangeCurrency, Long> {
+public interface ForeignExchangeCurrencyRepository extends JpaRepository<ForeignExchangeCurrency, Integer> {
 
 }

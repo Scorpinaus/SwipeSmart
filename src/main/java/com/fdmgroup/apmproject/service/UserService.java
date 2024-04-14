@@ -1,12 +1,11 @@
 package com.fdmgroup.apmproject.service;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.UserRepository;
@@ -15,13 +14,13 @@ import com.fdmgroup.apmproject.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private UserRepository userRepo;
-	
+
 	private static Logger logger = LogManager.getLogger(UserService.class);
-	
+
 	public UserService(UserRepository userRepo) {
 		this.userRepo = userRepo;
 	}
-	
+
 	public void persist(User user) {
 		Optional<User> returnedUser = userRepo.findByUsername(user.getUsername());
 		if (returnedUser.isEmpty()) {
@@ -31,7 +30,7 @@ public class UserService {
 			logger.warn("User already exists");
 		}
 	}
-	
+
 	public void update(User user) {
 		Optional<User> returnedUser = userRepo.findByUsername(user.getUsername());
 		if (returnedUser.isEmpty()) {
@@ -41,8 +40,8 @@ public class UserService {
 			logger.info("User successfully updated");
 		}
 	}
-	
-	public User findCustomerById(long customerId) {
+
+	public User findUserById(long customerId) {
 		Optional<User> returnedUser = userRepo.findById(customerId);
 		if (returnedUser.isEmpty()) {
 			logger.warn("Could not find User in Database");
@@ -52,8 +51,8 @@ public class UserService {
 			return returnedUser.get();
 		}
 	}
-	
-	public User findCustomerByUsername(String username) {
+
+	public User findUserByUsername(String username) {
 		Optional<User> returnedUser = userRepo.findByUsername(username);
 		if (returnedUser.isEmpty()) {
 			logger.warn("Could not find User in Database");
@@ -63,7 +62,7 @@ public class UserService {
 			return returnedUser.get();
 		}
 	}
-	
+
 	public void deleteById(long userId) {
 		Optional<User> returnedUser = userRepo.findById(userId);
 		if (returnedUser.isEmpty()) {

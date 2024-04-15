@@ -30,7 +30,7 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 		
-	private static Logger logger = LogManager.getLogger(AccountController.class);
+	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 	
 	public AccountController(AccountService accountService) {
 		this.accountService = accountService;
@@ -46,9 +46,9 @@ public class AccountController {
 			List<Account> userBankAccounts = currentUser.getAccounts();
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				logger.info("User is redirected to bank account dashboard");
+				LOGGER.info("User is redirected to bank account dashboard");
 			} else {
-				logger.info("User is redirected to bank account. User has no active bank accounts with the bank");
+				LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 			}
 			return "accountdashboard";
@@ -135,7 +135,7 @@ public class AccountController {
 	}
 	
 	@GetMapping("/bankaccount/create")
-	public String goToCreateBankAccountPage(Model model, HttpSession session) {
+	public String goToCreateBankAccountPage() {
 	
 		return "createbankaccount";
 	}
@@ -157,6 +157,72 @@ public class AccountController {
 		accountService.persist(accountCreated);
 		
 		return "redirect:/bankaccount/dashboard";
+	}
+	
+	@GetMapping("/bankaccount/transfer")
+	public String goToTransferPage(Model model, HttpSession session) {
+	
+		//Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+
+		// Get user id
+		long userId = currentUser.getUserId();
+
+		// get all the accounts owned by that user
+		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
+
+		// add user and account list to the model
+		model.addAttribute("user", currentUser);
+		model.addAttribute("AccountList", AccountList);
+
+		return "transfer";
+	}
+	
+	@PostMapping("/bankaccount/transfer")
+	public String transferMoney(	
+		@RequestParam("account") long accountId,	
+		@RequestParam("transferAmount") Double transferAmount,
+		@RequestParam("accountNumberTransferTo") String accountNumberTransferTo,
+		HttpSession session,
+		RedirectAttributes redirectAttributes)
+	{
+		
+		
+		//Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+		
+		// get the required accounts
+		Account accountFromBalance = accountService.findById(accountId);
+		
+				
+		if (accountFromBalance.getAccountNumber().equals(accountNumberTransferTo)){
+			
+			redirectAttributes.addAttribute("SameAccountError", "true");
+			LOGGER.info("SameAccount");
+			return "redirect:/bankaccount/transfer";
+		}
+		else if (accountFromBalance.getBalance() < transferAmount) {
+			redirectAttributes.addAttribute("InsufficientBalanceError", "true");
+			LOGGER.info("InsufficientBalance");
+			return "redirect:/bankaccount/transfer";
+		}
+		else {
+		System.out.println(accountFromBalance.getAccountNumber());
+		System.out.println(accountNumberTransferTo);
+		Account accountToBalance = accountService.findAccountByAccountNumber(accountNumberTransferTo);
+		
+			
+		// update the accounts' balance
+		accountFromBalance.setBalance(accountFromBalance.getBalance()-transferAmount);
+		accountService.update(accountFromBalance);
+		
+		accountToBalance.setBalance(accountToBalance.getBalance()+transferAmount);
+		accountService.update(accountToBalance);
+		
+		LOGGER.info("Transfer Success!");
+		
+		return "redirect:/bankaccount/dashboard";
+		}
 	}
 	
 	

@@ -1,5 +1,7 @@
 package com.fdmgroup.apmproject.service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
 
 
@@ -61,5 +64,45 @@ public class AccountService {
 			accountRepo.deleteById(accountId);
 			logger.info("Account deleted from Database");
 		}
+	}
+	
+	//Function that finds a bank account according to account Number.
+	public Account findAccountByAccountNumber(String accountNumber) {
+		Optional<Account> retrievedAccount = accountRepo.findByAccountNumber(accountNumber);
+		if (retrievedAccount.isEmpty()) {
+			logger.warn("Bank account does not exist in database");
+			return null;
+		}
+		else {
+		Account account = retrievedAccount.get();
+		return account;
+		}
+	}
+	
+	//Function that withdraws the amount from a specified bank account. It checks and updates if the bank account is sufficient, otherwise return false.
+	public boolean withdrawAccountByAmount(Long accountId, BigDecimal amount) {
+		//Retrieved Optional to check if retrievedAccount exists or not.
+		Optional<Account> retrievedAccount = accountRepo.findByAccountId(accountId);
+		if (retrievedAccount.isEmpty()) {
+			logger.warn("Bank account does not exist in database");
+			return false;
+		} else {
+			Account account = retrievedAccount.get();
+			BigDecimal currentBalance = BigDecimal.valueOf(account.getBalance());
+	int result = currentBalance.compareTo(amount);
+	if (result >= 0) {
+		logger.info("Bank account id"+ accountId + "has sufficient money for withdrawal");
+		BigDecimal finalBalance = currentBalance.subtract(amount);
+		double finalConvertedBalance = finalBalance.doubleValue();
+		account.setBalance(finalConvertedBalance);
+		this.update(account);
+		logger.info("Bank account id"+ accountId + "has sufficient money for withdrawal");
+		return true;
+	} else {
+		logger.info("Bank account id"+ accountId + "has insufficient money for withdrawal");
+		return false;
+	}
+		}
+		
 	}
 }

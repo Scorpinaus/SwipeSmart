@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Create Bank Account page</title>
+</head>
+<body>
+	<h1>Create Bank Account</h1>
+	<!--  Try changing the method to 'get' below -->
+	
+
+	<form method="post" action="/bankaccount/create">
+		<!-- Use the 'placeholder' tag to be more helpful -->
+		<input type="text" name="accountName" placeholder="Account Name">
+		<input type="number" name="initialDeposit" placeholder="initial deposit" step="0.01" required> 
+		<input type="submit" value="submit">
+	
+	</form>
+
+
+
+</body>
+</html> 

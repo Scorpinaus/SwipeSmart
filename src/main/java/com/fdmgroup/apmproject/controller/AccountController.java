@@ -108,7 +108,7 @@ public class AccountController {
 		//get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
 		
-		//add user and account list to the mode
+		//add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
 		
@@ -118,8 +118,8 @@ public class AccountController {
 	
 	@PostMapping("/bankaccount/deposit")
 	public String deposit(	@RequestParam("account") long accountId,
-            				@RequestParam("deposit amount") double depositAmount ,
-            				HttpServletRequest request) {
+            				@RequestParam("deposit amount") double depositAmount
+            				) {
 		
 		// get the required account
 		Account accountDeposited = accountService.findById(accountId);
@@ -135,16 +135,29 @@ public class AccountController {
 	}
 	
 	@GetMapping("/bankaccount/create")
-	public String createBankAccount(Model model, HttpSession session) {
-		//Get logged user
-		User currentUser = (User) session.getAttribute("loggedUser");
-				
-		//Get user id
-		long userId = currentUser.getUserId();		
-		
-		
-		
-		
+	public String goToCreateBankAccountPage(Model model, HttpSession session) {
+	
 		return "createbankaccount";
 	}
+	
+	@PostMapping("/bankaccount/create")
+	public String createBankAccount(	
+		@RequestParam("accountName") String accountName,
+		@RequestParam("initialDeposit") double initialDeposit,
+		HttpSession session)
+	{
+		//Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+		
+		
+		String accountnumber = accountService.generateUniqueAccountNumber();
+		
+		Account accountCreated = new Account(accountName,initialDeposit,accountnumber,currentUser);
+		
+		accountService.persist(accountCreated);
+		
+		return "redirect:/bankaccount/dashboard";
+	}
+	
+	
 }

@@ -3,6 +3,7 @@ package com.fdmgroup.apmproject.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -112,5 +113,10 @@ public class AccountService {
 	
 	public List<Account> getAllAccounts(){
 		return accountRepo.findAll();
+	}
+	
+	public String generateUniqueAccountNumber() {
+		String uuid = UUID.randomUUID().toString();
+		return uuid;
 	}
 }

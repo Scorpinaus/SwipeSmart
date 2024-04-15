@@ -1,6 +1,7 @@
 package com.fdmgroup.apmproject.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,6 +24,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	void updateUserDetails(@Param("username") String username, @Param("password") String password,
 			@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("address") String address);
 
-//	SELECT * FROM listOfAccounts WHERE `FK User ID` = 9;
-	
+Optional<Account> findByAccountNumber(String name);
+
+Optional<Account> findByAccountId(Long accountId);
+
 }

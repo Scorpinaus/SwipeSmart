@@ -34,6 +34,7 @@ public class Status {
 		setStatusName(statusName);
 	}
 	
+	// getters and setters
 	public int getStatusId() {
 		return statusId;
 	}

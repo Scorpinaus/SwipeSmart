@@ -15,7 +15,7 @@
 		<!-- Use the 'placeholder' tag to be more helpful -->
 
 	<select name="account">
-	<option th:each="account : ${listOfAccounts}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
+	<option th:each="account : ${AccountList}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
   	<option value="account1">Account 1</option>
   	<option value="account2">Account 2</option>
   	<option value="account3">Account 3</option>
@@ -23,8 +23,9 @@
 	</select>
 		
 		<input type="number" name="deposit amount" placeholder="deposit amount" step="0.01" required> 
-		<input type="text" name="DepositTo" placeholder="DepositTo">
+<!-- 		<input type="hidden" name="accountID" th:value="${account.accountId}" /> -->
 		<input type="submit" value="submit">
+	
 	</form>
 
 

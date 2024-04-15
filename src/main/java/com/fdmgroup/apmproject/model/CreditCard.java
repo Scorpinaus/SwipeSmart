@@ -50,11 +50,12 @@ public class CreditCard {
 	
 	public CreditCard() {};
 
-	public CreditCard(String creditCardNumber, String pin, int cardLimit, String cardType) {
+	public CreditCard(String creditCardNumber, String pin, int cardLimit, String cardType, Status status) {
 		setCreditCardNumber(creditCardNumber);
 		setPin(pin);
 		setCardLimit(cardLimit);
 		setCardType(cardType);
+		setCreditCardStatus(status);
 	}
 
 	public long getCreditCardId() {

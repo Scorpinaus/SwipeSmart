@@ -34,7 +34,7 @@ public class AccountController {
 		
 		model.addAttribute("user", currentUser);
 		
-		model.addAttribute("accounts", );
+		model.addAttribute("accounts" );
 		
 		return ("deposit");
 	}

@@ -3,11 +3,14 @@
 	<head>
 		<link rel="stylesheet" href="/dashboard.css">
 		<meta charset="UTF-8">
-		<title>Parcel Tracking Dashboard</title>
+		<title>User Dashboard</title>
 	</head>
 	<body>
 		<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
 		<div class="linkContainer">
+			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+			<a href="/usercards">Cards</a>
+			<a href="/bankaccount/dashboard">Accounts</a>
 			<a href="/logout">Logout</a>
 		</div>
 	</body>

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.repository.StatusRepository;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class StatusService {
 	@Autowired
@@ -52,6 +54,17 @@ public class StatusService {
 		}
 	}
 	
+	public Status findByStatusName(String statusName) {
+		Optional<Status> returnedStatus = statusRepo.findByStatusName(statusName);
+		if (returnedStatus.isEmpty()) {
+			logger.warn("Could not find Status in Database");
+			return null;
+		} else {
+			logger.info("Returning Status' details");
+			return returnedStatus.get();
+		}
+	}
+	
 	public void deleteById(int statusId) {
 		Optional<Status> returnedStatus = statusRepo.findById(statusId);
 		if (returnedStatus.isEmpty()) {
@@ -60,5 +73,15 @@ public class StatusService {
 			statusRepo.deleteById(statusId);
 			logger.info("Status deleted from Database");
 		}
+	}
+	
+	@PostConstruct
+	public void initStatus() {
+		Status status = new Status("Pending");
+		Status status2 = new Status("Approved");
+		Status status3 = new Status("Disabled");
+		persist(status);
+		persist(status2);
+		persist(status3);
 	}
 }

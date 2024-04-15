@@ -24,12 +24,12 @@ public class CreditCard {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Credit Card ID")
 	private long creditCardId;
-	@Column(name = "Credit Card Number")
+	@Column(name = "Credit Card Number", unique = true)
 	private String creditCardNumber;
 	@Column(name = "CVC/CVV")
 	private String pin;
 	@Column(name = "Credit Limit")
-	private int cardLimit;
+	private double cardLimit;
 	@Column(name = "Card Type")
 	private String cardType;
 	@Column(name = "Amount Used")
@@ -50,11 +50,13 @@ public class CreditCard {
 	
 	public CreditCard() {};
 
-	public CreditCard(String creditCardNumber, String pin, int cardLimit, String cardType) {
+	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed) {
 		setCreditCardNumber(creditCardNumber);
 		setPin(pin);
 		setCardLimit(cardLimit);
 		setCardType(cardType);
+		setCreditCardStatus(status);
+		setAmountUsed(amountUsed);
 	}
 
 	public long getCreditCardId() {
@@ -81,11 +83,11 @@ public class CreditCard {
 		this.pin = pin;
 	}
 
-	public int getCardLimit() {
+	public double getCardLimit() {
 		return cardLimit;
 	}
 
-	public void setCardLimit(int cardLimit) {
+	public void setCardLimit(double cardLimit) {
 		this.cardLimit = cardLimit;
 	}
 

@@ -24,10 +24,13 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Account ID")
 	private long accountId;
+	
 	@Column(name = "Account Name")
 	private String accountName;
+	
 	@Column(name = "Account Balance")
 	private double balance;
+	
 	@Column(name = "Account Number")
 	private String accountNumber;
 
@@ -46,10 +49,11 @@ public class Account {
 	
 	public Account() {};
 
-	public Account(String accountName, double balance, String accountNumber) {
+	public Account(String accountName, double balance, String accountNumber, User accountUser) {
 		setAccountName(accountName);
 		setBalance(balance);
 		setAccountNumber(accountNumber);
+		setAccountUser(accountUser);
 	}
 
 	public long getAccountId() {

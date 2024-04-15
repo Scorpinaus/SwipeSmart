@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApmProjectApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(ApmProjectApplication.class, args);
 	}
 }

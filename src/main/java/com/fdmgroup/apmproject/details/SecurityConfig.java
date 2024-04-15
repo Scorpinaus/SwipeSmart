@@ -40,11 +40,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/", "/register", "/login", "/login_error", "/*.css", "/*.png")
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/", "/register", "/login", "/login_error", "/*.css", "/*.png", "/*.js")
 						.permitAll().anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").failureUrl("/login_error")
 						.successHandler(authenticationSuccessHandlerSecurity))
-				.logout(logout -> logout.logoutSuccessUrl("/userlogout").permitAll());
+				.logout(logout -> logout.logoutSuccessUrl("/login").invalidateHttpSession(true).clearAuthentication(true).permitAll());
 
 		return http.build();
 	}

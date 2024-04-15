@@ -2,6 +2,7 @@ package com.fdmgroup.apmproject.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,9 +20,9 @@ public class MerchantCategoryCode {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Merchant Category Code ID")
 	private int merchantCategoryCodeId;
-	@Column(name = "Merchant Category Code Number")
-	private String merchantCategoryCodeNumber;
-	@Column(name = "Merchant Category")
+	@Column(name = "Merchant Category Code Number", unique = true)
+	private int merchantCategoryCodeNumber;
+	@Column(name = "Merchant Category", unique = true)
 	private String merchantCategory;
 
 	@OneToMany(mappedBy = "transactionReward", fetch = FetchType.EAGER)
@@ -29,12 +30,13 @@ public class MerchantCategoryCode {
 	
 	public MerchantCategoryCode() {};
 	
-	public MerchantCategoryCode(int merchantCategoryCodeId, String merchantCategoryCodeNumber, String merchantCategory) {
-		setMerchantCategoryCodeId(merchantCategoryCodeId);
+	public MerchantCategoryCode(int merchantCategoryCodeNumber, String merchantCategory) {
 		setMerchantCategoryCodeNumber(merchantCategoryCodeNumber);
 		setMerchantCategory(merchantCategory);
 	}
-
+	
+	
+	// getters and setters
 	public int getMerchantCategoryCodeId() {
 		return merchantCategoryCodeId;
 	}
@@ -43,11 +45,11 @@ public class MerchantCategoryCode {
 		this.merchantCategoryCodeId = merchantCategoryCodeId;
 	}
 
-	public String getMerchantCategoryCodeNumber() {
+	public int getMerchantCategoryCodeNumber() {
 		return merchantCategoryCodeNumber;
 	}
 
-	public void setMerchantCategoryCodeNumber(String merchantCategoryCodeNumber) {
+	public void setMerchantCategoryCodeNumber(int merchantCategoryCodeNumber) {
 		this.merchantCategoryCodeNumber = merchantCategoryCodeNumber;
 	}
 
@@ -66,4 +68,34 @@ public class MerchantCategoryCode {
 	public void setTransactions(Transaction transaction) {
 		this.transactions.add(transaction);
 	}
+	
+	// Override 
+	@Override
+	public String toString() {
+		return "MerchantCategoryCode [merchantCategoryCodeId=" + merchantCategoryCodeId
+				+ ", merchantCategoryCodeNumber=" + merchantCategoryCodeNumber + ", merchantCategory="
+				+ merchantCategory + ", transactions=" + transactions + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(merchantCategory, merchantCategoryCodeId, merchantCategoryCodeNumber, transactions);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MerchantCategoryCode other = (MerchantCategoryCode) obj;
+		return Objects.equals(merchantCategory, other.merchantCategory)
+				&& merchantCategoryCodeId == other.merchantCategoryCodeId
+				&& Objects.equals(merchantCategoryCodeNumber, other.merchantCategoryCodeNumber)
+				&& Objects.equals(transactions, other.transactions);
+	}
+	
+	
 }

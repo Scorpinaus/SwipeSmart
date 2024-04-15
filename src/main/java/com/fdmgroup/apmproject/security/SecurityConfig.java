@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.details;
+package com.fdmgroup.apmproject.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

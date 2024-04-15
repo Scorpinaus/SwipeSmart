@@ -1,6 +1,8 @@
 package com.fdmgroup.apmproject.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +16,8 @@ import com.fdmgroup.apmproject.repository.CreditCardRepository;
 public class CreditCardService {
 	@Autowired
 	private CreditCardRepository creditCardRepo;
-	
+	private List<String> numList;
+
 	private static Logger logger = LogManager.getLogger(CreditCardService.class);
 	
 	public CreditCardService(CreditCardRepository creditCardRepo) {
@@ -61,4 +64,48 @@ public class CreditCardService {
 			logger.info("Credit Card deleted from Database");
 		}
 	}
+	
+	public CreditCard findByCreditCardNumber(String number) {
+		Optional<CreditCard> returnedCreditCard = creditCardRepo.findByCreditCardNumber(number);
+		if (returnedCreditCard.isEmpty()) {
+			logger.warn("Could not find Credit Card in Database");
+			return null;
+		} else {
+			logger.info("Returning Credit Card's details");
+			return returnedCreditCard.get();
+		}
+	}
+	
+	public String generateCreditCardNumber() {
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 16; i++) {
+            sb.append(random.nextInt(10));
+            if ((i + 1) % 4 == 0 && i != 15) {
+                sb.append("-"); // Adds a dash after every 4 digits, except the last set of 4 digits
+            }
+        }
+        return sb.toString();
+    }
+	
+	@SuppressWarnings("unused")
+	public String validCreditCardNumber() {
+		String ccNumber = generateCreditCardNumber();
+		if (numList.contains(ccNumber)) {
+			return validCreditCardNumber();
+		} else {
+			numList.add(ccNumber);
+			return ccNumber;
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	public String generatePinNumber() {
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 3; i++) {
+            sb.append(random.nextInt(10));
+        }
+        return sb.toString();
+    }
 }

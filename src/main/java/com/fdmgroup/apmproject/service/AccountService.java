@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -64,7 +65,9 @@ public class AccountService {
 	}
 	
 	
-	
+	public List<Account> getAllAccounts(){
+		return accountRepo.findAll();
+	}
 	
 	
 }

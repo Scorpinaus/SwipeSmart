@@ -1,11 +1,14 @@
 package com.fdmgroup.apmproject.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.UserService;
@@ -30,11 +33,12 @@ public class AccountController {
 		
 		long userId = currentUser.getUserId();
 		
-		accountService.findById(userId);
-		
+		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
+		AccountList.forEach(System.out::println);
+		System.out.println(accountService.findAllAccountsByUserId(userId));
 		model.addAttribute("user", currentUser);
 		
-		model.addAttribute("accounts" );
+		model.addAttribute("accounts", AccountList);
 		
 		return ("deposit");
 	}

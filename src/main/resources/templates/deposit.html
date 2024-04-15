@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Deposit page</title>
+</head>
+<body>
+	<h1>Deposit</h1>
+	<!--  Try changing the method to 'get' below -->
+	
+	
+	
+
+	<form method="post" action="deposit">
+		<!-- Use the 'placeholder' tag to be more helpful -->
+
+	<select name="account">
+	<option th:each="account : ${listOfAccounts}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
+  	<option value="account1">Account 1</option>
+  	<option value="account2">Account 2</option>
+  	<option value="account3">Account 3</option>
+  <!-- Add more options as needed -->
+	</select>
+		
+		<input type="number" name="deposit amount" placeholder="deposit amount" step="0.01" required> 
+		<input type="text" name="DepositTo" placeholder="DepositTo">
+		<input type="submit" value="submit">
+	</form>
+
+
+
+</body>
+</html>

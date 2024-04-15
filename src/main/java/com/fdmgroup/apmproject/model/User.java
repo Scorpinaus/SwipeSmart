@@ -29,6 +29,8 @@ public class User {
 	private String firstName;
 	@Column(name = "Last Name")
 	private String lastName;
+	@Column(name = "Role")
+	private String role;
 
 	@OneToMany(mappedBy = "creditCardUser", fetch = FetchType.EAGER)
 	private List<CreditCard> creditCards = new ArrayList<>();
@@ -42,6 +44,11 @@ public class User {
 		setAddress(address);
 		setFirstName(firstName);
 		setLastName(lastName);
+		setRole("ROLE_USER");
+	}
+
+	public User() {
+
 	}
 
 	public long getUserId() {
@@ -90,6 +97,14 @@ public class User {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public List<CreditCard> getCreditCards() {

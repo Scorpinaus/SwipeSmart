@@ -38,6 +38,13 @@ public class UserController {
 	public String loginPage() {
 		return "login";
 	}
+	
+	@GetMapping("/logout")
+	public String logoutPage(HttpSession session) {
+		logger.info("Customer has logged out.");
+		session.invalidate();
+		return "redirect:/login";
+	}
 
 	@GetMapping("/login_error")
 	public String loginPageError(Model model) {

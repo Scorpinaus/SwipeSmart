@@ -54,7 +54,9 @@ public class Transaction {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Foreign Exchange Currency ID")
 	private ForeignExchangeCurrency transactionCurrency;
-
+	
+	public Transaction() {};
+	
 	public Transaction(String merchantCategoryCode, Date transactionDate) {
 		setMerchantCategoryCode(merchantCategoryCode);
 		setTransactionDate(transactionDate);

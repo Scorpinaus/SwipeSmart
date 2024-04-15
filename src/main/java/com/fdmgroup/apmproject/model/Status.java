@@ -27,11 +27,13 @@ public class Status {
 
 	@OneToMany(mappedBy = "creditCardStatus", fetch = FetchType.EAGER)
 	private List<CreditCard> creditCards = new ArrayList<>();
-
+	
+	public Status() {} ;
+	
 	public Status(String statusName) {
 		setStatusName(statusName);
 	}
-
+	
 	public int getStatusId() {
 		return statusId;
 	}

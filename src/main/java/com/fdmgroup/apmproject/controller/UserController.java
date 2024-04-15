@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -73,7 +74,14 @@ public class UserController {
 		logger.info("Redirecting to dashboard");
 		return "dashboard";
 	}
-
+	
+	@GetMapping("/users/{id}")
+	public String profilePage(@PathVariable("id") long userId, Model model) {
+		User user = userService.findUserById(userId);
+		model.addAttribute("user",user);
+		return "profile";
+	}
+	
 	@PostMapping("/login")
 	public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
 		session.setAttribute("loggedUser", userService.findUserByUsername(username));

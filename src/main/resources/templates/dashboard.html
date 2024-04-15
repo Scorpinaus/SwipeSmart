@@ -8,6 +8,7 @@
 	<body>
 		<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
 		<div class="linkContainer">
+			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
 			<a href="/logout">Logout</a>
 		</div>
 	</body>

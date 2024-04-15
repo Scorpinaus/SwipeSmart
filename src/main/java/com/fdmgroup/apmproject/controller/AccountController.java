@@ -96,10 +96,10 @@ public class AccountController {
 		
 	}
 	
-	@GetMapping("/deposit")
+	@GetMapping("/bankaccount/deposit")
 	public String goToDepositPage(Model model, HttpSession session) {
 		
-		//Get loggeduser
+		//Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
 		
 		//Get user id
@@ -116,7 +116,7 @@ public class AccountController {
 	}
 	
 	
-	@PostMapping("/deposit")
+	@PostMapping("/bankaccount/deposit")
 	public String deposit(	@RequestParam("account") long accountId,
             				@RequestParam("deposit amount") double depositAmount ,
             				HttpServletRequest request) {
@@ -131,6 +131,20 @@ public class AccountController {
 		accountDeposited.setBalance(updatedBalance);
 		accountService.update(accountDeposited);
 
-		return "redirect:/login";
+		return "redirect:/bankaccount/dashboard";
+	}
+	
+	@GetMapping("/bankaccount/create")
+	public String createBankAccount(Model model, HttpSession session) {
+		//Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+				
+		//Get user id
+		long userId = currentUser.getUserId();		
+		
+		
+		
+		
+		return "createbankaccount";
 	}
 }

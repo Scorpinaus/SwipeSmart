@@ -89,13 +89,6 @@ public class UserController {
 		model.addAttribute("user",user);
 		return "details";
 	}
-	
-	@PostMapping("/login")
-	public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-		session.setAttribute("loggedUser", userService.findUserByUsername(username));
-		logger.info("User has logged in");
-		return "redirect:/dashboard";
-	}
 
 	@PostMapping("/register")
 	public String processRegistration(@RequestParam("username") String username,

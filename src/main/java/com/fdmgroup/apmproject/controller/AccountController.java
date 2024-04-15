@@ -27,10 +27,7 @@ public class AccountController {
 	
 	@Autowired
 	private AccountService accountService;
-	
-	@Autowired
-	private UserService userService;
-	
+		
 	private static Logger logger = LogManager.getLogger(AccountController.class);
 	
 	public AccountController(AccountService accountService) {
@@ -112,16 +109,17 @@ public class AccountController {
 	@GetMapping("/deposit")
 	public String goToDepositPage(Model model, HttpSession session) {
 		
-
+		//Get loggeduser
 		User currentUser = (User) session.getAttribute("loggedUser");
 		
+		//Get user id
 		long userId = currentUser.getUserId();
 		
+		//get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-		AccountList.forEach(System.out::println);
-		System.out.println(accountService.findAllAccountsByUserId(userId));
-		model.addAttribute("user", currentUser);
 		
+		//add user and account list to the mode
+		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
 		
 		return ("deposit");
@@ -129,16 +127,20 @@ public class AccountController {
 	
 	
 	@PostMapping("/deposit")
-	public String deposit(HttpServletRequest request ) {
+	public String deposit(	@RequestParam("account") long accountId,
+            				@RequestParam("deposit amount") double depositAmount ,
+            				HttpServletRequest request) {
 		
+		// get the required account
+		Account accountDeposited = accountService.findById(accountId);
+		
+		//Calculate the balance after deposit
+		Double updatedBalance = accountDeposited.getBalance() + depositAmount;
+		
+		//update the account balance
+		accountDeposited.setBalance(updatedBalance);
+		accountService.update(accountDeposited);
 
-		String depositAmountStr = request.getParameter("deposit amount");
-		
-		Double depositAmount = Double.parseDouble(depositAmountStr);
-		
-		
-//		Account accountDeposited = accountService
-		
-		return "redirect:/account";
+		return "redirect:/login";
 	}
 }

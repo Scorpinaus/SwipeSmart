@@ -44,7 +44,7 @@ public class SecurityConfig {
 						.permitAll().anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").failureUrl("/login_error")
 						.successHandler(authenticationSuccessHandlerSecurity))
-				.logout(logout -> logout.logoutSuccessUrl("/userlogout").permitAll());
+				.logout(logout -> logout.logoutSuccessUrl("/login").invalidateHttpSession(true).clearAuthentication(true).permitAll());
 
 		return http.build();
 	}

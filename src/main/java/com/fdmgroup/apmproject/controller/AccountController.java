@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
+import com.fdmgroup.apmproject.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -24,6 +27,9 @@ public class AccountController {
 	
 	@Autowired
 	private AccountService accountService;
+	
+	@Autowired
+	private UserService userService;
 	
 	private static Logger logger = LogManager.getLogger(AccountController.class);
 	
@@ -103,9 +109,30 @@ public class AccountController {
 		
 	}
 	
+	@GetMapping("/deposit")
+	public String goToDepositPage(Model model, HttpSession session) {
+		
+		User currentUser = (User) session.getAttribute("loggedUser");
+		
+		long userId = currentUser.getUserId();
+		
+		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
+		AccountList.forEach(System.out::println);
+		System.out.println(accountService.findAllAccountsByUserId(userId));
+		model.addAttribute("user", currentUser);
+		
+		model.addAttribute("accounts", AccountList);
+		
+		return ("deposit");
+	}
 	
 	
-	
-	
-
+	@PostMapping("/deposit")
+	public String deposit(HttpServletRequest request ) {
+		
+		String depositAmountStr = request.getParameter("deposit amount");
+		Double depositAmount = Double.parseDouble(depositAmountStr);
+		
+		return "redirect:/account";
+	}
 }

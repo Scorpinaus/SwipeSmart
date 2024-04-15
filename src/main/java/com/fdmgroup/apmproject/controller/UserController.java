@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -65,7 +66,6 @@ public class UserController {
 		return "creditcard";
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	@GetMapping("/dashboard")
 	public String dashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");
@@ -73,26 +73,73 @@ public class UserController {
 		logger.info("Redirecting to dashboard");
 		return "dashboard";
 	}
-
-	@PostMapping("/login")
-	public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-		session.setAttribute("loggedUser", userService.findUserByUsername(username));
-		logger.info("User has logged in");
-		return "redirect:/dashboard";
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or #userId == principal.getUser().userId")
+	@GetMapping("/users/{id}")
+	public String profilePage(@PathVariable("id") long userId, Model model) {
+		User user = userService.findUserById(userId);
+		model.addAttribute("user",user);
+		return "profile";
+	}
+	
+	@GetMapping("/users/{id}/details")
+	public String editProfilePage(@PathVariable("id") long userId, Model model) {
+		logger.info("Editing Customer's profile page");
+		User user = userService.findUserById(userId);
+		model.addAttribute("user",user);
+		return "details";
 	}
 
 	@PostMapping("/register")
 	public String processRegistration(@RequestParam("username") String username,
 			@RequestParam("password") String password, HttpSession session, Model model) {
+		boolean isAlphanumeric = false;
+		boolean hasNumbers = false;
+		boolean hasLowercase = false;
+		boolean hasUppercase = false;
+		for (int i = 0; i < password.length() ; i++) {
+			if (password.codePointAt(i) >= 48 && password.codePointAt(i) <= 57) {
+				hasNumbers = true;
+			}
+			if (password.codePointAt(i) >= 65 && password.codePointAt(i) <= 90) {
+				hasUppercase = true;
+			}
+			if (password.codePointAt(i) >= 97 && password.codePointAt(i) <= 122) {
+				hasLowercase = true;
+			}
+		}
+		if (hasNumbers == true && hasLowercase == true && hasUppercase == true) {
+			isAlphanumeric = true;
+		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User(username, encoder.encode(password), null, null, null);
 		if (userService.findUserByUsername(username) != null || username.equals("") || password.equals("")) {
-			model.addAttribute("error", true);
+			model.addAttribute("errorInvalid", true);
 			logger.warn("Invalid username or password to register");
-			return ("register");
-		} else {
-			userService.persist(user);
-			return ("redirect:/login");
+			return "register";
+		} 
+		else if(isAlphanumeric == false) {
+			model.addAttribute("errorAlphanumeric", true);
+			logger.warn("Password must be alphanumeric");
+			return "register";
 		}
+		else {
+			userService.persist(user);
+			return "redirect:/login";
+		}
+	}
+	
+	@PostMapping("/users/{id}/details")
+	public String editCustomerProfile(@PathVariable("id") long userId, @RequestParam(name="address", required=false) String address,
+			@RequestParam(name="firstName", required=false) String firstName, @RequestParam(name="lastName", required=false) String lastName,
+			HttpSession session, Model model) {
+		User tempUser = userService.findUserById(userId);
+		tempUser.setAddress(address);
+		tempUser.setFirstName(firstName);
+		tempUser.setLastName(lastName);
+		session.setAttribute("loggedUser", tempUser);
+		model.addAttribute("user",tempUser);
+		userService.update(tempUser);
+		return "profile";
 	}
 }

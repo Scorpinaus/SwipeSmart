@@ -105,4 +105,12 @@ public class AccountService {
 		}
 		
 	}
+	
+	public List<Account> findAllAccountsByUserId(long userId){
+		return accountRepo.findByAccountUserUserId(userId);
+	}
+	
+	public List<Account> getAllAccounts(){
+		return accountRepo.findAll();
+	}
 }

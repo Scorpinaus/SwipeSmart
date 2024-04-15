@@ -15,8 +15,11 @@
 					<input id="registerButton" type="submit" value="Register">
 				</form>
 			</div>
-			<div class="errorMessage" th:if="${error}">
-					<p>Incorrect Username or Password</p>
+			<div class="errorMessage" th:if="${errorInvalid}">
+					<p>Invalid Username or Password</p>
+			</div>
+			<div class="errorMessage" th:if="${errorAlphanumeric}">
+					<p>Password needs to be alphanumeric</p>
 			</div>
 		</div>
 		<div class="loginButton">

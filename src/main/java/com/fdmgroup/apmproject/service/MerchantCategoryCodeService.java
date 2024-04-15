@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.repository.MerchantCategoryCodeRepository;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class MerchantCategoryCodeService {
 	@Autowired
@@ -25,40 +27,70 @@ public class MerchantCategoryCodeService {
 		Optional<MerchantCategoryCode> returnedMerchantCategoryCode = merchantCategoryCodeRepo.findById(merchantCategoryCode.getMerchantCategoryCodeId());
 		if (returnedMerchantCategoryCode.isEmpty()) {
 			merchantCategoryCodeRepo.save(merchantCategoryCode);
-			logger.info("Reward successfully created");
+			logger.info("MCC successfully created");
 		} else {
-			logger.warn("Reward already exists");
+			logger.warn("MCC already exists");
 		}
 	}
 	
 	public void update(MerchantCategoryCode merchantCategoryCode) {
 		Optional<MerchantCategoryCode> returnedMerchantCategoryCode = merchantCategoryCodeRepo.findById(merchantCategoryCode.getMerchantCategoryCodeId());
 		if (returnedMerchantCategoryCode.isEmpty()) {
-			logger.warn("Reward does not exist in database");
+			logger.warn("MCC does not exist in database");
 		} else {
 			merchantCategoryCodeRepo.save(merchantCategoryCode);
-			logger.info("Reward successfully updated");
+			logger.info("MCC successfully updated");
 		}
 	}
 	
-	public MerchantCategoryCode findById(int rewardId) {
-		Optional<MerchantCategoryCode> returnedMerchantCategoryCode = merchantCategoryCodeRepo.findById(rewardId);
+	public MerchantCategoryCode findById(int id) {
+		Optional<MerchantCategoryCode> returnedMerchantCategoryCode = merchantCategoryCodeRepo.findById(id);
 		if (returnedMerchantCategoryCode.isEmpty()) {
-			logger.warn("Could not find Reward in Database");
+			logger.warn("Could not find MCC in Database");
 			return null;
 		} else {
-			logger.info("Returning Reward's details");
+			logger.info("Returning MCC details");
 			return returnedMerchantCategoryCode.get();
 		}
 	}
 	
-	public void deleteById(int rewardId) {
-		Optional<MerchantCategoryCode> returnedMerchantCategoryCode = merchantCategoryCodeRepo.findById(rewardId);
+	public MerchantCategoryCode findByMerchantCategory(String MerchantCategory) {
+		Optional<MerchantCategoryCode> returnedMerchantCategoryCode = merchantCategoryCodeRepo.findByMerchantCategory(MerchantCategory);
 		if (returnedMerchantCategoryCode.isEmpty()) {
-			logger.warn("Reward does not exist in database");
+			logger.warn("Could not find MCC in Database");
+			return null;
 		} else {
-			merchantCategoryCodeRepo.deleteById(rewardId);
-			logger.info("Reward deleted from Database");
+			logger.info("Returning MCC details");
+			return returnedMerchantCategoryCode.get();
 		}
+	}
+	
+	public void deleteById(int id) {
+		Optional<MerchantCategoryCode> returnedMerchantCategoryCode = merchantCategoryCodeRepo.findById(id);
+		if (returnedMerchantCategoryCode.isEmpty()) {
+			logger.warn("MCC does not exist in database");
+		} else {
+			merchantCategoryCodeRepo.deleteById(id);
+			logger.info("MCC deleted from Database");
+		}
+	}
+	
+	@PostConstruct
+	public void initMCCs() {
+		MerchantCategoryCode mcc = new MerchantCategoryCode(1000, "Deposit");
+		MerchantCategoryCode mcc1 = new MerchantCategoryCode(1001, "Withdraw");
+		MerchantCategoryCode mcc2 = new MerchantCategoryCode(1002, "Transfer");
+		MerchantCategoryCode mcc3 = new MerchantCategoryCode(1003, "Dining");
+		MerchantCategoryCode mcc4 = new MerchantCategoryCode(1004, "Shopping");
+		MerchantCategoryCode mcc5 = new MerchantCategoryCode(1005, "Transport");
+		MerchantCategoryCode mcc6 = new MerchantCategoryCode(1006, "Travel");
+		persist(mcc);
+		persist(mcc1);
+		persist(mcc2);
+		persist(mcc3);
+		persist(mcc4);
+		persist(mcc5);
+		persist(mcc6);
+		
 	}
 }

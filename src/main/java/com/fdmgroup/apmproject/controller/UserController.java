@@ -66,7 +66,6 @@ public class UserController {
 		return "creditcard";
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
 	@GetMapping("/dashboard")
 	public String dashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");
@@ -75,11 +74,20 @@ public class UserController {
 		return "dashboard";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or #userId == principal.getUser().userId")
 	@GetMapping("/users/{id}")
 	public String profilePage(@PathVariable("id") long userId, Model model) {
 		User user = userService.findUserById(userId);
 		model.addAttribute("user",user);
 		return "profile";
+	}
+	
+	@GetMapping("/users/{id}/details")
+	public String editProfilePage(@PathVariable("id") long userId, Model model) {
+		logger.info("Editing Customer's profile page");
+		User user = userService.findUserById(userId);
+		model.addAttribute("user",user);
+		return "details";
 	}
 	
 	@PostMapping("/login")
@@ -126,5 +134,19 @@ public class UserController {
 			userService.persist(user);
 			return "redirect:/login";
 		}
+	}
+	
+	@PostMapping("/users/{id}/details")
+	public String editCustomerProfile(@PathVariable("id") long userId, @RequestParam(name="address", required=false) String address,
+			@RequestParam(name="firstName", required=false) String firstName, @RequestParam(name="lastName", required=false) String lastName,
+			HttpSession session, Model model) {
+		User tempUser = userService.findUserById(userId);
+		tempUser.setAddress(address);
+		tempUser.setFirstName(firstName);
+		tempUser.setLastName(lastName);
+		session.setAttribute("loggedUser", tempUser);
+		model.addAttribute("user",tempUser);
+		userService.update(tempUser);
+		return "profile";
 	}
 }

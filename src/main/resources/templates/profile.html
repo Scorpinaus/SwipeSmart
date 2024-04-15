@@ -10,10 +10,12 @@
 		<h2><span th:text="${user.username}"></span></h2>
 		<div class="userDetails" th:object="${user}">
 			Username: <span th:text="*{username}"></span>
+			Address: <span th:text="*{address}"></span>
 			First Name: <span th:text="*{firstName}"></span>
 			Last Name: <span th:text="*{lastName}"></span>	
 		</div>
 		<div class="link">
+			<a th:href="@{/users/{id}/details(id=${user.userId})}">Edit Profile Details</a>
 			<a href="/dashboard">Return to dashboard</a>
 			<a href="/logout">Logout</a>
 		</div>

@@ -84,15 +84,39 @@ public class UserController {
 	@PostMapping("/register")
 	public String processRegistration(@RequestParam("username") String username,
 			@RequestParam("password") String password, HttpSession session, Model model) {
+		boolean isAlphanumeric = false;
+		boolean hasNumbers = false;
+		boolean hasLowercase = false;
+		boolean hasUppercase = false;
+		for (int i = 0; i < password.length() ; i++) {
+			if (password.codePointAt(i) >= 48 && password.codePointAt(i) <= 57) {
+				hasNumbers = true;
+			}
+			if (password.codePointAt(i) >= 65 && password.codePointAt(i) <= 90) {
+				hasUppercase = true;
+			}
+			if (password.codePointAt(i) >= 97 && password.codePointAt(i) <= 122) {
+				hasLowercase = true;
+			}
+		}
+		if (hasNumbers == true && hasLowercase == true && hasUppercase == true) {
+			isAlphanumeric = true;
+		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User(username, encoder.encode(password), null, null, null);
 		if (userService.findUserByUsername(username) != null || username.equals("") || password.equals("")) {
-			model.addAttribute("error", true);
+			model.addAttribute("errorInvalid", true);
 			logger.warn("Invalid username or password to register");
-			return ("register");
-		} else {
+			return "register";
+		} 
+		else if(isAlphanumeric == false) {
+			model.addAttribute("errorAlphanumeric", true);
+			logger.warn("Password must be alphanumeric");
+			return "register";
+		}
+		else {
 			userService.persist(user);
-			return ("redirect:/login");
+			return "redirect:/login";
 		}
 	}
 }

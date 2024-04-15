@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.UserService;
@@ -47,28 +49,16 @@ public class AccountController {
 			List<Account> userBankAccounts = currentUser.getAccounts();
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				logger.info("User is redirected to bank account dashboard");	
+				logger.info("User is redirected to bank account dashboard");
 			} else {
 				logger.info("User is redirected to bank account. User has no active bank accounts with the bank");
+				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 			}
 			return "accountdashboard";
 			
 		} else {
 			return "redirect:/login";
 		}
-	}
-	
-	//Function which brings user to selected BankAccounts page & view list of transactions
-	@GetMapping("/bankaccount/{id}")
-	public String showBankAccountTransactions(HttpSession session, Model model) {
-		if (session !=null && session.getAttribute("loggedUser") !=null) {
-			//retrieves user from current session
-			User currentUser = (User) session.getAttribute("loggedUser");		
-			return "/bankaccount/{id}";
-		} else {
-			return "redirect:/login";
-		}
-		
 	}
 	
 	//Function which brings user to Bank Account withdrawal page

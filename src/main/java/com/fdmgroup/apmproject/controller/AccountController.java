@@ -32,6 +32,8 @@ public class AccountController {
 		
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 	
+    private final int LEASTINITIALDEPOSIT = 5000;
+	
 	public AccountController(AccountService accountService) {
 		this.accountService = accountService;
 	}
@@ -144,19 +146,27 @@ public class AccountController {
 	public String createBankAccount(	
 		@RequestParam("accountName") String accountName,
 		@RequestParam("initialDeposit") double initialDeposit,
-		HttpSession session)
+		HttpSession session,
+		RedirectAttributes redirectAttributes
+		)
 	{
+		
+		if (initialDeposit<LEASTINITIALDEPOSIT){
+			
+			redirectAttributes.addAttribute("InsufficientInitialDepositError", "true");
+			LOGGER.info("Insufficient Initial Deposit");
+			return "redirect:/bankaccount/create";
+		}else{
 		//Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
-		
-		
+				
 		String accountnumber = accountService.generateUniqueAccountNumber();
 		
 		Account accountCreated = new Account(accountName,initialDeposit,accountnumber,currentUser);
 		
 		accountService.persist(accountCreated);
 		
-		return "redirect:/bankaccount/dashboard";
+		return "redirect:/bankaccount/dashboard";}
 	}
 	
 	@GetMapping("/bankaccount/transfer")
@@ -194,13 +204,14 @@ public class AccountController {
 		// get the required accounts
 		Account accountFromBalance = accountService.findById(accountId);
 		
-				
+		//validate user is not transferring money to the same account	
 		if (accountFromBalance.getAccountNumber().equals(accountNumberTransferTo)){
 			
 			redirectAttributes.addAttribute("SameAccountError", "true");
 			LOGGER.info("SameAccount");
 			return "redirect:/bankaccount/transfer";
 		}
+		//validate user has sufficient in account	
 		else if (accountFromBalance.getBalance() < transferAmount) {
 			redirectAttributes.addAttribute("InsufficientBalanceError", "true");
 			LOGGER.info("InsufficientBalance");

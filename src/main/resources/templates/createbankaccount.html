@@ -12,9 +12,12 @@
 	<form method="post" action="/bankaccount/create">
 		<!-- Use the 'placeholder' tag to be more helpful -->
 		<input type="text" name="accountName" placeholder="Account Name">
-		<input type="number" name="initialDeposit" placeholder="initial deposit" step="0.01" required> 
+		<input type="number" name="initialDeposit" placeholder="initial deposit" step="0.01"  required> 
 		<input type="submit" value="submit">
-	
+		
+		<div th:if="${param.InsufficientInitialDepositError}">
+            <p style="color: red;">Could not create account with initial deposit smaller than 5000. Please check your initial deposit.</p>
+        </div>
 	</form>
 
 

@@ -45,7 +45,7 @@ public class UserController {
 		session.invalidate();
 		return "redirect:/login";
 	}
-	
+
 	@GetMapping("/login_error")
 	public String loginPageError(Model model) {
 		model.addAttribute("errorMessage", true);

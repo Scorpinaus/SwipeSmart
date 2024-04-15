@@ -102,6 +102,7 @@ public class AccountController {
 	@GetMapping("/deposit")
 	public String goToDepositPage(Model model, HttpSession session) {
 		
+
 		User currentUser = (User) session.getAttribute("loggedUser");
 		
 		long userId = currentUser.getUserId();
@@ -111,7 +112,7 @@ public class AccountController {
 		System.out.println(accountService.findAllAccountsByUserId(userId));
 		model.addAttribute("user", currentUser);
 		
-		model.addAttribute("accounts", AccountList);
+		model.addAttribute("AccountList", AccountList);
 		
 		return ("deposit");
 	}
@@ -120,8 +121,13 @@ public class AccountController {
 	@PostMapping("/deposit")
 	public String deposit(HttpServletRequest request ) {
 		
+
 		String depositAmountStr = request.getParameter("deposit amount");
+		
 		Double depositAmount = Double.parseDouble(depositAmountStr);
+		
+		
+//		Account accountDeposited = accountService
 		
 		return "redirect:/account";
 	}

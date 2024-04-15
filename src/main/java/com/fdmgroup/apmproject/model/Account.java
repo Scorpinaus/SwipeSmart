@@ -43,6 +43,8 @@ public class Account {
 
 	@OneToMany(mappedBy = "transactionAccount", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
+	
+	public Account() {};
 
 	public Account(String accountName, double balance, String accountNumber) {
 		setAccountName(accountName);

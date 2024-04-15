@@ -49,7 +49,7 @@ public class User {
 
 	public User() {
 
-	}
+	};
 
 	public long getUserId() {
 		return userId;

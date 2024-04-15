@@ -47,6 +47,8 @@ public class CreditCard {
 
 	@OneToMany(mappedBy = "transactionCreditCard", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
+	
+	public CreditCard() {};
 
 	public CreditCard(String creditCardNumber, String pin, int cardLimit, String cardType) {
 		setCreditCardNumber(creditCardNumber);

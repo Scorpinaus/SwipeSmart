@@ -26,7 +26,9 @@ public class ForeignExchangeCurrency {
 
 	@OneToMany(mappedBy = "transactionCurrency", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
-
+	
+	public ForeignExchangeCurrency() {};
+	
 	public ForeignExchangeCurrency(String currencyName, int currencyValue) {
 		setCurrencyName(currencyName);
 		setCurrencyValue(currencyValue);

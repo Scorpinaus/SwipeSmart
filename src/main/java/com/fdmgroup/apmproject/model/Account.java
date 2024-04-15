@@ -24,10 +24,13 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Account ID")
 	private long accountId;
+	
 	@Column(name = "Account Name")
 	private String accountName;
+	
 	@Column(name = "Account Balance")
 	private double balance;
+	
 	@Column(name = "Account Number")
 	private String accountNumber;
 
@@ -44,10 +47,11 @@ public class Account {
 	@OneToMany(mappedBy = "transactionAccount", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
 
-	public Account(String accountName, double balance, String accountNumber) {
+	public Account(String accountName, double balance, String accountNumber, User accountUser) {
 		setAccountName(accountName);
 		setBalance(balance);
 		setAccountNumber(accountNumber);
+		setAccountUser(accountUser);
 	}
 
 	public long getAccountId() {

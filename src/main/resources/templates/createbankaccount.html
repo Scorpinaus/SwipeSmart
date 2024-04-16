@@ -18,6 +18,9 @@
 		<div th:if="${param.InsufficientInitialDepositError}">
             <p style="color: red;">Could not create account with initial deposit smaller than 5000. Please check your initial deposit.</p>
         </div>
+        <div th:if="${param.NoAccountNameError}">
+            <p style="color: red;">Could not create account without account name. Please input your account name.</p>
+        </div>
 	</form>
 
 

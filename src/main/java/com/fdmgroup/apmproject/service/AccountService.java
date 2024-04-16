@@ -115,4 +115,10 @@ public class AccountService {
 		return accountRepo.findAll();
 	}
 	
+	
+	public String generateUniqueAccountNumber() {
+		String uuid = UUID.randomUUID().toString();
+		return uuid;
+	}
+	
 }

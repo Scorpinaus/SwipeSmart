@@ -10,16 +10,16 @@
 			<button onclick="closeSidebar()" class="closeSidebar">X</button>
 			<div class="sidebarLinks">
 				<div class="profile">
-					<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
 				</div>
 				<div class="cards">
-					<a href="/userCards">Cards</a>
+					<a id="cards" href="/userCards">Cards</a>
 				</div>
 				<div class="accounts">
-					<a href="/bankaccount/dashboard">Accounts</a>
+					<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
 				</div>
 				<div class="logout">
-					<a href="/logout">Logout</a>
+					<a id="logout" href="/logout">Logout</a>
 				</div>
 			</div>
 		</div>

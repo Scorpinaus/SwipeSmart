@@ -5,33 +5,53 @@
 	width:0;
 	z-index: 1;
 	overflow-x: hidden;
-    background-color: lightblue;
+    background-color: #2b6777;
     transition: 0.5s;
     position: fixed;
 }
 
-a{
-	transition: 0.3s;
-}
 
 .sidebarLinks{
-	padding: 20px;
+	padding-left: 20px;
 }
 
 .profile{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
 	padding: 20px;
 }
 
 .cards{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
 	padding: 20px;
+	background-color:white;
 }
 
 .accounts{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
 	padding: 20px;
 }
 
 .logout{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
 	padding: 20px;
+}
+
+a {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#cards{
+	color:black;	
 }
 
 .mainPage{

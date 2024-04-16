@@ -18,6 +18,12 @@
 			<p th:text="${creditCard.creditCardNumber}"></p>
 			<p th:text="${creditCard.pin}"></p>
 		</div>
+		
+		<div th:if="${account != null}">
+			<h2 th:text="${account.accountName}"></h2>
+			<p th:text="${account.accountNumber}"></p>
+			<p th:text="${account.balance}"></p>
+		</div>
 
 		<h2>Transactions</h2>
 		<div th:if="${creditCard != null}">

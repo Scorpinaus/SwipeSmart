@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.details;
+package com.fdmgroup.apmproject.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,7 +40,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/", "/register", "/login", "/login_error", "/*.css", "/*.js")
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/", "/register", "/login", "/login_error", "/*.css", "/*.png", "/*.js")
 						.permitAll().anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").failureUrl("/login_error")
 						.successHandler(authenticationSuccessHandlerSecurity))

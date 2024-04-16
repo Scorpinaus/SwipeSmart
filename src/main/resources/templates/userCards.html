@@ -1,30 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<!-- <link rel="stylesheet" href="#"> -->
-		<link rel="stylesheet" href="/userCards.css">
 		<meta charset="UTF-8">
 		<title>User Credit Cards</title>
 	</head>
 	<body>
-		<div class="linkContainerSideBar" id="sidebar">
+		<div class="linkContainerSideBar" style="display:none" id="sidebar">
 			<button onclick="closeSidebar()" class="closeSidebar">X</button>
-			<div class="sidebarLinks">
-				<div class="profile">
-					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
-				</div>
-				<div class="cards">
-					<a id="cards" href="/userCards">Cards</a>
-				</div>
-				<div class="accounts">
-					<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
-				</div>
-				<div class="logout">
-					<a id="logout" href="/logout">Logout</a>
-				</div>
-			</div>
+			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+			<a href="/userCards">Cards</a>
+			<a href="/bankaccount/dashboard">Accounts</a>
+			<a href="/logout">Logout</a>
 		</div>
-		<div class="mainPage" id="main">
+		<div class="mainPage">
 			<button onclick="openSidebar()" class="openSidebar">☰</button>
 			<h1 th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
 			<div class="button-container">
@@ -33,9 +21,9 @@
 	    	</div>
 			
 			<h2>Your Credit Cards</h2>
-			
+			<a href="/applyCreditCard">Apply for a new credit card</a>
 			<div class="secondary-content-container" th:each="creditCard : ${cards}">    
-	           <a th:href="@{'/viewTransactions?number=' + ${creditCard.creditCardNumber}}">
+	           <a th:href="@{'/viewTransactions?creditCardId=' + ${creditCard.creditCardId}}">
 		           <h3 th:text="${creditCard.cardType}"></h3>
 		           <p th:text="${creditCard.creditCardNumber}"></p>
 		           <p>Amount Used</p>
@@ -49,8 +37,7 @@
 				document.getElementById("main").style.marginLeft="160px";
 			}
 			function closeSidebar(){
-				document.getElementById("sidebar").style.width="0";
-				document.getElementById("main").style.marginLeft="0";
+				document.getElementById("sidebar").style.display="none";
 			}
 		</script>
 	</body>

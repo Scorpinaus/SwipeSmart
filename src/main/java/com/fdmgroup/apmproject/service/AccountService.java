@@ -81,31 +81,11 @@ public class AccountService {
 		}
 	}
 	
-	//Function that withdraws the amount from a specified bank account. It checks and updates if the bank account is sufficient, otherwise return false.
-	public boolean withdrawAccountByAmount(Long accountId, BigDecimal amount) {
-		//Retrieved Optional to check if retrievedAccount exists or not.
-		Optional<Account> retrievedAccount = accountRepo.findByAccountId(accountId);
-		if (retrievedAccount.isEmpty()) {
-			logger.warn("Bank account does not exist in database");
-			return false;
-		} else {
-			Account account = retrievedAccount.get();
-			BigDecimal currentBalance = BigDecimal.valueOf(account.getBalance());
-	int result = currentBalance.compareTo(amount);
-	if (result >= 0) {
-		logger.info("Bank account id"+ accountId + "has sufficient money for withdrawal");
-		BigDecimal finalBalance = currentBalance.subtract(amount);
-		double finalConvertedBalance = finalBalance.doubleValue();
-		account.setBalance(finalConvertedBalance);
-		this.update(account);
-		logger.info("Bank account id"+ accountId + "has sufficient money for withdrawal");
-		return true;
-	} else {
-		logger.info("Bank account id"+ accountId + "has insufficient money for withdrawal");
-		return false;
-	}
-		}
-		
+	//Function that calculates new Account Balance.
+	public double withdrawAccountByAmount(BigDecimal retrievedAccountBalance, BigDecimal amount) {
+		BigDecimal newBalance = retrievedAccountBalance.subtract(amount);
+		Double newAccountBalance = newBalance.doubleValue();
+		return newAccountBalance;
 	}
 	
 	public List<Account> findAllAccountsByUserId(long userId){

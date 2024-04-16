@@ -66,7 +66,7 @@ public class Transaction {
 		setCashback(cashback);
 		setTransactionCreditCard(transactionCreditCard);
 		setTransactionAccount(transactionAccount);
-		setMerchantCategoryCode(mcc);
+		setTransactionMerchantCategoryCode(mcc);
 		setTransactionCurrency(transactionCurrency);
 	}
 	
@@ -81,7 +81,7 @@ public class Transaction {
 		setCashback(cashback);
 		setTransactionCreditCard(transactionCreditCard);
 		setTransactionAccount(transactionAccount);
-		setMerchantCategoryCode(mcc);
+		setTransactionMerchantCategoryCode(mcc);
 		setTransactionCurrency(transactionCurrency);
 	}
 	//record transcation for bank account
@@ -172,13 +172,22 @@ public class Transaction {
 		this.transactionCurrency = transactionCurrency;
 	}
 
-	public MerchantCategoryCode getMerchantCategoryCode() {
+
+	public MerchantCategoryCode getTransactionMerchantCategoryCode() {
 		return transactionMerchantCategoryCode;
 	}
 
-	public void setMerchantCategoryCode(MerchantCategoryCode merchantCategoryCode) {
-		this.transactionMerchantCategoryCode = merchantCategoryCode;
+	public void setTransactionMerchantCategoryCode(MerchantCategoryCode transactionMerchantCategoryCode) {
+		this.transactionMerchantCategoryCode = transactionMerchantCategoryCode;
+	}
+
+	@Override
+	public String toString() {
+		return "Transaction [transactionId=" + transactionId + ", transactionDate=" + transactionDate
+				+ ", transactionType=" + transactionType + ", cashback=" + cashback
+				+ ", transactionMerchantCategoryCode=" + transactionMerchantCategoryCode.getMerchantCategory() + ", transactionCurrency="
+				+ transactionCurrency + "]";
 	}
 	
-
+	
 }

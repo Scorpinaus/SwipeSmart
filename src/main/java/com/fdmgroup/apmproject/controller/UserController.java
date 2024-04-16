@@ -39,7 +39,7 @@ public class UserController {
 	public String loginPage() {
 		return "login";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logoutPage(HttpSession session) {
 		logger.info("Customer has logged out.");
@@ -73,20 +73,20 @@ public class UserController {
 		logger.info("Redirecting to dashboard");
 		return "dashboard";
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN') or #userId == principal.getUser().userId")
 	@GetMapping("/users/{id}")
 	public String profilePage(@PathVariable("id") long userId, Model model) {
 		User user = userService.findUserById(userId);
-		model.addAttribute("user",user);
+		model.addAttribute("user", user);
 		return "profile";
 	}
-	
+
 	@GetMapping("/users/{id}/details")
 	public String editProfilePage(@PathVariable("id") long userId, Model model) {
 		logger.info("Editing Customer's profile page");
 		User user = userService.findUserById(userId);
-		model.addAttribute("user",user);
+		model.addAttribute("user", user);
 		return "details";
 	}
 
@@ -97,7 +97,7 @@ public class UserController {
 		boolean hasNumbers = false;
 		boolean hasLowercase = false;
 		boolean hasUppercase = false;
-		for (int i = 0; i < password.length() ; i++) {
+		for (int i = 0; i < password.length(); i++) {
 			if (password.codePointAt(i) >= 48 && password.codePointAt(i) <= 57) {
 				hasNumbers = true;
 			}
@@ -117,28 +117,31 @@ public class UserController {
 			model.addAttribute("errorInvalid", true);
 			logger.warn("Invalid username or password to register");
 			return "register";
-		} 
-		else if(isAlphanumeric == false) {
+		} else if (isAlphanumeric == false) {
 			model.addAttribute("errorAlphanumeric", true);
 			logger.warn("Password must be alphanumeric");
 			return "register";
-		}
-		else {
+		} else if (password.length() < 8) {
+			model.addAttribute("errorLength", true);
+			logger.warn("Password must be 8 characters long");
+			return "register";
+		} else {
 			userService.persist(user);
 			return "redirect:/login";
 		}
 	}
-	
+
 	@PostMapping("/users/{id}/details")
-	public String editCustomerProfile(@PathVariable("id") long userId, @RequestParam(name="address", required=false) String address,
-			@RequestParam(name="firstName", required=false) String firstName, @RequestParam(name="lastName", required=false) String lastName,
-			HttpSession session, Model model) {
+	public String editCustomerProfile(@PathVariable("id") long userId,
+			@RequestParam(name = "address", required = false) String address,
+			@RequestParam(name = "firstName", required = false) String firstName,
+			@RequestParam(name = "lastName", required = false) String lastName, HttpSession session, Model model) {
 		User tempUser = userService.findUserById(userId);
 		tempUser.setAddress(address);
 		tempUser.setFirstName(firstName);
 		tempUser.setLastName(lastName);
 		session.setAttribute("loggedUser", tempUser);
-		model.addAttribute("user",tempUser);
+		model.addAttribute("user", tempUser);
 		userService.update(tempUser);
 		return "profile";
 	}

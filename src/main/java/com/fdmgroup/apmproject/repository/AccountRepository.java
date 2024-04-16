@@ -24,8 +24,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	void updateUserDetails(@Param("username") String username, @Param("password") String password,
 			@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("address") String address);
 
-Optional<Account> findByAccountNumber(String name);
+	Optional<Account> findByAccountNumber(String name);
 
-Optional<Account> findByAccountId(Long accountId);
+	Optional<Account> findByAccountId(Long accountId);
 
 }

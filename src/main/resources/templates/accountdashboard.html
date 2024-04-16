@@ -15,19 +15,18 @@
 			<a href="/logout">Logout</a>
 		</div>
 		
-		<!--  Section for displaying user bank accounts -->
-		<div th:if"${not #lists.isEmpty(currentUserBankAccounts)}">
-			<h2> Your Bank Accounts</h2>
-				<ul>
-					<li th:each="account : ${currentUserBankAccounts}">
-						<span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
-						<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
-						<span th:text=" 'Account Balance: $' + ${account.balance}"></span>
-					</li>
-				</ul>
-		</div>
-		<div th:if="${#lists.isEmpty(currentUserBankAccounts)}">
-			<p>User has no active bank accounts. Do you want to create one? </p>
-		</div>
+		
+		<table>
+		<tr th:each="account : ${userBankAccounts}">
+			<td th:text=" ${account.accountName}"></td>
+			<td th:text=" ${account.accountNumber}"></td>
+			<td th:text=" ${account.balance}"></td>
+			
+
+		</tr>
+		</table>
+		
+		<h1>updated</h1>
+
 	</body>
 </html>

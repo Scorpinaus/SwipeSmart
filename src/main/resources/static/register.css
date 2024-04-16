@@ -1,0 +1,25 @@
+h1 {
+	display: flex;
+	justify-content: center;
+}
+
+
+.formContainer{
+	display: flex;
+	justify-content: center;
+}
+
+.errorMessage{
+	display: flex;
+	justify-content: center;
+}
+
+.loginTag {
+	display: flex;
+	justify-content: center;
+}
+
+.loginButton {
+	display: flex;
+	justify-content: center;
+}

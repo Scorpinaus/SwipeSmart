@@ -84,6 +84,21 @@ public class Transaction {
 		setMerchantCategoryCode(mcc);
 		setTransactionCurrency(transactionCurrency);
 	}
+	//record transcation for bank account
+	public Transaction(String transactionType, Account transactionAccount, double transactionAmount,String recipientAccountNumber, ForeignExchangeCurrency transactionCurrency
+			) {
+		setTransactionDate(LocalDateTime.now());
+		
+		setTransactionType(transactionType);
+		
+		setTransactionAccount(transactionAccount);
+		
+		setTransactionAmount(transactionAmount);
+		
+		setRecipientAccountNumber(recipientAccountNumber);
+		
+		setTransactionCurrency(transactionCurrency);
+	}
 
 	public long getTransactionId() {
 		return transactionId;

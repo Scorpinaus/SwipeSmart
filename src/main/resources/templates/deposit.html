@@ -7,11 +7,8 @@
 <body>
 	<h1>Deposit</h1>
 	<!--  Try changing the method to 'get' below -->
-	
-	
-	
 
-	<form method="post" action="/deposit">
+	<form method="post" action="/bankaccount/deposit">
 		<!-- Use the 'placeholder' tag to be more helpful -->
 
 	<select name="account">
@@ -20,7 +17,6 @@
 	</select>
 		
 		<input type="number" name="deposit amount" placeholder="deposit amount" step="0.01" required> 
-<!-- 		<input type="hidden" name="accountID" th:value="${account.accountId}" /> -->
 		<input type="submit" value="submit">
 	
 	</form>
@@ -28,4 +24,4 @@
 
 
 </body>
-</html>
+</html> 

@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.details;
+package com.fdmgroup.apmproject.security;
 
 import java.util.Arrays;
 import java.util.Collection;

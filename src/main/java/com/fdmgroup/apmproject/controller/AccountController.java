@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,7 +31,9 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 		
-	private static Logger logger = LogManager.getLogger(AccountController.class);
+	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
+	
+    private final int LEASTINITIALDEPOSIT = 5000;
 	
 	public AccountController(AccountService accountService) {
 		this.accountService = accountService;
@@ -46,9 +49,9 @@ public class AccountController {
 			List<Account> userBankAccounts = currentUser.getAccounts();
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				logger.info("User is redirected to bank account dashboard");
+				LOGGER.info("User is redirected to bank account dashboard");
 			} else {
-				logger.info("User is redirected to bank account. User has no active bank accounts with the bank");
+				LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 			}
 			return "accountdashboard";
@@ -78,10 +81,12 @@ public class AccountController {
 		
 	}
 	
+	//Function which processes the bank account withdrawal request.
 	@PostMapping("/processWithdrawal")
 	public String processWithdrawal(@RequestParam Long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
 		if (session != null && session.getAttribute("loggedUser") !=null) {
 			//Checking for account ownership & if funds in bank account is sufficient. Returns respective message if successful or failure.
+			//Add create transaction on controller class.
 			boolean success = accountService.withdrawAccountByAmount(accountId, amount);
 			if (success) {
 				redirectAttributes.addFlashAttribute("message", "Withdrawal successful!");
@@ -96,10 +101,10 @@ public class AccountController {
 		
 	}
 	
-	@GetMapping("/deposit")
+	@GetMapping("/bankaccount/deposit")
 	public String goToDepositPage(Model model, HttpSession session) {
 		
-		//Get loggeduser
+		//Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
 		
 		//Get user id
@@ -108,7 +113,7 @@ public class AccountController {
 		//get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
 		
-		//add user and account list to the mode
+		//add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
 		
@@ -116,10 +121,10 @@ public class AccountController {
 	}
 	
 	
-	@PostMapping("/deposit")
+	@PostMapping("/bankaccount/deposit")
 	public String deposit(	@RequestParam("account") long accountId,
-            				@RequestParam("deposit amount") double depositAmount ,
-            				HttpServletRequest request) {
+            				@RequestParam("deposit amount") double depositAmount
+            				) {
 		
 		// get the required account
 		Account accountDeposited = accountService.findById(accountId);
@@ -131,6 +136,107 @@ public class AccountController {
 		accountDeposited.setBalance(updatedBalance);
 		accountService.update(accountDeposited);
 
-		return "redirect:/login";
+		return "redirect:/bankaccount/dashboard";
 	}
+	
+	@GetMapping("/bankaccount/create")
+	public String goToCreateBankAccountPage() {
+	
+		return "createbankaccount";
+	}
+	
+	@PostMapping("/bankaccount/create")
+	public String createBankAccount(	
+		@RequestParam("accountName") String accountName,
+		@RequestParam("initialDeposit") double initialDeposit,
+		HttpSession session,
+		RedirectAttributes redirectAttributes
+		)
+	{
+		
+		if (initialDeposit<LEASTINITIALDEPOSIT){
+			
+			redirectAttributes.addAttribute("InsufficientInitialDepositError", "true");
+			LOGGER.info("Insufficient Initial Deposit");
+			return "redirect:/bankaccount/create";
+		}else{
+		//Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+				
+		String accountnumber = accountService.generateUniqueAccountNumber();
+		
+		Account accountCreated = new Account(accountName,initialDeposit,accountnumber,currentUser);
+		
+		accountService.persist(accountCreated);
+		
+		return "redirect:/bankaccount/dashboard";}
+	}
+	
+	@GetMapping("/bankaccount/transfer")
+	public String goToTransferPage(Model model, HttpSession session) {
+	
+		//Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+
+		// Get user id
+		long userId = currentUser.getUserId();
+
+		// get all the accounts owned by that user
+		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
+
+		// add user and account list to the model
+		model.addAttribute("user", currentUser);
+		model.addAttribute("AccountList", AccountList);
+
+		return "transfer";
+	}
+	
+	@PostMapping("/bankaccount/transfer")
+	public String transferMoney(	
+		@RequestParam("account") long accountId,	
+		@RequestParam("transferAmount") Double transferAmount,
+		@RequestParam("accountNumberTransferTo") String accountNumberTransferTo,
+		HttpSession session,
+		RedirectAttributes redirectAttributes)
+	{
+		
+		
+		//Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+		
+		// get the required accounts
+		Account accountFromBalance = accountService.findById(accountId);
+		
+		//validate user is not transferring money to the same account	
+		if (accountFromBalance.getAccountNumber().equals(accountNumberTransferTo)){
+			
+			redirectAttributes.addAttribute("SameAccountError", "true");
+			LOGGER.info("SameAccount");
+			return "redirect:/bankaccount/transfer";
+		}
+		//validate user has sufficient in account	
+		else if (accountFromBalance.getBalance() < transferAmount) {
+			redirectAttributes.addAttribute("InsufficientBalanceError", "true");
+			LOGGER.info("InsufficientBalance");
+			return "redirect:/bankaccount/transfer";
+		}
+		else {
+		System.out.println(accountFromBalance.getAccountNumber());
+		System.out.println(accountNumberTransferTo);
+		Account accountToBalance = accountService.findAccountByAccountNumber(accountNumberTransferTo);
+		
+			
+		// update the accounts' balance
+		accountFromBalance.setBalance(accountFromBalance.getBalance()-transferAmount);
+		accountService.update(accountFromBalance);
+		
+		accountToBalance.setBalance(accountToBalance.getBalance()+transferAmount);
+		accountService.update(accountToBalance);
+		
+		LOGGER.info("Transfer Success!");
+		
+		return "redirect:/bankaccount/dashboard";
+		}
+	}
+
 }

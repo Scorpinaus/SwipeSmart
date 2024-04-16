@@ -81,7 +81,7 @@ public class Account {
 	}
 	
 	public String getAccountNumber() {
-		return accountName;
+		return accountNumber;
 	}
 
 	public void setAccountNumber(String accountNumber) {

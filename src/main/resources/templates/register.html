@@ -3,10 +3,10 @@
 	<head>
 		<link rel="stylesheet" href="/register.css">
 		<meta charset="UTF-8">
-		<title>Registration Page</title>
+		<title>SwipeSmart Registration Page</title>
 	</head>
 	<body>
-		<h1>Registration Form</h1>
+		<h1>SwipeSmart</h1>
 		<div class="mainContainer">
 			<div class="formContainer">
 				<form method="post" action="register">
@@ -21,9 +21,12 @@
 			<div class="errorMessage" th:if="${errorAlphanumeric}">
 					<p>Password needs to be alphanumeric</p>
 			</div>
-		</div>
-		<div class="loginButton">
-			<a id="login" href="/login">Login Here</a>
+			<div class="loginTag">
+				<p>Have an account? Login here</p>
+			</div>
+			<div class="loginButton">
+				<a id="login" href="/login">Login Here</a>
+			</div>
 		</div>
 	</body>
 </html>

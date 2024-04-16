@@ -37,9 +37,11 @@
 					</div>
 					<ul>
 						<li th:each="account : ${currentUserBankAccounts}">
+						<a th:href="@{/viewTransactions(number=${account.accountNumber})}" style="text-decoration: none;">
 							<span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
 							<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
 							<span th:text=" 'Account Balance: $' + ${account.balance}"></span>
+						</a>
 						</li>
 					</ul>
 			</div>

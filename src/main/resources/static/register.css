@@ -1,25 +1,110 @@
-h1 {
-	display: flex;
-	justify-content: center;
+@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@keyframes transitionIn {
+  from{
+    opacity:0;
+    transform:rotateX(-10deg);
+  }
+  
+  to {
+    opacity:1;
+    transform:rotateX(0);
+  }
 }
 
+:root {
+  --darkgreen: #2b6777;
+  --lightblue:#c8d8e4;
+  --white: #ffffff;
+  --lightgrey:#f2f2f2;
+  --lightgreen:#52ab98;
+  --fadedgreen:#4F96A9;
+}
 
-.formContainer{
-	display: flex;
-	justify-content: center;
+body {
+  font-family: 'Actor', sans-serif;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding:0;
+  text-align: center;
+  background-color: var(--darkgreen);
+  background-image: url(https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  animation:transitionIn 0.75s;
+}
+
+.register-page-container {
+  width: 500px;
+  margin: 100px auto;
+  padding: 50px;
+  border-radius: 10px;
+  background-color: var(--fadedgreen);
+}
+
+.logo-container{
+  text-align: center;
+  background-color: var(--fadedgreen);
+  margin-bottom: 1px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.logo-container img {
+  width: 300px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  font-family: 'Actor', sans-serif;
+  font-size: 20px;
+  width: 100%;
+    padding: 10px;
+    border: 0px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    color: var(--white);
+    background-color: var(--darkgreen);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .errorMessage{
-	display: flex;
-	justify-content: center;
+    color: rgb(204, 0, 0);
 }
 
-.loginTag {
-	display: flex;
-	justify-content: center;
+#registerButton:hover {
+	background-color: var(--lightblue);
+	color:black;
 }
 
-.loginButton {
-	display: flex;
-	justify-content: center;
+.login-container {
+  font-family: 'Actor', sans-serif;
+  margin-top: 30px;
+}
+
+.login-container a {
+  text-decoration: none;
+  color: var(--lightgrey)
+}
+
+.login-container a:hover {
+  text-decoration: underline;
 }

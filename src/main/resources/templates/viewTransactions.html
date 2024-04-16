@@ -44,7 +44,6 @@
 							<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
 							<td th:text="${transaction.transactionCurrency}"></td> 
-							
 							<td th:text="${transaction.transactionType}"></td>
 							<td th:text="${transaction.transactionDate}"></td>
 							<td th:text="${transaction.cashback}"></td>
@@ -68,14 +67,14 @@
 						<tr th:each="transaction : ${transactions}">
 							<td th:text="${transaction.transactionType}"></td>
 							<td th:text="${transaction.transactionDate}"></td> 
-							
 							<td th:text="${transaction.transactionAmount}"></td>
+							<td th:text="${transaction.transactionCurrency}"></td> 
+							<td th:text="${transaction.recipientAccountNumber}"></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
-		
 	</div>
 	<script>
 		function openSidebar() {

@@ -11,12 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Status;
-import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
-import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.UserService;
@@ -28,9 +25,6 @@ public class CreditCardController {
 
 	@Autowired
 	private CreditCardService creditCardService;
-	
-	@Autowired
-	private AccountService accountService;
 	
 	@Autowired
 	private StatusService statusService;
@@ -53,31 +47,6 @@ public class CreditCardController {
 		}
 	}
 
-	@GetMapping("/viewTransactions")
-	public String viewCardTransactions(@RequestParam(name = "creditCardId", required = false) String creditCardId, @RequestParam(name = "accountId", required = false) String accountId, Model model,
-			HttpSession session) {
-		if (session != null && session.getAttribute("loggedUser") != null) {
-			User loggedUser = (User) session.getAttribute("loggedUser");
-			model.addAttribute("user", loggedUser);
-			if (accountId != null) {
-				Account userAccount = accountService.findById(Long.parseLong(accountId));
-				List<Transaction> transactions = userAccount.getTransactions();
-				model.addAttribute("account", userAccount);
-				model.addAttribute("transactions", transactions);
-			} else if (creditCardId != null) {
-				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
-				List<Transaction> transactions = userCreditCard.getTransactions();
-				model.addAttribute("creditCard", userCreditCard);
-				model.addAttribute("transactions", transactions);
-				System.out.println(transactions);
-			}
-			return "viewTransactions";
-		} else {
-			model.addAttribute("error", true);
-			logger.warn("User Is not logged-in. Please login first");
-			return "userCards";
-		}
-	}
 
 	@GetMapping("/applyCreditCard")
 	public String applyCreditCard(Model model, HttpSession session) {

@@ -110,4 +110,6 @@ input[type="submit"] {
   text-decoration: underline;
 }
 
-
+.errorMessage{
+	color:red;
+}

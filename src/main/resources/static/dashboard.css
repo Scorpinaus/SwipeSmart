@@ -1,4 +1,6 @@
 .linkContainerSideBar{
+	height: 100%;
+	left:0;
     background-color: lightblue;
     transition: 0.5s;
     position: fixed;

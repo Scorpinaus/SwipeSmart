@@ -1,6 +1,8 @@
 package com.fdmgroup.apmproject.service;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Transaction;
@@ -23,6 +26,7 @@ public class TransactionService {
 	private CreditCardService creditCardService;
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
+	private CreditCard creditcard;
 	
 	private static Logger logger = LogManager.getLogger(TransactionService.class);
 	
@@ -80,6 +84,21 @@ public class TransactionService {
 		}
 	}
 	
+	public List<Transaction> getTransactionsByMonthAndYearAndTransactionAccount(int year, int monthValue, Account account) {
+        YearMonth yearMonth = YearMonth.of(year, monthValue);
+        LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        return transactionRepo.findByTransactionDateBetweenAndTransactionAccount(startOfMonth,endOfMonth,account);
+    }
+	
+	public List<Transaction> getTransactionsByMonthAndYearAndTransactionCreditCard(int year, int monthValue, CreditCard creditcard) {
+        YearMonth yearMonth = YearMonth.of(year, monthValue);
+        LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+        return transactionRepo.findByTransactionDateBetweenAndTransactionCreditCard(startOfMonth,endOfMonth,creditcard);
+    }
+	
 	@PostConstruct
 	public void initTransactions() {
 		CreditCard creditCard = creditCardService.findByCreditCardNumber("1234-5678-1234-5678");
@@ -105,4 +124,5 @@ public class TransactionService {
 		updateCreditCardBalance(transaction4);
 		updateCreditCardBalance(transaction5);
 	}
+
 }

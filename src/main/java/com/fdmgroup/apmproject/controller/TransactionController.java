@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
+import com.fdmgroup.apmproject.service.TransactionService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,27 +28,44 @@ public class TransactionController {
 	private CreditCardService creditCardService;
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private TransactionService transactionService;
 	
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	
 	
 	@GetMapping("/viewTransactions")
-	public String viewCardTransactions(@RequestParam(name = "creditCardId", required = false) String creditCardId, @RequestParam(name = "accountId", required = false) String accountId, Model model,
+	public String viewCardTransactions(@RequestParam(name = "month", required = false) String month, @RequestParam(name = "creditCardId", required = false) String creditCardId, @RequestParam(name = "accountId", required = false) String accountId, Model model,
 			HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
 			User loggedUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", loggedUser);
+			List<Transaction> transactions = new ArrayList<>();
 			if (accountId != null) {
 				Account userAccount = accountService.findById(Long.parseLong(accountId));
-				List<Transaction> transactions = userAccount.getTransactions();
+				if (month == null || month == "") {
+					transactions = userAccount.getTransactions();
+				} else {
+					int year = Integer.parseInt(month.substring(0, 4));
+				    int monthValue = Integer.parseInt(month.substring(5));
+				    transactions = transactionService.getTransactionsByMonthAndYearAndTransactionAccount(year, monthValue, userAccount);
+				}
 				model.addAttribute("account", userAccount);
 				model.addAttribute("transactions", transactions);
 			} else if (creditCardId != null) {
 				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
-				List<Transaction> transactions = userCreditCard.getTransactions();
+				if (month == null || month == "") {
+					transactions = userCreditCard.getTransactions();
+				} else {
+					int year = Integer.parseInt(month.substring(0, 4));
+					System.out.println(year);
+				    int monthValue = Integer.parseInt(month.substring(5));
+				    System.out.println(monthValue);
+				    transactions = transactionService.getTransactionsByMonthAndYearAndTransactionCreditCard(year, monthValue, userCreditCard);
+				    System.out.println(transactions);
+				}
 				model.addAttribute("creditCard", userCreditCard);
 				model.addAttribute("transactions", transactions);
-				System.out.println(transactions);
 			}
 			return "viewTransactions";
 		} else {

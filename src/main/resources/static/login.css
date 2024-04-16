@@ -1,4 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
 
 :root {
 	--darkgreen: #2b6777;
@@ -6,6 +17,7 @@
 	--white: #ffffff;
 	--lightgrey:#f2f2f2;
 	--lightgreen:#52ab98;
+	--fadedgreen:#4F96A9;
 }
 
 body {
@@ -16,16 +28,86 @@ body {
 	padding:0;
 	text-align: center;
 	background-color: var(--darkgreen);
+	animation:transitionIn 0.75s;
+}
+
+.login-page-container {
+    width: 500px;
+	margin: 100px auto;
+	padding: 50px;
+	border-radius: 10px;
+	background-color: var(--fadedgreen);
 }
 
 .logo-container{
 	text-align: center;
-	background-color: var(--darkgreen);
+	background-color: var(--fadedgreen);
 	margin-bottom: 1px;
 	padding-top: 15px;
 	padding-bottom: 15px;
 }
 
 .logo-container img {
-	width: 200px;
+	width: 300px;
 }
+
+.welcome-message {
+    color: #333;
+    margin-top: 10px;
+    font-size: 25px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+	font-family: 'Actor', sans-serif;
+	font-size: 20px;
+	width: 100%;
+  	padding: 10px;
+  	border: 0px;
+  	border-radius: 10px;
+  	box-sizing: border-box;
+  	color: var(--white);
+  	background-color: var(--darkgreen);
+  	cursor: pointer;
+  	transition: all 0.3s ease;
+}
+
+#loginButton:hover {
+	background-color: var(--lightblue);
+	color:black;
+}
+
+.register-container {
+	font-family: 'Actor', sans-serif;
+	margin-top: 30px;
+}
+
+.register-container a {
+	text-decoration: none;
+	color: var(--lightgrey)
+}
+
+.register-container a:hover {
+  text-decoration: underline;
+}
+
+

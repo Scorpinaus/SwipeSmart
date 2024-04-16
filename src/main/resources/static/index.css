@@ -1,4 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
 
 :root {
 	--darkgreen: #2b6777;
@@ -6,6 +17,7 @@
 	--white: #ffffff;
 	--lightgrey:#f2f2f2;
 	--lightgreen:#52ab98;
+	--fadedgreen:#4F96A9;
 }
 
 body {
@@ -36,6 +48,8 @@ body {
 	padding: 5px;
 	margin-bottom: 0;
 	display: inline-block;
+	width: 100%;
+	animation:transitionIn 0.75s;
 }
 
 .register-container h2 {
@@ -65,11 +79,17 @@ body {
 	transition: all 0.3s ease;
 }
 
+.register-button:hover, 
+.login-button:hover {
+	background-color: var(--fadedgreen);
+}
+
 .login-container {
 	text-align: center;
 	background-color: var(--lightblue);
 	display:inline-block;
 	width: 100%;
+	animation:transitionIn 2.5s;
 }
 
 .login-button {

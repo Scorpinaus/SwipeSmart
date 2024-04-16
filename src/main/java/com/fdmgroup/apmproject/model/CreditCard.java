@@ -139,4 +139,19 @@ public class CreditCard {
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
 	}
+	
+	//Add balance when transactions are made
+	public void addTransaction(double amount) {
+		Double originalAmount = getAmountUsed();
+		setAmountUsed(originalAmount + amount);
+	}
+
+	@Override
+	public String toString() {
+		return "CreditCard [creditCardId=" + creditCardId + ", creditCardNumber=" + creditCardNumber + ", pin=" + pin
+				+ ", cardLimit=" + cardLimit + ", cardType=" + cardType + ", amountUsed=" + amountUsed
+				+ ", creditCardStatus=" + creditCardStatus + "]";
+	}
+	
+	
 }

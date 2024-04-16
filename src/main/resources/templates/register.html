@@ -21,6 +21,9 @@
 			<div class="errorMessage" th:if="${errorAlphanumeric}">
 					<p>Password needs to be alphanumeric</p>
 			</div>
+			<div class="errorMessage" th:if="${errorLength}">
+					<p>Password needs to be 8 characters long</p>
+			</div>
 			<div class="loginTag">
 				<p>Have an account? Login here</p>
 			</div>

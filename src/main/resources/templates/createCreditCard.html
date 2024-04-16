@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!-- <link rel="stylesheet" href="#"> -->
+		<meta charset="UTF-8">
+		<title>Apply for Credit Cards</title>
+	</head>
+	<body>
+		<h1 th:text="'Hi ' + ${session.loggedUser.username} + ', please select your credit card to apply for.'"></h1>
+		
+		<h2>Our available credit card</h2>
+		
+		<div class="secondary-content-container">    
+           <form method="post" action="createCreditCard" class="createCreditCard">					
+				<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
+				<br>
+				<select id="cars" name="cars">
+			    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
+			  	</select>
+				<input type="submit" value="Apply" class="button">
+			</form>
+			<div th:if="${error}">
+   				 <p style="color: red;">There are empty fields, please fill up</p>
+			</div>
+		</div>
+	</body>
+</html>s

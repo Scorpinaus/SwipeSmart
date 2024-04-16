@@ -1,0 +1,9 @@
+.linkContainerSideBar{
+    background-color: lightblue;
+    transition: 0.5s;
+    position: fixed;
+}
+
+.mainPage{
+	transition: margin-left .5s;
+}

@@ -75,7 +75,6 @@ public class Transaction {
 			Account transactionAccount, MerchantCategoryCode mcc,
 			ForeignExchangeCurrency transactionCurrency) {
 		setTransactionDate(LocalDateTime.now());
-		setTransactionDate(transactionDate);
 		setTransactionType(transactionType);
 		setTransactionAmount(transactionAmount);
 		setRecipientAccountNumber(recipientAccountNumber);

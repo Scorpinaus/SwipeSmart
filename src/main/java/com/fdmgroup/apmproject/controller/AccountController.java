@@ -176,15 +176,15 @@ public class AccountController {
 			String accountnumber = accountService.generateUniqueAccountNumber();
 
 			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser);
-
-
-//			accountService.persist(accountCreated);
+			//persist new account
 			
-//			double cashback = 0;
+			accountService.persist(accountCreated);
+			
+			double cashback = 0;
 //			
-//			Transaction transaction = new Transaction("deposit",initialDeposit,cashback, );
+			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null,null );
 //
-//			transactionService.persist(transaction);
+			transactionService.persist(transaction);
 			
 			LOGGER.info("account has been created");
 			return "redirect:/bankaccount/dashboard";

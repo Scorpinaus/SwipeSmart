@@ -54,19 +54,22 @@ public class CreditCardController {
 	}
 
 	@GetMapping("/viewTransactions")
-	public String viewCardTransactions(@RequestParam(name = "number", required = false) String number, Model model,
+	public String viewCardTransactions(@RequestParam(name = "creditCardId", required = false) String creditCardId, @RequestParam(name = "accountId", required = false) String accountId, Model model,
 			HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
-			if (number.length() == 11) {
-				Account userAccount = accountService.findAccountByAccountNumber(number);
+			User loggedUser = (User) session.getAttribute("loggedUser");
+			model.addAttribute("user", loggedUser);
+			if (accountId != null) {
+				Account userAccount = accountService.findById(Long.parseLong(accountId));
 				List<Transaction> transactions = userAccount.getTransactions();
 				model.addAttribute("account", userAccount);
 				model.addAttribute("transactions", transactions);
-			} else if (number.length() == 19) {
-				CreditCard userCreditCard = creditCardService.findByCreditCardNumber(number);
+			} else if (creditCardId != null) {
+				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
 				List<Transaction> transactions = userCreditCard.getTransactions();
 				model.addAttribute("creditCard", userCreditCard);
 				model.addAttribute("transactions", transactions);
+				System.out.println(transactions);
 			}
 			return "viewTransactions";
 		} else {

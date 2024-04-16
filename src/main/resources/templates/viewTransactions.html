@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Transactions</title>
+</head>
+<body>
+	<div class="linkContainerSideBar" style="display: none" id="sidebar">
+		<button onclick="closeSidebar()" class="closeSidebar">X</button>
+		<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a> <a
+			href="/userCards">Cards</a> <a href="/bankaccount/dashboard">Accounts</a>
+		<a href="/logout">Logout</a>
+	</div>
+	<div class="mainPage">
+		<button onclick="openSidebar()" class="openSidebar">☰</button>
+		<div th:if="${creditCard != null}">
+			<h2 th:text="${creditCard.cardType}"></h2>
+			<p th:text="${creditCard.creditCardNumber}"></p>
+			<p th:text="${creditCard.pin}"></p>
+		</div>
+
+		<h2>Transactions</h2>
+		<div th:if="${creditCard != null}">
+			<div class="secondary-content-container">
+				<table>
+					<thead>
+						<tr>
+							<th>Category</th>
+							<th>Amount</th>
+							<th>Currency</th>
+							<th>Transaction Type</th>
+							<th>Date</th>
+							<th>CashBack</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="transaction : ${transactions}">
+							<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
+							<td th:text="${transaction.transactionAmount}"></td>
+							<td th:text="${transaction.transactionCurrency}"></td> 
+							
+							<td th:text="${transaction.transactionType}"></td>
+							<td th:text="${transaction.transactionDate}"></td>
+							<td th:text="${transaction.cashback}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script>
+		function openSidebar() {
+			document.getElementById("sidebar").style.display = "block";
+		}
+		function closeSidebar() {
+			document.getElementById("sidebar").style.display = "none";
+		}
+	</script>
+</body>
+</html>

@@ -2,7 +2,6 @@
 	height: 100%;
 	top:0;
 	left:0;
-	width:0;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -56,4 +55,5 @@ a#cards{
 
 .mainPage{
 	transition: margin-left .5s;
+	margin-left: 160px;
 }

@@ -6,18 +6,35 @@
 		<title>User Profile Page</title>
 	</head>
 	<body>
-		<h1>User Profile:</h1>
-		<h2><span th:text="${user.username}"></span></h2>
-		<div class="userDetails" th:object="${user}">
-			Username: <span th:text="*{username}"></span>
-			Address: <span th:text="*{address}"></span>
-			First Name: <span th:text="*{firstName}"></span>
-			Last Name: <span th:text="*{lastName}"></span>	
-		</div>
-		<div class="link">
-			<a th:href="@{/users/{id}/details(id=${user.userId})}">Edit Profile Details</a>
-			<a href="/dashboard">Return to dashboard</a>
+		<div class="linkContainerSideBar" style="display:none" id="sidebar">
+			<button onclick="closeSidebar()" class="closeSidebar">X</button>
+			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+			<a href="/userCards">Cards</a>
+			<a href="/bankaccount/dashboard">Accounts</a>
 			<a href="/logout">Logout</a>
 		</div>
+		<div class="mainPage">
+			<button onclick="openSidebar()" class="openSidebar">☰</button>
+			<h1>User Profile:</h1>
+			<h2><span th:text="${user.username}"></span></h2>
+			<div class="userDetails" th:object="${user}">
+				Username: <span th:text="*{username}"></span>
+				Address: <span th:text="*{address}"></span>
+				First Name: <span th:text="*{firstName}"></span>
+				Last Name: <span th:text="*{lastName}"></span>	
+			</div>
+			<div class="link">
+				<a th:href="@{/users/{id}/details(id=${user.userId})}">Edit Profile Details</a>
+				<a href="/dashboard">Return to dashboard</a>
+			</div>
+		</div>
+		<script>
+			function openSidebar(){
+				document.getElementById("sidebar").style.display="block";
+			}
+			function closeSidebar(){
+				document.getElementById("sidebar").style.display="none";
+			}
+		</script>
 	</body>
 </html>

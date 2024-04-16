@@ -40,8 +40,8 @@ public class AccountController {
 			// retrieves current user from current session
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
-			// retrieves all active bank accounts under current user
-			List<Account> userBankAccounts = currentUser.getAccounts();
+			//retrieves all active bank accounts under current user
+			List<Account> userBankAccounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 				LOGGER.info("User is redirected to bank account dashboard");
@@ -65,31 +65,30 @@ public class AccountController {
 			List<Account> accounts = currentUser.getAccounts();
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
-				return "/bankaccount/withdrawal";
+				return "accountdashboard";
 			}
 			model.addAttribute("accounts", accounts);
-			return "/bankaccount/withdrawal";
-		} else {
+			return "accountwithdrawal";
+		}
+		else {
 			return "redirect:/login";
 		}
 
 	}
-
-	// Function which processes the bank account withdrawal request.
-	@PostMapping("/processWithdrawal")
-	public String processWithdrawal(@RequestParam Long accountId, @RequestParam BigDecimal amount, HttpSession session,
-			RedirectAttributes redirectAttributes) {
-		if (session != null && session.getAttribute("loggedUser") != null) {
-			// Checking for account ownership & if funds in bank account is sufficient.
-			// Returns respective message if successful or failure.
-			// Add create transaction on controller class.
+	
+	//Function which processes the bank account withdrawal request.
+	@PostMapping("/bankaccount/withdrawal")
+	public String processWithdrawal(@RequestParam Long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
+		if (session != null && session.getAttribute("loggedUser") !=null) {
+			//Checking for account ownership & if funds in bank account is sufficient. Returns respective message if successful or failure.
+			//Add create transaction on controller class.
 			boolean success = accountService.withdrawAccountByAmount(accountId, amount);
 			if (success) {
 				redirectAttributes.addFlashAttribute("message", "Withdrawal successful!");
 				return "redirect:/bankaccount/dashboard";
 			} else {
 				redirectAttributes.addFlashAttribute("error", "Withdrawal failed!");
-				return "redirect:/backaccount/withdrawal";
+				return "redirect:/bankaccount/withdrawal";
 			}
 		} else {
 			return "redirect:/login";
@@ -159,9 +158,8 @@ public class AccountController {
 
 			accountService.persist(accountCreated);
 
-			return "redirect:/bankaccount/dashboard";
+			return "redirect:/bankaccount/dashboard";}
 		}
-	}
 
 	@GetMapping("/bankaccount/transfer")
 	public String goToTransferPage(Model model, HttpSession session) {

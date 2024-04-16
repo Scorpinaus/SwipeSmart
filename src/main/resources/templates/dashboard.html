@@ -6,14 +6,24 @@
 		<title>User Dashboard</title>
 	</head>
 	<body>
-		<div class="linkContainerSideBar" style="display:none" id="sidebar">
+		<div class="linkContainerSideBar" id="sidebar">
 			<button onclick="closeSidebar()" class="closeSidebar">X</button>
-			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
-			<a href="/userCards">Cards</a>
-			<a href="/bankaccount/dashboard">Accounts</a>
-			<a href="/logout">Logout</a>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="cards">
+					<a href="/userCards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a href="/bankaccount/dashboard">Accounts</a>
+				</div>
+				<div class="logout">
+					<a href="/logout">Logout</a>
+				</div>
+			</div>
 		</div>
-		<div class="mainPage">
+		<div class="mainPage" id="main">
 			<button onclick="openSidebar()" class="openSidebar">☰</button>
 			<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
 			<p> Display info here on Dashboard </p>	
@@ -39,10 +49,12 @@
 		</div>
 		<script>
 			function openSidebar(){
-				document.getElementById("sidebar").style.display="block";
+				document.getElementById("sidebar").style.width="250px";
+				document.getElementById("main").style.marginLeft="250px";
 			}
 			function closeSidebar(){
-				document.getElementById("sidebar").style.display="none";
+				document.getElementById("sidebar").style.width="0";
+				document.getElementById("main").style.marginLeft="0";
 			}
 		</script>
 	</body>	

@@ -1,9 +1,37 @@
 .linkContainerSideBar{
 	height: 100%;
+	top:0;
 	left:0;
+	width:0;
+	z-index: 1;
+	overflow-x: hidden;
     background-color: lightblue;
     transition: 0.5s;
     position: fixed;
+}
+
+a{
+	transition: 0.3s;
+}
+
+.sidebarLinks{
+	padding: 20px;
+}
+
+.profile{
+	padding: 20px;
+}
+
+.cards{
+	padding: 20px;
+}
+
+.accounts{
+	padding: 20px;
+}
+
+.logout{
+	padding: 20px;
 }
 
 .mainPage{

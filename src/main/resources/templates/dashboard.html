@@ -17,6 +17,25 @@
 			<button onclick="openSidebar()" class="openSidebar">☰</button>
 			<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
 			<p> Display info here on Dashboard </p>	
+			<div class="accounts" th:each="account : ${user.accounts}" th:object=${user}>
+				<div class="accountDetails">
+					<p th:text="${account.accountName}">hi</p>
+					<p th:text="${account.balance}"></p>
+					<p th:text="${account.accountNumber}"></p>
+				</div>
+			</div>
+			<div class="cards" th:each="card: ${user.creditCards}" th:object="${user}">
+				<div class="cardDetails">
+					<p th:text="${card.creditCardNumber}"></p>
+					<p th:text="${card.cardLimit}"></p>
+					<p th:text="${card.cardType}"></p>
+					<p th:text="${card.amountUsed}"></p>
+				</div>
+			</div>
+			<div class="spendingInsights">
+			</div>
+			<div class="pieChart">
+			</div>
 		</div>
 		<script>
 			function openSidebar(){

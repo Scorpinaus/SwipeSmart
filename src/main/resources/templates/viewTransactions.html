@@ -44,10 +44,34 @@
 							<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
 							<td th:text="${transaction.transactionCurrency}"></td> 
-							
 							<td th:text="${transaction.transactionType}"></td>
 							<td th:text="${transaction.transactionDate}"></td>
 							<td th:text="${transaction.cashback}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div th:if="${account != null}">
+			<div class="secondary-content-container">
+				<table>
+					<thead>
+						<tr>
+							<th>Amount</th>
+							<th>Currency</th>
+							<th>Transaction Type</th>
+							<th>Date</th>
+							<th>Recipient Account Number</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="transaction : ${transactions}">
+							<td th:text="${transaction.transactionAmount}"></td>
+							<td th:text="${transaction.transactionCurrency}"></td> 
+							<td th:text="${transaction.transactionType}"></td>
+							<td th:text="${transaction.transactionDate}"></td>
+							<td th:text="${transaction.recipientAccountNumber}"></td>
 						</tr>
 					</tbody>
 				</table>

@@ -43,7 +43,25 @@
 	padding: 20px;
 }
 
-a {
+a#profile {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#accounts {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#logout {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#cards{
 	color: white;
 	text-decoration:none;
 	padding: 10px;

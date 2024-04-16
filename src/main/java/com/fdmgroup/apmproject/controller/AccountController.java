@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
+
 import com.fdmgroup.apmproject.service.AccountService;
+
+import com.fdmgroup.apmproject.service.TransactionService;
+
 import com.fdmgroup.apmproject.service.UserService;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -29,6 +35,10 @@ public class AccountController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private TransactionService transactionService;
+		
+
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
 	private final int LEASTINITIALDEPOSIT = 5000;
@@ -40,6 +50,7 @@ public class AccountController {
 	// Function brings logged on user to BankAccounts page.
 	@GetMapping("/bankaccount/dashboard")
 	public String showBankAccountDashboard(HttpSession session, Model model) {
+
 		if (session != null && session.getAttribute("loggedUser") != null) {
 			// retrieves current user from current session
 			User currentUser = (User) session.getAttribute("loggedUser");
@@ -58,6 +69,7 @@ public class AccountController {
 		} else {
 			return "redirect:/login";
 		}
+
 	}
 
 	// Function which brings user to Bank Account withdrawal page
@@ -133,6 +145,14 @@ public class AccountController {
 		accountDeposited.setBalance(updatedBalance);
 		accountService.update(accountDeposited);
 
+		
+		//Transaction
+		double cashback = 0;
+		
+		Transaction transaction = new Transaction("deposit",depositAmount ,accountDeposited.getAccountNumber(),cashback,null,accountDeposited,null,null );
+
+		transactionService.persist(transaction);
+		
 		return "redirect:/bankaccount/dashboard";
 	}
 
@@ -152,22 +172,43 @@ public class AccountController {
 			redirectAttributes.addAttribute("InsufficientInitialDepositError", "true");
 			LOGGER.info("Insufficient Initial Deposit");
 			return "redirect:/bankaccount/create";
-		} else {
+		} else if (accountName.matches("\\s*")) {
+			LOGGER.info("The account name does not contain any words.");
+			return "redirect:/bankaccount/create";
+		} else if (accountName.isEmpty()) {
+			LOGGER.info("The account name can not be blank");
+			return "redirect:/bankaccount/create";
+		}
+			 else {
+
+
 			// Get logged user
 			User currentUser = (User) session.getAttribute("loggedUser");
 
 			String accountnumber = accountService.generateUniqueAccountNumber();
 
 			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser);
-
-			accountService.persist(accountCreated);
-			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");
-			currentUser.setAccounts(accountCreated);
-			userService.update(currentUser);
+			//persist new account
 			
+			accountService.persist(accountCreated);
 
-			return "redirect:/bankaccount/dashboard";}
+			
+			double cashback = 0;
+			
+			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null,null );
+
+			transactionService.persist(transaction);
+	
+
+			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");
+			
+	
+			return "redirect:/bankaccount/dashboard";
+
+
 		}
+	}
+
 
 	@GetMapping("/bankaccount/transfer")
 	public String goToTransferPage(Model model, HttpSession session) {
@@ -194,36 +235,45 @@ public class AccountController {
 			@RequestParam("accountNumberTransferTo") String accountNumberTransferTo, HttpSession session,
 			RedirectAttributes redirectAttributes) {
 
-		// get the required accounts
-		Account accountFromBalance = accountService.findById(accountId);
+			// get the required accounts
+			Account accountFromBalance = accountService.findById(accountId);
 
-		// validate user is not transferring money to the same account
-		if (accountFromBalance.getAccountNumber().equals(accountNumberTransferTo)) {
+			// validate user is not transferring money to the same account
+			if (accountFromBalance.getAccountNumber().equals(accountNumberTransferTo)) {
+	
+				redirectAttributes.addAttribute("SameAccountError", "true");
+				LOGGER.info("SameAccount");
+				return "redirect:/bankaccount/transfer";
+				}
+			// validate user has sufficient in account
+			else if (accountFromBalance.getBalance() < transferAmount) {
+				redirectAttributes.addAttribute("InsufficientBalanceError", "true");
+				LOGGER.info("InsufficientBalance");
+				return "redirect:/bankaccount/transfer";
+			} else {
 
-			redirectAttributes.addAttribute("SameAccountError", "true");
-			LOGGER.info("SameAccount");
-			return "redirect:/bankaccount/transfer";
-		}
-		// validate user has sufficient in account
-		else if (accountFromBalance.getBalance() < transferAmount) {
-			redirectAttributes.addAttribute("InsufficientBalanceError", "true");
-			LOGGER.info("InsufficientBalance");
-			return "redirect:/bankaccount/transfer";
-		} else {
-			System.out.println(accountFromBalance.getAccountNumber());
-			System.out.println(accountNumberTransferTo);
-			Account accountToBalance = accountService.findAccountByAccountNumber(accountNumberTransferTo);
-
-			// update the accounts' balance
-			accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
-			accountService.update(accountFromBalance);
-
-			accountToBalance.setBalance(accountToBalance.getBalance() + transferAmount);
-			accountService.update(accountToBalance);
-
-			LOGGER.info("Transfer Success!");
-
-			return "redirect:/bankaccount/dashboard";
+				Account accountToBalance = accountService.findAccountByAccountNumber(accountNumberTransferTo);
+	
+				// update the accounts' balance
+				accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+				accountService.update(accountFromBalance);
+	
+				accountToBalance.setBalance(accountToBalance.getBalance() + transferAmount);
+				accountService.update(accountToBalance);
+	
+				// Transaction
+				double cashback = 0;
+	
+				Transaction transaction = new Transaction("transfer", transferAmount, accountNumberTransferTo, cashback,
+						null, accountFromBalance, null, null);
+	
+				transactionService.persist(transaction);
+			
+			
+			
+				LOGGER.info("Transfer Success!");
+	
+				return "redirect:/bankaccount/dashboard";
 		}
 	}
 

@@ -3,6 +3,7 @@ package com.fdmgroup.apmproject.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -117,8 +118,15 @@ public class AccountService {
 	
 	
 	public String generateUniqueAccountNumber() {
-		String uuid = UUID.randomUUID().toString();
-		return uuid;
+		StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 9; i++) {
+            sb.append(random.nextInt(10));
+            if ((i + 1) % 3 == 0 && i != 8) {
+                sb.append("-"); // Adds a dash after every 4 digits, except the last set of 4 digits
+            }
+        }
+        return sb.toString();
 	}
 	
 }

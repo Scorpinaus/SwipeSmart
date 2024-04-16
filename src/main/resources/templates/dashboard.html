@@ -6,12 +6,25 @@
 		<title>User Dashboard</title>
 	</head>
 	<body>
-		<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
-		<div class="linkContainer">
+		<div class="linkContainerSideBar" style="display:none" id="sidebar">
+			<button onclick="closeSidebar()" class="closeSidebar">X</button>
 			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
 			<a href="/usercards">Cards</a>
 			<a href="/bankaccount/dashboard">Accounts</a>
 			<a href="/logout">Logout</a>
 		</div>
-	</body>
+		<div class="mainPage">
+			<button onclick="openSidebar()" class="openSidebar">☰</button>
+			<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
+			<p> Display info here on Dashboard </p>	
+		</div>
+		<script>
+			function openSidebar(){
+				document.getElementById("sidebar").style.display="block";
+			}
+			function closeSidebar(){
+				document.getElementById("sidebar").style.display="none";
+			}
+		</script>
+	</body>	
 </html>

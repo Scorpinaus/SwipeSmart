@@ -3,33 +3,52 @@
 	<head>
 		<link rel="stylesheet" href="/register.css">
 		<meta charset="UTF-8">
-		<title>SwipeSmart Registration Page</title>
+		<title>Register</title>
 	</head>
 	<body>
-		<h1>SwipeSmart</h1>
-		<div class="mainContainer">
-			<div class="formContainer">
-				<form method="post" action="register">
-					<input id="username" type="text" name="username" placeholder="Username">
-					<input id="password" type="password" name="password" placeholder="Password">
-					<input id="registerButton" type="submit" value="Register">
-				</form>
-			</div>
-			<div class="errorMessage" th:if="${errorInvalid}">
-					<p>Invalid Username or Password</p>
-			</div>
-			<div class="errorMessage" th:if="${errorAlphanumeric}">
-					<p>Password needs to be alphanumeric</p>
-			</div>
-			<div class="errorMessage" th:if="${errorLength}">
-					<p>Password needs to be 8 characters long</p>
-			</div>
-			<div class="loginTag">
-				<p>Have an account? Login here</p>
-			</div>
-			<div class="loginButton">
-				<a id="login" href="/login">Login Here</a>
-			</div>
-		</div>
+		<div class="register-page-container">
+    
+          <div class="logo-container">
+            <a href="/">
+              <img src="/logo-transparent.png">
+            </a>
+          </div>
+          
+          <div class="formContainer">
+            <form method="post" action="register">
+            
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" placeholder="eg. John123">
+              </div>
+              
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" placeholder="must be alphanumeric and at least 8 characters long">
+              </div>
+              
+              <div class="register-button-container">
+                  <input id="registerButton" type="submit" value="Register">
+              </div>
+              
+            </form> 
+          </div>
+          
+          <div class="errorMessage" th:if="${errorInvalid}">
+            <p>Invalid Username or Password</p>
+          </div>
+          <div class="errorMessage" th:if="${errorAlphanumeric}">
+            <p>Password needs to be alphanumeric</p>
+          </div>
+          <div class="errorMessage" th:if="${errorLength}">
+            <p>Password needs to be 8 characters long</p>
+          </div>
+          
+          <div class="login-container">
+            <p>Have an existing account? <a id="login" href="/login">Login Here</a> </p>
+          </div>
+		
+    </div> 
+       
 	</body>
 </html>

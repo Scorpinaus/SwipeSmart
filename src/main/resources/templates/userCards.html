@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
+		<link rel="stylesheet" href="/userCards.css">
 		<meta charset="UTF-8">
 		<title>User Credit Cards</title>
 	</head>
 	<body>
-		<div class="linkContainerSideBar" style="display:none" id="sidebar">
+		<div class="linkContainerSideBar" id="sidebar">
 			<button onclick="closeSidebar()" class="closeSidebar">X</button>
-			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
-			<a href="/userCards">Cards</a>
-			<a href="/bankaccount/dashboard">Accounts</a>
-			<a href="/logout">Logout</a>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="cards">
+					<a id="cards" href="/userCards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
 		</div>
-		<div class="mainPage">
+		<div class="mainPage" id="main">
 			<button onclick="openSidebar()" class="openSidebar">☰</button>
 			<h1 th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
 			<div class="button-container">
@@ -37,7 +48,7 @@
 				document.getElementById("main").style.marginLeft="160px";
 			}
 			function closeSidebar(){
-				document.getElementById("sidebar").style.display="none";
+				document.getElementById("sidebar").style.width="0";
 				document.getElementById("main").style.marginLeft="0";
 			}
 		</script>

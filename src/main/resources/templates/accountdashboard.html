@@ -2,32 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/accountdashboard.css">
 		<title>Account Dashboard Page</title>
 	</head>
 	<body>
-		<h1>Account Dashboard Page</h1>
-		
-		<div class="linkContainer">
-		<a href="/bankaccount/create">Create</a>
-			<a href="/bankaccount/deposit">Deposit</a>
-			<a href="/bankaccount/transfer">Transfer</a>
-			<a href="/bankaccount/withdraw">Withdraw</a>
+		<div class="linkContainerSideBar" style="display:none" id="sidebar">
+			<button onclick="closeSidebar()" class="closeSidebar">X</button>
+			<a th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+			<a href="/usercards">Cards</a>
+			<a href="/bankaccount/dashboard">Accounts</a>
 			<a href="/logout">Logout</a>
 		</div>
-		
-		<!--  Section for displaying user bank accounts -->
-		<div th:if"${not #lists.isEmpty(currentUserBankAccounts)}">
-			<h2> Your Bank Accounts</h2>
-				<ul>
-					<li th:each="account : ${currentUserBankAccounts}">
-						<span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
-						<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
-						<span th:text=" 'Account Balance: $' + ${account.balance}"></span>
-					</li>
-				</ul>
+		<div class="mainPage">
+			<button onclick="openSidebar()" class="openSidebar">☰</button>
+			<h1>Account Dashboard Page</h1>
+			
+			<div class="linkContainer">
+			<a href="/bankaccount/create">Create</a>
+				<a href="/bankaccount/deposit">Deposit</a>
+				<a href="/bankaccount/transfer">Transfer</a>
+				<a href="/bankaccount/withdraw">Withdraw</a>
+				<a href="/logout">Logout</a>
+			</div>
+			
+			<!--  Section for displaying user bank accounts -->
+			<div th:if"${not #lists.isEmpty(currentUserBankAccounts)}">
+				<h2> Your Bank Accounts</h2>
+					<ul>
+						<li th:each="account : ${currentUserBankAccounts}">
+							<span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
+							<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
+							<span th:text=" 'Account Balance: $' + ${account.balance}"></span>
+						</li>
+					</ul>
+			</div>
+			<div th:if="${#lists.isEmpty(currentUserBankAccounts)}">
+				<p>User has no active bank accounts. Do you want to create one? </p>
+			</div>
 		</div>
-		<div th:if="${#lists.isEmpty(currentUserBankAccounts)}">
-			<p>User has no active bank accounts. Do you want to create one? </p>
-		</div>
+		<script>
+			function openSidebar(){
+				document.getElementById("sidebar").style.display="block";
+			}
+			function closeSidebar(){
+				document.getElementById("sidebar").style.display="none";
+			}
+		</script>
 	</body>
 </html>

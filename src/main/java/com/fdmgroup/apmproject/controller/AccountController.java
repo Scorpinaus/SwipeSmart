@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -80,10 +81,12 @@ public class AccountController {
 		
 	}
 	
+	//Function which processes the bank account withdrawal request.
 	@PostMapping("/processWithdrawal")
 	public String processWithdrawal(@RequestParam Long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
 		if (session != null && session.getAttribute("loggedUser") !=null) {
 			//Checking for account ownership & if funds in bank account is sufficient. Returns respective message if successful or failure.
+			//Add create transaction on controller class.
 			boolean success = accountService.withdrawAccountByAmount(accountId, amount);
 			if (success) {
 				redirectAttributes.addFlashAttribute("message", "Withdrawal successful!");
@@ -235,6 +238,5 @@ public class AccountController {
 		return "redirect:/bankaccount/dashboard";
 		}
 	}
-	
-	
+
 }

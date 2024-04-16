@@ -29,8 +29,6 @@ public class CreditCardController {
 	@Autowired
 	private CreditCardService creditCardService;
 	@Autowired
-	private UserService userService;
-	@Autowired
 	private AccountService accountService;
 	@Autowired
 	private StatusService statusService;
@@ -54,7 +52,6 @@ public class CreditCardController {
 	@GetMapping("/viewTransactions") 
 	public String viewCardTransactions(@RequestParam(name = "number", required = false) String number, Model model, HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
-			User loggedUser = (User) session.getAttribute("loggedUser");
 			if (number.length() == 11) {
 				Account userAccount = accountService.findAccountByAccountNumber(number);
 				List<Transaction> transactions = userAccount.getTransactions();
@@ -95,12 +92,13 @@ public class CreditCardController {
 				model.addAttribute("error2", true);
 				return "applyCreditCard";
 			} else {
-				String creditCardNumber = creditCardService.validCreditCardNumber();
+				User loggedUser = (User) session.getAttribute("loggedUser");
+				String creditCardNumber = creditCardService.generateCreditCardNumber();
 				String pin = creditCardService.generatePinNumber();
 				double cardLimit = Double.parseDouble(monthlySalary) * 3;
 				// Default approved
 				Status statusName = statusService.findByStatusName("Approved");
-				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0);
+				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0, loggedUser);
 				creditCardService.persist(createCreditCard);
 				logger.info("Credit card of number " + creditCardNumber + " created");
 				return "userCards";

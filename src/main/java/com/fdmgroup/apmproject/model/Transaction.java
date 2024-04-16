@@ -1,6 +1,6 @@
 package com.fdmgroup.apmproject.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -22,14 +22,12 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Transaction ID")
 	private long transactionId;
-	@Column(name = "Merchant Category Code")
-	private String merchantCategoryCode;
 	@Column(name = "Transaction Date")
-	private Date transactionDate;
+	private LocalDateTime transactionDate;
 	@Column(name = "Transaction Type")
 	private String transactionType;
 	@Column(name = "Transaction Amount")
-	private long transactionAmount;
+	private double transactionAmount;
 	@Column(name = "Recipient Account Number")
 	private String recipientAccountNumber;
 	@Column(name = "Cashback")
@@ -47,8 +45,8 @@ public class Transaction {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "FK Reward ID")
-	private MerchantCategoryCode transactionReward;
+	@JoinColumn(name = "FK Merchant Category Code ID")
+	private MerchantCategoryCode transactionMerchantCategoryCode;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -56,10 +54,36 @@ public class Transaction {
 	private ForeignExchangeCurrency transactionCurrency;
 	
 	public Transaction() {};
-	
-	public Transaction(String merchantCategoryCode, Date transactionDate) {
-		setMerchantCategoryCode(merchantCategoryCode);
+
+	public Transaction(LocalDateTime transactionDate, String transactionType,
+			double transactionAmount, String recipientAccountNumber, double cashback, CreditCard transactionCreditCard,
+			Account transactionAccount, MerchantCategoryCode mcc,
+			ForeignExchangeCurrency transactionCurrency) {
 		setTransactionDate(transactionDate);
+		setTransactionType(transactionType);
+		setTransactionAmount(transactionAmount);
+		setRecipientAccountNumber(recipientAccountNumber);
+		setCashback(cashback);
+		setTransactionCreditCard(transactionCreditCard);
+		setTransactionAccount(transactionAccount);
+		setMerchantCategoryCode(mcc);
+		setTransactionCurrency(transactionCurrency);
+	}
+	
+	public Transaction(String transactionType,
+			double transactionAmount, String recipientAccountNumber, double cashback, CreditCard transactionCreditCard,
+			Account transactionAccount, MerchantCategoryCode mcc,
+			ForeignExchangeCurrency transactionCurrency) {
+		setTransactionDate(LocalDateTime.now());
+		setTransactionDate(transactionDate);
+		setTransactionType(transactionType);
+		setTransactionAmount(transactionAmount);
+		setRecipientAccountNumber(recipientAccountNumber);
+		setCashback(cashback);
+		setTransactionCreditCard(transactionCreditCard);
+		setTransactionAccount(transactionAccount);
+		setMerchantCategoryCode(mcc);
+		setTransactionCurrency(transactionCurrency);
 	}
 
 	public long getTransactionId() {
@@ -70,14 +94,6 @@ public class Transaction {
 		this.transactionId = transactionId;
 	}
 
-	public String getMerchantCategoryCode() {
-		return merchantCategoryCode;
-	}
-
-	public void setMerchantCategoryCode(String merchantCategoryCode) {
-		this.merchantCategoryCode = merchantCategoryCode;
-	}
-
 	public String getTransactionType() {
 		return transactionType;
 	}
@@ -86,11 +102,11 @@ public class Transaction {
 		this.transactionType = transactionType;
 	}
 	
-	public long getTransactionAmount() {
+	public double getTransactionAmount() {
 		return transactionAmount;
 	}
 
-	public void setTransactionAmount(long transactionAmount) {
+	public void setTransactionAmount(double transactionAmount) {
 		this.transactionAmount = transactionAmount;
 	}
 	
@@ -110,11 +126,11 @@ public class Transaction {
 		this.cashback = cashback;
 	}
 	
-	public Date getTransactionDate() {
+	public LocalDateTime getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(Date transactionDate) {
+	public void setTransactionDate(LocalDateTime transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 
@@ -134,14 +150,6 @@ public class Transaction {
 		this.transactionAccount = transactionAccount;
 	}
 
-	public MerchantCategoryCode getTransactionReward() {
-		return transactionReward;
-	}
-
-	public void setTransactionReward(MerchantCategoryCode transactionReward) {
-		this.transactionReward = transactionReward;
-	}
-
 	public ForeignExchangeCurrency getTransactionCurrency() {
 		return transactionCurrency;
 	}
@@ -149,5 +157,14 @@ public class Transaction {
 	public void setTransactionCurrency(ForeignExchangeCurrency transactionCurrency) {
 		this.transactionCurrency = transactionCurrency;
 	}
+
+	public MerchantCategoryCode getMerchantCategoryCode() {
+		return transactionMerchantCategoryCode;
+	}
+
+	public void setMerchantCategoryCode(MerchantCategoryCode merchantCategoryCode) {
+		this.transactionMerchantCategoryCode = merchantCategoryCode;
+	}
+	
 
 }

@@ -1,6 +1,5 @@
 package com.fdmgroup.apmproject.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -10,13 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.Status;
+import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.CreditCardRepository;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class CreditCardService {
 	@Autowired
 	private CreditCardRepository creditCardRepo;
-	private List<String> numList;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private StatusService statusService;
+	
 
 	private static Logger logger = LogManager.getLogger(CreditCardService.class);
 	
@@ -88,16 +95,6 @@ public class CreditCardService {
         return sb.toString();
     }
 	
-	@SuppressWarnings("unused")
-	public String validCreditCardNumber() {
-		String ccNumber = generateCreditCardNumber();
-		if (numList.contains(ccNumber)) {
-			return validCreditCardNumber();
-		} else {
-			numList.add(ccNumber);
-			return ccNumber;
-		}
-	}
 	
 	@SuppressWarnings("unused")
 	public String generatePinNumber() {
@@ -108,4 +105,14 @@ public class CreditCardService {
         }
         return sb.toString();
     }
+	
+	@PostConstruct
+	public void intiCreditCards() {
+		User userJacky = userService.findUserByUsername("jackytan");
+		String creditCardNumber = "1234-5678-1234-5678";
+		String pin = "123";
+		Status statusName = statusService.findByStatusName("Approved");
+		CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, 3000, "Ultimate Cashback Card", statusName, 0, userJacky);
+		persist(createCreditCard);
+	}
 }

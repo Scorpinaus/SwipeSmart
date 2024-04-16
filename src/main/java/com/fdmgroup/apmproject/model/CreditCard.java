@@ -50,12 +50,13 @@ public class CreditCard {
 	
 	public CreditCard() {};
 
-	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed) {
+	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed, User creditCardUser) {
 		setCreditCardNumber(creditCardNumber);
 		setPin(pin);
 		setCardLimit(cardLimit);
 		setCardType(cardType);
 		setCreditCardStatus(status);
+		setCreditCardUser(creditCardUser);
 		setAmountUsed(amountUsed);
 	}
 
@@ -129,5 +130,13 @@ public class CreditCard {
 
 	public void setTransactions(Transaction transaction) {
 		this.transactions.add(transaction);
+	}
+
+	public void setCreditCardUser(User creditCardUser) {
+		this.creditCardUser = creditCardUser;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 }

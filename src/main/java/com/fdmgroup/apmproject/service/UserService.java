@@ -5,10 +5,13 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.UserRepository;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class UserService {
@@ -71,5 +74,12 @@ public class UserService {
 			userRepo.deleteById(userId);
 			logger.info("User deleted from Database");
 		}
+	}
+	
+	@PostConstruct
+	public void initUsers() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		User user = new User("jackytan", encoder.encode("Qwerty1"), "Sentosa", "Jacky", "Tan");
+		persist(user);
 	}
 }

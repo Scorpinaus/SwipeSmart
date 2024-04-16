@@ -25,7 +25,7 @@ public class MerchantCategoryCode {
 	@Column(name = "Merchant Category", unique = true)
 	private String merchantCategory;
 
-	@OneToMany(mappedBy = "transactionReward", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "transactionMerchantCategoryCode", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
 	
 	public MerchantCategoryCode() {};

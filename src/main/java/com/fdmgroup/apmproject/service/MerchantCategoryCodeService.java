@@ -77,20 +77,14 @@ public class MerchantCategoryCodeService {
 	
 	@PostConstruct
 	public void initMCCs() {
-		MerchantCategoryCode mcc = new MerchantCategoryCode(1000, "Deposit");
-		MerchantCategoryCode mcc1 = new MerchantCategoryCode(1001, "Withdraw");
-		MerchantCategoryCode mcc2 = new MerchantCategoryCode(1002, "Transfer");
-		MerchantCategoryCode mcc3 = new MerchantCategoryCode(1003, "Dining");
-		MerchantCategoryCode mcc4 = new MerchantCategoryCode(1004, "Shopping");
-		MerchantCategoryCode mcc5 = new MerchantCategoryCode(1005, "Transport");
-		MerchantCategoryCode mcc6 = new MerchantCategoryCode(1006, "Travel");
+		MerchantCategoryCode mcc = new MerchantCategoryCode(1000, "Dining");
+		MerchantCategoryCode mcc1 = new MerchantCategoryCode(1001, "Shopping");
+		MerchantCategoryCode mcc2 = new MerchantCategoryCode(1002, "Transport");
+		MerchantCategoryCode mcc3 = new MerchantCategoryCode(1003, "Travel");
 		persist(mcc);
 		persist(mcc1);
 		persist(mcc2);
 		persist(mcc3);
-		persist(mcc4);
-		persist(mcc5);
-		persist(mcc6);
 		
 	}
 }

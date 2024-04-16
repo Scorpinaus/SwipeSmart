@@ -27,7 +27,7 @@
 			</div>
 			
 			<!--  Section for displaying user bank accounts -->
-			<div th:if"${not #lists.isEmpty(currentUserBankAccounts)}">
+			<div th:if = "${not #lists.isEmpty(currentUserBankAccounts)}">
 				<h2> Your Bank Accounts</h2>
 					<ul>
 						<li th:each="account : ${currentUserBankAccounts}">

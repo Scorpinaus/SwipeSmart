@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
+import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -24,6 +25,9 @@ public class AccountController {
 
 	@Autowired
 	private AccountService accountService;
+	
+	@Autowired
+	private UserService userService;
 
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
@@ -157,6 +161,10 @@ public class AccountController {
 			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser);
 
 			accountService.persist(accountCreated);
+			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");
+			currentUser.setAccounts(accountCreated);
+			userService.update(currentUser);
+			
 
 			return "redirect:/bankaccount/dashboard";}
 		}

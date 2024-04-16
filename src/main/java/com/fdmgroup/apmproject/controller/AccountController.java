@@ -2,6 +2,7 @@ package com.fdmgroup.apmproject.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,9 +19,7 @@ import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 
 import com.fdmgroup.apmproject.service.AccountService;
-
 import com.fdmgroup.apmproject.service.TransactionService;
-
 import com.fdmgroup.apmproject.service.UserService;
 
 
@@ -34,7 +33,7 @@ public class AccountController {
 	
 	@Autowired
 	private UserService userService;
-
+	
 	@Autowired
 	private TransactionService transactionService;
 		
@@ -60,12 +59,12 @@ public class AccountController {
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 				LOGGER.info("User is redirected to bank account dashboard");
+				return "accountdashboard";
 			} else {
 				LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
+				return "accountdashboard";
 			}
-			return "accountdashboard";
-
 		} else {
 			return "redirect:/login";
 		}
@@ -78,7 +77,7 @@ public class AccountController {
 		if (session != null && session.getAttribute("loggedUser") != null) {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
-			List<Account> accounts = currentUser.getAccounts();
+			List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
 				return "accountdashboard";
@@ -94,23 +93,37 @@ public class AccountController {
 	
 	//Function which processes the bank account withdrawal request.
 	@PostMapping("/bankaccount/withdrawal")
-	public String processWithdrawal(@RequestParam Long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String processWithdrawal(@RequestParam("account") long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
 		if (session != null && session.getAttribute("loggedUser") !=null) {
-			//Checking for account ownership & if funds in bank account is sufficient. Returns respective message if successful or failure.
-			//Add create transaction on controller class.
-			boolean success = accountService.withdrawAccountByAmount(accountId, amount);
-			if (success) {
-				redirectAttributes.addFlashAttribute("message", "Withdrawal successful!");
+			//Retrieve currentUser and selectedAccount for withdrawal
+			User currentUser = (User) session.getAttribute("loggedUser");
+			Account retrievedAccount = accountService.findById(accountId);
+			Double withdrawalAmount = amount.doubleValue();
+			BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
+			
+			//Checks if selectedAccount has sufficient funds for withdrawal
+			int comparisonResult = retrievedAccountBalance.compareTo(amount);
+			if (comparisonResult >=0) {
+				LOGGER.info("Bank account Number"+ retrievedAccount.getAccountNumber() + "has sufficient money for withdrawal");
+				double newAccountBalance = accountService.withdrawAccountByAmount(retrievedAccountBalance, amount);
+				LOGGER.info("Bank account name" + retrievedAccount.getAccountNumber() + "account balance has changed from" + retrievedAccountBalance + " to : " + newAccountBalance);
+				retrievedAccount.setBalance(newAccountBalance);
+				Transaction newTransaction = new Transaction("withdraw", retrievedAccount, withdrawalAmount, null, null);
+				transactionService.persist(newTransaction);
+				retrievedAccount.setTransactions(newTransaction);
+				accountService.update(retrievedAccount);
 				return "redirect:/bankaccount/dashboard";
+				
 			} else {
-				redirectAttributes.addFlashAttribute("error", "Withdrawal failed!");
+				LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
+				redirectAttributes.addAttribute("InsufficientFundsForWithdrawalError","true");
 				return "redirect:/bankaccount/withdrawal";
 			}
-		} else {
-			return "redirect:/login";
-		}
-
+} else {
+				return "redirect:/login";
+}
 	}
+	
 
 	@GetMapping("/bankaccount/deposit")
 	public String goToDepositPage(Model model, HttpSession session) {

@@ -11,12 +11,12 @@
 		<p th:text="${message}"></p>
 	</div>
 	
-	<form action="/bankaccount/performWithdrawal" method="post">
+	<form action="/bankaccount/withdrawal" method="post">
 	<div>
 		<label for="account">Select account:</label>
-		<select id="account" name="account Number" required>
+		<select id="account" name="account" required>
 			<option th:each= "account : ${accounts}"
-					th:value = "${account.accountNumber}"
+					th:value = "${account.accountId}"
 					th:text="${account.accountName} + ' - Balance: $' + ${account.balance}">
 			</option>
 		</select>

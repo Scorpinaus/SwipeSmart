@@ -1,6 +1,7 @@
 package com.fdmgroup.apmproject.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -76,6 +77,11 @@ public class TransactionService {
 			logger.info("Transaction deleted from Database");
 		}
 	}
+	
+	public List<Transaction> getTransactionsByDateAmountAndType(int dateFilter, String transactionTypeFilter, double minAmountFilter) {
+               
+        return transactionRepo.findTransactionsByDateAmountAndType(LocalDateTime.now().minusDays(dateFilter), minAmountFilter, transactionTypeFilter);
+    }
 	
 	@PostConstruct
 	public void initTransactions() {

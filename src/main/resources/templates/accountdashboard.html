@@ -33,13 +33,15 @@
 						<a href="/bankaccount/create">Create</a>
 						<a href="/bankaccount/deposit">Deposit</a>
 						<a href="/bankaccount/transfer">Transfer</a>
-						<a href="/bankaccount/withdraw">Withdraw</a>
+						<a href="/bankaccount/withdrawal">Withdraw</a>
 					</div>
 					<ul>
 						<li th:each="account : ${currentUserBankAccounts}">
+						<a th:href="@{/viewTransactions(number=${account.accountNumber})}" style="text-decoration: none;">
 							<span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
 							<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
 							<span th:text=" 'Account Balance: $' + ${account.balance}"></span>
+						</a>
 						</li>
 					</ul>
 			</div>
@@ -50,8 +52,8 @@
 		</div>
 		<script>
 			function openSidebar(){
-				document.getElementById("sidebar").style.width="250px";
-				document.getElementById("main").style.marginLeft="250px";
+				document.getElementById("sidebar").style.width="160px";
+				document.getElementById("main").style.marginLeft="160px";
 			}
 			function closeSidebar(){
 				document.getElementById("sidebar").style.width="0";

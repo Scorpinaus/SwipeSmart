@@ -61,6 +61,8 @@
 							<th>Transaction Type</th>
 							<th>Date</th>
 							<th>Transaction Amount</th>
+							<th>Recipient Account Number</th>
+							<th>Transaction Currency</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -68,8 +70,8 @@
 							<td th:text="${transaction.transactionType}"></td>
 							<td th:text="${transaction.transactionDate}"></td> 
 							<td th:text="${transaction.transactionAmount}"></td>
-							<td th:text="${transaction.transactionCurrency}"></td> 
 							<td th:text="${transaction.recipientAccountNumber}"></td>
+							<td th:text="${transaction.transactionCurrency}"></td> 
 						</tr>
 					</tbody>
 				</table>

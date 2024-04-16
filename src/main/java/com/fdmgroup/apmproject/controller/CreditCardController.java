@@ -19,6 +19,8 @@ import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.StatusService;
+import com.fdmgroup.apmproject.service.UserService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -30,6 +32,8 @@ public class CreditCardController {
 	private AccountService accountService;
 	@Autowired
 	private StatusService statusService;
+	@Autowired
+	private UserService userService;
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	
 	
@@ -61,7 +65,7 @@ public class CreditCardController {
 				model.addAttribute("creditCard", userCreditCard);
 				model.addAttribute("transactions", transactions);
 			}
-			return "/viewTransactions";
+			return "viewTransactions";
 		} else {
 			model.addAttribute("error", true);
 			logger.warn("User Is not logged-in. Please login first");
@@ -85,7 +89,7 @@ public class CreditCardController {
 			model.addAttribute("error", true);
 			return "applyCreditCard";
 		} else {
-			if (Double.parseDouble(monthlySalary) > 1000) {
+			if (Double.parseDouble(monthlySalary) < 1000) {
 				logger.warn("Your salary is too low. You are required to have a monthly salary above $1000");
 				model.addAttribute("error2", true);
 				return "applyCreditCard";
@@ -98,8 +102,11 @@ public class CreditCardController {
 				Status statusName = statusService.findByStatusName("Approved");
 				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0, loggedUser);
 				creditCardService.persist(createCreditCard);
-				logger.info("Credit card of number " + creditCardNumber + " created");
-				return "userCards";
+				logger.info("Credit card of number " + creditCardNumber + " created");	
+				loggedUser.setCreditCards(createCreditCard);
+				userService.update(loggedUser);
+		
+				return "redirect:/userCards";
 			}
 		}
 	}

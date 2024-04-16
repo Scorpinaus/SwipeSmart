@@ -35,12 +35,6 @@ public class TransactionService {
 		Optional<Transaction> returnedTransaction = transactionRepo.findById(transaction.getTransactionId());
 		if (returnedTransaction.isEmpty()) {
 			transactionRepo.save(transaction);
-			// ensure amount used in credit card is updated
-			if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("Withdraw")) {
-				CreditCard creditCard = transaction.getTransactionCreditCard();
-				creditCard.addTransaction(transaction.getTransactionAmount());
-				creditCardService.update(creditCard);
-			}
 			logger.info("Transaction successfully created");
 		} else {
 			logger.warn("Transaction already exists");
@@ -78,10 +72,21 @@ public class TransactionService {
 		}
 	}
 	
+
 	public List<Transaction> getTransactionsByDateAmountAndType(int dateFilter, String transactionTypeFilter, double minAmountFilter) {
                
         return transactionRepo.findTransactionsByDateAmountAndType(LocalDateTime.now().minusDays(dateFilter), minAmountFilter, transactionTypeFilter);
     }
+
+	public void updateCreditCardBalance(Transaction transaction) {
+		// ensure amount used in credit card is updated
+		if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("Withdraw")) {
+			CreditCard creditCard = transaction.getTransactionCreditCard();
+			creditCard.addTransaction(transaction.getTransactionAmount());
+			creditCardService.update(creditCard);
+		}
+	}
+
 	
 	@PostConstruct
 	public void initTransactions() {
@@ -101,5 +106,11 @@ public class TransactionService {
 		persist(transaction3);
 		persist(transaction4);
 		persist(transaction5);
+		updateCreditCardBalance(transaction);
+		updateCreditCardBalance(transaction1);
+		updateCreditCardBalance(transaction2);
+		updateCreditCardBalance(transaction3);
+		updateCreditCardBalance(transaction4);
+		updateCreditCardBalance(transaction5);
 	}
 }

@@ -18,7 +18,7 @@
 			<p th:text="${creditCard.creditCardNumber}"></p>
 			<p th:text="${creditCard.pin}"></p>
 		</div>
-		
+			
 		<div th:if="${account != null}">
 			<h2 th:text="${account.accountName}"></h2>
 			<p th:text="${account.accountNumber}"></p>
@@ -26,7 +26,13 @@
 		</div>
 
 		<h2>Transactions</h2>
+		
+		
+		
 		<div th:if="${creditCard != null}">
+		
+
+		
 			<div class="secondary-content-container">
 				<table>
 					<thead>
@@ -44,10 +50,44 @@
 							<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
 							<td th:text="${transaction.transactionCurrency}"></td> 
-							
 							<td th:text="${transaction.transactionType}"></td>
 							<td th:text="${transaction.transactionDate}"></td>
 							<td th:text="${transaction.cashback}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div th:if="${account != null}">
+		
+			<form method="post" action="/transaction/transactionFilter">
+			<label for="transactionType">Select transaction type:</label>
+			<select name="transactionType">
+  				<option value="deposit">Deposit</option>
+  				<option value="transfer">Transfer</option>
+ 				<option value="Withdraw">Withdraw</option>
+			</select>
+				<input type="submit" value="filter">
+			</form>
+			<div class="secondary-content-container">
+				<table>
+					<thead>
+						<tr>
+							<th>Amount</th>
+							<th>Currency</th>
+							<th>Transaction Type</th>
+							<th>Date</th>
+							<th>Recipient Account Number</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="transaction : ${transactions}">
+							<td th:text="${transaction.transactionAmount}"></td>
+							<td th:text="${transaction.transactionCurrency}"></td> 
+							<td th:text="${transaction.transactionType}"></td>
+							<td th:text="${transaction.transactionDate}"></td>
+							<td th:text="${transaction.recipientAccountNumber}"></td>
 						</tr>
 					</tbody>
 				</table>

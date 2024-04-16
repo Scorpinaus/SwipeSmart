@@ -290,10 +290,4 @@ public class AccountController {
 		}
 	}
 	
-	@PostMapping("/bankaccount/transferFilter")
-	public String filterTransaction() {
-		return null;
-		
-	}
-
 }

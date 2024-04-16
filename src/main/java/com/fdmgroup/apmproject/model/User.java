@@ -122,4 +122,13 @@ public class User {
 	public void setAccounts(Account account) {
 		this.accounts.add(account);
 	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", address=" + address
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", role=" + role + ", creditCards="
+				+ creditCards + ", accounts=" + accounts + "]";
+	}
+	
+	
 }

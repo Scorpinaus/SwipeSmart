@@ -34,6 +34,12 @@ public class TransactionService {
 		Optional<Transaction> returnedTransaction = transactionRepo.findById(transaction.getTransactionId());
 		if (returnedTransaction.isEmpty()) {
 			transactionRepo.save(transaction);
+			// ensure amount used in credit card is updated
+			if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("Withdraw")) {
+				CreditCard creditCard = transaction.getTransactionCreditCard();
+				creditCard.addTransaction(transaction.getTransactionAmount());
+				creditCardService.update(creditCard);
+			}
 			logger.info("Transaction successfully created");
 		} else {
 			logger.warn("Transaction already exists");

@@ -113,6 +113,11 @@ public class CreditCardService {
 		String pin = "123";
 		Status statusName = statusService.findByStatusName("Approved");
 		CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, 3000, "Ultimate Cashback Card", statusName, 0, userJacky);
+		String creditCardNumber2 = "2345-5678-2398-5678";
+		String pin2 = "124";
+		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "Ultimate Slay Card", statusName, 0, userJacky);
 		persist(createCreditCard);
+		persist(createCreditCard2);
+		
 	}
 }

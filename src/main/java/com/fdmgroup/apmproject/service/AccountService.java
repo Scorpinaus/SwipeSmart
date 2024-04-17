@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,14 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
+
+import jakarta.annotation.PostConstruct;
 
 
 @Service
 public class AccountService {
 	@Autowired
 	private AccountRepository accountRepo;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private StatusService statusService;
 	
 	private static Logger logger = LogManager.getLogger(AccountService.class);
 	
@@ -107,6 +113,16 @@ public class AccountService {
             }
         }
         return sb.toString();
+	}
+	
+	@PostConstruct
+	public void intiAccounts() {
+		User userJacky = userService.findUserByUsername("jackytan");
+		Status statusName = statusService.findByStatusName("Approved");
+		Account account = new Account("Savings", 5000, "123-123-123", userJacky, statusName);
+		Account account2 = new Account("Current", 10000, "124-124-124", userJacky, statusName);
+		persist(account);
+		persist(account2);
 	}
 	
 }

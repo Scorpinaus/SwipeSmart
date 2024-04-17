@@ -39,7 +39,7 @@
 			</div>
 			<div class="creditCards" th:each="card: ${user.creditCards}" th:object="${user}">
 				<div class="cardDetails">
-					<p th:text="${card.creditCardNumber}"></p>
+					<p th:text="'****-****-****-' + ${#strings.substring(card.creditCardNumber, card.creditCardNumber.length() - 4)}"></p>
 					<p th:text="${card.cardLimit}"></p>
 					<p th:text="${card.cardType}"></p>
 					<p th:text="${card.amountUsed}"></p>

@@ -215,11 +215,14 @@ public class Transaction {
 		this.transactionMerchantCategoryCode = transactionMerchantCategoryCode;
 	}
 
+	
+
 	@Override
 	public String toString() {
 		return "Transaction [transactionId=" + transactionId + ", transactionDate=" + transactionDate
-				+ ", transactionType=" + transactionType + ", cashback=" + cashback
-				+ ", transactionMerchantCategoryCode=" + transactionMerchantCategoryCode.getMerchantCategory() + ", transactionCurrency="
+				+ ", transactionType=" + transactionType + ", transactionAmount=" + transactionAmount
+				+ ", recipientAccountNumber=" + recipientAccountNumber + ", cashback=" + cashback
+				+ ", transactionMerchantCategoryCode=" + transactionMerchantCategoryCode + ", transactionCurrency="
 				+ transactionCurrency + "]";
 	}
 

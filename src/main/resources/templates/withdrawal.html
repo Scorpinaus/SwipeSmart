@@ -7,10 +7,6 @@
 <body>
 	<h1> Withdraw Funds</h1>
 	
-	<div th:if="${message}">
-		<p th:text="${message}"></p>
-	</div>
-	
 	<form action="/bankaccount/withdrawal" method="post">
 	<div>
 		<label for="account">Select account:</label>
@@ -30,6 +26,9 @@
 		<button type = "submit">Withdraw</button>
 	</div>
 	</form>
+	<div th:if="${errorInsufficient}">
+    	<p style="color: red;">Account has insufficient balance for withdrawal.</p>
+	</div>
 	
 <a href="/bankaccount/dashboard">Back to Dashboard</a>
 

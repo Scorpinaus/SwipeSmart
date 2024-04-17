@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -77,7 +78,7 @@ public class AccountController {
 
 	// Function which brings user to Bank Account withdrawal page
 	@GetMapping("/bankaccount/withdrawal")
-	public String withdrawalBankAccount(HttpSession session, Model model) {
+	public String withdrawalBankAccount(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
@@ -87,7 +88,12 @@ public class AccountController {
 				return "accountdashboard";
 			}
 			model.addAttribute("accounts", accounts);
-			return "accountwithdrawal";
+			
+			// Check for the flash attribute directly in the model. If present, it adds to the current model as true.
+		    if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
+		        model.addAttribute("errorInsufficient", true);
+		    }
+			return "withdrawal";
 		}
 		else {
 			return "redirect:/login";
@@ -98,34 +104,29 @@ public class AccountController {
 	//Function which processes the bank account withdrawal request.
 	@PostMapping("/bankaccount/withdrawal")
 	public String processWithdrawal(@RequestParam("account") long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
-		if (session != null && session.getAttribute("loggedUser") !=null) {
-			//Retrieve currentUser and selectedAccount for withdrawal
-			User currentUser = (User) session.getAttribute("loggedUser");
-			Account retrievedAccount = accountService.findById(accountId);
-			Double withdrawalAmount = amount.doubleValue();
-			BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
-			
-			//Checks if selectedAccount has sufficient funds for withdrawal
-			int comparisonResult = retrievedAccountBalance.compareTo(amount);
-			if (comparisonResult >=0) {
-				LOGGER.info("Bank account Number"+ retrievedAccount.getAccountNumber() + "has sufficient money for withdrawal");
-				double newAccountBalance = accountService.withdrawAccountByAmount(retrievedAccountBalance, amount);
-				LOGGER.info("Bank account name" + retrievedAccount.getAccountNumber() + "account balance has changed from" + retrievedAccountBalance + " to : " + newAccountBalance);
-				retrievedAccount.setBalance(newAccountBalance);
-				Transaction newTransaction = new Transaction("withdraw", retrievedAccount, withdrawalAmount, null, null);
-				transactionService.persist(newTransaction);
-				retrievedAccount.setTransactions(newTransaction);
-				accountService.update(retrievedAccount);
-				return "redirect:/bankaccount/dashboard";
-				
-			} else {
-				LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
-				redirectAttributes.addAttribute("InsufficientFundsForWithdrawalError","true");
-				return "redirect:/bankaccount/withdrawal";
-			}
-} else {
-				return "redirect:/login";
-}
+		//Checks if user is logged on, if not user will be brought to login page.
+		if (session.getAttribute("loggedUser") == null ) {
+			return "redirect:/login";
+		}
+		
+		//Retrieve currentUser and selectedAccount for withdrawal
+		User currentUser = (User) session.getAttribute("loggedUser");
+		Account retrievedAccount = accountService.findById(accountId);
+		Double withdrawalAmount = amount.doubleValue();
+		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
+		
+		if (retrievedAccountBalance.compareTo(amount) < 0) {
+			LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
+			redirectAttributes.addFlashAttribute("errorInsufficient",true);
+			return "redirect:/bankaccount/withdrawal";
+		}
+		
+		 LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
+		    double newAccountBalance = accountService.withdrawAccountByAmount(retrievedAccountBalance, amount);
+		    retrievedAccount.setBalance(newAccountBalance);
+		    transactionService.persist(new Transaction("withdraw", retrievedAccount, amount.doubleValue(), null, null));
+		    accountService.update(retrievedAccount);
+		    return "redirect:/bankaccount/dashboard";
 	}
 	
 

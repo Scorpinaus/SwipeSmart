@@ -64,7 +64,7 @@
 						<tr>
 							<th>Category</th>
 							<th>Date</th>
-							<th>Date</th>
+							<th>Time</th>
 							<th>Amount</th>
 							<th>Currency</th>
 							<th>Transaction Type</th>
@@ -75,7 +75,7 @@
 						<tr th:each="transaction : ${transactions}">
 							<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
 							<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-							<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+							<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
 							<td th:text="${transaction.transactionCurrency}"></td> 
 							<td th:text="${transaction.transactionType}"></td>
@@ -105,7 +105,7 @@
 						<tr th:each="transaction : ${transactions}">
 							<td th:text="${transaction.transactionType}"></td>
 							 <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-							 <td th:text="${#strings.substring(transaction.transactionDate, 12, 19)}"></td>
+							 <td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
 							<td th:if="${transaction.transactionAccount != null}" th:text="${transaction.transactionAccount.accountNumber}"></td>
 <td th:if="${transaction.recipientAccount != null}" th:text="${transaction.recipientAccount.accountNumber}"></td>

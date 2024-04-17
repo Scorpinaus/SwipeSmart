@@ -256,9 +256,9 @@ public class AccountController {
 
 			// get the required accounts
 			Account accountFromBalance = accountService.findById(accountId);
-
+			String accountNumber = accountNumberTransferTo.replace(" ","-");
 			// validate user is not transferring money to the same account
-			if (accountFromBalance.getAccountNumber().equals(accountNumberTransferTo)) {
+			if (accountFromBalance.getAccountNumber().equals(accountNumber)) {
 	
 				redirectAttributes.addAttribute("SameAccountError", "true");
 				LOGGER.info("SameAccount");
@@ -270,7 +270,6 @@ public class AccountController {
 				LOGGER.info("InsufficientBalance");
 				return "redirect:/bankaccount/transfer";
 			} else {
-				String accountNumber = accountNumberTransferTo.replace(" ","-");
 				Account accountToBalance = accountService.findAccountByAccountNumber(accountNumber);
 	
 				// update the accounts' balance

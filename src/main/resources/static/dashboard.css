@@ -137,6 +137,9 @@ body{
 	font-weight: bold;
 }
 
+.details-account-balance {
+	text-align: end;
+}
 
 .details-account-balance p{
     display: inline;

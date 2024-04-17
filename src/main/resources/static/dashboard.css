@@ -11,7 +11,6 @@
 	height: 100%;
 	top:0;
 	left:0;
-	width:0;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -22,6 +21,14 @@
 
 .sidebarLinks{
 	padding-left: 20px;
+}
+
+.dashboard{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+	background-color: white;
 }
 
 .profile{
@@ -59,6 +66,12 @@
 	padding: 20px;
 }
 
+a#dashboard {
+	color: black;
+	text-decoration:none;
+	padding: 10px;
+}
+
 a#profile {
 	color: white;
 	text-decoration:none;
@@ -91,6 +104,7 @@ a#cards{
 
 .mainPage{
 	transition: margin-left .5s;
+	margin-left: 160px;
 }
 
 body{

@@ -24,8 +24,10 @@ import jakarta.annotation.PostConstruct;
 public class TransactionService {
 	@Autowired
 	private TransactionRepository transactionRepo;
+	
 	@Autowired
 	private CreditCardService creditCardService;
+	
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
 	
@@ -99,6 +101,8 @@ public class TransactionService {
         LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59);
         return transactionRepo.findByTransactionDateBetweenAndTransactionCreditCard(startOfMonth,endOfMonth,creditcard);
     }
+	
+	
 	
 	@PostConstruct
 	public void initTransactions() {

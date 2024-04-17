@@ -80,6 +80,7 @@ public class StatusService {
 		Status status = new Status("Pending");
 		Status status2 = new Status("Approved");
 		Status status3 = new Status("Disabled");
+		
 		persist(status);
 		persist(status2);
 		persist(status3);

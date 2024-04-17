@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,6 +21,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "listOfAccounts")
 public class Account {
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Account ID")
@@ -49,11 +52,12 @@ public class Account {
 	
 	public Account() {};
 
-	public Account(String accountName, double balance, String accountNumber, User accountUser) {
-		setAccountName(accountName);
-		setBalance(balance);
-		setAccountNumber(accountNumber);
-		setAccountUser(accountUser);
+	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus) {
+	        setAccountName(accountName);
+	        setBalance(balance);
+	        setAccountNumber(accountNumber);
+	        setAccountUser(accountUser);
+	        setAccountStatus(accountStatus);
 	}
 
 	public long getAccountId() {

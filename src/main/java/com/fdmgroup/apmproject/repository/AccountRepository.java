@@ -11,19 +11,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.Status;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 	
-	
+
 	List<Account> findByAccountUserUserId(long userId);
 	
-	@Modifying
-	@Transactional
-	@Query("UPDATE User u SET u.firstName = :firstName, u.lastName = :lastName, u.address = :address WHERE u.username = :username and u.password = :password")
-	void updateUserDetails(@Param("username") String username, @Param("password") String password,
-			@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("address") String address);
-
+	
 	Optional<Account> findByAccountNumber(String name);
 
 	Optional<Account> findByAccountId(Long accountId);

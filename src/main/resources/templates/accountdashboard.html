@@ -40,10 +40,31 @@
 						<a th:href="@{/viewTransactions(accountId=${account.accountId})}" style="text-decoration: none;">
 							<span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
 							<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
-							<span th:text=" 'Account Balance: $' + ${account.balance}"></span>
+							<span th:text=" 'Account Balance: $' + ${account.balance}"></span> <br/>
+							<span th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
 						</a>
 						</li>
 					</ul>
+					
+					
+					 <ul>
+					        <li th:each="account : ${currentUserBankAccounts}">
+					            <a th:if="${account.accountStatus.statusName != 'Pending'}" th:href="@{/viewTransactions(accountId=${account.accountId})}" style="text-decoration: none;">
+					                <span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
+					                <span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
+					                <span th:text=" 'Account Balance: $' + ${account.balance}"></span> <br/>
+					                <span th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
+					            </a>
+					            <span th:if="${account.accountStatus.statusName == 'Pending'}">
+					                <span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
+					                <span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
+					                <span th:text=" 'Account Balance: $' + ${account.balance}"></span> <br/>
+					                <span th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
+					                <span style="color: red;">your ac is Approving</span>
+					            </span>
+					        </li>
+    				</ul>
+					
 			</div>
 			<div th:if="${#lists.isEmpty(currentUserBankAccounts)}">
 				<a href="/bankaccount/create">Create</a>

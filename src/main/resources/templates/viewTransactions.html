@@ -18,7 +18,7 @@
 			<p th:text="${creditCard.creditCardNumber}"></p>
 			<p th:text="${creditCard.pin}"></p>
 		</div>
-		
+			
 		<div th:if="${account != null}">
 			<h2 th:text="${account.accountName}"></h2>
 			<p th:text="${account.accountNumber}"></p>
@@ -26,6 +26,8 @@
 		</div>
 
 		<h2>Transactions</h2>
+
+
 		<form th:action="@{/viewTransactions}" method="get">
 		    <label for="month">Month:</label>
 		    <input type="month" id="month" name="month">
@@ -33,7 +35,11 @@
    			<input type="hidden" id="creditCardId" name="creditCardId" th:if="${creditCard != null}" th:value="${creditCard.creditCardId}">
 		    <button type="submit">Filter</button>
 		</form>
+
 		<div th:if="${creditCard != null}">
+		
+
+		
 			<div class="secondary-content-container">
 				<table>
 					<thead>
@@ -61,6 +67,7 @@
 		</div>
 		
 		<div th:if="${account != null}">
+		
 			<div class="secondary-content-container">
 				<table>
 					<thead>

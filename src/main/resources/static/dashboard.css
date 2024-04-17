@@ -132,6 +132,7 @@ body{
     padding: 5px;
     margin: 10px auto;
     border-radius: 10px;
+    height: 125px;
 }
 
 .details-account-name p {
@@ -139,7 +140,7 @@ body{
 }
 
 .details-account-balance {
-	text-align: end;
+	text-align: right;
 }
 
 .details-account-balance p{
@@ -163,7 +164,7 @@ body{
     padding: 5px;
     margin: 10px auto;
     border-radius: 10px;
-    
+    height: 125px;
 }
 
 .details-card-type p {
@@ -176,4 +177,9 @@ body{
 .details-card-limit p,
 .details-card-amount p {
     display: inline;
+}
+
+.details-card-limit,
+.details-card-amount {
+    text-align: right;
 }

@@ -106,16 +106,22 @@ public class AccountService {
 	
 	//Function that generates a unique Bank Account Number when creating a new bank account
 	public String generateUniqueAccountNumber() {
-		StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 9; i++) {
-            sb.append(random.nextInt(10));
-            if ((i + 1) % 3 == 0 && i != 8) {
-                sb.append("-"); // Adds a dash after every 4 digits, except the last set of 4 digits
-            }
-        }
-        return sb.toString();
-	}
+	    StringBuilder sb = new StringBuilder();
+	    Random random = new Random();
+	    
+	    do {
+	        sb.setLength(0); // Clear the StringBuilder before generating a new account number
+	        for (int i = 0; i < 9; i++) {
+	            sb.append(random.nextInt(10));
+	            if ((i + 1) % 3 == 0 && i != 8) {
+	                sb.append("-"); // Adds a dash after every 3 digits, except the last set of 3 digits
+	            }
+	        }
+	    } while (findAccountByAccountNumber(sb.toString()) != null);
+
+	    return sb.toString();
+	} 
+   
 	
 	@PostConstruct
 	public void intiAccounts() {

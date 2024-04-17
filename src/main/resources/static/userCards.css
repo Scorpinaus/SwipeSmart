@@ -1,13 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
 @keyframes transitionIn {
-	from{
+	0% {
 		opacity:0;
-		transform:rotateX(-10deg);
 	}
 	
-	to {
+	100% {
 		opacity:1;
-		transform:rotateX(0);
 	}
 }
 
@@ -112,6 +110,12 @@ h1, h2{
 	margin-left: 5%;
 }
 
+h2 {
+	animation:transitionIn 1.5s;
+	opacity: 0;
+	animation-fill-mode: forwards;
+}
+
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px
@@ -133,6 +137,9 @@ h1, h2{
 	display:flex;
 	justify-content: center;
 	gap: 15px;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 a#cardTransactions{
@@ -147,6 +154,9 @@ a#cardTransactions{
 .cardCreation{
 	display:flex;
 	justify-content: center;
+	animation:transitionIn 2s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 .secondary-content-container{
@@ -160,6 +170,9 @@ a#cardTransactions{
 	border-radius: 15px;
 	padding: 15px;
 	background-color: #4F96A9;
+	animation:transitionIn 2.5s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 a#cardDetails{

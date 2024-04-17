@@ -1,4 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
 
 body{
 	font-family: 'Actor', sans-serif;
@@ -115,6 +126,9 @@ a#accounts{
 	border-radius: 15px;
 	padding: 20px;
 	background-color: #4F96A9;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 .accountLinkContainer{
@@ -184,5 +198,8 @@ span#accountDetails{
 	background-color:#4F96A9;
 	padding: 15px;
 	border-radius: 15px;
+	animation:transitionIn 1.5s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 

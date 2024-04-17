@@ -116,7 +116,6 @@ a#cards{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
-	padding: 10px;
 }
 
 h1{
@@ -137,6 +136,9 @@ body{
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 5px;
+    margin-left: 2%;
+    margin-right: 2%;
+    animation:transitionIn 0.75s;
 }
 
 .accounts-summary,

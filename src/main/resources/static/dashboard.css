@@ -47,13 +47,6 @@ p#sidebarHeader{
 	padding: 20px;
 }
 
-.dashboard{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-}
-
 .cards{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
@@ -88,12 +81,6 @@ a#profile {
 }
 
 a#accounts {
-	color: white;
-	text-decoration:none;
-	padding: 10px;
-}
-
-a#dashboard {
 	color: white;
 	text-decoration:none;
 	padding: 10px;

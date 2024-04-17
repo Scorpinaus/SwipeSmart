@@ -50,46 +50,45 @@ public class TransactionTest {
 		MerchantCategoryCode expectedMCC = mcc;
 		double expectedAmount = 10;
 		double expectedCashback = 1;
-		String transactionType = "Withdraw";
+		String expectedtransactionType = "Withdraw";
 		
 		
 		//act
 		CreditCard resultCreditCard = transaction1.getTransactionCreditCard();
-		Charity resultCharity = donation1.getCharity();
-		BigDecimal resultAmount = donation1.getAmount();
+		MerchantCategoryCode resultMCC = transaction1.getTransactionMerchantCategoryCode();
+		double resultAmount = transaction1.getTransactionAmount();
+		double resultCashback = transaction1.getCashback();
+		String resultTransactionType = transaction1.getTransactionType();
 		
 		
 		//assert
-		assertEquals(expectedUser, resultUser);
-		assertEquals(expectedCharity, resultCharity);
+		assertEquals(expectedCreditCard, resultCreditCard);
+		assertEquals(expectedMCC, resultMCC);
 		assertEquals(expectedAmount, resultAmount);
+		assertEquals(expectedCashback, resultCashback);
+		assertEquals(expectedtransactionType, resultTransactionType);
     }
 	
 	@Test
-	@DisplayName("Same user can make multiple donations")
-    public void testMultipleDonation() {
+	@DisplayName("The transaction shows the correct credit card or amount")
+    public void testTransaction() {
 		//arrange
-		User expectedUser = user1;
+		CreditCard expectedCreditCard = creditCard;
+		Account expectedAccount = account;
 		
 		//act
-		User resultUser1 = donation1.getUser();
-		User resultUser2 = donation2.getUser();
+		CreditCard resultCreditCard = transaction1.getTransactionCreditCard();
+		Account resultAccount = transaction.getTransactionAccount();
 		
 		//assert
-		assertEquals(expectedUser, resultUser1);
-		assertEquals(expectedUser, resultUser2);
+		assertEquals(expectedCreditCard, resultCreditCard);
+		assertEquals(expectedAccount, resultAccount);
 	}
 	
-	@Test
-	@DisplayName("Two objects instansiated with the same argument are equals to each other")
-    public void testEqualsSameFields() {
-        Donation donation3 = new Donation(user1,mockCharity1);
-		assertTrue(donation1.equals(donation3));
-    }
 
     @Test
     @DisplayName("Two objects instansiated with different argument are different to each other")
     public void testEquals_DifferentFields() {
-        assertFalse(donation1.equals(donation2));
+        assertFalse(transaction.equals(transaction1));
     }
 }

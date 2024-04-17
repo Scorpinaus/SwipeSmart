@@ -7,13 +7,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 	
-	@Query("SELECT t FROM Transaction t WHERE t.transactionDate >= :startDate AND t.transactionAmount >= :minAmount AND t.transactionType = :transactionType")
-    List<Transaction> findTransactionsByDateAmountAndType(LocalDateTime startDate, double minAmount, String transactionType);
 
+	List<Transaction> findByTransactionDateBetweenAndTransactionAccount(LocalDateTime startOfMonth, LocalDateTime endOfMonth, Account account);
 	
+	List<Transaction> findByTransactionDateBetweenAndTransactionCreditCard(LocalDateTime startOfMonth, LocalDateTime endOfMonth, CreditCard creditcard);
+
 }

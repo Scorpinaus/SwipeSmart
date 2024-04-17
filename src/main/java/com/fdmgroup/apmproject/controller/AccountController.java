@@ -19,6 +19,7 @@ import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 
 import com.fdmgroup.apmproject.service.AccountService;
+import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.TransactionService;
 import com.fdmgroup.apmproject.service.UserService;
 
@@ -27,7 +28,10 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AccountController {
-
+	
+	@Autowired 
+	private StatusService statusService;
+	
 	@Autowired
 	private AccountService accountService;
 	
@@ -200,7 +204,7 @@ public class AccountController {
 
 			String accountnumber = accountService.generateUniqueAccountNumber();
 
-			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser);
+			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser, statusService.findByStatusName("Pending") );
 			//persist new account
 			
 			accountService.persist(accountCreated);

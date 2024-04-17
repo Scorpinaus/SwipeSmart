@@ -12,8 +12,8 @@
 		<!-- Use the 'placeholder' tag to be more helpful -->
 
 	<select name="account">
-	<option th:each="account : ${AccountList}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
-  	<!-- Add more options as needed -->
+    	<option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
+    <!-- Add more options as needed -->
 	</select>
 		
 		<input type="number" name="deposit amount" placeholder="deposit amount" step="0.01" required> 

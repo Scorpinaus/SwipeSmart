@@ -1,6 +1,9 @@
 package com.fdmgroup.apmproject.service;
 
 import java.time.LocalDateTime;
+
+import java.time.YearMonth;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Transaction;
@@ -24,6 +28,7 @@ public class TransactionService {
 	private CreditCardService creditCardService;
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
+	private CreditCard creditcard;
 	
 	private static Logger logger = LogManager.getLogger(TransactionService.class);
 	
@@ -72,12 +77,6 @@ public class TransactionService {
 		}
 	}
 	
-
-	public List<Transaction> getTransactionsByDateAmountAndType(int dateFilter, String transactionTypeFilter, double minAmountFilter) {
-               
-        return transactionRepo.findTransactionsByDateAmountAndType(LocalDateTime.now().minusDays(dateFilter), minAmountFilter, transactionTypeFilter);
-    }
-
 	public void updateCreditCardBalance(Transaction transaction) {
 		// ensure amount used in credit card is updated
 		if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("Withdraw")) {
@@ -87,6 +86,21 @@ public class TransactionService {
 		}
 	}
 
+	
+	public List<Transaction> getTransactionsByMonthAndYearAndTransactionAccount(int year, int monthValue, Account account) {
+        YearMonth yearMonth = YearMonth.of(year, monthValue);
+        LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        return transactionRepo.findByTransactionDateBetweenAndTransactionAccount(startOfMonth,endOfMonth,account);
+    }
+	
+	public List<Transaction> getTransactionsByMonthAndYearAndTransactionCreditCard(int year, int monthValue, CreditCard creditcard) {
+        YearMonth yearMonth = YearMonth.of(year, monthValue);
+        LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+        return transactionRepo.findByTransactionDateBetweenAndTransactionCreditCard(startOfMonth,endOfMonth,creditcard);
+    }
 	
 	@PostConstruct
 	public void initTransactions() {
@@ -113,4 +127,5 @@ public class TransactionService {
 		updateCreditCardBalance(transaction4);
 		updateCreditCardBalance(transaction5);
 	}
+
 }

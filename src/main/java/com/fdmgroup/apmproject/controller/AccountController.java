@@ -115,6 +115,7 @@ public class AccountController {
 		Double withdrawalAmount = amount.doubleValue();
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
 		
+		//If balance in account is less than withdrawal amount, user redirected back to withdrawal page + errorInsufficient flash attribute added for subsequent use.
 		if (retrievedAccountBalance.compareTo(amount) < 0) {
 			LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
 			redirectAttributes.addFlashAttribute("errorInsufficient",true);

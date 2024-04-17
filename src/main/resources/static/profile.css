@@ -100,3 +100,35 @@ a#profile{
 	transition: margin-left .5s;
 	margin-left:160px;
 }
+
+h1{
+	display:flex;
+	justify-content: center;
+}
+
+.userDetailsList{
+	width: 500px;
+	margin: 100px auto;
+	padding: 50px;
+	border-radius: 10px;
+	background-color: #4F96A9;
+}
+
+.userDetails{
+	color: white;
+}
+
+.link {
+	font-family: 'Actor', sans-serif;
+	margin-top: 30px;
+}
+
+.link a {
+	text-decoration: none;
+	color: white;
+	background-color: #4F96A9;
+}
+
+.link a:hover {
+  text-decoration: underline;
+}

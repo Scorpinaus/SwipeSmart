@@ -85,7 +85,6 @@ public class TransactionService {
 			creditCardService.update(creditCard);
 		}
 	}
-
 	
 	public List<Transaction> getTransactionsByMonthAndYearAndTransactionAccount(int year, int monthValue, Account account) {
         YearMonth yearMonth = YearMonth.of(year, monthValue);

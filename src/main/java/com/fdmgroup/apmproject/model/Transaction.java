@@ -42,6 +42,20 @@ public class Transaction {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Account ID")
 	private Account transactionAccount;
+	
+	//example
+	@ManyToOne(fetch = FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "FK recipientAccount ID")
+	private Account recipientAccount;
+
+	public Account getRecipientAccount() {
+		return recipientAccount;
+	}
+
+	public void setRecipientAccount(Account recipientAccount) {
+		this.recipientAccount = recipientAccount;
+	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -84,7 +98,7 @@ public class Transaction {
 		setTransactionMerchantCategoryCode(mcc);
 		setTransactionCurrency(transactionCurrency);
 	}
-	//record transcation for bank account
+	//record transaction for bank account
 	public Transaction(String transactionType, Account transactionAccount, double transactionAmount,String recipientAccountNumber, ForeignExchangeCurrency transactionCurrency
 			) {
 		setTransactionDate(LocalDateTime.now());
@@ -100,6 +114,25 @@ public class Transaction {
 		setTransactionCurrency(transactionCurrency);
 	}
 
+	public Transaction(String transactionType, Account transactionAccount,Account recipientAccount, double transactionAmount,String recipientAccountNumber, ForeignExchangeCurrency transactionCurrency
+			) {
+		setTransactionDate(LocalDateTime.now());
+		
+		setTransactionType(transactionType);
+		
+		setTransactionAccount(transactionAccount);
+		
+		setTransactionAmount(transactionAmount);
+		
+		setRecipientAccountNumber(recipientAccountNumber);
+		
+		setTransactionCurrency(transactionCurrency);
+		
+		setRecipientAccount(recipientAccount);
+	}
+	
+	
+	
 	public long getTransactionId() {
 		return transactionId;
 	}

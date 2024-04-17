@@ -279,10 +279,10 @@ public class AccountController {
 				accountService.update(accountToBalance);
 	
 				// Transaction
-				double cashback = 0;
+//				double cashback = 0;
 	
-				Transaction transaction = new Transaction("transfer", transferAmount, accountNumberTransferTo, cashback,
-						null, accountFromBalance, null, null);
+				Transaction transaction = new Transaction("transfer",accountFromBalance, accountToBalance,transferAmount, accountNumberTransferTo,
+						null );
 	
 				transactionService.persist(transaction);
 			

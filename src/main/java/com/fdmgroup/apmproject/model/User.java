@@ -2,6 +2,7 @@ package com.fdmgroup.apmproject.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -129,6 +130,28 @@ public class User {
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", role=" + role + ", creditCards="
 				+ creditCards + ", accounts=" + accounts + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(accounts, address, creditCards, firstName, lastName, password, role, userId, username);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(accounts, other.accounts) && Objects.equals(address, other.address)
+				&& Objects.equals(creditCards, other.creditCards) && Objects.equals(firstName, other.firstName)
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
+				&& Objects.equals(role, other.role) && userId == other.userId
+				&& Objects.equals(username, other.username);
+	}
+	
 	
 	
 }

@@ -2,6 +2,7 @@ package com.fdmgroup.apmproject.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -65,4 +66,24 @@ public class ForeignExchangeCurrency {
 	public void setTransactions(Transaction transaction) {
 		this.transactions.add(transaction);
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(currencyId, currencyName, currencyValue);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ForeignExchangeCurrency other = (ForeignExchangeCurrency) obj;
+		return currencyId == other.currencyId && Objects.equals(currencyName, other.currencyName)
+				&& currencyValue == other.currencyValue;
+	}
+	
+	
 }

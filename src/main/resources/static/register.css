@@ -17,7 +17,7 @@
   --white: #ffffff;
   --lightgrey:#f2f2f2;
   --lightgreen:#52ab98;
-  --fadedgreen:#4F96A9;
+  --fadedgreen:#4F96A9;	
 }
 
 body {
@@ -28,9 +28,9 @@ body {
   padding:0;
   text-align: center;
   background-color: var(--darkgreen);
-  background-image: url(https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-image: url("mainpagebackground.jpeg");
   animation:transitionIn 0.75s;
-}
+
 
 .register-page-container {
   width: 500px;

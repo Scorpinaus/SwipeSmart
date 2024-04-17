@@ -2,6 +2,7 @@ package com.fdmgroup.apmproject.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -66,4 +67,28 @@ public class Status {
 	public void setCreditCards(CreditCard creditCard) {
 		this.creditCards.add(creditCard);
 	}
+
+	@Override
+	public String toString() {
+		return "Status [statusId=" + statusId + ", statusName=" + statusName + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(statusId, statusName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Status other = (Status) obj;
+		return statusId == other.statusId && Objects.equals(statusName, other.statusName);
+	}
+	
+	
 }

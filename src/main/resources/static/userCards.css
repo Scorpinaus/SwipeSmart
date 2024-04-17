@@ -9,9 +9,25 @@
     position: fixed;
 }
 
+.sidebarHeader{
+	display: flex;
+	justify-content: center;
+}
+
+p#sidebarHeader{
+	color: white;
+	padding: 10px;
+}
 
 .sidebarLinks{
 	padding-left: 20px;
+}
+
+.dashboard{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
 }
 
 .profile{
@@ -41,6 +57,12 @@
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+}
+
+a#dashboard {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
 }
 
 a#profile {

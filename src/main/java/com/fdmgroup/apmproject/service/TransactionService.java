@@ -30,7 +30,6 @@ public class TransactionService {
 	
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
-	private CreditCard creditcard;
 	
 	private static Logger logger = LogManager.getLogger(TransactionService.class);
 	

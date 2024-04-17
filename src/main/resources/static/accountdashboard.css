@@ -9,9 +9,29 @@
     position: fixed;
 }
 
+.sidebarHeader{
+	display: flex;
+	justify-content: center;
+}
+
+p#sidebarHeader{
+	color: white;
+	padding: 10px;
+}
+
+.closeSidebar:hover{
+	opacity: 0.5;
+}
 
 .sidebarLinks{
 	padding-left: 20px;
+}
+
+.dashboard{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
 }
 
 .profile{
@@ -43,6 +63,12 @@
 	padding: 20px;
 }
 
+a#dashboard {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
 a#profile {
 	color: white;
 	text-decoration:none;
@@ -70,4 +96,58 @@ a#accounts{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left:160px;
+}
+
+.accountLinkContainer{
+	display: flex;
+	justify-content: center;
+}
+
+h1{
+	padding-bottom: 15px;
+}
+
+.noAccounts{
+	display: flex;
+	justify-content: center;
+}
+
+.accountCRUD{
+	display: inline-flex;
+	justify-content: center;
+	gap: 15px;
+	padding-bottom: 15px;
+}
+
+a#accountCRUD{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+}
+
+.accountDetails{
+	display:flex;
+}
+
+a#accountDetails{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+	margin: 15px;
+}
+
+span#accountDetails{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+	margin: 15px;
 }

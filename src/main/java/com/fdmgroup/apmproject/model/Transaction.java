@@ -1,6 +1,7 @@
 package com.fdmgroup.apmproject.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -232,6 +233,32 @@ public class Transaction {
 				+ ", recipientAccount=" + recipientAccount + ", transactionMerchantCategoryCode="
 				+ transactionMerchantCategoryCode + ", transactionCurrency=" + transactionCurrency + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(cashback, recipientAccountNumber, transactionAmount, transactionCurrency, transactionDate,
+				transactionId, transactionMerchantCategoryCode, transactionType);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transaction other = (Transaction) obj;
+		return Double.doubleToLongBits(cashback) == Double.doubleToLongBits(other.cashback)
+				&& Objects.equals(recipientAccountNumber, other.recipientAccountNumber)
+				&& Double.doubleToLongBits(transactionAmount) == Double.doubleToLongBits(other.transactionAmount)
+				&& Objects.equals(transactionCurrency, other.transactionCurrency)
+				&& Objects.equals(transactionDate, other.transactionDate) && transactionId == other.transactionId
+				&& Objects.equals(transactionMerchantCategoryCode, other.transactionMerchantCategoryCode)
+				&& Objects.equals(transactionType, other.transactionType);
+	}
+	
+	
 	
 	
 	

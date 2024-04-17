@@ -2,6 +2,7 @@ package com.fdmgroup.apmproject.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -115,4 +116,36 @@ public class Account {
 	public void setTransactions(Transaction transaction) {
 		this.transactions.add(transaction);
 	}
+
+	@Override
+	public String toString() {
+		return "Account [accountId=" + accountId + ", accountName=" + accountName + ", balance=" + balance
+				+ ", accountNumber=" + accountNumber + ", accountStatus=" + accountStatus + ", transactions="
+				+ transactions + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(accountId, accountName, accountNumber, accountStatus, balance, transactions);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Account other = (Account) obj;
+		return accountId == other.accountId && Objects.equals(accountName, other.accountName)
+				&& Objects.equals(accountNumber, other.accountNumber)
+				&& Objects.equals(accountStatus, other.accountStatus)
+				&& Double.doubleToLongBits(balance) == Double.doubleToLongBits(other.balance)
+				&& Objects.equals(transactions, other.transactions);
+	}
+	
+	
+	
+	
 }

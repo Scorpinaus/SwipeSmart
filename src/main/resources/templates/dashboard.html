@@ -6,11 +6,17 @@
 		<title>User Dashboard</title>
 	</head>
 	<body>
+		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
-			<button onclick="closeSidebar()" class="closeSidebar">X</button>
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
 			<div class="sidebarLinks">
 				<div class="profile">
 					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/dashboard">Dashboard</a>
 				</div>
 				<div class="cards">
 					<a id="cards" href="/userCards">Cards</a>
@@ -23,23 +29,57 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- dashboard -->
 		<div class="mainPage" id="main">
-			<button onclick="openSidebar()" class="openSidebar">☰</button>
-			<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
-			<p> Display info here on Dashboard </p>	
-			<div class="accounts" th:each="account : ${user.accounts}" th:object=${user}>
-				<div class="accountDetails">
-					<p th:text="${account.accountName}">hi</p>
-					<p th:text="${account.balance}"></p>
-					<p th:text="${account.accountNumber}"></p>
+
+			<button class="openSidebar">☰</button>
+			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
+			<p> This is for you, at a glance: </p>	
+			
+			<div class="summary-container">
+			<div class="accounts-summary" >
+				<p>Your Accounts:</p>
+				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
+					<div class="details-account-name">
+						<p th:text="${account.accountName}"></p>
+					</div>
+					<div class="details-account-number">
+						<p th:text="${account.accountNumber}"></p>
+					</div>
+					<div class="details-account-balance">
+						<label class="detail-label">Balance</label>
+						<p th:text="${account.balance}"></p>
+					</div>
+					
+				
 				</div>
 			</div>
-			<div class="creditCards" th:each="card: ${user.creditCards}" th:object="${user}">
-				<div class="cardDetails">
-					<p th:text="${card.creditCardNumber}"></p>
-					<p th:text="${card.cardLimit}"></p>
-					<p th:text="${card.cardType}"></p>
-					<p th:text="${card.amountUsed}"></p>
+			
+			<div class="cards-summary" >
+				<p>Your Cards:</p>
+				<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
+					<div class="details-card-type">
+						<p th:text="${card.cardType}"></p>
+					</div>
+					
+					<div class="details-card-number">
+						<p th:text="${card.creditCardNumber}"></p>
+					</div>
+					
+					<div class="details-card-limit">
+						<label class="detail-label">Card Limit</label>
+						<p th:text="${card.cardLimit}"></p>
+					</div>
+					
+					<div class="details-card-amount">
+						<label class="detail-label">Amount Used</label>
+						<p th:text="${card.amountUsed}"></p>
+					</div>
+					
+					
+					
+					
 				</div>
 			</div>
 			<div class="spendingInsights">
@@ -47,15 +87,16 @@
 			<div class="pieChart">
 			</div>
 		</div>
+		</div>
 		<script>
-			function openSidebar(){
-				document.getElementById("sidebar").style.width="160px";
-				document.getElementById("main").style.marginLeft="160px";
-			}
-			function closeSidebar(){
-				document.getElementById("sidebar").style.width="0";
-				document.getElementById("main").style.marginLeft="0";
-			}
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
+			sidebar.style.width = menuOpen ? '0' : '160px';})
 		</script>
 	</body>	
 </html>

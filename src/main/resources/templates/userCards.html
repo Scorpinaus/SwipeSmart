@@ -7,10 +7,15 @@
 	</head>
 	<body>
 		<div class="linkContainerSideBar" id="sidebar">
-			<button onclick="closeSidebar()" class="closeSidebar">X</button>
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
 			<div class="sidebarLinks">
 				<div class="profile">
 					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/dashboard">Dashboard</a>
 				</div>
 				<div class="cards">
 					<a id="cards" href="/userCards">Cards</a>
@@ -43,14 +48,14 @@
 			</div>
 		</div>
 		<script>
-			function openSidebar(){
-				document.getElementById("sidebar").style.width="160px";
-				document.getElementById("main").style.marginLeft="160px";
-			}
-			function closeSidebar(){
-				document.getElementById("sidebar").style.width="0";
-				document.getElementById("main").style.marginLeft="0";
-			}
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
+			sidebar.style.width = menuOpen ? '0' : '160px';})
 		</script>
 	</body>
 </html>

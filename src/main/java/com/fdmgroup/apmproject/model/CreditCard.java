@@ -2,6 +2,7 @@ package com.fdmgroup.apmproject.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -150,8 +151,33 @@ public class CreditCard {
 	public String toString() {
 		return "CreditCard [creditCardId=" + creditCardId + ", creditCardNumber=" + creditCardNumber + ", pin=" + pin
 				+ ", cardLimit=" + cardLimit + ", cardType=" + cardType + ", amountUsed=" + amountUsed
-				+ ", creditCardStatus=" + creditCardStatus + "]";
+				+ ", creditCardStatus=" + creditCardStatus + ", transactions=" + transactions + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(amountUsed, cardLimit, cardType, creditCardId, creditCardNumber, creditCardStatus, pin,
+				transactions);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CreditCard other = (CreditCard) obj;
+		return Double.doubleToLongBits(amountUsed) == Double.doubleToLongBits(other.amountUsed)
+				&& Double.doubleToLongBits(cardLimit) == Double.doubleToLongBits(other.cardLimit)
+				&& Objects.equals(cardType, other.cardType) && creditCardId == other.creditCardId
+				&& Objects.equals(creditCardNumber, other.creditCardNumber)
+				&& Objects.equals(creditCardStatus, other.creditCardStatus) && Objects.equals(pin, other.pin)
+				&& Objects.equals(transactions, other.transactions);
+	}
+
+	
 	
 	
 }

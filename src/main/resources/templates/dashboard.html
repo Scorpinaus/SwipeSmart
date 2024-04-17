@@ -33,15 +33,27 @@
 			<button onclick="openSidebar()" class="openSidebar">☰</button>
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
 			<p> This is for you, at a glance: </p>	
-			<div class="accounts-summary" th:each="account : ${user.accounts}" th:object=${user}>
-				<div class="account-details">
-					<p th:text="${account.accountName}">hi</p>
-					<p th:text="${account.balance}"></p>
-					<p th:text="${account.accountNumber}"></p>
+			
+			<div class="summary-container">
+			<div class="accounts-summary" >
+				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
+					<div class="details-account-name">
+						<p th:text="${account.accountName}"></p>
+					</div>
+					<div class="details-account-number">
+						<p th:text="${account.accountNumber}"></p>
+					</div>
+					<div class="details-account-balance">
+						<label class="detail-label">Balance</label>
+						<p th:text="${account.balance}"></p>
+					</div>
+					
+					
 				</div>
 			</div>
-			<div class="cards-summary" th:each="card: ${user.creditCards}" th:object="${user}">
-				<div class="card-details">
+			
+			<div class="cards-summary" >
+				<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
 					<div class="details-card-type">
 						<p th:text="${card.cardType}"></p>
 					</div>

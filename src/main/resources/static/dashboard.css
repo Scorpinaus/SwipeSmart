@@ -111,17 +111,47 @@ body{
 	font-family: 'Actor', sans-serif;
 }
 
+.summary-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    grid-gap: 0px;
+}
+
 .accounts-summary {
-	width: 500px;
+	width: 350px;
   	margin: 100px auto;
-  	padding: 50px;
+  	padding: 5px auto;
+  	padding-left: 10px;
+  	padding-right: 10px;
   	border-radius: 10px;
+  	background-color: var(--lightgrey);
+}
+
+.account-details {
+    display: block;
+    flex-direction: column;
+    background-color: var(--white);
+    padding: 5px;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+
+.details-account-name p {
+	font-weight: bold;
+}
+
+
+.details-account-balance p{
+    display: inline;
 }
 
 .cards-summary {
-	width: auto;
+	width: 350px;
   	margin: 100px auto;
-  	padding: 50px;
+  	padding: 5px auto;
+  	padding-left: 10px;
+  	padding-right: 10px;
   	border-radius: 10px;
   	background-color: var(--lightgrey);
 }
@@ -129,6 +159,10 @@ body{
 .card-details {
     display: block;
     flex-direction: column;
+    background-color: var(--white);
+    padding: 5px;
+    margin: 10px auto;
+    border-radius: 10px;
     
 }
 

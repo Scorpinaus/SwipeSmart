@@ -104,37 +104,43 @@ a#cards{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 160px;
+	padding: 10px;
 }
 
 body{
 	font-family: 'Actor', sans-serif;
+	width: 100%;
 }
 
 .summary-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0;
-    grid-gap: 0px;
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
 }
 
-.accounts-summary {
-	width: 350px;
-  	margin: 100px auto;
-  	padding: 5px auto;
-  	padding-left: 10px;
-  	padding-right: 10px;
+.accounts-summary,
+.cards-summary {
+    flex: 1 0 35%;
+    margin-bottom: 20px;
+    min-width: 300px;
+    padding: 10px;
   	border-radius: 10px;
   	background-color: var(--lightgrey);
 }
 
-.account-details {
-    display: block;
+.accounts-summary p {
+	font-weight: bold;
+}
+
+.account-details, .card-details {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    padding-left: 5px;
     flex-direction: column;
     background-color: var(--white);
-    padding: 5px;
-    margin: 10px auto;
     border-radius: 10px;
-    height: 125px;
 }
 
 .details-account-name p {
@@ -147,26 +153,6 @@ body{
 
 .details-account-balance p{
     display: inline;
-}
-
-.cards-summary {
-	width: 350px;
-  	margin: 100px auto;
-  	padding: 5px auto;
-  	padding-left: 10px;
-  	padding-right: 10px;
-  	border-radius: 10px;
-  	background-color: var(--lightgrey);
-}
-
-.card-details {
-    display: block;
-    flex-direction: column;
-    background-color: var(--white);
-    padding: 5px;
-    margin: 10px auto;
-    border-radius: 10px;
-    height: 125px;
 }
 
 .details-card-type p {

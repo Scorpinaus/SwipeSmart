@@ -204,28 +204,17 @@ public class AccountController {
 
 			// Get logged user
 			User currentUser = (User) session.getAttribute("loggedUser");
-
 			String accountnumber = accountService.generateUniqueAccountNumber();
-
 			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser, statusService.findByStatusName("Pending") );
-			//persist new account
 			
+			//persist new account
 			accountService.persist(accountCreated);
 
-			
-			double cashback = 0;
-			
+			double cashback = 0;			
 			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null,null );
-
 			transactionService.persist(transaction);
-	
-
-			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");
-			
-	
+			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");	
 			return "redirect:/bankaccount/dashboard";
-
-
 		}
 	}
 
@@ -265,35 +254,48 @@ public class AccountController {
 				LOGGER.info("SameAccount");
 				return "redirect:/bankaccount/transfer";
 				}
-			// validate user has sufficient in account
+			// validate user has sufficient amount in account
 			else if (accountFromBalance.getBalance() < transferAmount) {
 				redirectAttributes.addAttribute("InsufficientBalanceError", "true");
 				LOGGER.info("InsufficientBalance");
 				return "redirect:/bankaccount/transfer";
 			} else {
-				Account accountToBalance = accountService.findAccountByAccountNumber(accountNumber);
-	
-				// update the accounts' balance
-				accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
-				accountService.update(accountFromBalance);
-	
-				accountToBalance.setBalance(accountToBalance.getBalance() + transferAmount);
-				accountService.update(accountToBalance);
-	
-				// Transaction
-//				double cashback = 0;
-	
-				Transaction transaction = new Transaction("transfer",accountFromBalance, accountToBalance,transferAmount, accountNumberTransferTo,
-						null );
-	
-				transactionService.persist(transaction);
-			
-			
-			
-				LOGGER.info("Transfer Success!");
-	
-				return "redirect:/bankaccount/dashboard";
-		}
-	}
-	
+			//Check if recipientAccount exists in database. If exists, operate normally, if not, consider one sided transfer.
+				Optional<Account> recipientAccount = Optional.ofNullable(accountService.findAccountByAccountNumber(accountNumber));
+				//When recipientAccount is internal & existing
+				if (!recipientAccount.isEmpty()) {
+					// update the accounts' balance
+					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+					accountService.update(accountFromBalance);
+					
+					recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
+					accountService.update(recipientAccount.get());
+					
+					// Transaction
+//					double cashback = 0;
+		
+					Transaction internalTransaction = new Transaction("Internal Transfer",accountFromBalance, recipientAccount.get(),transferAmount, recipientAccount.get().getAccountNumber(), null);
+		
+					transactionService.persist(internalTransaction);
+					LOGGER.info("Internal Transfer Success!");
+					return "redirect:/bankaccount/dashboard";
+					
+				} else {
+					// update the accounts' balance
+					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+					accountService.update(accountFromBalance);
+					
+					Account externalAccount = new Account();
+					externalAccount.setAccountNumber(accountNumber);
+					externalAccount.setBalance(transferAmount);
+					
+					//Transactions
+//					double cashback = 0;
+					Transaction externalTransaction = new Transaction("External Transfer", accountFromBalance, null, transferAmount, accountNumber, null);
+					transactionService.persist(externalTransaction);
+					LOGGER.info("External Transfer Success!");
+					return "redirect:/bankaccount/dashboard";
+				}
+			}
+	} 
 }

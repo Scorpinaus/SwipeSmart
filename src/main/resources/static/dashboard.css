@@ -13,7 +13,7 @@
 	height: 100%;
 	top:0;
 	left:0;
-	width: 160px;
+	width: 200px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -104,37 +104,51 @@ a#cards{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 160px;
+	padding: 10px;
+}
+
+h1{
+	margin-left: 5%;
+}
+
+p#headerIntro{
+	margin-left: 5%;
 }
 
 body{
 	font-family: 'Actor', sans-serif;
+	width: 100%;
 }
 
 .summary-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0;
-    grid-gap: 0px;
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
 }
 
-.accounts-summary {
-	width: 350px;
-  	margin: 100px auto;
-  	padding: 5px auto;
-  	padding-left: 10px;
-  	padding-right: 10px;
+.accounts-summary,
+.cards-summary {
+    flex: 1 0 35%;
+    margin-bottom: 20px;
+    min-width: 300px;
+    padding: 10px;
   	border-radius: 10px;
   	background-color: var(--lightgrey);
 }
 
-.account-details {
+.accounts-summary p {
+	font-weight: bold;
+}
+
+.account-details, .card-details {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    padding-left: 5px;
     flex-direction: column;
     background-color: var(--white);
-    width: 95%;
-    padding: 5px;
-    margin: 10px auto;
     border-radius: 10px;
-    height: 125px;
 }
 
 .details-account-name p {
@@ -147,27 +161,6 @@ body{
 
 .details-account-balance p{
     display: inline;
-}
-
-.cards-summary {
-	width: 350px;
-  	margin: 100px auto;
-  	padding: 5px auto;
-  	padding-left: 10px;
-  	padding-right: 10px;
-  	border-radius: 10px;
-  	background-color: var(--lightgrey);
-}
-
-.card-details {
-    display: block;
-    flex-direction: column;
-    background-color: var(--white);
-    padding: 5px;
-    margin: 10px auto;
-    width: 95%;
-    border-radius: 10px;
-    height: 125px;
 }
 
 .details-card-type p {
@@ -185,4 +178,16 @@ body{
 .details-card-limit,
 .details-card-amount {
     text-align: right;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
 }

@@ -13,7 +13,7 @@
 	height: 100%;
 	top:0;
 	left:0;
-	width: 160px;
+	width: 200px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -104,9 +104,55 @@ a#cards{
 
 .mainPage{
 	transition: margin-left .5s;
-	margin-left: 160px;
+	margin-left: 200px;
 }
 
 body{
 	font-family: 'Actor', sans-serif;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
+}
+
+h1{
+	margin-left: 5%;
+}
+
+input{
+	margin-bottom: 5%;
+}
+
+.secondary-content-container{
+	margin-left: 5%;
+	display: flex;
+	justify-content: center;
+}
+
+.form{
+	border-radius: 15px;
+	background-color:#4F96A9;
+	padding: 50px;
+}
+
+input#submitButton{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+	border: none;
+}
+
+input#submitButton:hover{
+	opacity: 0.6;
 }

@@ -3,7 +3,7 @@
 	height: 100%;
 	top:0;
 	left:0;
-	width: 160px;
+	width: 200px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -97,7 +97,7 @@ body {
 
 .mainPage{
 	transition: margin-left .5s;
-	margin-left:160px;
+	margin-left:200px;
 }
 
 .form{
@@ -134,4 +134,16 @@ input[type="submit"] {
   	background-color: #2b6777;
   	cursor: pointer;
   	transition: all 0.3s ease;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
 }

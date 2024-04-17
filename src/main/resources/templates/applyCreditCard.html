@@ -34,20 +34,23 @@
 			
 			<h2>Our available credit card</h2>
 			
-			<div class="secondary-content-container">    
-	           <form method="post" action="applyCreditCard" class="applyCreditCard">					
-					<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
-					<br>
-					<select name="cardType">
-				    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
-				  	</select>
-					<input type="submit" value="Apply" class="button">
-				</form>
-				<div th:if="${error}">
-	   				 <p style="color: red;">There are empty fields, please fill up</p>
-				</div>
-				<div th:if="${error2}">
-	   				 <p style="color: red;">Your salary is too low. You are required to have a monthly salary above $1000</p>
+			<div class="secondary-content-container">   
+				<div class="form"> 
+		           	<form method="post" action="applyCreditCard" class="applyCreditCard">					
+						<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
+						<br>
+						<select name="cardType">
+					    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
+					  	</select>
+					  	<br>
+						<input id="submitButton" type="submit" value="Apply" class="button">
+					</form>
+					<div th:if="${error}">
+		   				 <p style="color: red;">There are empty fields, please fill up</p>
+					</div>
+					<div th:if="${error2}">
+		   				 <p style="color: red;">Your salary is too low. You are required to have a monthly salary above $1000</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -58,8 +61,8 @@
 			const button = document.querySelector('.openSidebar')
 			
 			button.addEventListener('click', () => {menuOpen = !menuOpen;
-			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
-			sidebar.style.width = menuOpen ? '0' : '160px';})
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
 		</script>
 	</body>
 </html>

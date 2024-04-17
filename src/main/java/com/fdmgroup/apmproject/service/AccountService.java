@@ -94,15 +94,17 @@ public class AccountService {
 		return newAccountBalance;
 	}
 	
+	//Function that finds all Bank Accounts based on user ID
 	public List<Account> findAllAccountsByUserId(long userId){
 		return accountRepo.findByAccountUserUserId(userId);
 	}
 	
+	//Function that retrieves all Bank Accounts
 	public List<Account> getAllAccounts(){
 		return accountRepo.findAll();
 	}
 	
-	
+	//Function that generates a unique Bank Account Number when creating a new bank account
 	public String generateUniqueAccountNumber() {
 		StringBuilder sb = new StringBuilder();
         Random random = new Random();

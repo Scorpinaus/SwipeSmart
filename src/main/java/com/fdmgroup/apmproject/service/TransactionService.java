@@ -3,7 +3,7 @@ package com.fdmgroup.apmproject.service;
 import java.time.LocalDateTime;
 
 import java.time.YearMonth;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,6 +102,27 @@ public class TransactionService {
         return transactionRepo.findByTransactionDateBetweenAndTransactionCreditCard(startOfMonth,endOfMonth,creditcard);
     }
 	
+	public List<Transaction> findByTransactionAccountOrRecipientAccount(Account transactionAccount, Account recipientAccount){
+		List<Transaction> Transactions = new ArrayList<>();
+		
+		Transactions = transactionRepo.findByTransactionAccountOrRecipientAccount(transactionAccount, recipientAccount);
+	
+	for (Transaction transaction : Transactions) {
+		
+	
+	    String accountFromNumber = transaction.getTransactionAccount().getAccountNumber();
+	    String maskedAccountFromNumber = "***-***-" + accountFromNumber.substring(accountFromNumber.length() - 3);
+	    transaction.getTransactionAccount().setAccountNumber(maskedAccountFromNumber);
+	    
+	    String accountToNumber = transaction.getRecipientAccount().getAccountNumber();
+	    String maskedAccountToNumber = "***-***-" + accountToNumber.substring(accountToNumber.length() - 3);
+	    transaction.getRecipientAccount().setAccountNumber(maskedAccountToNumber);
+	    
+	}
+	    // Repeat the same for the recipient account if necessary
+	    
+	    return Transactions;
+	}
 	
 	
 	@PostConstruct

@@ -1,46 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>Transfer page</title>
-</head>
-<body>
-	<h1>Transfer</h1>
-	<!--  Try changing the method to 'get' below -->
-
-	<form method="post" action="/bankaccount/transfer">
-		<!-- Use the 'placeholder' tag to be more helpful -->
-
-	<select name="account">
-    	<option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
-    <!-- Add more options as needed -->
-	</select>
+	<head>
+		<link rel="stylesheet" href="/transfer.css">
+		<meta charset="UTF-8">
+		<title>Transfer page</title>
+	</head>
+	<body>
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/dashboard">Dashboard</a>
+				</div>
+				<div class="cards">
+					<a class="cardsText" id="cards" href="/userCards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a class="accountsText" id="accounts" href="/bankaccount/dashboard">Accounts</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
+		</div>
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<h1>Transfer</h1>
+			<!--  Try changing the method to 'get' below -->
 		
-		<input type="number" name="transferAmount" placeholder="Transfer Amount" min = "0" step="0.01" required> 
+			<form method="post" action="/bankaccount/transfer">
+				<!-- Use the 'placeholder' tag to be more helpful -->
 		
-		<input type="text" name="accountNumberTransferTo" id="accountNumberTransferTo" placeholder="Account Number Transfer To" > 
-<!-- 		<input type="text" name="accountNumberTransferTo" placeholder="Account Number Transfer To" pattern=".{11}" title="Account number must be 11 characters" required>  -->
-		<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
+			<select name="account">
+		    	<option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
+		    <!-- Add more options as needed -->
+			</select>
+				
+				<input type="number" name="transferAmount" placeholder="Transfer Amount" min = "0" step="0.01" required> 
+				
+				<input type="text" name="accountNumberTransferTo" id="accountNumberTransferTo" placeholder="Account Number Transfer To" > 
+		<!-- 		<input type="text" name="accountNumberTransferTo" placeholder="Account Number Transfer To" pattern=".{11}" title="Account number must be 11 characters" required>  -->
+				<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
+				
+				<input type="submit" value="transfer">
+			
+				<div th:if="${param.SameAccountError}">
+		            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>
+		        </div>
+		        <div th:if="${param.InsufficientBalanceError}">
+		            <p style="color: red;">Insufficient balance. Please check your account balance.</p>
+		        </div>
+			</form>
+		</div>
+		<script>
+			const input = document.getElementById("accountNumberTransferTo");
+			input.addEventListener("input", () => input.value = formatNumber(input.value.replaceAll(" ", "")));
 		
-		<input type="submit" value="transfer">
-	
-		<div th:if="${param.SameAccountError}">
-            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>
-        </div>
-        <div th:if="${param.InsufficientBalanceError}">
-            <p style="color: red;">Insufficient balance. Please check your account balance.</p>
-        </div>
-	</form>
-	
-	<a href="/bankaccount/dashboard">Back to Dashboard</a>
-	<script>
-		const input = document.getElementById("accountNumberTransferTo");
-		input.addEventListener("input", () => input.value = formatNumber(input.value.replaceAll(" ", "")));
-	
-		const formatNumber = (number) => number.split("").reduce((seed, next, index) => {
-		  if (index !== 0 && !(index % 3)) seed += " ";
-		  return seed + next;
-		}, "");
-	</script>
-</body>
+			const formatNumber = (number) => number.split("").reduce((seed, next, index) => {
+			  if (index !== 0 && !(index % 3)) seed += " ";
+			  return seed + next;
+			}, "");
+			
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
+		</script>
+	</body>
 </html>

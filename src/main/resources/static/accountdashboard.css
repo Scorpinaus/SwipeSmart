@@ -8,7 +8,7 @@ body{
 	height: 100%;
 	top:0;
 	left:0;
-	width: 160px;
+	width: 200px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -102,7 +102,7 @@ a#accounts{
 
 .mainPage{
 	transition: margin-left .5s;
-	margin-left:160px;
+	margin-left: 200px;
 }
 
 .accountLinkContainer{
@@ -157,4 +157,16 @@ span#accountDetails{
 	background-color: #4F96A9;
 	text-align: center;
 	margin: 15px;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
 }

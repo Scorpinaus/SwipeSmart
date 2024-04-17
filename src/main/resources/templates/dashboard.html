@@ -6,6 +6,7 @@
 		<title>User Dashboard</title>
 	</head>
 	<body>
+		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
 			<button onclick="closeSidebar()" class="closeSidebar">X</button>
 			<div class="sidebarLinks">
@@ -26,23 +27,42 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- dashboard -->
 		<div class="mainPage" id="main">
 			<button onclick="openSidebar()" class="openSidebar">☰</button>
-			<h1 th:text="'Hello ' + ${user.username} + '! Welcome to the dashboard'"></h1>
-			<p> Display info here on Dashboard </p>	
-			<div class="accounts" th:each="account : ${user.accounts}" th:object=${user}>
-				<div class="accountDetails">
+			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
+			<p> This is for you, at a glance: </p>	
+			<div class="accounts-summary" th:each="account : ${user.accounts}" th:object=${user}>
+				<div class="account-details">
 					<p th:text="${account.accountName}">hi</p>
 					<p th:text="${account.balance}"></p>
 					<p th:text="${account.accountNumber}"></p>
 				</div>
 			</div>
-			<div class="creditCards" th:each="card: ${user.creditCards}" th:object="${user}">
-				<div class="cardDetails">
-					<p th:text="${card.creditCardNumber}"></p>
-					<p th:text="${card.cardLimit}"></p>
-					<p th:text="${card.cardType}"></p>
-					<p th:text="${card.amountUsed}"></p>
+			<div class="cards-summary" th:each="card: ${user.creditCards}" th:object="${user}">
+				<div class="card-details">
+					<div class="details-card-type">
+						<p th:text="${card.cardType}"></p>
+					</div>
+					
+					<div class="details-card-number">
+						<p th:text="${card.creditCardNumber}"></p>
+					</div>
+					
+					<div class="details-card-limit">
+						<label class="detail-label">Card Limit</label>
+						<p th:text="${card.cardLimit}"></p>
+					</div>
+					
+					<div class="details-card-amount">
+						<label class="detail-label">Amount Used</label>
+						<p th:text="${card.amountUsed}"></p>
+					</div>
+					
+					
+					
+					
 				</div>
 			</div>
 			<div class="spendingInsights">

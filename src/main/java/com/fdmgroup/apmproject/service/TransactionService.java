@@ -106,22 +106,47 @@ public class TransactionService {
 		List<Transaction> Transactions = new ArrayList<>();
 		
 		Transactions = transactionRepo.findByTransactionAccountOrRecipientAccount(transactionAccount, recipientAccount);
-	
-	for (Transaction transaction : Transactions) {
 		
+		
+		Transactions = maskCredentialInfo(Transactions);
 	
-	    String accountFromNumber = transaction.getTransactionAccount().getAccountNumber();
-	    String maskedAccountFromNumber = "***-***-" + accountFromNumber.substring(accountFromNumber.length() - 3);
-	    transaction.getTransactionAccount().setAccountNumber(maskedAccountFromNumber);
-	    
-	    String accountToNumber = transaction.getRecipientAccount().getAccountNumber();
-	    String maskedAccountToNumber = "***-***-" + accountToNumber.substring(accountToNumber.length() - 3);
-	    transaction.getRecipientAccount().setAccountNumber(maskedAccountToNumber);
-	    
-	}
+//	for (Transaction transaction : Transactions) {
+//		
+//		if(transaction.getTransactionAccount() != null) {
+//	    String accountFromNumber = transaction.getTransactionAccount().getAccountNumber();
+//	    String maskedAccountFromNumber = "***-***-" + accountFromNumber.substring(accountFromNumber.length() - 3);
+//	    transaction.getTransactionAccount().setAccountNumber(maskedAccountFromNumber);
+//		}
+//		if(transaction.getRecipientAccount() != null) {
+//		
+//	    String accountToNumber = transaction.getRecipientAccount().getAccountNumber();
+//	    String maskedAccountToNumber = "***-***-" + accountToNumber.substring(accountToNumber.length() - 3);
+//	    transaction.getRecipientAccount().setAccountNumber(maskedAccountToNumber);
+//		}
+//	}
 	    // Repeat the same for the recipient account if necessary
 	    
 	    return Transactions;
+	}
+	
+	
+	private List<Transaction> maskCredentialInfo(List<Transaction> Transactions){
+		for (Transaction transaction : Transactions) {
+			
+			if(transaction.getTransactionAccount() != null) {
+		    String accountFromNumber = transaction.getTransactionAccount().getAccountNumber();
+		    String maskedAccountFromNumber = "***-***-" + accountFromNumber.substring(accountFromNumber.length() - 3);
+		    transaction.getTransactionAccount().setAccountNumber(maskedAccountFromNumber);
+			}
+			if(transaction.getRecipientAccount() != null) {
+			
+		    String accountToNumber = transaction.getRecipientAccount().getAccountNumber();
+		    String maskedAccountToNumber = "***-***-" + accountToNumber.substring(accountToNumber.length() - 3);
+		    transaction.getRecipientAccount().setAccountNumber(maskedAccountToNumber);
+			}
+		}
+		
+		return Transactions;
 	}
 	
 	

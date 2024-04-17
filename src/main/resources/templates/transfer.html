@@ -18,7 +18,7 @@
 		
 		<input type="number" name="transferAmount" placeholder="Transfer Amount" step="0.01" required> 
 		
-		<input type="text" name="accountNumberTransferTo" placeholder="Account Number Transfer To" > 
+		<input type="text" name="accountNumberTransferTo" id="accountNumberTransferTo" placeholder="Account Number Transfer To" > 
 <!-- 		<input type="text" name="accountNumberTransferTo" placeholder="Account Number Transfer To" pattern=".{11}" title="Account number must be 11 characters" required>  -->
 		<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
 		
@@ -32,7 +32,15 @@
         </div>
 	</form>
 	
-<a href="/bankaccount/dashboard">Back to Dashboard</a>
-
+	<a href="/bankaccount/dashboard">Back to Dashboard</a>
+	<script>
+		const input = document.getElementById("accountNumberTransferTo");
+		input.addEventListener("input", () => input.value = formatNumber(input.value.replaceAll(" ", "")));
+	
+		const formatNumber = (number) => number.split("").reduce((seed, next, index) => {
+		  if (index !== 0 && !(index % 3)) seed += " ";
+		  return seed + next;
+		}, "");
+	</script>
 </body>
 </html>

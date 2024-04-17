@@ -269,8 +269,8 @@ public class AccountController {
 				LOGGER.info("InsufficientBalance");
 				return "redirect:/bankaccount/transfer";
 			} else {
-
-				Account accountToBalance = accountService.findAccountByAccountNumber(accountNumberTransferTo);
+				String accountNumber = accountNumberTransferTo.replace(" ","-");
+				Account accountToBalance = accountService.findAccountByAccountNumber(accountNumber);
 	
 				// update the accounts' balance
 				accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);

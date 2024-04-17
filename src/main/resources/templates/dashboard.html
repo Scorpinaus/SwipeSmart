@@ -39,6 +39,7 @@
 			
 			<div class="summary-container">
 			<div class="accounts-summary" >
+				<p>Your Accounts:</p>
 				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
 					<div class="details-account-name">
 						<p th:text="${account.accountName}"></p>
@@ -56,6 +57,7 @@
 			</div>
 			
 			<div class="cards-summary" >
+				<p>Your Cards:</p>
 				<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
 					<div class="details-card-type">
 						<p th:text="${card.cardType}"></p>

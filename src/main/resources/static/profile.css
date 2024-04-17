@@ -1,7 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+
+body{
+	font-family: 'Actor', sans-serif;
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
 	left:0;
+	width: 160px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -9,6 +16,15 @@
     position: fixed;
 }
 
+.sidebarHeader{
+	display: flex;
+	justify-content: center;
+}
+
+p#sidebarHeader{
+	color: white;
+	padding: 10px;
+}
 
 .sidebarLinks{
 	padding-left: 20px;

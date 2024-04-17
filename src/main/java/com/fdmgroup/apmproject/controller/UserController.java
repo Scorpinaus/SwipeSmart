@@ -137,9 +137,15 @@ public class UserController {
 			@RequestParam(name = "firstName", required = false) String firstName,
 			@RequestParam(name = "lastName", required = false) String lastName, HttpSession session, Model model) {
 		User tempUser = userService.findUserById(userId);
-		tempUser.setAddress(address);
-		tempUser.setFirstName(firstName);
-		tempUser.setLastName(lastName);
+		if (!address.isEmpty()) {
+			tempUser.setAddress(address);
+		}
+		if (!address.isEmpty()) {
+			tempUser.setFirstName(firstName);		
+		}
+		if (!address.isEmpty()) {
+			tempUser.setLastName(lastName);
+		}
 		session.setAttribute("loggedUser", tempUser);
 		model.addAttribute("user", tempUser);
 		userService.update(tempUser);

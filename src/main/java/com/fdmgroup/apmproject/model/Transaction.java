@@ -23,14 +23,19 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Transaction ID")
 	private long transactionId;
+	
 	@Column(name = "Transaction Date")
 	private LocalDateTime transactionDate;
+	
 	@Column(name = "Transaction Type")
 	private String transactionType;
+	
 	@Column(name = "Transaction Amount")
 	private double transactionAmount;
+	
 	@Column(name = "Recipient Account Number")
 	private String recipientAccountNumber;
+	
 	@Column(name = "Cashback")
 	private double cashback;
 
@@ -50,13 +55,7 @@ public class Transaction {
 	@JoinColumn(name = "FK recipientAccount ID")
 	private Account recipientAccount;
 
-	public Account getRecipientAccount() {
-		return recipientAccount;
-	}
-
-	public void setRecipientAccount(Account recipientAccount) {
-		this.recipientAccount = recipientAccount;
-	}
+	
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -68,7 +67,9 @@ public class Transaction {
 	@JoinColumn(name = "FK Foreign Exchange Currency ID")
 	private ForeignExchangeCurrency transactionCurrency;
 	
-	public Transaction() {};
+	public Transaction() {
+		
+	};
 
 	public Transaction(LocalDateTime transactionDate, String transactionType,
 			double transactionAmount, String recipientAccountNumber, double cashback, CreditCard transactionCreditCard,
@@ -214,6 +215,14 @@ public class Transaction {
 	public void setTransactionMerchantCategoryCode(MerchantCategoryCode transactionMerchantCategoryCode) {
 		this.transactionMerchantCategoryCode = transactionMerchantCategoryCode;
 	}
+	
+	public Account getRecipientAccount() {
+		return recipientAccount;
+	}
+
+	public void setRecipientAccount(Account recipientAccount) {
+		this.recipientAccount = recipientAccount;
+	}
 
 	
 
@@ -249,6 +258,8 @@ public class Transaction {
 				&& Objects.equals(transactionMerchantCategoryCode, other.transactionMerchantCategoryCode)
 				&& Objects.equals(transactionType, other.transactionType);
 	}
+	
+	
 	
 	
 	

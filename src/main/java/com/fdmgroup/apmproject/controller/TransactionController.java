@@ -20,6 +20,7 @@ import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
+import com.fdmgroup.apmproject.repository.TransactionRepository;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.TransactionService;
@@ -35,7 +36,8 @@ public class TransactionController {
 	private AccountService accountService;
 	@Autowired
 	private TransactionService transactionService;
-	
+	@Autowired
+	private TransactionRepository transactionRepository;
 	 	
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	
@@ -57,13 +59,19 @@ public class TransactionController {
 				Account userAccount = accountService.findById(Long.parseLong(accountId));
 
 				if (month == null || month == "") {
-					transactions = userAccount.getTransactions();
+					
+//					transactions = transactionRepository.findByTransactionAccountOrRecipientAccount(userAccount,userAccount);
+					transactions = transactionService.findByTransactionAccountOrRecipientAccount(userAccount,userAccount);
+					System.out.println(transactions.size());
+//					System.out.println(transactions.toString());
 				} else {
 					int year = Integer.parseInt(month.substring(0, 4));
 				    int monthValue = Integer.parseInt(month.substring(5));
 				    transactions = transactionService.getTransactionsByMonthAndYearAndTransactionAccount(year, monthValue, userAccount);
 				}
-
+				
+				
+				
 				model.addAttribute("transactions", transactions);
 				model.addAttribute("account", userAccount);
 				

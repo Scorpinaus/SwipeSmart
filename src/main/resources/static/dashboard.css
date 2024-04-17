@@ -1,7 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+
+:root {
+  --darkgreen: #2b6777;
+  --lightblue:#c8d8e4;
+  --white: #ffffff;
+  --lightgrey:#f2f2f2;
+  --lightgreen:#52ab98;
+  --fadedgreen:#4F96A9;
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
 	left:0;
+	width: 160px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -9,6 +21,15 @@
     position: fixed;
 }
 
+.sidebarHeader{
+	display: flex;
+	justify-content: center;
+}
+
+p#sidebarHeader{
+	color: white;
+	padding: 10px;
+}
 
 .sidebarLinks{
 	padding-left: 20px;
@@ -83,4 +104,75 @@ a#cards{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 160px;
+}
+
+body{
+	font-family: 'Actor', sans-serif;
+}
+
+.summary-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    grid-gap: 0px;
+}
+
+.accounts-summary {
+	width: 350px;
+  	margin: 100px auto;
+  	padding: 5px auto;
+  	padding-left: 10px;
+  	padding-right: 10px;
+  	border-radius: 10px;
+  	background-color: var(--lightgrey);
+}
+
+.account-details {
+    display: block;
+    flex-direction: column;
+    background-color: var(--white);
+    padding: 5px;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+
+.details-account-name p {
+	font-weight: bold;
+}
+
+
+.details-account-balance p{
+    display: inline;
+}
+
+.cards-summary {
+	width: 350px;
+  	margin: 100px auto;
+  	padding: 5px auto;
+  	padding-left: 10px;
+  	padding-right: 10px;
+  	border-radius: 10px;
+  	background-color: var(--lightgrey);
+}
+
+.card-details {
+    display: block;
+    flex-direction: column;
+    background-color: var(--white);
+    padding: 5px;
+    margin: 10px auto;
+    border-radius: 10px;
+    
+}
+
+.details-card-type p {
+	font-weight: bold;
+}
+.detail-label {
+    font-weight: bold;
+}
+
+.details-card-limit p,
+.details-card-amount p {
+    display: inline;
 }

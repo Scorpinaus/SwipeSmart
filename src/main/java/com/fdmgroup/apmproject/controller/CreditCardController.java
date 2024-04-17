@@ -25,7 +25,7 @@ public class CreditCardController {
 
 	@Autowired
 	private CreditCardService creditCardService;
-	
+
 	@Autowired
 	private StatusService statusService;
 	@Autowired
@@ -47,7 +47,6 @@ public class CreditCardController {
 		}
 	}
 
-
 	@GetMapping("/applyCreditCard")
 	public String applyCreditCard(Model model, HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
@@ -62,6 +61,8 @@ public class CreditCardController {
 	@PostMapping("/applyCreditCard")
 	public String applyCreditCard(Model model, HttpSession session, @RequestParam String monthlySalary,
 			@RequestParam String cardType) {
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", loggedUser);
 		if (monthlySalary.isBlank() || cardType.isBlank()) {
 			logger.warn("There are empty fields, please fill up");
 			model.addAttribute("error", true);
@@ -72,7 +73,6 @@ public class CreditCardController {
 				model.addAttribute("error2", true);
 				return "applyCreditCard";
 			} else {
-				User loggedUser = (User) session.getAttribute("loggedUser");
 				String creditCardNumber = creditCardService.generateCreditCardNumber();
 				String pin = creditCardService.generatePinNumber();
 				double cardLimit = Double.parseDouble(monthlySalary) * 3;
@@ -81,10 +81,10 @@ public class CreditCardController {
 				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0,
 						loggedUser);
 				creditCardService.persist(createCreditCard);
-				logger.info("Credit card of number " + creditCardNumber + " created");	
+				logger.info("Credit card of number " + creditCardNumber + " created");
 				loggedUser.setCreditCards(createCreditCard);
 				userService.update(loggedUser);
-		
+
 				return "redirect:/userCards";
 			}
 		}

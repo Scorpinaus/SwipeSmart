@@ -104,6 +104,19 @@ a#accounts{
 	margin-left: 200px;
 }
 
+.account, .creditCard{
+	display:flex;
+	margin-bottom: 5%;
+}
+
+.creditCardDetails, .accountDetails{
+	width: 35%;
+	margin-left:5%;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+}
+
 .accountLinkContainer{
 	display: flex;
 	justify-content: center;
@@ -134,9 +147,6 @@ a#accountCRUD{
 	text-align: center;
 }
 
-.accountDetails{
-	display:flex;
-}
 
 a#accountDetails{
 	color: white;
@@ -169,3 +179,10 @@ span#accountDetails{
 .openSidebar:hover{
 	opacity: 0.6;
 }
+
+.transactionTable{
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+

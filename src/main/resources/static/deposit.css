@@ -122,3 +122,38 @@ body{
 .openSidebar:hover{
 	opacity: 0.6;
 }
+
+h1{
+	margin-left: 5%;
+}
+
+.secondary-content-container{
+	margin-left: 5%;
+	display: flex;
+	justify-content: center;
+}
+
+.form{
+	border-radius: 15px;
+	background-color:#4F96A9;
+	padding: 50px;
+}
+
+input, option, select{
+	margin-bottom: 5%;
+}
+
+
+input#submitButton{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+	border: none;
+}
+
+input#submitButton:hover{
+	opacity: 0.6;
+}

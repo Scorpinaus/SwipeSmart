@@ -46,88 +46,85 @@
 		</div>
 		<div class="mainPage" id="main">
 			<button class="openSidebar">☰</button>
-			<div id="sidebarChecker" th:if="${creditCard != null}">
-				<h2 th:text="${creditCard.cardType}"></h2>
-				<p th:text="${creditCard.creditCardNumber}"></p>
-				<p th:text="${creditCard.pin}"></p>
-			</div>
-				
-			<div th:if="${account != null}">
-				<h2 th:text="${account.accountName}"></h2>
-				<p th:text="${account.accountNumber}"></p>
-				<p th:text="${account.balance}"></p>
-			</div>
-	
-			<h2>Transactions</h2>
-	
-	
-			<form th:action="@{/viewTransactions}" method="get">
-			    <label for="month">Month:</label>
-			    <input type="month" id="month" name="month">
-			    <input type="hidden" id="accountId" name="accountId" th:if="${account != null}" th:value="${account.accountId}">
-	   			<input type="hidden" id="creditCardId" name="creditCardId" th:if="${creditCard != null}" th:value="${creditCard.creditCardId}">
-			    <button type="submit">Filter</button>
-			</form>
-	
-			<div th:if="${creditCard != null}">
-			
-	
-			
-				<div class="secondary-content-container">
-					<table>
-						<thead>
-							<tr>
-								<th>Category</th>
-								<th>Date</th>
-								<th>Time</th>
-								<th>Amount</th>
-								<th>Currency</th>
-								<th>Transaction Type</th>
-								<th>CashBack</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="transaction : ${transactions}">
-								<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
-								<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-								<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
-								<td th:text="${transaction.transactionAmount}"></td>
-								<td th:text="${transaction.transactionCurrency}"></td> 
-								<td th:text="${transaction.transactionType}"></td>
-								<td th:text="${transaction.cashback}"></td>
-							</tr>
-						</tbody>
-					</table>
+			<div class="creditCard" id="sidebarChecker" th:if="${creditCard != null}">
+				<div class="creditCardDetails">
+					<h2 th:text="${creditCard.cardType}"></h2>
+					<p th:text="${creditCard.creditCardNumber}"></p>
+					<p th:text="${creditCard.pin}"></p>
 				</div>
 			</div>
-			
-			<div th:if="${account != null}">
-			
-				<div class="secondary-content-container">
-					<table>
-						<thead>
-							<tr>
-								<th>Transaction Type</th>
-								<th>Date</th>
-								<th>Time</th>
-								<th>Transaction Amount</th>
-								<th>Transaction Account Number</th>
-								<th>Recipient Account Number</th>
-								<th>Transaction Currency</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="transaction : ${transactions}">
-								<td th:text="${transaction.transactionType}"></td>
-								 <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-								 <td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
-								<td th:text="${transaction.transactionAmount}"></td>
-								<td th:if="${transaction.transactionAccount != null}" th:text="${transaction.transactionAccount.accountNumber}"></td>
-	<td th:if="${transaction.recipientAccount != null}" th:text="${transaction.recipientAccount.accountNumber}"></td>
-								<td th:text="${transaction.transactionCurrency}"></td> 
-							</tr>
-						</tbody>
-					</table>
+				
+			<div class="account" th:if="${account != null}">
+				<div class="accountDetails">
+					<h2 th:text="${account.accountName}"></h2>
+					<p th:text="${account.accountNumber}"></p>
+					<p th:text="${account.balance}"></p>
+				</div>
+			</div>
+		<div class="transactionTable">
+				<h3>Transactions</h3>
+				<form th:action="@{/viewTransactions}" method="get">
+				    <label for="month">Month:</label>
+				    <input type="month" id="month" name="month">
+				    <input type="hidden" id="accountId" name="accountId" th:if="${account != null}" th:value="${account.accountId}">
+		   			<input type="hidden" id="creditCardId" name="creditCardId" th:if="${creditCard != null}" th:value="${creditCard.creditCardId}">
+				    <button id="filterButton" type="submit">Filter</button>
+				</form>
+				<div th:if="${creditCard != null}">
+					<div class="secondary-content-container">
+						<table>
+							<thead>
+								<tr>
+									<th>Category</th>
+									<th>Date</th>
+									<th>Time</th>
+									<th>Amount</th>
+									<th>Currency</th>
+									<th>Transaction Type</th>
+									<th>CashBack</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="transaction : ${transactions}">
+									<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
+									<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+									<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
+									<td th:text="${transaction.transactionAmount}"></td>
+									<td th:text="${transaction.transactionCurrency}"></td> 
+									<td th:text="${transaction.transactionType}"></td>
+									<td th:text="${transaction.cashback}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div th:if="${account != null}">
+					<div class="secondary-content-container">
+						<table>
+							<thead>
+								<tr>
+									<th>Transaction Type</th>
+									<th>Date</th>
+									<th>Time</th>
+									<th>Transaction Amount</th>
+									<th>Transaction Account Number</th>
+									<th>Recipient Account Number</th>
+									<th>Transaction Currency</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="transaction : ${transactions}">
+									<td th:text="${transaction.transactionType}"></td>
+									 <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+									 <td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
+									<td th:text="${transaction.transactionAmount}"></td>
+									<td th:if="${transaction.transactionAccount != null}" th:text="${transaction.transactionAccount.accountNumber}"></td>
+		<td th:if="${transaction.recipientAccount != null}" th:text="${transaction.recipientAccount.accountNumber}"></td>
+									<td th:text="${transaction.transactionCurrency}"></td> 
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

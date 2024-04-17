@@ -32,30 +32,33 @@
 			<button class="openSidebar">☰</button>
 			<h1>Transfer</h1>
 			<!--  Try changing the method to 'get' below -->
-		
-			<form method="post" action="/bankaccount/transfer">
-				<!-- Use the 'placeholder' tag to be more helpful -->
-		
-			<select name="account">
-		    	<option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
-		    <!-- Add more options as needed -->
-			</select>
+			<div class="secondary-content-container">   
+				<div class="form"> 
+					<form method="post" action="/bankaccount/transfer">
+						<!-- Use the 'placeholder' tag to be more helpful -->
 				
-				<input type="number" name="transferAmount" placeholder="Transfer Amount" min = "0" step="0.01" required> 
-				
-				<input type="text" name="accountNumberTransferTo" id="accountNumberTransferTo" placeholder="Account Number Transfer To" > 
-		<!-- 		<input type="text" name="accountNumberTransferTo" placeholder="Account Number Transfer To" pattern=".{11}" title="Account number must be 11 characters" required>  -->
-				<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
-				
-				<input type="submit" value="transfer">
-			
-				<div th:if="${param.SameAccountError}">
-		            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>
-		        </div>
-		        <div th:if="${param.InsufficientBalanceError}">
-		            <p style="color: red;">Insufficient balance. Please check your account balance.</p>
-		        </div>
-			</form>
+					<select name="account">
+				    	<option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
+				    <!-- Add more options as needed -->
+					</select>
+						
+						<input type="number" name="transferAmount" placeholder="Transfer Amount" min = "0" step="0.01" required> 
+						
+						<input type="text" name="accountNumberTransferTo" id="accountNumberTransferTo" placeholder="Account Number Transfer To" > 
+				<!-- 		<input type="text" name="accountNumberTransferTo" placeholder="Account Number Transfer To" pattern=".{11}" title="Account number must be 11 characters" required>  -->
+						<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
+						
+						<input id="submitButton" type="submit" value="Transfer">
+					
+						<div th:if="${param.SameAccountError}">
+				            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>
+				        </div>
+				        <div th:if="${param.InsufficientBalanceError}">
+				            <p style="color: red;">Insufficient balance. Please check your account balance.</p>
+				        </div>
+					</form>
+				</div>	
+			</div>		
 		</div>
 		<script>
 			const input = document.getElementById("accountNumberTransferTo");

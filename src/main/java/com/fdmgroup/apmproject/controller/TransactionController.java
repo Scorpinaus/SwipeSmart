@@ -60,8 +60,10 @@ public class TransactionController {
 
 				if (month == null || month == "") {
 					
-					transactions = transactionRepository.findByTransactionAccountOrRecipientAccount(userAccount,userAccount);
-
+//					transactions = transactionRepository.findByTransactionAccountOrRecipientAccount(userAccount,userAccount);
+					transactions = transactionService.findByTransactionAccountOrRecipientAccount(userAccount,userAccount);
+					System.out.println(transactions.size());
+//					System.out.println(transactions.toString());
 				} else {
 					int year = Integer.parseInt(month.substring(0, 4));
 				    int monthValue = Integer.parseInt(month.substring(5));

@@ -4,6 +4,24 @@
 <meta charset="UTF-8">
 <title>Transactions</title>
 </head>
+
+	<style>
+	        table {
+	            width: 100%;
+	            border-collapse: collapse;
+	        }
+	        
+	        th, td {
+	            padding: 8px;
+	            text-align: left;
+	            border-bottom: 1px solid #ddd;
+	        }
+	        
+	        tr:hover {
+	            background-color: #f5f5f5;
+	        }
+	</style>
+
 <body>
 	<div class="linkContainerSideBar" style="display: none" id="sidebar">
 		<button onclick="closeSidebar()" class="closeSidebar">X</button>
@@ -45,20 +63,22 @@
 					<thead>
 						<tr>
 							<th>Category</th>
+							<th>Date</th>
+							<th>Date</th>
 							<th>Amount</th>
 							<th>Currency</th>
 							<th>Transaction Type</th>
-							<th>Date</th>
 							<th>CashBack</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="transaction : ${transactions}">
 							<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
+							<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+							<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
 							<td th:text="${transaction.transactionCurrency}"></td> 
 							<td th:text="${transaction.transactionType}"></td>
-							<td th:text="${transaction.transactionDate}"></td>
 							<td th:text="${transaction.cashback}"></td>
 						</tr>
 					</tbody>
@@ -74,7 +94,9 @@
 						<tr>
 							<th>Transaction Type</th>
 							<th>Date</th>
+							<th>Time</th>
 							<th>Transaction Amount</th>
+							<th>Transaction Account Number</th>
 							<th>Recipient Account Number</th>
 							<th>Transaction Currency</th>
 						</tr>
@@ -82,9 +104,11 @@
 					<tbody>
 						<tr th:each="transaction : ${transactions}">
 							<td th:text="${transaction.transactionType}"></td>
-							<td th:text="${transaction.transactionDate}"></td> 
+							 <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+							 <td th:text="${#strings.substring(transaction.transactionDate, 12, 19)}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
-							<td th:text="${transaction.recipientAccountNumber}"></td>
+							<td th:text="${transaction.transactionAccount.accountNumber}"></td>
+							<td th:text="${transaction.recipientAccount.accountNumber}"></td>
 							<td th:text="${transaction.transactionCurrency}"></td> 
 						</tr>
 					</tbody>

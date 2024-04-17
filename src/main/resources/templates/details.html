@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
+		<link rel="stylesheet" href="/details.css">
 		<meta charset="UTF-8">
 		<title>User Details Page</title>
 	</head>
 	<body>
-		<form method="post" th:object="${customer}">
-			<input type="text" name="address" placeholder="Address">
-			<input type="text" name="firstName" placeholder="First Name">
-			<input type="text" name="lastName" placeholder="Last Name">
-			<input type="submit" value="Update">
-		</form>
-		<a href="/dashboard">Return to dashboard</a>
-		<a th:href="@{/users/{id}(id=${user.userId})}">Return to Profile Page</a>
-		<a href="/logout">Logout</a>
+		<div class="linkContainerSideBar" id="sidebar">
+				<div class="sidebarHeader">
+					<p id="sidebarHeader" >SwipeSmart</p>
+				</div>
+				<div class="sidebarLinks">
+					<div class="profile">
+						<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+					</div>
+					<div class="dashboard">
+						<a id="dashboard" href="/dashboard">Dashboard</a>
+					</div>
+					<div class="cards">
+						<a id="cards" href="/userCards">Cards</a>
+					</div>
+					<div class="accounts">
+						<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
+					</div>
+					<div class="logout">
+						<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
+		</div>
+		<div class="mainPage" id="main">
+				<button onclick="openSidebar()" class="openSidebar">☰</button>
+			<form method="post" th:object="${customer}">
+				<input type="text" name="address" placeholder="Address">
+				<input type="text" name="firstName" placeholder="First Name">
+				<input type="text" name="lastName" placeholder="Last Name">
+				<input type="submit" value="Update">
+			</form>
+		</div>
+		<script>
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
+			sidebar.style.width = menuOpen ? '0' : '160px';})
+		</script>
 	</body>
 </html>

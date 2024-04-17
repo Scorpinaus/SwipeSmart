@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
 
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
+
 body{
 	font-family: 'Actor', sans-serif;
 }
@@ -43,6 +55,7 @@ p#sidebarHeader{
 	text-align: center;
 	padding: 20px;
 	background-color: white;
+	animation: transitionIn 0.75s;
 }
 
 .cards{

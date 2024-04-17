@@ -224,14 +224,14 @@ public class Transaction {
 		this.recipientAccount = recipientAccount;
 	}
 
+	
+
 	@Override
 	public String toString() {
 		return "Transaction [transactionId=" + transactionId + ", transactionDate=" + transactionDate
 				+ ", transactionType=" + transactionType + ", transactionAmount=" + transactionAmount
 				+ ", recipientAccountNumber=" + recipientAccountNumber + ", cashback=" + cashback
-				+ ", transactionCreditCard=" + transactionCreditCard + ", transactionAccount=" + transactionAccount
-				+ ", recipientAccount=" + recipientAccount + ", transactionMerchantCategoryCode="
-				+ transactionMerchantCategoryCode + ", transactionCurrency=" + transactionCurrency + "]";
+				;
 	}
 
 	@Override

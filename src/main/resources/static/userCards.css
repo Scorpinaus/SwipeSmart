@@ -9,6 +9,15 @@
     position: fixed;
 }
 
+.sidebarHeader{
+	display: flex;
+	justify-content: center;
+}
+
+p#sidebarHeader{
+	color: white;
+	padding: 10px;
+}
 
 .sidebarLinks{
 	padding-left: 20px;

@@ -231,8 +231,7 @@ public class Transaction {
 		return "Transaction [transactionId=" + transactionId + ", transactionDate=" + transactionDate
 				+ ", transactionType=" + transactionType + ", transactionAmount=" + transactionAmount
 				+ ", recipientAccountNumber=" + recipientAccountNumber + ", cashback=" + cashback
-				+ ", transactionMerchantCategoryCode=" + transactionMerchantCategoryCode + ", transactionCurrency="
-				+ transactionCurrency + "]";
+				;
 	}
 
 	@Override

@@ -176,8 +176,9 @@ public class AccountController {
 	}
 
 	@GetMapping("/bankaccount/create")
-	public String goToCreateBankAccountPage() {
-
+	public String goToCreateBankAccountPage(HttpSession session, Model model) {
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user",loggedUser);
 		return "createbankaccount";
 	}
 

@@ -1,30 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<link rel="stylesheet" href="#">
+		<link rel="stylesheet" href="/applyCreditCard.css">
 		<meta charset="UTF-8">
 		<title>Apply for Credit Cards</title>
 	</head>
 	<body>
-		<h1 th:text="'Hi ' + ${session.loggedUser.username} + ', please select your credit card to apply for.'"></h1>
-		
-		<h2>Our available credit card</h2>
-		
-		<div class="secondary-content-container">    
-           <form method="post" action="applyCreditCard" class="applyCreditCard">					
-				<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
-				<br>
-				<select name="cardType">
-			    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
-			  	</select>
-				<input type="submit" value="Apply" class="button">
-			</form>
-			<div th:if="${error}">
-   				 <p style="color: red;">There are empty fields, please fill up</p>
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
 			</div>
-			<div th:if="${error2}">
-   				 <p style="color: red;">Your salary is too low. You are required to have a monthly salary above $1000</p>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/dashboard">Dashboard</a>
+				</div>
+				<div class="cards">
+					<a id="cards" href="/userCards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
 			</div>
 		</div>
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<h1 th:text="'Hi ' + ${session.loggedUser.username} + ', please select your credit card to apply for.'"></h1>
+			
+			<h2>Our available credit card</h2>
+			
+			<div class="secondary-content-container">    
+	           <form method="post" action="applyCreditCard" class="applyCreditCard">					
+					<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
+					<br>
+					<select name="cardType">
+				    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
+				  	</select>
+					<input type="submit" value="Apply" class="button">
+				</form>
+				<div th:if="${error}">
+	   				 <p style="color: red;">There are empty fields, please fill up</p>
+				</div>
+				<div th:if="${error2}">
+	   				 <p style="color: red;">Your salary is too low. You are required to have a monthly salary above $1000</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
+			sidebar.style.width = menuOpen ? '0' : '160px';})
+		</script>
 	</body>
 </html>

@@ -51,6 +51,8 @@ public class CreditCardController {
 	@GetMapping("/applyCreditCard")
 	public String applyCreditCard(Model model, HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
+			User loggedUser = (User) session.getAttribute("loggedUser");
+			model.addAttribute("user", loggedUser);
 			return "applyCreditCard";
 		} else {
 			return "applyCreditCard";

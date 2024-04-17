@@ -124,60 +124,65 @@ body{
 	display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 5px;
+    gap:5px;
 }
 
 .accounts-summary,
 .cards-summary {
-    flex: 1 0 35%;
-    margin-bottom: 20px;
+    flex: 1 1 35%;
     min-width: 300px;
-    padding: 10px;
+    padding: 20px;
   	border-radius: 10px;
   	background-color: var(--lightgrey);
 }
 
-.accounts-summary p {
-	font-weight: bold;
-}
-
 .account-details, .card-details {
-    display: inline-block;
+    display: flex;
+    text-align: left;
     width: 100%;
-    height: auto;
-    padding-left: 5px;
+    min-height: 100px;
     flex-direction: column;
     background-color: var(--white);
     border-radius: 10px;
+    margin-bottom: 5px;
 }
 
-.details-account-name p {
-	font-weight: bold;
-}
+.details-account-name, 
+.details-account-number,
+.details-card-type,
+.details-card-number{
+	padding-left: 15px;
+} 
 
-.details-account-balance {
-	text-align: right;
-}
 
-.details-account-balance p{
-    display: inline;
-}
-
+.details-account-name p,
 .details-card-type p {
 	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0px;
 }
+
+.details-account-number p,
+.details-card-number p {
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
 .detail-label {
     font-weight: bold;
 }
 
 .details-card-limit p,
-.details-card-amount p {
+.details-card-amount p,
+.details-account-balance p {
     display: inline;
 }
 
 .details-card-limit,
-.details-card-amount {
+.details-card-amount, 
+.details-account-balance {
     text-align: right;
+    padding-right: 15px;
 }
 
 .openSidebar{

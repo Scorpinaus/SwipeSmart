@@ -115,7 +115,7 @@ a#cards{
 
 .mainPage{
 	transition: margin-left .5s;
-	margin-left: 160px;
+	margin-left: 200px;
 	padding: 10px;
 }
 
@@ -155,9 +155,9 @@ body{
 
 .account-details, .card-details {
     display: inline-block;
-    width: 100%;
-    height: auto;
-    padding-left: 5px;
+    margin-bottom: 2%;
+	width: 95%;
+	padding: 15px;
     flex-direction: column;
     background-color: var(--white);
     border-radius: 10px;

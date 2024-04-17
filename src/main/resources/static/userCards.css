@@ -96,6 +96,10 @@ a#cards{
 	padding: 10px;
 }
 
+h1, h2{
+	margin-left: 5%;
+}
+
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px
@@ -111,4 +115,49 @@ a#cards{
 
 .openSidebar:hover{
 	opacity: 0.6;
+}
+
+.button-container{
+	display:flex;
+	justify-content: center;
+	gap: 15px;
+}
+
+a#cardTransactions{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+}
+
+.cardCreation{
+	display:flex;
+	justify-content: center;
+}
+
+.secondary-content-container{
+	display: flex;
+	margin-left: 5%;
+}
+
+.cardDetails{
+	width: 35%;
+	margin-top: 5%;
+	border-radius: 15px;
+	padding: 15px;
+	background-color: #4F96A9;
+}
+
+a#cardDetails{
+	text-decoration: none;
+}
+
+a#cardDetails:hover{
+	opacity: 0.6;
+}
+
+p#cardDetails, h3{
+	color: white;
 }

@@ -102,8 +102,7 @@ a#profile{
 }
 
 h1{
-	display:flex;
-	justify-content: center;
+	margin-left: 5%;
 }
 
 .userDetailsList{

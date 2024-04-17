@@ -106,6 +106,14 @@ a#cards{
 	margin-left: 200px;
 }
 
+h1{
+	margin-left: 5%;
+}
+
+p#headerIntro{
+	margin-left: 5%;
+}
+
 body{
 	font-family: 'Actor', sans-serif;
 }

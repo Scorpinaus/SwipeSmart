@@ -34,52 +34,52 @@
 		<div class="mainPage" id="main">
 			<button class="openSidebar">☰</button>
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
-			<p> This is for you, at a glance: </p>	
+			<p id="headerIntro"> This is for you, at a glance: </p>	
 			
 			<div class="summary-container">
-			<div class="accounts-summary" >
-				<p>Your Accounts:</p>
-				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
-					<div class="details-account-name">
-						<p th:text="${account.accountName}"></p>
-					</div>
-					<div class="details-account-number">
-						<p th:text="${account.accountNumber}"></p>
-					</div>
-					<div class="details-account-balance">
-						<label class="detail-label">Balance </label>
-						<p th:text="${account.balance}"></p>
-					</div>
+				<div class="accounts-summary" >
+					<p>Your Accounts:</p>
+					<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
+						<div class="details-account-name">
+							<p th:text="${account.accountName}"></p>
+						</div>
+						<div class="details-account-number">
+							<p th:text="${account.accountNumber}"></p>
+						</div>
+						<div class="details-account-balance">
+							<label class="detail-label">Balance </label>
+							<p th:text="${account.balance}"></p>
+						</div>
+						
 					
-				
-				</div>
-			</div>
-
-			<div class="cards-summary" >
-				<p>Your Cards:</p>
-				<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
-					<div class="details-card-type">
-						<p th:text="${card.cardType}"></p>
-					</div>
-					
-					<div class="details-card-number">
-						<p th:text="'****-****-****-' + ${#strings.substring(card.creditCardNumber, card.creditCardNumber.length() - 4)}"></p>
-					</div>
-					
-					<div class="details-card-limit">
-						<label class="detail-label">Card Limit</label>
-						<p th:text="${card.cardLimit}"></p>
-					</div>
-					
-					<div class="details-card-amount">
-						<label class="detail-label">Amount Used</label>
-						<p th:text="${card.amountUsed}"></p>
 					</div>
 				</div>
-			</div>
-			<div class="spendingInsights">
-			</div>
-			<div class="pieChart">
+	
+				<div class="cards-summary" >
+					<p>Your Cards:</p>
+					<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
+						<div class="details-card-type">
+							<p th:text="${card.cardType}"></p>
+						</div>
+						
+						<div class="details-card-number">
+							<p th:text="'****-****-****-' + ${#strings.substring(card.creditCardNumber, card.creditCardNumber.length() - 4)}"></p>
+						</div>
+						
+						<div class="details-card-limit">
+							<label class="detail-label">Card Limit</label>
+							<p th:text="${card.cardLimit}"></p>
+						</div>
+						
+						<div class="details-card-amount">
+							<label class="detail-label">Amount Used</label>
+							<p th:text="${card.amountUsed}"></p>
+						</div>
+					</div>
+				</div>
+				<div class="spendingInsights">
+				</div>
+				<div class="pieChart">
 			</div>
 		</div>
 		</div>

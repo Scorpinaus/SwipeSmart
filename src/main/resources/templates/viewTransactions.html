@@ -92,11 +92,10 @@ tr:hover {
 							<tr th:each="transaction : ${transactions}">
 								<td
 									th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
-								<td
-									th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-								<td
-									th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
-								<td th:text="${transaction.transactionAmount}"></td>
+								<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+								<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
+								<td th:if="${transaction.transactionType == 'CC Bill Payment'}" th:text="'-' + ${transaction.transactionAmount}"></td>
+								<td th:unless="${transaction.transactionType == 'CC Bill Payment'}" th:text="${transaction.transactionAmount}"></td>
 								<td th:text="${transaction.transactionCurrency}"></td>
 								<td th:text="${transaction.transactionType}"></td>
 								<td th:text="${transaction.cashback}"></td>
@@ -129,8 +128,8 @@ tr:hover {
 								<td th:text="${transaction.transactionAmount}"></td>
 								<td th:if="${transaction.transactionAccount != null}"
 									th:text="${transaction.transactionAccount.accountNumber}"></td>
-								<td th:if="${transaction.recipientAccount != null}"
-									th:text="${transaction.recipientAccount.accountNumber}"></td>
+								<td th:if="${transaction.recipientAccountNumber != null}"
+									th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></td>
 								<td th:text="${transaction.transactionCurrency}"></td>
 							</tr>
 						</tbody>

@@ -75,18 +75,21 @@ public class UserService {
 			logger.info("User deleted from Database");
 		}
 	}
-	
+
 	@PostConstruct
 	public void initUsers() {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User("jackytan", encoder.encode("Qwerty1"), "Sentosa", "Jacky", "Tan");
+		User user2 = new User("admin", encoder.encode("Fdm123456"), "admin's house", "admin", "chan");
+		user2.setRole("ROLE_ADMIN");
 		persist(user);
+		persist(user2);
 	}
 	
 	@PostConstruct
 	public void intiAdmin() {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		User Admin = new User("Admin", encoder.encode("Admin1234"));
+		User Admin = new User("Admin1", encoder.encode("Admin1234"));
 		Admin.setRole("ROLE_ADMIN");
 		persist(Admin);
 		

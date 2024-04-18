@@ -37,6 +37,17 @@ public class Account {
 	
 	@Column(name = "Account Number")
 	private String accountNumber;
+	
+	@Column(name = "Currency Code")
+	private String currencyCode;
+
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -60,6 +71,15 @@ public class Account {
 	        setAccountUser(accountUser);
 	        setAccountStatus(accountStatus);
 	}
+	
+	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus, String currencyCode) {
+        setAccountName(accountName);
+        setBalance(balance);
+        setAccountNumber(accountNumber);
+        setAccountUser(accountUser);
+        setAccountStatus(accountStatus);
+        setCurrencyCode(currencyCode);
+}
 
 	public long getAccountId() {
 		return accountId;

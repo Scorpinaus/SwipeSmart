@@ -1,11 +1,9 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.util.ArrayList;
-
-import java.util.HashMap;
-
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +18,6 @@ import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
-import com.fdmgroup.apmproject.repository.TransactionRepository;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.TransactionService;
@@ -29,29 +26,28 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class TransactionController {
-	
+
 	@Autowired
 	private CreditCardService creditCardService;
 	@Autowired
 	private AccountService accountService;
 	@Autowired
 	private TransactionService transactionService;
-	@Autowired
-	private TransactionRepository transactionRepository;
-	 	
+
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
-	
-	
+
 	@PostMapping("/viewTransactions")
-	public String viewCardTransactions(@RequestParam(name = "transactionType", required = false) String transactionType, @RequestParam(name = "month", required = false) String month, @RequestParam(name = "creditCardId", required = false) String creditCardId, @RequestParam(name = "accountId", required = false) String accountId, Model model,
-			HttpSession session) {
-		
+	public String viewCardTransactions(@RequestParam(name = "transactionType", required = false) String transactionType,
+			@RequestParam(name = "month", required = false) String month,
+			@RequestParam(name = "creditCardId", required = false) String creditCardId,
+			@RequestParam(name = "accountId", required = false) String accountId, Model model, HttpSession session) {
+
 		if (!(session != null && session.getAttribute("loggedUser") != null)) {
 			model.addAttribute("error", true);
 			logger.warn("User Is not logged-in. Please login first");
 			return "userCards";
 		} else {
-			
+
 			User loggedUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", loggedUser);
 			List<Transaction> transactions = new ArrayList<>();
@@ -59,38 +55,105 @@ public class TransactionController {
 				Account userAccount = accountService.findById(Long.parseLong(accountId));
 
 				if (month == null || month == "") {
-					
-					transactions = transactionService.findByTransactionAccountOrRecipientAccount(userAccount,userAccount);
+
+					transactions = transactionService.findByTransactionAccountOrRecipientAccount(userAccount,
+							userAccount);
+					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 
 				} else {
 					int year = Integer.parseInt(month.substring(0, 4));
-				    int monthValue = Integer.parseInt(month.substring(5));
-				    transactions = transactionService.getTransactionsByMonthAndYearAndTransactionAccount(year, monthValue, userAccount);
+					int monthValue = Integer.parseInt(month.substring(5));
+					transactions = transactionService.getTransactionsByMonthAndYearAndTransactionAccount(year,
+							monthValue, userAccount);
+					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				}
-				
-				
-				
+
 				model.addAttribute("transactions", transactions);
 				model.addAttribute("account", userAccount);
-				
+
 			} else if (creditCardId != null) {
 				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
 				if (month == null || month == "") {
 					transactions = userCreditCard.getTransactions();
+					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				} else {
 					int year = Integer.parseInt(month.substring(0, 4));
-					System.out.println(year);
-				    int monthValue = Integer.parseInt(month.substring(5));
-				    System.out.println(monthValue);
-				    transactions = transactionService.getTransactionsByMonthAndYearAndTransactionCreditCard(year, monthValue, userCreditCard);
-				    System.out.println(transactions);
+					int monthValue = Integer.parseInt(month.substring(5));
+					transactions = transactionService.getTransactionsByMonthAndYearAndTransactionCreditCard(year,
+							monthValue, userCreditCard);
+					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				}
 				model.addAttribute("creditCard", userCreditCard);
 				model.addAttribute("transactions", transactions);
 			}
 			return "viewTransactions";
-			
-			
+
 		}
+	}
+
+	@GetMapping("/admin/transactions")
+	public String creditcardPage(HttpSession session, Model model) {
+		User returnedUser = (User) session.getAttribute("loggedUser");
+		List<CreditCard> ccList = creditCardService.findAllCreditCards();
+		List<Account> accountList = accountService.getAllAccounts();
+		List<Transaction> transactionList = new ArrayList<Transaction>();
+		for (CreditCard cc : ccList) {
+			List<Transaction> transaction = cc.getTransactions();
+			transactionList.addAll(transaction);
+		}
+		for (Account a : accountList) {
+			List<Transaction> transaction = a.getTransactions();
+			transactionList.addAll(transaction);
+		}
+		model.addAttribute("transactions", transactionList);
+		model.addAttribute("user", returnedUser);
+		return "admintransactions";
+	}
+
+	@PostMapping("/admin/transactions")
+	public String adminViewCardTransactions(
+			@RequestParam(name = "transactionType", required = false) String transactionType,
+			@RequestParam(name = "month", required = false) String month, Model model, HttpSession session) {
+
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", loggedUser);
+		List<Transaction> transactions = new ArrayList<>();
+		List<CreditCard> creditCards = creditCardService.findAllCreditCards();
+		List<Account> accountList = accountService.getAllAccounts();
+		if (month == null || month == "") {
+			for (CreditCard cc : creditCards) {
+				List<Transaction> transaction = cc.getTransactions();
+				transactions.addAll(transaction);
+			}
+			for (Account a : accountList) {
+				List<Transaction> transaction = a.getTransactions();
+				transactions.addAll(transaction);
+			}
+			Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
+		} else {
+			int year = Integer.parseInt(month.substring(0, 4));
+			int monthValue = Integer.parseInt(month.substring(5, 7));
+			for (CreditCard cc : creditCards) {
+				List<Transaction> transaction = cc.getTransactions();
+				for (Transaction t : transaction) {
+					if (t.getTransactionDate().getMonthValue() == monthValue
+							&& t.getTransactionDate().getYear() == year) {
+						transactions.add(t);
+					}
+				}
+			}
+			for (Account a : accountList) {
+				List<Transaction> transaction = a.getTransactions();
+				for (Transaction t : transaction) {
+					if (t.getTransactionDate().getMonthValue() == monthValue
+							&& t.getTransactionDate().getYear() == year) {
+						transactions.add(t);
+					}
+				}
+			}
+			Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
+		}
+		model.addAttribute("transactions", transactions);
+		return "admintransactions";
 	}
 }

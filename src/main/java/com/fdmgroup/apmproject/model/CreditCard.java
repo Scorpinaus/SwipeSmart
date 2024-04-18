@@ -35,6 +35,11 @@ public class CreditCard {
 	private String cardType;
 	@Column(name = "Amount Used")
 	private double amountUsed;
+	@Column(name = "Monthly Balance")
+	private double monthlyBalance;
+	
+	@Column(name = "Currency Code")
+	private String currencyCode;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -51,6 +56,18 @@ public class CreditCard {
 	
 	public CreditCard() {};
 
+	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed, User creditCardUser, String currencyCode) {
+		setCreditCardNumber(creditCardNumber);
+		setPin(pin);
+		setCardLimit(cardLimit);
+		setCardType(cardType);
+		setCreditCardStatus(status);
+		setCreditCardUser(creditCardUser);
+		setAmountUsed(amountUsed);
+		setMonthlyBalance(0);
+		setCurrencyCode(currencyCode);
+	}
+	
 	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed, User creditCardUser) {
 		setCreditCardNumber(creditCardNumber);
 		setPin(pin);
@@ -59,6 +76,7 @@ public class CreditCard {
 		setCreditCardStatus(status);
 		setCreditCardUser(creditCardUser);
 		setAmountUsed(amountUsed);
+		setMonthlyBalance(0);
 	}
 
 	public long getCreditCardId() {
@@ -141,23 +159,46 @@ public class CreditCard {
 		this.transactions = transactions;
 	}
 	
+
+	public double getMonthlyBalance() {
+		return monthlyBalance;
+	}
+
+	public void setMonthlyBalance(double monthlyBalance) {
+		this.monthlyBalance = monthlyBalance;
+	}
+	
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
+	
 	//Add balance when transactions are made
 	public void addTransaction(double amount) {
 		Double originalAmount = getAmountUsed();
 		setAmountUsed(originalAmount + amount);
+	}
+	
+	public void addTransactionMonthly(double amount) {
+		Double originalAmount = getMonthlyBalance();
+		setMonthlyBalance(originalAmount + amount);
 	}
 
 	@Override
 	public String toString() {
 		return "CreditCard [creditCardId=" + creditCardId + ", creditCardNumber=" + creditCardNumber + ", pin=" + pin
 				+ ", cardLimit=" + cardLimit + ", cardType=" + cardType + ", amountUsed=" + amountUsed
-				+ ", creditCardStatus=" + creditCardStatus + ", transactions=" + transactions + "]";
+				+ ", monthlyBalance=" + monthlyBalance + ", creditCardStatus=" + creditCardStatus + ", transactions="
+				+ transactions + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(amountUsed, cardLimit, cardType, creditCardId, creditCardNumber, creditCardStatus, pin,
-				transactions);
+		return Objects.hash(amountUsed, cardLimit, cardType, creditCardId, creditCardNumber, creditCardStatus,
+				monthlyBalance, pin, transactions);
 	}
 
 	@Override
@@ -173,10 +214,12 @@ public class CreditCard {
 				&& Double.doubleToLongBits(cardLimit) == Double.doubleToLongBits(other.cardLimit)
 				&& Objects.equals(cardType, other.cardType) && creditCardId == other.creditCardId
 				&& Objects.equals(creditCardNumber, other.creditCardNumber)
-				&& Objects.equals(creditCardStatus, other.creditCardStatus) && Objects.equals(pin, other.pin)
-				&& Objects.equals(transactions, other.transactions);
+				&& Objects.equals(creditCardStatus, other.creditCardStatus)
+				&& Double.doubleToLongBits(monthlyBalance) == Double.doubleToLongBits(other.monthlyBalance)
+				&& Objects.equals(pin, other.pin) && Objects.equals(transactions, other.transactions);
 	}
-
+	
+	
 	
 	
 	

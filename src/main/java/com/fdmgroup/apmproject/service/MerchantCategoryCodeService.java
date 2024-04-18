@@ -81,10 +81,12 @@ public class MerchantCategoryCodeService {
 		MerchantCategoryCode mcc1 = new MerchantCategoryCode(1001, "Shopping");
 		MerchantCategoryCode mcc2 = new MerchantCategoryCode(1002, "Transport");
 		MerchantCategoryCode mcc3 = new MerchantCategoryCode(1003, "Travel");
+		MerchantCategoryCode mcc4 = new MerchantCategoryCode(1004, "Bill");
 		persist(mcc);
 		persist(mcc1);
 		persist(mcc2);
 		persist(mcc3);
+		persist(mcc4);
 		
 	}
 }

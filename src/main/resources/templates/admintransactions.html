@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="/admintransactions.css">
+		<meta charset="UTF-8">
+		<title>Transactions</title>
+	</head>
+	<body>
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" href="/admin/profile">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
+				</div>
+				<div class="cards">
+					<a class="cardsText" id="cards" href="/admin/creditcards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a class="accountsText" id="accounts" href="/admin/accounts">Accounts</a>
+				</div>
+				<div class="transactions">
+					<a class="transactionsText" id="transactions" href="/admin/transactions">Transactions</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
+		</div>
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<div class="transactionTable">
+				<h3>Transactions</h3>
+				<form method="post">
+					<label for="month">Month:</label> 
+					<input type="month" id="month" name="month">
+					<button type="submit">Filter</button>
+				</form>
+				<div>
+					<div class="secondary-content-container">
+						<table>
+							<thead>
+								<tr>
+									<th>Category</th>
+									<th>Date</th>
+									<th>Time</th>
+									<th>User</th>
+									<th>Credit Card Number</th>
+									<th>Account</th>
+									<th>Recipient</th>
+									<th>Amount</th>
+									<th>Currency</th>
+									<th>Transaction Type</th>
+									<th>CashBack</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="transaction : ${transactions}">
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory}"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.transactionType}"></td>
+									<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+									<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardUser.getUsername}"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountUser.getUsername}"></td>
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardNumber}"></td>
+									<td th:text="'-'"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountNumber}"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="'-'"></td>
+									<td th:text="${transaction.transactionAmount}"></td>
+									<td th:text="${transaction.transactionCurrency}"></td>
+									<td th:if="${transaction.transactionType != null}" th:text="${transaction.transactionType}"></td>
+									<td th:text="${transaction.cashback}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
+		</script>
+	</body>
+</html>

@@ -54,7 +54,6 @@ public class UserController {
 		return "login";
 	}
 
-	
 	@GetMapping("/dashboard")
 	public String dashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");

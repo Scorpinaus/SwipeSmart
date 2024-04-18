@@ -18,13 +18,6 @@
 			<div class="dashboard">
 				<a id="dashboard" href="/dashboard">Dashboard</a>
 			</div>
-<!-- <<<<<<< HEAD -->
-<!-- 			<div class="cards"> -->
-<!-- 				<a id="cards" href="/userCards">Cards</a> -->
-<!-- 			</div> -->
-<!-- 			<div class="accounts"> -->
-<!-- 				<a id="accounts" href="/bankaccount/dashboard">Accounts</a> -->
-<!-- ======= -->
 		</div>
 		<div class="mainPage" id="main">
 			<button class="openSidebar">☰</button>
@@ -47,7 +40,7 @@
 			           <p id="cardDetails" th:text="${creditCard.amountUsed}"></p>
 		           </a>
 		       </div>
-<!-- >>>>>>> 0c1036f36cf346a187080e3bb9ecab38424f31d5 -->
+
 			</div>
 			<div class="logout">
 				<a id="logout" href="/logout">Logout</a>
@@ -69,8 +62,11 @@
 			<a href="#" th:onclick="'submitForm(' + ${creditCard.creditCardId} + ')'">
 				<h3 th:text="${creditCard.cardType}"></h3>
 				<p th:text="${creditCard.creditCardNumber}"></p>
-				<p>Amount Used</p>
+				<p>Current Balance</p>
 				<p th:text="${creditCard.amountUsed}"></p>
+				<p>Statement Balance</p>
+				<p th:text="${creditCard.monthlyBalance}"></p>
+				
 			</a>
 		</div>
 

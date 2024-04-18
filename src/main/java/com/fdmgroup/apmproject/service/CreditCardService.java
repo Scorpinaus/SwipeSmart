@@ -131,5 +131,6 @@ public class CreditCardService {
 		String pinPending = "125";
 		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000, "Ultimate Slay Card", statusService.findByStatusName("Pending"),
 				0, userJacky, currencyCode);
+		persist(createCreditCardPending);
 	}
 }

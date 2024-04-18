@@ -140,6 +140,7 @@ header {
 
 body{
 	font-family: "Nunito Sans", sans-serif;
+	min-width: 500px;
 }
 
 .summary-container {
@@ -162,7 +163,7 @@ body{
     display: flex;
     text-align: left;
     width: 100%;
-    min-height: 100px;
+    min-height: 110px;
     flex-direction: column;
     background-color: var(--white);
     border-radius: 10px;

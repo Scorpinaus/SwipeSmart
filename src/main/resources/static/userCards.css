@@ -139,6 +139,7 @@ header {
 
 body{
 	font-family: "Nunito Sans", sans-serif;
+	min-width: 500px;
 }
 
 .button-container{
@@ -148,6 +149,7 @@ body{
 	animation:transitionIn 1s;
 	opacity: 0;
 	animation-fill-mode: forwards;
+	min-width: 450px;
 }
 
 a#cardTransactions{

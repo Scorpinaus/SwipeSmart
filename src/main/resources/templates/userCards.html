@@ -35,7 +35,7 @@
               <button class="openSidebar">☰</button>
             </header>
             
-			<h1 th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
+			<h1 th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
 			
             <div class="button-container">
 		        <a id="cardTransactions" href="/creditCard/paybills">Pay</a>
@@ -53,12 +53,16 @@
                        </div>
                        <div class="details-card-number">
                          <p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
+                         <p th:if="${creditCard.getCreditCardStatus.getStatusName == 'Approved'}" id="cardDetails" style="color:green" th:text="${creditCard.getCreditCardStatus.getStatusName}"></p>
+                         <p th:if="${creditCard.getCreditCardStatus.getStatusName != 'Approved'}" id="cardDetails" style="color:red" th:text="${creditCard.getCreditCardStatus.getStatusName}"></p>
                        </div>
                        <div class="details-card-amount">
                          <label class="detail-label">Amount Used </label>
-                         <p id="cardDetails" th:text="${creditCard.amountUsed}"></p>
+                         <p th:if="${creditCard.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
+                         <p th:if="${creditCard.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
                          <label class="detail-label">Statement Balance </label>
-                         <p id="cardDetails" th:text="${creditCard.monthlyBalance}"></p>
+                         <p th:if="${creditCard.monthlyBalance != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(creditCard.getMonthlyBalance,0,'COMMA',2,'POINT')}"></p>
+                         <p th:if="${creditCard.monthlyBalance == 0}" id="cardDetails" th:text="'$0.00'"></p>
                        </div>
 			           
 		           </a>

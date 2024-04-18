@@ -37,7 +37,7 @@ public class CreditCard {
 	private double amountUsed;
 	@Column(name = "Monthly Balance")
 	private double monthlyBalance;
-	
+
 	@Column(name = "Currency Code")
 	private String currencyCode;
 
@@ -53,10 +53,12 @@ public class CreditCard {
 
 	@OneToMany(mappedBy = "transactionCreditCard", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
-	
-	public CreditCard() {};
 
-	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed, User creditCardUser, String currencyCode) {
+	public CreditCard() {
+	};
+
+	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status,
+			double amountUsed, User creditCardUser, String currencyCode) {
 		setCreditCardNumber(creditCardNumber);
 		setPin(pin);
 		setCardLimit(cardLimit);
@@ -67,8 +69,9 @@ public class CreditCard {
 		setMonthlyBalance(0);
 		setCurrencyCode(currencyCode);
 	}
-	
-	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed, User creditCardUser) {
+
+	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status,
+			double amountUsed, User creditCardUser) {
 		setCreditCardNumber(creditCardNumber);
 		setPin(pin);
 		setCardLimit(cardLimit);
@@ -118,7 +121,7 @@ public class CreditCard {
 	public void setCardType(String cardType) {
 		this.cardType = cardType;
 	}
-	
+
 	public double getAmountUsed() {
 		return amountUsed;
 	}
@@ -158,7 +161,6 @@ public class CreditCard {
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
 	}
-	
 
 	public double getMonthlyBalance() {
 		return monthlyBalance;
@@ -167,7 +169,7 @@ public class CreditCard {
 	public void setMonthlyBalance(double monthlyBalance) {
 		this.monthlyBalance = monthlyBalance;
 	}
-	
+
 	public String getCurrencyCode() {
 		return currencyCode;
 	}
@@ -175,16 +177,14 @@ public class CreditCard {
 	public void setCurrencyCode(String currencyCode) {
 		this.currencyCode = currencyCode;
 	}
-	
-	//Add balance when transactions are made
+
+	// Add balance when transactions are made
 	public void addTransaction(double amount) {
-		Double originalAmount = getAmountUsed();
-		setAmountUsed(originalAmount + amount);
+		setAmountUsed(amountUsed + amount);
 	}
-	
+
 	public void addTransactionMonthly(double amount) {
-		Double originalAmount = getMonthlyBalance();
-		setMonthlyBalance(originalAmount + amount);
+		setMonthlyBalance(amountUsed + amount);
 	}
 
 	@Override
@@ -218,9 +218,5 @@ public class CreditCard {
 				&& Double.doubleToLongBits(monthlyBalance) == Double.doubleToLongBits(other.monthlyBalance)
 				&& Objects.equals(pin, other.pin) && Objects.equals(transactions, other.transactions);
 	}
-	
-	
-	
-	
-	
+
 }

@@ -69,11 +69,11 @@
 									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardNumber}"></td>
 									<td th:text="'-'"></td>
 									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountNumber}"></td>
-									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
-									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="'-'"></td>
+									<td th:if="${transaction.getRecipientAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
+									<td th:if="${transaction.getRecipientAccount == null}" th:text="'-'"></td>
 									<td th:text="${transaction.transactionAmount}"></td>
 									<td th:text="${transaction.transactionCurrency}"></td>
-									<td th:if="${transaction.transactionType != null}" th:text="${transaction.transactionType}"></td>
+									<td th:text="${transaction.transactionType}"></td>
 									<td th:text="${transaction.cashback}"></td>
 								</tr>
 							</tbody>

@@ -55,6 +55,9 @@
                 <label class="detail-label">Amount Used </label>
                 <p id="cardDetails" th:text="${creditCard.amountUsed}"></p>
             </div>
+            <div class="details-card-status">
+                <p th:text="${creditCard.creditCardStatus.statusName}"></p>
+            </div>
             <form method="post" action="/admin/credicardApproval">
                 <input type="hidden" name="creditCardNumber" th:value="${creditCard.creditCardNumber}" />
                 <!-- Add the if statement to conditionally show the submit button -->

@@ -37,6 +37,17 @@ public class Account {
 	
 	@Column(name = "Account Number")
 	private String accountNumber;
+	
+	@Column(name = "Currency Code")
+	private String currencyCode;
+
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)

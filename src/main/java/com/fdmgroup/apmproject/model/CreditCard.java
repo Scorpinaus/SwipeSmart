@@ -37,6 +37,17 @@ public class CreditCard {
 	private double amountUsed;
 	@Column(name = "Monthly Balance")
 	private double monthlyBalance;
+	
+	@Column(name = "Currency Code")
+	private String currencyCode;
+
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)

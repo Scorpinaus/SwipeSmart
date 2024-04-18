@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 @keyframes transitionIn {
 	from{
 		opacity:0;
@@ -117,26 +117,36 @@ a#cards{
 	transition: margin-left .5s;
 	margin-left: 200px;
 	padding: 10px;
+	padding-top: 5px;
 }
 
-h1{
-	margin-left: 5%;
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:var(--darkgreen);
+	padding: 15px;
+	border-radius: 15px;
 }
 
-p#headerIntro{
-	margin-left: 5%;
+.openSidebar:hover{
+	opacity: 0.6;
+}
+
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
 }
 
 body{
-	font-family: 'Actor', sans-serif;
-	width: 100%;
+	font-family: "Nunito Sans", sans-serif;
 }
 
 .summary-container {
 	display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap:5px;
+    gap:2px;
 }
 
 .accounts-summary,
@@ -197,14 +207,15 @@ body{
     padding-right: 15px;
 }
 
-.openSidebar{
-	color: white;
-	border:none;
-	background-color:#4F96A9;
-	padding: 15px;
-	border-radius: 15px;
+h4 {
+	margin-top: 0px;
 }
 
-.openSidebar:hover{
-	opacity: 0.6;
+.account-details:hover, 
+.card-details:hover {
+	background-color: var(--lightblue);
+	cursor: pointer;
 }
+
+
+

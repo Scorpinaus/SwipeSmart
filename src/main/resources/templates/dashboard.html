@@ -30,10 +30,13 @@
 				</div>
 			</div>
 		</div>
-		
+        
 		<!-- dashboard -->
 		<div class="mainPage" id="main">
-			<button class="openSidebar">☰</button>
+            <header>
+              <button class="openSidebar">☰</button>
+            </header>
+			
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
 			<p id="headerIntro"> This is for you, at a glance: </p>	
 			

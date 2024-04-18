@@ -80,6 +80,15 @@ p#sidebarHeader{
 	padding: 20px;
 }
 
+.transactions{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+	background-color: white;
+	animation: transitionIn 0.75s;
+}
+
 a#dashboard {
 	color: white;
 	text-decoration:none;
@@ -106,6 +115,12 @@ a#cards{
 
 a#accounts{
 	color:white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#transactions{
+	color:black;
 	text-decoration:none;
 	padding: 10px;
 }

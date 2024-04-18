@@ -47,7 +47,7 @@
 			
 			<div class="card-details-container">    
 	           <div class="card-details"  th:each="creditCard : ${cards}">
-		           <a id="card-details" th:href="@{'/viewTransactions?creditCardId=' + ${creditCard.creditCardId}}">
+		          <a id="card-details" href="#" th:onclick="'submitForm(' + ${creditCard.creditCardId} + ')'">
 			           <div class="details-card-type">
                          <p th:text="${creditCard.cardType}"></p>
                        </div>
@@ -61,6 +61,8 @@
 			           
 		           </a>
 		       </div>
+		       
+		       
 			</div>
 	
 			<form id="viewTransactionsForm" th:action="@{/viewTransactions}"

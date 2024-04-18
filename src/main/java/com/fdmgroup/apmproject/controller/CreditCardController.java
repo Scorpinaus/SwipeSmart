@@ -99,7 +99,13 @@ public class CreditCardController {
 				
 				ForeignExchangeCurrency localCurrency = currencyService.getCurrencyByCode("SGD");
 				
-				Status statusName = statusService.findByStatusName("Approved");
+				
+				//set credit card as pending when they apply for the card
+				Status statusName = statusService.findByStatusName("Pending");
+				
+//				//set credit card as Approved when they apply for the card
+//				Status statusName = statusService.findByStatusName("Approved");
+				
 				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0, loggedUser, localCurrency.getCode());
 				creditCardService.persist(createCreditCard);
 				logger.info("Credit card of number " + creditCardNumber + " created");

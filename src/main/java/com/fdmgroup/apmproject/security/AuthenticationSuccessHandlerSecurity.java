@@ -37,7 +37,12 @@ public class AuthenticationSuccessHandlerSecurity implements AuthenticationSucce
 		UserSecurityDetails loggedUser = (UserSecurityDetails) authentication.getPrincipal();
 		session.setAttribute("loggedUser", loggedUser.getUser());
 		logger.info("User has logged in");
-		redirectStrategy.sendRedirect(request, response, "/dashboard");
+		if (loggedUser.getUser().getRole().equals("ROLE_ADMIN")) {
+			redirectStrategy.sendRedirect(request, response, "/admin/dashboard");
+		} else {
+			redirectStrategy.sendRedirect(request, response, "/dashboard");
+		}
+
 		;
 	}
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="/admindashboard.css">
+		<meta charset="UTF-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>User Dashboard</title>
+	</head>
+	<body>
+		<!-- side bar -->
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" href="/admin/profile">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
+				</div>
+				<div class="cards">
+					<a id="cards" href="/admin/creditcards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a id="accounts" href="/admin/accounts">Accounts</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
+		</div>
+		
+		<!-- dashboard -->
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
+			<p id="headerIntro"> This is for you, at a glance: </p>	
+		</div>
+		<script>
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
+		</script>
+	</body>	
+</html>

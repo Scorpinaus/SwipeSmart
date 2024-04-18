@@ -136,4 +136,8 @@ public class ForeignExchangeCurrencyService {
             throw new RuntimeException("Failed to read JSON file: I/O error.", e);
         }
 	}
+	
+	public ForeignExchangeCurrency getCurrencyByCode(String currencyCode) {
+		return currencyRepo.findByCurrencyCode(currencyCode);
+	}
 }

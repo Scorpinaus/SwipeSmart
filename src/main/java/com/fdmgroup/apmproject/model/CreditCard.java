@@ -41,14 +41,6 @@ public class CreditCard {
 	@Column(name = "Currency Code")
 	private String currencyCode;
 
-	public String getCurrencyCode() {
-		return currencyCode;
-	}
-
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
-	}
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK User ID")
@@ -64,6 +56,18 @@ public class CreditCard {
 	
 	public CreditCard() {};
 
+	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed, User creditCardUser, String currencyCode) {
+		setCreditCardNumber(creditCardNumber);
+		setPin(pin);
+		setCardLimit(cardLimit);
+		setCardType(cardType);
+		setCreditCardStatus(status);
+		setCreditCardUser(creditCardUser);
+		setAmountUsed(amountUsed);
+		setMonthlyBalance(0);
+		setCurrencyCode(currencyCode);
+	}
+	
 	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status, double amountUsed, User creditCardUser) {
 		setCreditCardNumber(creditCardNumber);
 		setPin(pin);
@@ -162,6 +166,14 @@ public class CreditCard {
 
 	public void setMonthlyBalance(double monthlyBalance) {
 		this.monthlyBalance = monthlyBalance;
+	}
+	
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
 	}
 	
 	//Add balance when transactions are made

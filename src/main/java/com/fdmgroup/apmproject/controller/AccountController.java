@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 
 import com.fdmgroup.apmproject.service.AccountService;
+import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.TransactionService;
 import com.fdmgroup.apmproject.service.UserService;
@@ -38,6 +40,9 @@ public class AccountController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ForeignExchangeCurrencyService currencyService;
 	
 	@Autowired
 	private TransactionService transactionService;
@@ -206,12 +211,14 @@ public class AccountController {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			String accountnumber = accountService.generateUniqueAccountNumber();
 			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser, statusService.findByStatusName("Pending") );
+			ForeignExchangeCurrency localCurrency = currencyService.getCurrencyByCode("SGD");
+			accountCreated.setCurrencyCode(localCurrency.getCode());
 			
 			//persist new account
 			accountService.persist(accountCreated);
 
 			double cashback = 0;			
-			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null,null );
+			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null, localCurrency);
 			transactionService.persist(transaction);
 			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");	
 			return "redirect:/bankaccount/dashboard";

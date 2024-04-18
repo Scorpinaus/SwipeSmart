@@ -52,6 +52,13 @@ p#sidebarHeader{
 	padding: 20px;
 }
 
+.user{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+}
+
 .profile{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
@@ -91,6 +98,12 @@ p#sidebarHeader{
 
 a#dashboard {
 	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#user {
+	color: black;
 	text-decoration:none;
 	padding: 10px;
 }

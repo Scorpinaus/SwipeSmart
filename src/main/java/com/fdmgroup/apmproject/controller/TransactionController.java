@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
@@ -37,7 +38,9 @@ public class TransactionController {
 	private TransactionService transactionService;
 
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
-
+	
+	private List<ForeignExchangeCurrency> currencies;
+	
 	@PostMapping("/viewTransactions")
 	public String viewCardTransactions(@RequestParam(name = "transactionType", required = false) String transactionType,
 			@RequestParam(name = "month", required = false) String month,

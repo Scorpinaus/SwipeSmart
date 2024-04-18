@@ -38,7 +38,7 @@
 			<h1 th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
 			
             <div class="button-container">
-		        <a id="cardTransactions" href="#">Pay</a>
+		        <a id="cardTransactions" href="/creditCard/paybills">Pay</a>
 		        <a id="cardTransactions" href="#">Rewards</a>
                 <a id="cardTransactions" href="/applyCreditCard">Apply</a>
 	    	</div>
@@ -47,7 +47,7 @@
 			
 			<div class="card-details-container">    
 	           <div class="card-details"  th:each="creditCard : ${cards}">
-		           <a id="card-details" th:href="@{'/viewTransactions?creditCardId=' + ${creditCard.creditCardId}}">
+		          <a id="card-details" href="#" th:onclick="'submitForm(' + ${creditCard.creditCardId} + ')'">
 			           <div class="details-card-type">
                          <p th:text="${creditCard.cardType}"></p>
                        </div>
@@ -57,10 +57,14 @@
                        <div class="details-card-amount">
                          <label class="detail-label">Amount Used </label>
                          <p id="cardDetails" th:text="${creditCard.amountUsed}"></p>
+                         <label class="detail-label">Statement Balance </label>
+                         <p id="cardDetails" th:text="${creditCard.monthlyBalance}"></p>
                        </div>
 			           
 		           </a>
 		       </div>
+		       
+		       
 			</div>
 	
 			<form id="viewTransactionsForm" th:action="@{/viewTransactions}"

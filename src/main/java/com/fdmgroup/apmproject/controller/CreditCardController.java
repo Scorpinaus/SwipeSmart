@@ -1,5 +1,7 @@
 package com.fdmgroup.apmproject.controller;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
+import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
+import com.fdmgroup.apmproject.service.MerchantCategoryCodeService;
 import com.fdmgroup.apmproject.service.StatusService;
+import com.fdmgroup.apmproject.service.TransactionService;
 import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -35,10 +40,16 @@ public class CreditCardController {
 
 	@Autowired
 	private StatusService statusService;
+	@Autowired
+	private MerchantCategoryCodeService merchantCategoryCodeService;
+	
+	@Autowired
+	private TransactionService transactionService;
 	
 	@Autowired
 	private UserService userService;
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
+	private List<ForeignExchangeCurrency> currencies;
 
 	@GetMapping("/userCards")
 	public String viewCreditCards(Model model, HttpSession session) {
@@ -88,7 +99,13 @@ public class CreditCardController {
 				
 				ForeignExchangeCurrency localCurrency = currencyService.getCurrencyByCode("SGD");
 				
-				Status statusName = statusService.findByStatusName("Approved");
+				
+				//set credit card as pending when they apply for the card
+				Status statusName = statusService.findByStatusName("Pending");
+				
+//				//set credit card as Approved when they apply for the card
+//				Status statusName = statusService.findByStatusName("Approved");
+				
 				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0, loggedUser, localCurrency.getCode());
 				creditCardService.persist(createCreditCard);
 				logger.info("Credit card of number " + creditCardNumber + " created");
@@ -112,6 +129,29 @@ public class CreditCardController {
 		model.addAttribute("CcList", ccList);
 
 		return "paybills";
+	}
+	
+	@PostMapping("/creditCard/paybills")
+	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCard") Long creditCardId, @RequestParam(name ="payment", required = false) Double paymentAmount, @RequestParam("balanceType") String balanceType) {
+
+		// Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+		CreditCard creditCard = creditCardService.findById(creditCardId);
+		MerchantCategoryCode mccBill = merchantCategoryCodeService.findByMerchantCategory("Bill");
+		Transaction transaction = null;
+		if (balanceType.equals("custom")) {
+			transaction = new Transaction("CC Bill Payment", paymentAmount,null,0.00, creditCard,null,mccBill,null);
+		}
+		
+		
+		transactionService.persist(transaction);
+		transactionService.updateCreditCardBalance(transaction);
+		logger.info("Payment of" + balanceType + " balance to credit card " + creditCard.getCreditCardNumber() + " completed");
+		System.out.println(creditCard.getAmountUsed());
+//		userService.update(currentUser);
+//		session.setAttribute("loggedUser", currentUser);
+
+		return "redirect:/userCards";
 	}
 
 	

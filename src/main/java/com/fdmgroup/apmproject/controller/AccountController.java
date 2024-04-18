@@ -1,6 +1,7 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class AccountController {
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
 	private final int LEASTINITIALDEPOSIT = 5000;
+	private List<ForeignExchangeCurrency> currenciesList;
 
 	public AccountController(AccountService accountService) {
 		this.accountService = accountService;
@@ -88,12 +90,14 @@ public class AccountController {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
 			List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
+			currenciesList = currencyService.getAllCurrencies();
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
 				return "accountdashboard";
 			}
 			model.addAttribute("accounts", accounts);
-			
+			LOGGER.info("Currencies List: " + currenciesList);
+			model.addAttribute("currencies", currenciesList);
 			// Check for the flash attribute directly in the model. If present, it adds to the current model as true.
 		    if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
 		        model.addAttribute("errorInsufficient", true);
@@ -108,17 +112,23 @@ public class AccountController {
 	
 	//Function which processes the bank account withdrawal request.
 	@PostMapping("/bankaccount/withdrawal")
-	public String processWithdrawal(@RequestParam("account") long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String processWithdrawal(@RequestParam("account") long accountId, @RequestParam("currency") String withdrawalCurrencyCode, @RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
 		//Checks if user is logged on, if not user will be brought to login page.
 		if (session.getAttribute("loggedUser") == null ) {
 			return "redirect:/login";
 		}
 		
 		//Retrieve currentUser and selectedAccount for withdrawal
-		User currentUser = (User) session.getAttribute("loggedUser");
 		Account retrievedAccount = accountService.findById(accountId);
-		Double withdrawalAmount = amount.doubleValue();
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
+		String baseCurrencyCode = retrievedAccount.getCurrencyCode();
+		
+		//Getting target withdrawal currency & exchange rate for conversion
+		BigDecimal exchangeRate = BigDecimal.ONE;
+		if (!withdrawalCurrencyCode.equals(baseCurrencyCode)) {
+			exchangeRate = currencyService.getExchangeRate(baseCurrencyCode, withdrawalCurrencyCode);
+			amount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
+		}
 		
 		//If balance in account is less than withdrawal amount, user redirected back to withdrawal page + errorInsufficient flash attribute added for subsequent use.
 		if (retrievedAccountBalance.compareTo(amount) < 0) {
@@ -127,10 +137,11 @@ public class AccountController {
 			return "redirect:/bankaccount/withdrawal";
 		}
 		
+		//Assuming sufficient amount, proceed and log withdrawal.
 		 LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
-		    double newAccountBalance = accountService.withdrawAccountByAmount(retrievedAccountBalance, amount);
-		    retrievedAccount.setBalance(newAccountBalance);
-		    transactionService.persist(new Transaction("withdraw", retrievedAccount, amount.doubleValue(), null, null));
+		 BigDecimal newAccountBalance = retrievedAccountBalance.subtract(amount);
+		    retrievedAccount.setBalance(newAccountBalance.doubleValue());
+		    transactionService.persist(new Transaction("Withdrawal", retrievedAccount, amount.doubleValue(), null, currencyService.getCurrencyByCode(withdrawalCurrencyCode)));
 		    accountService.update(retrievedAccount);
 		    return "redirect:/bankaccount/dashboard";
 	}
@@ -147,23 +158,30 @@ public class AccountController {
 
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-
+		currenciesList = currencyService.getAllCurrencies();
+		
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
-
+		model.addAttribute("currencies", currenciesList);
+		
 		return ("deposit");
 	}
 
 	@PostMapping("/bankaccount/deposit")
 	public String deposit(@RequestParam("account") long accountId,
-			@RequestParam("deposit amount") double depositAmount) {
+			@RequestParam("depositAmount") double depositAmount, @RequestParam("currency") String currencyCode) {
 
 		// get the required account
 		Account accountDeposited = accountService.findById(accountId);
+		ForeignExchangeCurrency accountCurrency = currencyService.getCurrencyByCode(accountDeposited.getCurrencyCode());
+		
+		//Get the exchange rate and the converted amount after exchange
+		BigDecimal exchangeRate = currencyService.getExchangeRate(currencyCode, accountCurrency.getCode());
+		BigDecimal convertedAmount = BigDecimal.valueOf(depositAmount).multiply(exchangeRate);
 
 		// Calculate the balance after deposit
-		Double updatedBalance = accountDeposited.getBalance() + depositAmount;
+		Double updatedBalance = accountDeposited.getBalance() + convertedAmount.doubleValue();
 
 		// update the account balance
 		accountDeposited.setBalance(updatedBalance);
@@ -173,7 +191,7 @@ public class AccountController {
 		//Transaction
 		double cashback = 0;
 		
-		Transaction transaction = new Transaction("deposit",depositAmount ,accountDeposited.getAccountNumber(),cashback,null,accountDeposited,null,null );
+		Transaction transaction = new Transaction("deposit",depositAmount ,accountDeposited.getAccountNumber(),cashback,null,accountDeposited,null,currencyService.getCurrencyByCode(currencyCode));
 
 		transactionService.persist(transaction);
 		
@@ -218,7 +236,7 @@ public class AccountController {
 			accountService.persist(accountCreated);
 
 			double cashback = 0;			
-			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null, localCurrency);
+			Transaction transaction = new Transaction("Deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null, localCurrency);
 			transactionService.persist(transaction);
 			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");	
 			return "redirect:/bankaccount/dashboard";
@@ -270,24 +288,32 @@ public class AccountController {
 			//Check if recipientAccount exists in database. If exists, operate normally, if not, consider one sided transfer.
 				Optional<Account> recipientAccount = Optional.ofNullable(accountService.findAccountByAccountNumber(accountNumber));
 				//When recipientAccount is internal & existing
-				if (!recipientAccount.isEmpty()) {
-					// update the accounts' balance
-					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
-					accountService.update(accountFromBalance);
+				if (!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() == statusService.findByStatusName("Pending")) {
 					
-					recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
-					accountService.update(recipientAccount.get());
-					
-					// Transaction
-//					double cashback = 0;
-		
-					Transaction internalTransaction = new Transaction("Internal Transfer",accountFromBalance, recipientAccount.get(),transferAmount, recipientAccount.get().getAccountNumber(), null);
-		
-					transactionService.persist(internalTransaction);
-					LOGGER.info("Internal Transfer Success!");
-					return "redirect:/bankaccount/dashboard";
-					
-				} else {
+					//validate if account status is approved or not
+						
+						redirectAttributes.addAttribute("RecipientAccountPendingError", "true");
+						LOGGER.info("Recipient Account is still pending");
+						return "redirect:/bankaccount/transfer";
+						
+					}else if(!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() != statusService.findByStatusName("Pending")) {
+						// update the accounts' balance
+						accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+						accountService.update(accountFromBalance);
+						
+						recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
+						accountService.update(recipientAccount.get());
+						
+						// Transaction
+	//					double cashback = 0;
+			
+						Transaction internalTransaction = new Transaction("Internal Transfer",accountFromBalance, recipientAccount.get(),transferAmount, recipientAccount.get().getAccountNumber(), null);
+			
+						transactionService.persist(internalTransaction);
+						LOGGER.info("Internal Transfer Success!");
+						return "redirect:/bankaccount/dashboard";
+					}	
+				else {
 					// update the accounts' balance
 					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
 					accountService.update(accountFromBalance);
@@ -305,7 +331,8 @@ public class AccountController {
 				}
 			}
 	} 
-	
-	
-	
 }
+	
+	
+	
+

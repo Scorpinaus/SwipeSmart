@@ -53,6 +53,10 @@ tr:hover {
 				<h2 th:text="${creditCard.cardType}"></h2>
 				<p th:text="${creditCard.creditCardNumber}"></p>
 				<p th:text="${creditCard.pin}"></p>
+				<p> Amount Used: </p>
+				<p th:text="${creditCard.amountUsed}">></p>
+				<p> Statement Balance: </p>
+				<p th:text="${creditCard.monthlyBalance}"></p>
 			</div>
 		</div>
 
@@ -114,24 +118,24 @@ tr:hover {
 								<th>Time</th>
 								<th>Transaction Amount</th>
 								<th>Transaction Account Number</th>
-								<th>Recipient Account Number</th>
 								<th>Transaction Currency</th>
+								<th>Recipient Account Number</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="transaction : ${transactions}">
-								<td th:text="${transaction.transactionType}"></td>
-								<td
-									th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-								<td
-									th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
-								<td th:text="${transaction.transactionAmount}"></td>
-								<td th:if="${transaction.transactionAccount != null}"
-									th:text="${transaction.transactionAccount.accountNumber}"></td>
-								<td th:if="${transaction.recipientAccountNumber != null}"
-									th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></td>
-								<td th:text="${transaction.transactionCurrency}"></td>
-							</tr>
+						    <tr th:each="transaction : ${transactions}">
+						        <td th:text="${transaction.transactionType}"></td>
+						        <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+						        <td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
+						        <td th:text="${transaction.transactionAmount}"></td>
+						        <td th:if="${transaction.transactionAccount != null}"
+						            th:text="${transaction.transactionAccount.accountNumber}"></td>
+						        <td th:text="${transaction.transactionCurrency.code}"></td>
+						        <td th:unless="${transaction.recipientAccountNumber == null}">
+						            <span th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></span>
+						        </td>
+						        <td th:if="${transaction.recipientAccountNumber == null}" colspan="2"></td>
+						    </tr>
 						</tbody>
 					</table>
 				</div>

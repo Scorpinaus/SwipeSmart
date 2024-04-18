@@ -4,6 +4,8 @@ import com.fdmgroup.apmproject.config.CurrencyDeserializer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.repository.ForeignExchangeCurrencyRepository;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class ForeignExchangeCurrencyService {
 	@Autowired
@@ -41,29 +45,29 @@ public class ForeignExchangeCurrencyService {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo.findById(foreignExchangeCurrency.getCurrencyId());
 		if (returnedCurrency.isEmpty()) {
 			currencyRepo.save(foreignExchangeCurrency);
-			logger.info("Customer successfully registered");
+			logger.info("Foreign currency successfully registered");
 		} else {
-			logger.warn("Customer already exists");
+			logger.warn("Foreign currency already exists");
 		}
 	}
 	
 	public void update(ForeignExchangeCurrency foreignExchangeCurrency) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo.findById(foreignExchangeCurrency.getCurrencyId());
 		if (returnedCurrency.isEmpty()) {
-			logger.warn("Customer does not exist in database");
+			logger.warn("Foreign Currency does not exist in database");
 		} else {
 			currencyRepo.save(foreignExchangeCurrency);
-			logger.info("Customer successfully updated");
+			logger.info("Foreign Currency successfully updated");
 		}
 	}
 	
 	public ForeignExchangeCurrency findById(int currencyId) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo.findById(currencyId);
 		if (returnedCurrency.isEmpty()) {
-			logger.warn("Could not find Customer in Database");
+			logger.warn("Could not find foreign currency in database");
 			return null;
 		} else {
-			logger.info("Returning customer's details");
+			logger.info("Foreign currency exists in database");
 			return returnedCurrency.get();
 		}
 	}
@@ -71,10 +75,10 @@ public class ForeignExchangeCurrencyService {
 	public void deleteById(int currencyId) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo.findById(currencyId);
 		if (returnedCurrency.isEmpty()) {
-			logger.warn("Customer does not exist in database");
+			logger.warn("Currency does not exist in database");
 		} else {
 			currencyRepo.deleteById(currencyId);
-			logger.info("Customer deleted from Database");
+			logger.info("Currency deleted from Database");
 		}
 	}
 	
@@ -140,4 +144,65 @@ public class ForeignExchangeCurrencyService {
 	public ForeignExchangeCurrency getCurrencyByCode(String currencyCode) {
 		return currencyRepo.findByCurrencyCode(currencyCode);
 	}
+	
+	public List<ForeignExchangeCurrency> getAllCurrencies() {
+		return currencyRepo.findAll();
+	}
+	
+	public BigDecimal getExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
+		ForeignExchangeCurrency localCurrency = currencyRepo.findByCurrencyCode(baseCurrencyCode);
+		ForeignExchangeCurrency foreignCurrency = currencyRepo.findByCurrencyCode(targetCurrencyCode);
+		ForeignExchangeCurrency USCurrency = currencyRepo.findByCurrencyCode("USD");
+		
+		//If both currencies same, no conversion is required
+		if (localCurrency.getCode().equals(foreignCurrency.getCode())) {
+			BigDecimal exchangeRate = BigDecimal.valueOf(1);
+			logger.info("No conversion required! BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+			logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
+			return exchangeRate;
+		}
+		
+		//Direct conversion to USD
+		if (targetCurrencyCode.equals(USCurrency.getCode())) {
+			BigDecimal exchangeRate = BigDecimal.valueOf(localCurrency.getRate());
+			logger.info("Conversion to USD: BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+			logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
+			return exchangeRate;
+		}
+		
+		//Conversion from USD to another currency
+		if (baseCurrencyCode.equals(USCurrency.getCode())) {
+			BigDecimal exchangeRate = BigDecimal.valueOf(foreignCurrency.getRate());
+			logger.info("Conversion from USD to another currency: BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+			logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
+			return exchangeRate;
+		}
+		
+		// Conversion between two non-USD currencies using USD as an intermediary
+		BigDecimal localCurrencyToUSD = BigDecimal.valueOf(localCurrency.getInverseRate()); // USD per Local Currency
+		BigDecimal usdToForeignCurrency = BigDecimal.valueOf(foreignCurrency.getRate()); // USD per Foreign Currency
+
+		// Calculate the exchange rate from local currency to foreign currency
+		BigDecimal exchangeRate = usdToForeignCurrency.multiply(localCurrencyToUSD);
+
+		logger.info("Conversion between 2 non-USD currencies: BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+		logger.info("The conversion of local currency to USD is: "+ localCurrencyToUSD + " and the conversion of usd to Target Currency is "+ usdToForeignCurrency);
+		logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
+		return exchangeRate;		
+	}
+	
+	@PostConstruct
+	public void initCurrency() {
+		ForeignExchangeCurrency currencyOne = new ForeignExchangeCurrency();
+		currencyOne.setCode("USD");
+		currencyOne.setAlphaCode("USD");
+		currencyOne.setNumericCode("USD");
+		currencyOne.setName("United States Dollar");
+		currencyOne.setInverseRate(1.00);
+		currencyOne.setRate(1.00);
+		persist(currencyOne);
+		
+	}
+	
+	
 }

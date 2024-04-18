@@ -34,7 +34,7 @@
 			<!--  Try changing the method to 'get' below -->
 			<div class="secondary-content-container">   
 				<div class="form"> 
-					<form method="post" action="/creditCard/paybills">
+					<form id="paymentForm" method="post" action="/creditCard/paybills">
 					<select id="creditCardSelect" name="creditCard">
 				    	<option th:each="creditCard : ${CcList}" th:if="${creditCard.creditCardStatus.statusName != 'Pending'}" th:value="${creditCard.creditCardId}" th:text="${creditCard.creditCardNumber}"></option>
 					</select>
@@ -48,12 +48,12 @@
 					    <button type="button" onclick="getBalance('statement')">Statement Balance</button>
 						<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
 						
-						<div th:if="${param.SameAccountError}">
-				            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>
-				        </div>
-				        <div th:if="${param.InsufficientBalanceError}">
-				            <p style="color: red;">Insufficient balance. Please check your account balance.</p>
-				        </div>
+<!-- 						<div th:if="${param.SameAccountError}"> -->
+<!-- 				            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p> -->
+<!-- 				        </div> -->
+<!-- 				        <div th:if="${param.InsufficientBalanceError}"> -->
+<!-- 				            <p style="color: red;">Insufficient balance. Please check your account balance.</p> -->
+<!-- 				        </div> -->
 					</form>
 				</div>	
 			</div>		
@@ -80,6 +80,7 @@
 		        document.getElementById("balanceType").value = balanceType;
 		        // Submit the form
 		        document.getElementById("paymentForm").submit();
+			}
 		</script>
 	</body>
 </html>

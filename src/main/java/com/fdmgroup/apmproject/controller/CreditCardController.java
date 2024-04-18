@@ -114,18 +114,5 @@ public class CreditCardController {
 		return "paybills";
 	}
 
-	@GetMapping("/admin/creditcards")
-	public String creditcardPage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		List<CreditCard> ccList = creditCardService.findAllCreditCards();
-		List<Transaction> transactionList = new ArrayList<Transaction>();
-		for (CreditCard cc : ccList) {
-			List<Transaction> transaction = cc.getTransactions();
-			transactionList.addAll(transaction);
-		}
-		model.addAttribute("transactions", transactionList);
-		model.addAttribute("user", returnedUser);
-		model.addAttribute("creditCards", ccList);
-		return "admincreditcard";
-	}
+	
 }

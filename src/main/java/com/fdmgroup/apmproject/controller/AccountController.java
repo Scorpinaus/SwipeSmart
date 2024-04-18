@@ -288,24 +288,32 @@ public class AccountController {
 			//Check if recipientAccount exists in database. If exists, operate normally, if not, consider one sided transfer.
 				Optional<Account> recipientAccount = Optional.ofNullable(accountService.findAccountByAccountNumber(accountNumber));
 				//When recipientAccount is internal & existing
-				if (!recipientAccount.isEmpty()) {
-					// update the accounts' balance
-					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
-					accountService.update(accountFromBalance);
+				if (!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() == statusService.findByStatusName("Pending")) {
 					
-					recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
-					accountService.update(recipientAccount.get());
-					
-					// Transaction
-//					double cashback = 0;
-		
-					Transaction internalTransaction = new Transaction("Internal Transfer",accountFromBalance, recipientAccount.get(),transferAmount, recipientAccount.get().getAccountNumber(), null);
-		
-					transactionService.persist(internalTransaction);
-					LOGGER.info("Internal Transfer Success!");
-					return "redirect:/bankaccount/dashboard";
-					
-				} else {
+					//validate if account status is approved or not
+						
+						redirectAttributes.addAttribute("RecipientAccountPendingError", "true");
+						LOGGER.info("Recipient Account is still pending");
+						return "redirect:/bankaccount/transfer";
+						
+					}else if(!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() != statusService.findByStatusName("Pending")) {
+						// update the accounts' balance
+						accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+						accountService.update(accountFromBalance);
+						
+						recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
+						accountService.update(recipientAccount.get());
+						
+						// Transaction
+	//					double cashback = 0;
+			
+						Transaction internalTransaction = new Transaction("Internal Transfer",accountFromBalance, recipientAccount.get(),transferAmount, recipientAccount.get().getAccountNumber(), null);
+			
+						transactionService.persist(internalTransaction);
+						LOGGER.info("Internal Transfer Success!");
+						return "redirect:/bankaccount/dashboard";
+					}	
+				else {
 					// update the accounts' balance
 					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
 					accountService.update(accountFromBalance);
@@ -323,7 +331,8 @@ public class AccountController {
 				}
 			}
 	} 
-	
-	
-	
 }
+	
+	
+	
+

@@ -56,6 +56,9 @@
 				        <div th:if="${param.InsufficientBalanceError}">
 				            <p style="color: red;">Insufficient balance. Please check your account balance.</p>
 				        </div>
+				        <div th:if="${param.RecipientAccountPendingError}">
+				            <p style="color: red;">Recipient Account is still pending. Please try again later.</p>
+				        </div>
 					</form>
 				</div>	
 			</div>		

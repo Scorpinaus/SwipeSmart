@@ -1,13 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 @keyframes transitionIn {
-	from{
+	0% {
 		opacity:0;
-		transform:rotateX(-10deg);
 	}
 	
-	to {
+	100% {
 		opacity:1;
-		transform:rotateX(0);
 	}
 }
 
@@ -113,6 +111,7 @@ a#cards{
 	padding: 10px;
 }
 
+
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
@@ -146,6 +145,9 @@ body{
 	display:flex;
 	justify-content: center;
 	gap: 15px;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 a#cardTransactions{
@@ -185,6 +187,7 @@ a#cardTransactions:hover {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
 
 a#card-details{
 	text-decoration: none;

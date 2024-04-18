@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="/transfer.css">
+		<meta charset="UTF-8">
+		<title>Transfer page</title>
+	</head>
+	<body>
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/dashboard">Dashboard</a>
+				</div>
+				<div class="cards">
+					<a class="cardsText" id="cards" href="/userCards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a class="accountsText" id="accounts" href="/bankaccount/dashboard">Accounts</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
+		</div>
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<h1>Pay Credit Card Bill</h1>
+			<!--  Try changing the method to 'get' below -->
+			<div class="secondary-content-container">   
+				<div class="form"> 
+					<form method="post" action="/creditCard/paybills">
+					<select id="creditCardSelect" name="creditCard">
+				    	<option th:each="creditCard : ${CcList}" th:if="${creditCard.creditCardStatus.statusName != 'Pending'}" th:value="${creditCard.creditCardId}" th:text="${creditCard.creditCardNumber}"></option>
+					</select>
+						
+						<input type="number" name="payment" placeholder="Payment Amount" min = "0" step="0.01" required>
+						<input type="hidden" id="balanceType" name="balanceType">
+						<button type="button" onclick="getBalance('custom')">Custom Balance</button>
+						<br>	
+						<button type="button" onclick="getBalance('minimum')">Minimum Balance</button>
+					    <button type="button" onclick="getBalance('current')">Current Balance</button>
+					    <button type="button" onclick="getBalance('statement')">Statement Balance</button>
+						<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
+						
+						<div th:if="${param.SameAccountError}">
+				            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>
+				        </div>
+				        <div th:if="${param.InsufficientBalanceError}">
+				            <p style="color: red;">Insufficient balance. Please check your account balance.</p>
+				        </div>
+					</form>
+				</div>	
+			</div>		
+		</div>
+		<script>
+			const input = document.getElementById("accountNumberTransferTo");
+			input.addEventListener("input", () => input.value = formatNumber(input.value.replaceAll(" ", "")));
+		
+			const formatNumber = (number) => number.split("").reduce((seed, next, index) => {
+			  if (index !== 0 && !(index % 3)) seed += " ";
+			  return seed + next;
+			}, "");
+			
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
+			
+			function getBalance(balanceType) {
+		        document.getElementById("balanceType").value = balanceType;
+		        // Submit the form
+		        document.getElementById("paymentForm").submit();
+		</script>
+	</body>
+</html>

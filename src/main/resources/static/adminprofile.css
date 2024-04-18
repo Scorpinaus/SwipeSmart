@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+
 @keyframes transitionIn {
 	from{
 		opacity:0;
@@ -11,13 +12,8 @@
 	}
 }
 
-:root {
-  --darkgreen: #2b6777;
-  --lightblue:#c8d8e4;
-  --white: #ffffff;
-  --lightgrey:#f2f2f2;
-  --lightgreen:#52ab98;
-  --fadedgreen:#4F96A9;
+body{
+	font-family: 'Actor', sans-serif;
 }
 
 .linkContainerSideBar{
@@ -51,7 +47,6 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-	
 }
 
 .profile{
@@ -59,6 +54,8 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	background-color: white;
+	animation: transitionIn 0.75s;
 }
 
 .cards{
@@ -73,10 +70,16 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-	background-color: white;
 }
 
 .logout{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+}
+
+.transactions{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
 	text-align: center;
@@ -89,14 +92,8 @@ a#dashboard {
 	padding: 10px;
 }
 
-a#profile {
-	color: white;
-	text-decoration:none;
-	padding: 10px;
-}
-
 a#accounts {
-	color: black;
+	color: white;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -108,7 +105,19 @@ a#logout {
 }
 
 a#cards{
-	color: white; 
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#profile{
+	color: black;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#transactions {
+	color: white;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -118,8 +127,37 @@ a#cards{
 	margin-left: 200px;
 }
 
-body{
+h1{
+	margin-left: 5%;
+}
+
+.userDetailsList{
+	width: 500px;
+	margin: 100px auto;
+	padding: 50px;
+	border-radius: 10px;
+	background-color: #4F96A9;
+	animation:transitionIn 0.75s;
+}
+
+.userDetails{
+	padding-bottom: 15px;
+	color: white;
+}
+
+.link {
 	font-family: 'Actor', sans-serif;
+	margin-top: 30px;
+}
+
+.link a {
+	text-decoration: none;
+	color: white;
+	background-color: #4F96A9;
+}
+
+.link a:hover {
+  text-decoration: underline;
 }
 
 .openSidebar{
@@ -131,46 +169,5 @@ body{
 }
 
 .openSidebar:hover{
-	opacity: 0.6;
-}
-
-.secondary-content-container{
-	margin-left: 5%;
-	display: flex;
-	justify-content: center;
-}
-
-h1{
-	margin-left: 5%;
-}
-
-.form{
-	border-radius: 15px;
-	background-color:#4F96A9;
-	padding: 50px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-input{
-	margin-bottom: 5%;
-}
-
-option{
-	margin-bottom: 5%;
-}
-
-input#submitButton{
-	color: white;
-	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
-	background-color: #4F96A9;
-	text-align: center;
-	border: none;
-}
-
-input#submitButton:hover{
 	opacity: 0.6;
 }

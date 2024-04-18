@@ -123,6 +123,12 @@ h1, h2{
 	padding-bottom: 15px;
 }
 
+h2 {
+	animation:transitionIn 1.5s;
+	opacity: 0;
+	animation-fill-mode: forwards;
+}
+
 .noAccounts{
 	display: flex;
 	justify-content: center;
@@ -133,6 +139,9 @@ h1, h2{
 	justify-content: center;
 	gap: 15px;
 	padding-bottom: 15px;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 a#accountCRUD{
@@ -151,6 +160,9 @@ a#accountCRUD{
 	border-radius: 15px;
 	padding: 15px;
 	background-color: #4F96A9;
+	animation:transitionIn 2s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 a#accountDetails{

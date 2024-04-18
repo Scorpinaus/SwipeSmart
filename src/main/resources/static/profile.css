@@ -124,6 +124,7 @@ h1{
 	padding: 50px;
 	border-radius: 10px;
 	background-color: #4F96A9;
+	animation:transitionIn 0.75s;
 }
 
 .userDetails{

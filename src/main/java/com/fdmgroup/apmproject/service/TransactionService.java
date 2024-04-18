@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.time.YearMonth;
@@ -79,10 +80,23 @@ public class TransactionService {
 	}
 	
 	public void updateCreditCardBalance(Transaction transaction) {
+		LocalDate previousMonth = LocalDate.now().withDayOfMonth(1);
 		// ensure amount used in credit card is updated
-		if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("Withdraw")) {
+		if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("CC Payment")) {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
 			creditCard.addTransaction(transaction.getTransactionAmount());
+			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
+			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
+				creditCard.addTransactionMonthly(transaction.getTransactionAmount());
+			}
+			creditCardService.update(creditCard);
+		} else if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("CC Bill Payment")) {
+			CreditCard creditCard = transaction.getTransactionCreditCard();
+			creditCard.addTransaction(-transaction.getTransactionAmount());
+			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
+			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
+				creditCard.addTransactionMonthly(-transaction.getTransactionAmount());
+			}
 			creditCardService.update(creditCard);
 		}
 	}
@@ -141,24 +155,31 @@ public class TransactionService {
 		MerchantCategoryCode mcc = merchantCategoryCodeService.findByMerchantCategory("Dining");
 		MerchantCategoryCode mcc1 = merchantCategoryCodeService.findByMerchantCategory("Shopping");
 		MerchantCategoryCode mcc2 = merchantCategoryCodeService.findByMerchantCategory("Travel");
-		Transaction transaction = new Transaction(LocalDateTime.of(2024, 4, 15, 12, 34, 56), "Withdraw",20.5,null,0.00, creditCard,null,mcc,null);
-		Transaction transaction1 = new Transaction(LocalDateTime.of(2024, 4, 12, 12, 34, 56), "Withdraw",10,null,0.00, creditCard,null,mcc,null);
-		Transaction transaction2 = new Transaction(LocalDateTime.of(2024, 3, 12, 11, 33, 56), "Withdraw",10,null,0.00, creditCard,null,mcc1,null);
-		Transaction transaction3 = new Transaction(LocalDateTime.of(2024, 3, 28, 11, 33, 56), "Withdraw",50,null,0.00, creditCard,null,mcc2,null);
-		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "Withdraw",150.10,null,0.00, creditCard,null,mcc2,null);
-		Transaction transaction5 = new Transaction(LocalDateTime.of(2024, 2, 12, 11, 33, 56), "Withdraw",20,null,0.00, creditCard,null,mcc,null);
+		MerchantCategoryCode mcc3 = merchantCategoryCodeService.findByMerchantCategory("Bill");
+		Transaction transaction = new Transaction(LocalDateTime.of(2024, 4, 15, 12, 34, 56), "CC Payment",20.5,null,0.00, creditCard,null,mcc,null);
+		Transaction transaction1 = new Transaction(LocalDateTime.of(2024, 4, 12, 12, 34, 56), "CC Payment",10,null,0.00, creditCard,null,mcc,null);
+		Transaction transaction2 = new Transaction(LocalDateTime.of(2024, 3, 12, 11, 33, 56), "CC Payment",10,null,0.00, creditCard,null,mcc1,null);
+		Transaction transaction3 = new Transaction(LocalDateTime.of(2024, 3, 28, 11, 33, 56), "CC Payment",50,null,0.00, creditCard,null,mcc2,null);
+		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Payment",150.10,null,0.00, creditCard,null,mcc2,null);
+		Transaction transaction5 = new Transaction(LocalDateTime.of(2024, 2, 12, 11, 33, 56), "CC Payment",20,null,0.00, creditCard,null,mcc,null);
+		Transaction transaction6 = new Transaction(LocalDateTime.of(2024, 2, 13, 11, 33, 56), "CC Bill Payment",20,null,0.00, creditCard,null,mcc3,null);
+		Transaction transaction7 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 33, 56), "CC Bill Payment",100,null,0.00, creditCard,null,mcc3,null);
 		persist(transaction);
 		persist(transaction1);
 		persist(transaction2);
 		persist(transaction3);
 		persist(transaction4);
 		persist(transaction5);
+		persist(transaction6);
+		persist(transaction7);
 		updateCreditCardBalance(transaction);
 		updateCreditCardBalance(transaction1);
 		updateCreditCardBalance(transaction2);
 		updateCreditCardBalance(transaction3);
 		updateCreditCardBalance(transaction4);
 		updateCreditCardBalance(transaction5);
+		updateCreditCardBalance(transaction6);
+		updateCreditCardBalance(transaction7);
 	}
 
 }

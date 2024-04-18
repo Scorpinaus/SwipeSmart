@@ -1,18 +1,16 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.util.ArrayList;
-
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -42,7 +40,7 @@ public class TransactionController {
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	
 	
-	@GetMapping("/viewTransactions")
+	@PostMapping("/viewTransactions")
 	public String viewCardTransactions(@RequestParam(name = "transactionType", required = false) String transactionType, @RequestParam(name = "month", required = false) String month, @RequestParam(name = "creditCardId", required = false) String creditCardId, @RequestParam(name = "accountId", required = false) String accountId, Model model,
 			HttpSession session) {
 		
@@ -61,11 +59,13 @@ public class TransactionController {
 				if (month == null || month == "") {
 					
 					transactions = transactionService.findByTransactionAccountOrRecipientAccount(userAccount,userAccount);
+					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 
 				} else {
 					int year = Integer.parseInt(month.substring(0, 4));
 				    int monthValue = Integer.parseInt(month.substring(5));
 				    transactions = transactionService.getTransactionsByMonthAndYearAndTransactionAccount(year, monthValue, userAccount);
+				    Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				}
 				
 				
@@ -77,13 +77,12 @@ public class TransactionController {
 				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
 				if (month == null || month == "") {
 					transactions = userCreditCard.getTransactions();
+					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				} else {
 					int year = Integer.parseInt(month.substring(0, 4));
-					System.out.println(year);
 				    int monthValue = Integer.parseInt(month.substring(5));
-				    System.out.println(monthValue);
 				    transactions = transactionService.getTransactionsByMonthAndYearAndTransactionCreditCard(year, monthValue, userCreditCard);
-				    System.out.println(transactions);
+				    Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				}
 				model.addAttribute("creditCard", userCreditCard);
 				model.addAttribute("transactions", transactions);

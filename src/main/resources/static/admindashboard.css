@@ -51,7 +51,8 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-	
+	background-color: white;
+	animation:transitionIn 0.75s;
 }
 
 .profile{
@@ -73,7 +74,6 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-	background-color: white;
 }
 
 .logout{
@@ -83,8 +83,15 @@ p#sidebarHeader{
 	padding: 20px;
 }
 
+.transactions{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+}
+
 a#dashboard {
-	color: white;
+	color: black;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -96,7 +103,7 @@ a#profile {
 }
 
 a#accounts {
-	color: black;
+	color: white;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -108,7 +115,13 @@ a#logout {
 }
 
 a#cards{
-	color: white; 
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#transactions {
+	color: white;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -118,8 +131,85 @@ a#cards{
 	margin-left: 200px;
 }
 
+h1{
+	margin-left: 5%;
+}
+
+p#headerIntro{
+	margin-left: 5%;
+}
+
 body{
 	font-family: 'Actor', sans-serif;
+	width: 100%;
+}
+
+.summary-container {
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
+    margin-left: 2%;
+    margin-right: 2%;
+    animation:transitionIn 0.75s;
+}
+
+.accounts-summary,
+.cards-summary {
+    flex: 1 1 35%;
+    min-width: 300px;
+    padding: 20px;
+  	border-radius: 10px;
+  	background-color: var(--lightgrey);
+}
+
+.account-details, .card-details {
+    display: flex;
+    text-align: left;
+    width: 100%;
+    min-height: 100px;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.details-account-name, 
+.details-account-number,
+.details-card-type,
+.details-card-number{
+	padding-left: 15px;
+} 
+
+
+.details-account-name p,
+.details-card-type p {
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.details-account-number p,
+.details-card-number p {
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
+.detail-label {
+    font-weight: bold;
+}
+
+.details-card-limit p,
+.details-card-amount p,
+.details-account-balance p {
+    display: inline;
+}
+
+.details-card-limit,
+.details-card-amount, 
+.details-account-balance {
+    text-align: right;
+    padding-right: 15px;
 }
 
 .openSidebar{
@@ -131,46 +221,5 @@ body{
 }
 
 .openSidebar:hover{
-	opacity: 0.6;
-}
-
-.secondary-content-container{
-	margin-left: 5%;
-	display: flex;
-	justify-content: center;
-}
-
-h1{
-	margin-left: 5%;
-}
-
-.form{
-	border-radius: 15px;
-	background-color:#4F96A9;
-	padding: 50px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-input{
-	margin-bottom: 5%;
-}
-
-option{
-	margin-bottom: 5%;
-}
-
-input#submitButton{
-	color: white;
-	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
-	background-color: #4F96A9;
-	text-align: center;
-	border: none;
-}
-
-input#submitButton:hover{
 	opacity: 0.6;
 }

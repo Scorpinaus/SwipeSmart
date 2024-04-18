@@ -1,4 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
@@ -108,6 +120,7 @@ body {
 	background-color: #4F96A9;
 	display:flex;
 	justify-content: center;
+	animation: transitionIn 0.75s;
 }
 
 .form-group {

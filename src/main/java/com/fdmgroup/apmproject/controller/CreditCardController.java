@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.User;
@@ -88,6 +89,20 @@ public class CreditCardController {
 				return "redirect:/userCards";
 			}
 		}
+	}
+	
+	@GetMapping("/creditCard/paybills")
+	public String goToPaybillsPage(Model model, HttpSession session) {
+
+		// Get logged user
+		User currentUser = (User) session.getAttribute("loggedUser");
+		List<CreditCard> ccList = currentUser.getCreditCards();
+
+		// add user and account list to the model
+		model.addAttribute("user", currentUser);
+		model.addAttribute("CcList", ccList);
+
+		return "paybills";
 	}
 
 }

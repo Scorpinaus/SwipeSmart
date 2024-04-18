@@ -267,6 +267,14 @@ a#card-details{
     
 }
 
+.details-card-status p{
+    display: block;
+    color: black;
+    margin: 0px;
+    padding-bottom: 5px;
+}
+
+
 .card-details:hover {
 	background-color: var(--lightblue);
 }

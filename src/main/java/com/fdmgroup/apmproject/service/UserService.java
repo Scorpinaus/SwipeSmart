@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -74,6 +75,11 @@ public class UserService {
 			userRepo.deleteById(userId);
 			logger.info("User deleted from Database");
 		}
+	}
+
+	public List<User> findAllUsers() {
+		List<User> users = userRepo.findAll();
+		return users;
 	}
 
 	@PostConstruct

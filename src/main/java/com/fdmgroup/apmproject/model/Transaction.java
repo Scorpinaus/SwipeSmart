@@ -55,8 +55,6 @@ public class Transaction {
 	@JoinColumn(name = "FK recipientAccount ID")
 	private Account recipientAccount;
 
-	
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "FK Merchant Category Code ID")

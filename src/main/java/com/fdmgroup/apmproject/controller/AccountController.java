@@ -1,6 +1,7 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class AccountController {
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
 	private final int LEASTINITIALDEPOSIT = 5000;
+	private List<ForeignExchangeCurrency> currenciesList;
 
 	public AccountController(AccountService accountService) {
 		this.accountService = accountService;
@@ -88,12 +90,14 @@ public class AccountController {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
 			List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
+			currenciesList = currencyService.getAllCurrencies();
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
 				return "accountdashboard";
 			}
 			model.addAttribute("accounts", accounts);
-			
+			LOGGER.info("Currencies List: " + currenciesList);
+			model.addAttribute("currencies", currenciesList);
 			// Check for the flash attribute directly in the model. If present, it adds to the current model as true.
 		    if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
 		        model.addAttribute("errorInsufficient", true);
@@ -108,17 +112,23 @@ public class AccountController {
 	
 	//Function which processes the bank account withdrawal request.
 	@PostMapping("/bankaccount/withdrawal")
-	public String processWithdrawal(@RequestParam("account") long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String processWithdrawal(@RequestParam("account") long accountId, @RequestParam("currency") String withdrawalCurrencyCode, @RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
 		//Checks if user is logged on, if not user will be brought to login page.
 		if (session.getAttribute("loggedUser") == null ) {
 			return "redirect:/login";
 		}
 		
 		//Retrieve currentUser and selectedAccount for withdrawal
-		User currentUser = (User) session.getAttribute("loggedUser");
 		Account retrievedAccount = accountService.findById(accountId);
-		Double withdrawalAmount = amount.doubleValue();
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
+		String baseCurrencyCode = retrievedAccount.getCurrencyCode();
+		
+		//Getting target withdrawal currency & exchange rate for conversion
+		BigDecimal exchangeRate = BigDecimal.ONE;
+		if (!withdrawalCurrencyCode.equals(baseCurrencyCode)) {
+			exchangeRate = currencyService.getExchangeRate(baseCurrencyCode, withdrawalCurrencyCode);
+			amount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
+		}
 		
 		//If balance in account is less than withdrawal amount, user redirected back to withdrawal page + errorInsufficient flash attribute added for subsequent use.
 		if (retrievedAccountBalance.compareTo(amount) < 0) {
@@ -128,9 +138,9 @@ public class AccountController {
 		}
 		
 		 LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
-		    double newAccountBalance = accountService.withdrawAccountByAmount(retrievedAccountBalance, amount);
-		    retrievedAccount.setBalance(newAccountBalance);
-		    transactionService.persist(new Transaction("withdraw", retrievedAccount, amount.doubleValue(), null, null));
+		 BigDecimal newAccountBalance = retrievedAccountBalance.subtract(amount);
+		    retrievedAccount.setBalance(newAccountBalance.doubleValue());
+		    transactionService.persist(new Transaction("withdraw", retrievedAccount, amount.doubleValue(), null, currencyService.getCurrencyByCode(withdrawalCurrencyCode)));
 		    accountService.update(retrievedAccount);
 		    return "redirect:/bankaccount/dashboard";
 	}

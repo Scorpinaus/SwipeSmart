@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<link rel="stylesheet" href="/admindashboard.css">
+		<link rel="stylesheet" href="/admintransactions.css">
 		<meta charset="UTF-8">
-  		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>User Dashboard</title>
+		<title>Transactions</title>
 	</head>
 	<body>
-		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
 			<div class="sidebarHeader">
 				<p id="sidebarHeader" >SwipeSmart</p>
@@ -20,10 +18,10 @@
 					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
 				</div>
 				<div class="cards">
-					<a id="cards" href="/admin/creditcards">Cards</a>
+					<a class="cardsText" id="cards" href="/admin/creditcards">Cards</a>
 				</div>
 				<div class="accounts">
-					<a id="accounts" href="/admin/accounts">Accounts</a>
+					<a class="accountsText" id="accounts" href="/admin/accounts">Accounts</a>
 				</div>
 				<div class="transactions">
 					<a class="transactionsText" id="transactions" href="/admin/transactions">Transactions</a>
@@ -33,12 +31,8 @@
 				</div>
 			</div>
 		</div>
-		
-		<!-- dashboard -->
 		<div class="mainPage" id="main">
 			<button class="openSidebar">☰</button>
-			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
-			<p id="headerIntro"> This is for you, at a glance: </p>	
 		</div>
 		<script>
 			let menuOpen = false;
@@ -50,5 +44,5 @@
 			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
 			sidebar.style.width = menuOpen ? '0' : '200px';})
 		</script>
-	</body>	
+	</body>
 </html>

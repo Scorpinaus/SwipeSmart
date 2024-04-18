@@ -135,7 +135,7 @@ public class AdminController {
 		account.setAccountStatus(statusService.findByStatusName("Approved"));
 		accountService.update(account);
 		long userId = account.getAccountUser().getUserId();
-		return "redirect:/admin/accounts?userId=" + userId;
+		return "redirect:/admin/creditcards?userId=" + userId;
 	}
 	
 	@PostMapping("/admin/credicardApproval")

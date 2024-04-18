@@ -38,6 +38,10 @@
 				<form method="post">
 					<label for="month">Month:</label> 
 					<input type="month" id="month" name="month">
+					<select name="pickedUser">
+					 	<option value="" disabled selected>Select Category</option>
+					    <option th:each="pickedUser : ${users}" th:if="${pickedUser.getRole != 'ROLE_ADMIN'}" th:value="${pickedUser.getUsername}" th:text="${pickedUser.getUsername}"></option>
+					 </select>
 					<button type="submit">Filter</button>
 				</form>
 				<div>

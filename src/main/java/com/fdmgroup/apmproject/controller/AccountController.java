@@ -122,16 +122,18 @@ public class AccountController {
 		Account retrievedAccount = accountService.findById(accountId);
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
 		String baseCurrencyCode = retrievedAccount.getCurrencyCode();
+		LOGGER.info("Withdrawal request: Currency={} Amount={} AccountID={}", withdrawalCurrencyCode, amount, accountId);
 		
-		//Getting target withdrawal currency & exchange rate for conversion
-		BigDecimal exchangeRate = BigDecimal.ONE;
+		//Conversion of withdrawal amount from target currency to base currency if required
+		BigDecimal adjustedAmount = amount;
 		if (!withdrawalCurrencyCode.equals(baseCurrencyCode)) {
-			exchangeRate = currencyService.getExchangeRate(baseCurrencyCode, withdrawalCurrencyCode);
-			amount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
+			BigDecimal exchangeRate = currencyService.getExchangeRate(baseCurrencyCode, withdrawalCurrencyCode);
+			adjustedAmount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
+			LOGGER.info("Converted amount: {} (Exchange rate: {})", adjustedAmount, exchangeRate);
 		}
 		
 		//If balance in account is less than withdrawal amount, user redirected back to withdrawal page + errorInsufficient flash attribute added for subsequent use.
-		if (retrievedAccountBalance.compareTo(amount) < 0) {
+		if (retrievedAccountBalance.compareTo(adjustedAmount) < 0) {
 			LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
 			redirectAttributes.addFlashAttribute("errorInsufficient",true);
 			return "redirect:/bankaccount/withdrawal";
@@ -139,9 +141,9 @@ public class AccountController {
 		
 		//Assuming sufficient amount, proceed and log withdrawal.
 		 LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
-		 BigDecimal newAccountBalance = retrievedAccountBalance.subtract(amount);
+		 BigDecimal newAccountBalance = retrievedAccountBalance.subtract(adjustedAmount);
 		    retrievedAccount.setBalance(newAccountBalance.doubleValue());
-		    transactionService.persist(new Transaction("Withdrawal", retrievedAccount, amount.doubleValue(), null, currencyService.getCurrencyByCode(withdrawalCurrencyCode)));
+		    transactionService.persist(new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null, currencyService.getCurrencyByCode(withdrawalCurrencyCode)));
 		    accountService.update(retrievedAccount);
 		    return "redirect:/bankaccount/dashboard";
 	}

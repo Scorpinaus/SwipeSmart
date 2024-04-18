@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/accountdashboard.css">
-<title>Account Dashboard Page</title>
+<title>Accounts</title>
 </head>
 <body>
 	<div class="linkContainerSideBar" id="sidebar">
@@ -30,49 +30,65 @@
 		</div>
 	</div>
 	<div class="mainPage" id="main">
-		<button class="openSidebar">☰</button>
-		<h1
-			th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
-		<!--  Section for displaying user bank accounts -->
+        <header>
+              <button class="openSidebar">☰</button>
+            </header>
+		
+		<h1 th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
+		
 		<div class="accountLinkContainer">
 			<div class="hasAccounts"
 				th:if="${not #lists.isEmpty(currentUserBankAccounts)}">
 				<div class="accountCRUD">
-					<div class="createAccount">
-						<a id="accountCRUD" href="/bankaccount/create">Create</a>
-					</div>
-					<div class="depositMoney">
-						<a id="accountCRUD" href="/bankaccount/deposit">Deposit</a>
-					</div>
-					<div class="transferMoney">
-						<a id="accountCRUD" href="/bankaccount/transfer">Transfer</a>
-					</div>
-					<div class="withdrawMoney">
-						<a id="accountCRUD" href="/bankaccount/withdrawal">Withdraw</a>
-					</div>
+					<a id="accountCRUD" href="/bankaccount/create">Create</a>
+					<a id="accountCRUD" href="/bankaccount/deposit">Deposit</a>
+					<a id="accountCRUD" href="/bankaccount/transfer">Transfer</a>
+					<a id="accountCRUD" href="/bankaccount/withdrawal">Withdraw</a>
 				</div>
+        
 				<h2>Your Bank Accounts</h2>
-				<div class="accountDetails"
-					th:each="account : ${currentUserBankAccounts}">
+        
+				<div class="account-details-container">
+                  <div class="account-details" th:each="account : ${currentUserBankAccounts}">
 					<a id="accountDetails"
 						th:if="${account.accountStatus.statusName != 'Pending'}" href="#"
-						th:onclick="'submitForm(' + ${account.accountId} + ')'"
-						style="text-decoration: none;"> <span
-						th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
-						<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span>
-						<br /> <span th:text=" 'Account Balance: $' + ${account.balance}"></span>
-						<br /> <span
-						th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
-					</a> <span id="accountDetails"
-						th:if="${account.accountStatus.statusName == 'Pending'}"> <span
-						th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
-						<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span>
-						<br /> <span th:text=" 'Account Balance: $' + ${account.balance}"></span>
-						<br /> <span
-						th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
-						<span style="color: red;">Pending Approval</span>
-					</span>
-				</div>
+						th:onclick="'submitForm(' + ${account.accountId} + ')'">
+                        
+                        <div class="details-account-name">
+                         <p th:text="${account.accountName}"></p>
+                        </div>
+                        
+                        <div class="details-account-number">
+                         <p th:text="${account.accountNumber}"></p>
+                        </div>
+                        
+                        <div class="details-account-balance-status">
+                         <label class="detail-label">Account Balance </label>
+                         <p th:text="${account.balance}"></p>
+                         <label class="detail-label">Account Status </label>
+                         <p th:text="${account.accountStatus.statusName}"></p>
+                        </div>
+                        
+					</a> 
+                    <div th:if="${account.accountStatus.statusName == 'Pending'}">
+                        <div class="details-account-name">
+                         <p th:text="${account.accountName}"></p>
+                        </div>
+                        
+                        <div class="details-account-number">
+                         <p th:text="${account.accountNumber}"></p>
+                        </div>
+                        
+						<div class="details-account-balance-status">
+                         <label class="detail-label">Account Balance </label>
+                         <p th:text="${account.balance}"></p>
+                         <label class="detail-label">Account Status </label>
+                         <p class="status-pending" th:text="${account.accountStatus.statusName}"></p>
+                        </div>
+					  
+                    </div>
+                 </div>
+			   </div>
 
 				<form id="viewTransactionsForm" th:action="@{/viewTransactions}"
 					method="post" style="display: none;">

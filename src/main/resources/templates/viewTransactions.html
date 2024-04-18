@@ -5,22 +5,22 @@
 <title>Transactions</title>
 </head>
 
-	<style>
-	        table {
-	            width: 100%;
-	            border-collapse: collapse;
-	        }
-	        
-	        th, td {
-	            padding: 8px;
-	            text-align: left;
-	            border-bottom: 1px solid #ddd;
-	        }
-	        
-	        tr:hover {
-	            background-color: #f5f5f5;
-	        }
-	</style>
+<style>
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+	background-color: #f5f5f5;
+}
+</style>
 
 <body>
 	<div class="linkContainerSideBar" style="display: none" id="sidebar">
@@ -36,7 +36,7 @@
 			<p th:text="${creditCard.creditCardNumber}"></p>
 			<p th:text="${creditCard.pin}"></p>
 		</div>
-			
+
 		<div th:if="${account != null}">
 			<h2 th:text="${account.accountName}"></h2>
 			<p th:text="${account.accountNumber}"></p>
@@ -46,18 +46,20 @@
 		<h2>Transactions</h2>
 
 
-		<form th:action="@{/viewTransactions}" method="get">
-		    <label for="month">Month:</label>
-		    <input type="month" id="month" name="month">
-		    <input type="hidden" id="accountId" name="accountId" th:if="${account != null}" th:value="${account.accountId}">
-   			<input type="hidden" id="creditCardId" name="creditCardId" th:if="${creditCard != null}" th:value="${creditCard.creditCardId}">
-		    <button type="submit">Filter</button>
+		<form th:action="@{/viewTransactions}" method="post">
+			<label for="month">Month:</label> <input type="month" id="month"
+				name="month"> <input type="hidden" id="accountId"
+				name="accountId" th:if="${account != null}"
+				th:value="${account.accountId}"> <input type="hidden"
+				id="creditCardId" name="creditCardId" th:if="${creditCard != null}"
+				th:value="${creditCard.creditCardId}">
+			<button type="submit">Filter</button>
 		</form>
 
 		<div th:if="${creditCard != null}">
-		
 
-		
+
+
 			<div class="secondary-content-container">
 				<table>
 					<thead>
@@ -73,11 +75,14 @@
 					</thead>
 					<tbody>
 						<tr th:each="transaction : ${transactions}">
-							<td th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
-							<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-							<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+							<td
+								th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
+							<td
+								th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+							<td
+								th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
-							<td th:text="${transaction.transactionCurrency}"></td> 
+							<td th:text="${transaction.transactionCurrency}"></td>
 							<td th:text="${transaction.transactionType}"></td>
 							<td th:text="${transaction.cashback}"></td>
 						</tr>
@@ -85,9 +90,9 @@
 				</table>
 			</div>
 		</div>
-		
+
 		<div th:if="${account != null}">
-		
+
 			<div class="secondary-content-container">
 				<table>
 					<thead>
@@ -104,12 +109,16 @@
 					<tbody>
 						<tr th:each="transaction : ${transactions}">
 							<td th:text="${transaction.transactionType}"></td>
-							 <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-							 <td th:text="${#strings.substring(transaction.transactionDate, 12, 19)}"></td>
+							<td
+								th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+							<td
+								th:text="${#strings.substring(transaction.transactionDate, 12, 19)}"></td>
 							<td th:text="${transaction.transactionAmount}"></td>
-							<td th:text="${transaction.transactionAccount.accountNumber}"></td>
-							<td th:text="${transaction.recipientAccount.accountNumber}"></td>
-							<td th:text="${transaction.transactionCurrency}"></td> 
+							<td th:if="${transaction.transactionAccount != null}"
+								th:text="${transaction.transactionAccount.accountNumber}"></td>
+							<td th:if="${transaction.recipientAccount != null}"
+								th:text="${transaction.recipientAccount.accountNumber}"></td>
+							<td th:text="${transaction.transactionCurrency}"></td>
 						</tr>
 					</tbody>
 				</table>

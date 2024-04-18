@@ -42,7 +42,7 @@ public class TransactionController {
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	
 	
-	@GetMapping("/viewTransactions")
+	@PostMapping("/viewTransactions")
 	public String viewCardTransactions(@RequestParam(name = "transactionType", required = false) String transactionType, @RequestParam(name = "month", required = false) String month, @RequestParam(name = "creditCardId", required = false) String creditCardId, @RequestParam(name = "accountId", required = false) String accountId, Model model,
 			HttpSession session) {
 		

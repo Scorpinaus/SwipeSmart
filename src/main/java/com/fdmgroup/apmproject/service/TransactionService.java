@@ -131,12 +131,12 @@ public class TransactionService {
 		MerchantCategoryCode mcc = merchantCategoryCodeService.findByMerchantCategory("Dining");
 		MerchantCategoryCode mcc1 = merchantCategoryCodeService.findByMerchantCategory("Shopping");
 		MerchantCategoryCode mcc2 = merchantCategoryCodeService.findByMerchantCategory("Travel");
-		Transaction transaction = new Transaction(LocalDateTime.of(2024, 4, 15, 12, 34, 56), "Withdraw",20.5,null,0.00, creditCard,null,mcc,null);
-		Transaction transaction1 = new Transaction(LocalDateTime.of(2024, 4, 12, 12, 34, 56), "Withdraw",10,null,0.00, creditCard,null,mcc,null);
-		Transaction transaction2 = new Transaction(LocalDateTime.of(2024, 3, 12, 11, 33, 56), "Withdraw",10,null,0.00, creditCard,null,mcc1,null);
-		Transaction transaction3 = new Transaction(LocalDateTime.of(2024, 3, 28, 11, 33, 56), "Withdraw",50,null,0.00, creditCard,null,mcc2,null);
-		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "Withdraw",150.10,null,0.00, creditCard,null,mcc2,null);
-		Transaction transaction5 = new Transaction(LocalDateTime.of(2024, 2, 12, 11, 33, 56), "Withdraw",20,null,0.00, creditCard,null,mcc,null);
+		Transaction transaction = new Transaction(LocalDateTime.of(2024, 4, 15, 12, 34, 56), "CC Payment",20.5,null,0.00, creditCard,null,mcc,null);
+		Transaction transaction1 = new Transaction(LocalDateTime.of(2024, 4, 12, 12, 34, 56), "CC Payment",10,null,0.00, creditCard,null,mcc,null);
+		Transaction transaction2 = new Transaction(LocalDateTime.of(2024, 3, 12, 11, 33, 56), "CC Payment",10,null,0.00, creditCard,null,mcc1,null);
+		Transaction transaction3 = new Transaction(LocalDateTime.of(2024, 3, 28, 11, 33, 56), "CC Payment",50,null,0.00, creditCard,null,mcc2,null);
+		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Payment",150.10,null,0.00, creditCard,null,mcc2,null);
+		Transaction transaction5 = new Transaction(LocalDateTime.of(2024, 2, 12, 11, 33, 56), "CC Payment",20,null,0.00, creditCard,null,mcc,null);
 		persist(transaction);
 		persist(transaction1);
 		persist(transaction2);

@@ -17,6 +17,7 @@ import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
+import com.fdmgroup.apmproject.repository.CreditCardRepository;
 import com.fdmgroup.apmproject.repository.UserRepository;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
@@ -41,6 +42,9 @@ public class AdminController {
 	@Autowired
 	private CreditCardService creditCardService;
 	
+	@Autowired
+	private CreditCardRepository creditCardRepository;
+	
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 	
 	@GetMapping("/admin/accounts")
@@ -48,8 +52,18 @@ public class AdminController {
 		User returnedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", returnedUser);
 		
+		//find all account by user Id
 		List<Account> requiredAccounts = accountRepository.findByAccountUserUserId(userId);
 		model.addAttribute("requiredAccounts", requiredAccounts);
+		
+		
+		//find all credit card by user Id
+		List<CreditCard> requiredCreditCards = creditCardRepository.findByCreditCardUserUserId(userId);
+		model.addAttribute("requiredCreditCards", requiredCreditCards);
+		
+		
+		
+		
 		return "adminaccount";
 	}
 	

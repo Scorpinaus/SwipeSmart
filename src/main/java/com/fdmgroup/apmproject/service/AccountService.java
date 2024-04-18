@@ -14,12 +14,14 @@ import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
+import com.fdmgroup.apmproject.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 
 
 @Service
 public class AccountService {
+	
 	@Autowired
 	private AccountRepository accountRepo;
 	@Autowired
@@ -129,8 +131,15 @@ public class AccountService {
 		Status statusName = statusService.findByStatusName("Approved");
 		Account account = new Account("Savings", 5000, "123-123-123", userJacky, statusName);
 		Account account2 = new Account("Current", 10000, "124-124-124", userJacky, statusName);
+		Account accountPending = new Account("pending ac", 10000, "125-125-125", userJacky, statusService.findByStatusName("Pending"));
+		Account accountPending2 = new Account("pending ac2", 10123, "126-126-126", userJacky, statusService.findByStatusName("Pending"));
 		persist(account);
 		persist(account2);
+		persist(accountPending);
+		persist(accountPending2);
 	}
+	
+	
+	
 	
 }

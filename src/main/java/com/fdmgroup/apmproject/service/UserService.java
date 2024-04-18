@@ -82,4 +82,14 @@ public class UserService {
 		User user = new User("jackytan", encoder.encode("Qwerty1"), "Sentosa", "Jacky", "Tan");
 		persist(user);
 	}
+	
+	@PostConstruct
+	public void intiAdmin() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		User Admin = new User("Admin", encoder.encode("Admin1234"));
+		Admin.setRole("ROLE_ADMIN");
+		persist(Admin);
+		
+		
+	}
 }

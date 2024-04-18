@@ -1,94 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="/accountdashboard.css">
-<title>Account Dashboard Page</title>
-</head>
-<body>
-	<div class="linkContainerSideBar" id="sidebar">
-		<div class="sidebarHeader">
-			<p id="sidebarHeader">SwipeSmart</p>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/accountdashboard.css">
+		<title>Account Dashboard Page</title>
+	</head>
+	<body>
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/dashboard">Dashboard</a>
+				</div>
+				<div class="cards">
+					<a id="cards" href="/userCards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
 		</div>
-		<div class="sidebarLinks">
-			<div class="profile">
-				<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile
-					Page</a>
-			</div>
-			<div class="dashboard">
-				<a id="dashboard" href="/dashboard">Dashboard</a>
-			</div>
-			<div class="cards">
-				<a id="cards" href="/userCards">Cards</a>
-			</div>
-			<div class="accounts">
-				<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
-			</div>
-			<div class="logout">
-				<a id="logout" href="/logout">Logout</a>
-			</div>
-		</div>
-	</div>
-	<div class="mainPage" id="main">
-		<button class="openSidebar">☰</button>
-		<h1
-			th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
-		<!--  Section for displaying user bank accounts -->
-		<div class="accountLinkContainer">
-			<div class="hasAccounts"
-				th:if="${not #lists.isEmpty(currentUserBankAccounts)}">
-				<div class="accountCRUD">
-					<div class="createAccount">
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<h1 th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
+			<!--  Section for displaying user bank accounts -->
+			<div class="accountLinkContainer">
+				<div class="hasAccounts" th:if="${not #lists.isEmpty(currentUserBankAccounts)}">
+						<div class="accountCRUD">
+							<div class="createAccount">
+								<a id="accountCRUD" href="/bankaccount/create">Create</a>
+							</div>
+							<div class="depositMoney">
+								<a id="accountCRUD" href="/bankaccount/deposit">Deposit</a>
+							</div>
+							<div class="transferMoney">
+								<a id="accountCRUD" href="/bankaccount/transfer">Transfer</a>
+							</div>
+							<div class="withdrawMoney">
+								<a id="accountCRUD" href="/bankaccount/withdrawal">Withdraw</a>
+							</div>
+						</div>
+						<h2> Your Bank Accounts</h2>
+				        <div class="accountDetails" th:each="account : ${currentUserBankAccounts}">
+				            <a id="accountDetails" th:if="${account.accountStatus.statusName != 'Pending'}" th:href="@{/viewTransactions(accountId=${account.accountId})}" style="text-decoration: none;">
+				                <span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
+				                <span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
+				                <span th:text=" 'Account Balance: $' + ${account.balance}"></span> <br/>
+				                <span th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
+				            </a>
+				            <span id="accountDetails" th:if="${account.accountStatus.statusName == 'Pending'}">
+				                <span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br/>
+				                <span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br/>
+				                <span th:text=" 'Account Balance: $' + ${account.balance}"></span> <br/>
+				                <span th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
+				                <span style="color: red;">Pending Approval</span>
+				            </span>
+				        </div>
+				</div>
+				<div th:if="${#lists.isEmpty(currentUserBankAccounts)}">
+					<div class="noAccounts">
 						<a id="accountCRUD" href="/bankaccount/create">Create</a>
 					</div>
-					<div class="depositMoney">
-						<a id="accountCRUD" href="/bankaccount/deposit">Deposit</a>
-					</div>
-					<div class="transferMoney">
-						<a id="accountCRUD" href="/bankaccount/transfer">Transfer</a>
-					</div>
-					<div class="withdrawMoney">
-						<a id="accountCRUD" href="/bankaccount/withdrawal">Withdraw</a>
-					</div>
+					<p>No active bank accounts. Would you like to create one? </p>
 				</div>
-				<h2>Your Bank Accounts</h2>
-				<div class="accountDetails"
-					th:each="account : ${currentUserBankAccounts}">
-					<a id="accountDetails"
-						th:if="${account.accountStatus.statusName != 'Pending'}" href="#"
-						th:onclick="'submitForm(' + ${account.accountId} + ')'"
-						style="text-decoration: none;"> <span
-						th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
-							<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span>
-							<br /> <span th:text=" 'Account Balance: $' + ${account.balance}"></span>
-							<br /> <span
-							th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
-					</a> 
-					<span id="accountDetails"
-						th:if="${account.accountStatus.statusName == 'Pending'}"> <span
-						th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
-						<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span>
-						<br /> <span th:text=" 'Account Balance: $' + ${account.balance}"></span>
-						<br /> <span
-						th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
-						<span style="color: red;">Pending Approval</span>
-					</span>
-				</div>
-
-				<form id="viewTransactionsForm" th:action="@{/viewTransactions}"
-					method="post" style="display: none;">
-					<input type="hidden" id="accountIdInput" name="accountId">
-				</form>
-			</div>
-			<div th:if="${#lists.isEmpty(currentUserBankAccounts)}">
-				<div class="noAccounts">
-					<a id="accountCRUD" href="/bankaccount/create">Create</a>
-				</div>
-				<p>No active bank accounts. Would you like to create one?</p>
 			</div>
 		</div>
-	</div>
-	<script>
+		<script>
 			let menuOpen = false;
 			const sidebar = document.querySelector('.linkContainerSideBar');
 			const mainpage = document.querySelector('.mainPage');
@@ -97,8 +82,9 @@
 			button.addEventListener('click', () => {menuOpen = !menuOpen;
 			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
 			sidebar.style.width = menuOpen ? '0' : '160px';})
-			
-			function submitForm(accountId) {
+		</script>
+	</body>
+</html>m(accountId) {
 		        document.getElementById("accountIdInput").value = accountId;
 		        document.getElementById("viewTransactionsForm").submit();
 		        return false; // Prevent default action of the anchor tag

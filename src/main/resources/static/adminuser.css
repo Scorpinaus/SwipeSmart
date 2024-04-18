@@ -1,0 +1,247 @@
+/* copy from admindashboard.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
+
+:root {
+  --darkgreen: #2b6777;
+  --lightblue:#c8d8e4;
+  --white: #ffffff;
+  --lightgrey:#f2f2f2;
+  --lightgreen:#52ab98;
+  --fadedgreen:#4F96A9;
+}
+
+.linkContainerSideBar{
+	height: 100%;
+	top:0;
+	left:0;
+	width: 200px;
+	z-index: 1;
+	overflow-x: hidden;
+    background-color: #2b6777;
+    transition: 0.5s;
+    position: fixed;
+}
+
+.sidebarHeader{
+	display: flex;
+	justify-content: center;
+}
+
+p#sidebarHeader{
+	color: white;
+	padding: 10px;
+}
+
+.sidebarLinks{
+	padding-left: 20px;
+}
+
+.dashboard{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+	background-color: white;
+	animation:transitionIn 0.75s;
+}
+
+.profile{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+}
+
+.cards{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+}
+
+.accounts{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+}
+
+.logout{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	text-align: center;
+	padding: 20px;
+}
+
+a#dashboard {
+	color: black;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#profile {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#accounts {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#logout {
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#cards{
+	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+.mainPage{
+	transition: margin-left .5s;
+	margin-left: 200px;
+}
+
+h1{
+	margin-left: 5%;
+}
+
+p#headerIntro{
+	margin-left: 5%;
+}
+
+body{
+	font-family: 'Actor', sans-serif;
+	width: 100%;
+}
+
+.summary-container {
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
+    margin-left: 2%;
+    margin-right: 2%;
+    animation:transitionIn 0.75s;
+}
+
+.accounts-summary,
+.cards-summary {
+    flex: 1 1 35%;
+    min-width: 300px;
+    padding: 20px;
+  	border-radius: 10px;
+  	background-color: var(--lightgrey);
+}
+
+.account-details, .card-details {
+    display: flex;
+    text-align: left;
+    width: 100%;
+    min-height: 100px;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.details-account-name, 
+.details-account-number,
+.details-card-type,
+.details-card-number{
+	padding-left: 15px;
+} 
+
+
+.details-account-name p,
+.details-card-type p {
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.details-account-number p,
+.details-card-number p {
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
+.detail-label {
+    font-weight: bold;
+}
+
+.details-card-limit p,
+.details-card-amount p,
+.details-account-balance p {
+    display: inline;
+}
+
+.details-card-limit,
+.details-card-amount, 
+.details-account-balance {
+    text-align: right;
+    padding-right: 15px;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
+}
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+    .manage-button {
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    .manage-button-green {
+        background-color: #4CAF50;
+        color: white;
+    }
+    .manage-button-red {
+        background-color: #FF0000;
+        color: white;
+    }
+

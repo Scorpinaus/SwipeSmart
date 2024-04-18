@@ -31,6 +31,43 @@
 		<div class="mainPage" id="main">
 			<button class="openSidebar">☰</button>
 		</div>
+		
+		
+		<div class="mainPage" id="main">
+			<h2>Bank Accounts handler</h2>
+			
+			<div class="accountDetails"
+					th:each="account : ${requiredAccounts}">
+					<a id="accountDetails"
+						th:if="${account.accountStatus.statusName != 'Pending'}" href="#"
+						th:onclick="'submitForm(' + ${account.accountId} + ')'"
+						style="text-decoration: none;"> <span
+						th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
+							<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span>
+							<br /> <span th:text=" 'Account Balance: $' + ${account.balance}"></span>
+							<br /> <span
+							th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
+					</a> 
+					
+					<div id="accountDetails" th:if="${account.accountStatus.statusName == 'Pending'}">
+					    <span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
+					    <span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br />
+					    <span th:text=" 'Account Balance: $' + ${account.balance}"></span> <br />
+					    <span th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
+					    <span style="color: red;">Pending Approval</span>
+					    <br />
+					    <form method="post" action="/admin/bankaccountApproval">
+					        <input type="hidden" name="accountNumber" th:value="${account.accountNumber}" />
+					        <button type="submit" >Approve</button>
+					    </form>
+					</div>
+				</div>
+		</div>
+	
+			
+
+		
+		
 		<script>
 			let menuOpen = false;
 			const sidebar = document.querySelector('.linkContainerSideBar');

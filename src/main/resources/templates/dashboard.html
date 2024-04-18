@@ -52,7 +52,7 @@
 					</div>
 					<div class="details-account-balance">
 						<label class="detail-label">Balance </label>
-						<p th:text="${account.balance}"></p>
+						<p th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
 					</div>
 					
 				
@@ -72,12 +72,14 @@
 						
 						<div class="details-card-limit">
 							<label class="detail-label">Card Limit</label>
-							<p th:text="${card.cardLimit}"></p>
+							<p th:if="${card.cardLimit != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.cardLimit,0,'COMMA',2,'POINT')}"></p>
+                         	<p th:if="${card.cardLimit == 0}" id="cardDetails" th:text="'$0.00'"></p>
 						</div>
 						
 						<div class="details-card-amount">
 							<label class="detail-label">Amount Used</label>
-							<p th:text="${card.amountUsed}"></p>
+							<p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
+                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
 						</div>
 					</div>
 				</div>

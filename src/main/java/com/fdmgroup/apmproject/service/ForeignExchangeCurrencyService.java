@@ -154,28 +154,43 @@ public class ForeignExchangeCurrencyService {
 		ForeignExchangeCurrency foreignCurrency = currencyRepo.findByCurrencyCode(targetCurrencyCode);
 		ForeignExchangeCurrency USCurrency = currencyRepo.findByCurrencyCode("USD");
 		
-		//Same currency
+		//If both currencies same, no conversion is required
 		if (localCurrency.getCode().equals(foreignCurrency.getCode())) {
 			BigDecimal exchangeRate = BigDecimal.valueOf(1);
+			logger.info("No conversion required! BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+			logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
 			return exchangeRate;
 		}
 		
-		//Either local or foreign currency is USD
-		if (localCurrency.getCode().equals(USCurrency.getCode())) {
-			BigDecimal exchangeRate = BigDecimal.valueOf(foreignCurrency.getInverseRate());
+		//Direct conversion to USD
+		if (targetCurrencyCode.equals(USCurrency.getCode())) {
+			BigDecimal exchangeRate = BigDecimal.valueOf(localCurrency.getRate());
+			logger.info("Conversion to USD: BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+			logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
 			return exchangeRate;
-		} else if (foreignCurrency.getAlphaCode().equals(USCurrency.getCode())) {
-			return BigDecimal.valueOf(localCurrency.getRate());
 		}
 		
-		BigDecimal rateUSDToLocal = BigDecimal.valueOf(localCurrency.getRate());
-		BigDecimal rateUSDToForeign = BigDecimal.valueOf(foreignCurrency.getInverseRate());
+		//Conversion from USD to another currency
+		if (baseCurrencyCode.equals(USCurrency.getCode())) {
+			BigDecimal exchangeRate = BigDecimal.valueOf(foreignCurrency.getRate());
+			logger.info("Conversion from USD to another currency: BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+			logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
+			return exchangeRate;
+		}
 		
-		BigDecimal rate = rateUSDToForeign.divide(rateUSDToLocal, 6, RoundingMode.HALF_EVEN);
-		
-		return rate;
-		
+		// Conversion between two non-USD currencies using USD as an intermediary
+		BigDecimal localCurrencyToUSD = BigDecimal.valueOf(localCurrency.getInverseRate()); // USD per Local Currency
+		BigDecimal usdToForeignCurrency = BigDecimal.valueOf(foreignCurrency.getRate()); // USD per Foreign Currency
+
+		// Calculate the exchange rate from local currency to foreign currency
+		BigDecimal exchangeRate = usdToForeignCurrency.multiply(localCurrencyToUSD);
+
+		logger.info("Conversion between 2 non-USD currencies: BaseCurrencyCode"+ baseCurrencyCode + " & targetCurrencyCode: " + targetCurrencyCode);
+		logger.info("The conversion of local currency to USD is: "+ localCurrencyToUSD + " and the conversion of usd to Target Currency is "+ usdToForeignCurrency);
+		logger.info("The exchange rate used for this transaction is : "+ exchangeRate);
+		return exchangeRate;		
 	}
+	
 	@PostConstruct
 	public void initCurrency() {
 		ForeignExchangeCurrency currencyOne = new ForeignExchangeCurrency();

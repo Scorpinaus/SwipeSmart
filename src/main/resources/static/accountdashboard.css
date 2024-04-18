@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
 
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
+
 body{
 	font-family: 'Actor', sans-serif;
 }
@@ -8,7 +20,7 @@ body{
 	height: 100%;
 	top:0;
 	left:0;
-	width: 160px;
+	width: 200px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -61,6 +73,7 @@ p#sidebarHeader{
 	text-align: center;
 	padding: 20px;
 	background-color: white;
+	animation:transitionIn 0.75s;
 }
 
 .logout{
@@ -102,16 +115,18 @@ a#accounts{
 
 .mainPage{
 	transition: margin-left .5s;
-	margin-left:160px;
+	margin-left: 200px;
 }
 
-.accountLinkContainer{
-	display: flex;
-	justify-content: center;
-}
-
-h1{
+h1, h2{
+	margin-left: 5%;
 	padding-bottom: 15px;
+}
+
+h2 {
+	animation:transitionIn 1.5s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 .noAccounts{
@@ -120,10 +135,13 @@ h1{
 }
 
 .accountCRUD{
-	display: inline-flex;
+	display: flex;
 	justify-content: center;
 	gap: 15px;
 	padding-bottom: 15px;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 a#accountCRUD{
@@ -136,14 +154,20 @@ a#accountCRUD{
 }
 
 .accountDetails{
-	display:flex;
+	width: 35%;
+	margin-top: 5%;
+	margin-left: 5%;
+	border-radius: 15px;
+	padding: 15px;
+	background-color: #4F96A9;
+	animation:transitionIn 2s;
+	opacity: 0;
+	animation-fill-mode: forwards;
 }
 
 a#accountDetails{
 	color: white;
 	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
 	background-color: #4F96A9;
 	text-align: center;
 	margin: 15px;
@@ -152,9 +176,19 @@ a#accountDetails{
 span#accountDetails{
 	color: white;
 	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
 	background-color: #4F96A9;
 	text-align: center;
 	margin: 15px;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
 }

@@ -11,6 +11,15 @@
 	}
 }
 
+:root {
+  --darkgreen: #2b6777;
+  --lightblue:#c8d8e4;
+  --white: #ffffff;
+  --lightgrey:#f2f2f2;
+  --lightgreen:#52ab98;
+  --fadedgreen:#4F96A9;
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
@@ -42,6 +51,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	
 }
 
 .profile{
@@ -49,7 +59,6 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-	background-color: white;
 }
 
 .cards{
@@ -64,6 +73,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	background-color: white;
 }
 
 .logout{
@@ -79,8 +89,14 @@ a#dashboard {
 	padding: 10px;
 }
 
-a#accounts {
+a#profile {
 	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#accounts {
+	color: black;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -92,61 +108,18 @@ a#logout {
 }
 
 a#cards{
-	color: white;
+	color: white; 
 	text-decoration:none;
 	padding: 10px;
-}
-
-a#profile{
-	color: black;
-	text-decoration:none;
-	padding: 10px;
-}
-
-body {
-	font-family: 'Actor', sans-serif;
 }
 
 .mainPage{
 	transition: margin-left .5s;
-	margin-left:200px;
+	margin-left: 200px;
 }
 
-.form{
-	width: 500px;
-	margin: 100px auto;
-	padding: 50px;
-	border-radius: 10px;
-	background-color: #4F96A9;
-	display:flex;
-	justify-content: center;
-	animation: transitionIn 0.75s;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-input[type="text"]{
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-sizing: border-box;
-}
-
-input[type="submit"] {
+body{
 	font-family: 'Actor', sans-serif;
-	font-size: 20px;
-	width: 100%;
-  	padding: 10px;
-  	border: 0px;
-  	border-radius: 10px;
-  	box-sizing: border-box;
-  	color: #ffffff;
-  	background-color: #2b6777;
-  	cursor: pointer;
-  	transition: all 0.3s ease;
 }
 
 .openSidebar{
@@ -158,5 +131,43 @@ input[type="submit"] {
 }
 
 .openSidebar:hover{
+	opacity: 0.6;
+}
+
+h1{
+	margin-left: 5%;
+}
+
+.secondary-content-container{
+	margin-left: 5%;
+	display: flex;
+	justify-content: center;
+}
+
+.form{
+	border-radius: 15px;
+	background-color:#4F96A9;
+	padding: 50px;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
+}
+
+input, option, select{
+	margin-bottom: 5%;
+}
+
+
+input#submitButton{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+	border: none;
+}
+
+input#submitButton:hover{
 	opacity: 0.6;
 }

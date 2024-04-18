@@ -29,19 +29,27 @@
 			</div>
 		</div>
 		<div class="mainPage" id="main">
-			<button onclick="openSidebar()" class="openSidebar">☰</button>
-			<h1>User Profile:</h1>
-			<h2><span th:text="${user.username}"></span></h2>
-			<div class="userDetails" th:object="${user}">
-				Username: <span th:text="*{username}"></span>
-				Address: <span th:text="*{address}"></span>
-				First Name: <span th:text="*{firstName}"></span>
-				Last Name: <span th:text="*{lastName}"></span>	
-			</div>
-			<div class="link">
-				<a th:href="@{/users/{id}/details(id=${user.userId})}">Edit Profile Details</a>
-				<a href="/dashboard">Return to dashboard</a>
-			</div>
+			<button class="openSidebar">☰</button>
+			<div class="mainPageContent">
+				<h1><span th:text="'Hi ' + ${user.username} + ', this is your profile page'"></span></h1>
+				<div class="userDetailsList" th:object="${user}">
+					<div class="userDetails">
+						Username: <span th:text="*{username}"></span>
+					</div>
+					<div class="userDetails">
+						Address: <span th:text="*{address}"></span>
+					</div >
+					<div class="userDetails">
+						First Name: <span th:text="*{firstName}"></span>
+					</div>
+					<div class="userDetails">
+						Last Name: <span th:text="*{lastName}"></span>	
+					</div>
+					<div class="link">
+						<a th:href="@{/users/{id}/details(id=${user.userId})}">Edit Profile Details</a>
+					</div>
+				</div>
+			</div>	
 		</div>
 		<script>
 			let menuOpen = false;
@@ -50,8 +58,8 @@
 			const button = document.querySelector('.openSidebar')
 			
 			button.addEventListener('click', () => {menuOpen = !menuOpen;
-			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
-			sidebar.style.width = menuOpen ? '0' : '160px';})
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
 		</script>
 	</body>
 </html>

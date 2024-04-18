@@ -1,4 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@keyframes transitionIn {
+	from{
+		opacity:0;
+		transform:rotateX(-10deg);
+	}
+	
+	to {
+		opacity:1;
+		transform:rotateX(0);
+	}
+}
 
 :root {
   --darkgreen: #2b6777;
@@ -13,7 +24,7 @@
 	height: 100%;
 	top:0;
 	left:0;
-	width: 160px;
+	width: 200px;
 	z-index: 1;
 	overflow-x: hidden;
     background-color: #2b6777;
@@ -41,6 +52,7 @@ p#sidebarHeader{
 	text-align: center;
 	padding: 20px;
 	background-color: white;
+	animation:transitionIn 0.75s;
 }
 
 .profile{
@@ -103,85 +115,98 @@ a#cards{
 
 .mainPage{
 	transition: margin-left .5s;
-	margin-left: 160px;
+	margin-left: 200px;
+}
+
+h1{
+	margin-left: 5%;
+}
+
+p#headerIntro{
+	margin-left: 5%;
 }
 
 body{
 	font-family: 'Actor', sans-serif;
+	width: 100%;
 }
 
 .summary-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0;
-    grid-gap: 0px;
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 5px;
+    margin-left: 2%;
+    margin-right: 2%;
+    animation:transitionIn 0.75s;
 }
 
-.accounts-summary {
-	width: 350px;
-  	margin: 100px auto;
-  	padding: 5px auto;
-  	padding-left: 10px;
-  	padding-right: 10px;
-  	border-radius: 10px;
-  	background-color: var(--lightgrey);
-}
-
-.account-details {
-    display: block;
-    flex-direction: column;
-    background-color: var(--white);
-    padding: 5px;
-    margin: 10px auto;
-    border-radius: 10px;
-    height: 125px;
-}
-
-.details-account-name p {
-	font-weight: bold;
-}
-
-.details-account-balance {
-	text-align: right;
-}
-
-.details-account-balance p{
-    display: inline;
-}
-
+.accounts-summary,
 .cards-summary {
-	width: 350px;
-  	margin: 100px auto;
-  	padding: 5px auto;
-  	padding-left: 10px;
-  	padding-right: 10px;
+    flex: 1 1 35%;
+    min-width: 300px;
+    padding: 20px;
   	border-radius: 10px;
   	background-color: var(--lightgrey);
 }
 
-.card-details {
-    display: block;
+.account-details, .card-details {
+    display: flex;
+    text-align: left;
+    width: 100%;
+    min-height: 100px;
     flex-direction: column;
     background-color: var(--white);
-    padding: 5px;
-    margin: 10px auto;
     border-radius: 10px;
-    height: 125px;
+    margin-bottom: 5px;
 }
 
+.details-account-name, 
+.details-account-number,
+.details-card-type,
+.details-card-number{
+	padding-left: 15px;
+} 
+
+
+.details-account-name p,
 .details-card-type p {
 	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0px;
 }
+
+.details-account-number p,
+.details-card-number p {
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
 .detail-label {
     font-weight: bold;
 }
 
 .details-card-limit p,
-.details-card-amount p {
+.details-card-amount p,
+.details-account-balance p {
     display: inline;
 }
 
 .details-card-limit,
-.details-card-amount {
+.details-card-amount, 
+.details-account-balance {
     text-align: right;
+    padding-right: 15px;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
 }

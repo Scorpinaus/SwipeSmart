@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -77,7 +78,7 @@ public class AccountController {
 
 	// Function which brings user to Bank Account withdrawal page
 	@GetMapping("/bankaccount/withdrawal")
-	public String withdrawalBankAccount(HttpSession session, Model model) {
+	public String withdrawalBankAccount(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
@@ -87,7 +88,12 @@ public class AccountController {
 				return "accountdashboard";
 			}
 			model.addAttribute("accounts", accounts);
-			return "accountwithdrawal";
+			
+			// Check for the flash attribute directly in the model. If present, it adds to the current model as true.
+		    if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
+		        model.addAttribute("errorInsufficient", true);
+		    }
+			return "withdrawal";
 		}
 		else {
 			return "redirect:/login";
@@ -98,34 +104,30 @@ public class AccountController {
 	//Function which processes the bank account withdrawal request.
 	@PostMapping("/bankaccount/withdrawal")
 	public String processWithdrawal(@RequestParam("account") long accountId,@RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
-		if (session != null && session.getAttribute("loggedUser") !=null) {
-			//Retrieve currentUser and selectedAccount for withdrawal
-			User currentUser = (User) session.getAttribute("loggedUser");
-			Account retrievedAccount = accountService.findById(accountId);
-			Double withdrawalAmount = amount.doubleValue();
-			BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
-			
-			//Checks if selectedAccount has sufficient funds for withdrawal
-			int comparisonResult = retrievedAccountBalance.compareTo(amount);
-			if (comparisonResult >=0) {
-				LOGGER.info("Bank account Number"+ retrievedAccount.getAccountNumber() + "has sufficient money for withdrawal");
-				double newAccountBalance = accountService.withdrawAccountByAmount(retrievedAccountBalance, amount);
-				LOGGER.info("Bank account name" + retrievedAccount.getAccountNumber() + "account balance has changed from" + retrievedAccountBalance + " to : " + newAccountBalance);
-				retrievedAccount.setBalance(newAccountBalance);
-				Transaction newTransaction = new Transaction("withdraw", retrievedAccount, withdrawalAmount, null, null);
-				transactionService.persist(newTransaction);
-				retrievedAccount.setTransactions(newTransaction);
-				accountService.update(retrievedAccount);
-				return "redirect:/bankaccount/dashboard";
-				
-			} else {
-				LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
-				redirectAttributes.addAttribute("InsufficientFundsForWithdrawalError","true");
-				return "redirect:/bankaccount/withdrawal";
-			}
-} else {
-				return "redirect:/login";
-}
+		//Checks if user is logged on, if not user will be brought to login page.
+		if (session.getAttribute("loggedUser") == null ) {
+			return "redirect:/login";
+		}
+		
+		//Retrieve currentUser and selectedAccount for withdrawal
+		User currentUser = (User) session.getAttribute("loggedUser");
+		Account retrievedAccount = accountService.findById(accountId);
+		Double withdrawalAmount = amount.doubleValue();
+		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
+		
+		//If balance in account is less than withdrawal amount, user redirected back to withdrawal page + errorInsufficient flash attribute added for subsequent use.
+		if (retrievedAccountBalance.compareTo(amount) < 0) {
+			LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
+			redirectAttributes.addFlashAttribute("errorInsufficient",true);
+			return "redirect:/bankaccount/withdrawal";
+		}
+		
+		 LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
+		    double newAccountBalance = accountService.withdrawAccountByAmount(retrievedAccountBalance, amount);
+		    retrievedAccount.setBalance(newAccountBalance);
+		    transactionService.persist(new Transaction("withdraw", retrievedAccount, amount.doubleValue(), null, null));
+		    accountService.update(retrievedAccount);
+		    return "redirect:/bankaccount/dashboard";
 	}
 	
 
@@ -174,8 +176,9 @@ public class AccountController {
 	}
 
 	@GetMapping("/bankaccount/create")
-	public String goToCreateBankAccountPage() {
-
+	public String goToCreateBankAccountPage(HttpSession session, Model model) {
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user",loggedUser);
 		return "createbankaccount";
 	}
 
@@ -201,28 +204,17 @@ public class AccountController {
 
 			// Get logged user
 			User currentUser = (User) session.getAttribute("loggedUser");
-
 			String accountnumber = accountService.generateUniqueAccountNumber();
-
 			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser, statusService.findByStatusName("Pending") );
-			//persist new account
 			
+			//persist new account
 			accountService.persist(accountCreated);
 
-			
-			double cashback = 0;
-			
+			double cashback = 0;			
 			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null,null );
-
 			transactionService.persist(transaction);
-	
-
-			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");
-			
-	
+			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");	
 			return "redirect:/bankaccount/dashboard";
-
-
 		}
 	}
 
@@ -254,44 +246,56 @@ public class AccountController {
 
 			// get the required accounts
 			Account accountFromBalance = accountService.findById(accountId);
-
+			String accountNumber = accountNumberTransferTo.replace(" ","-");
 			// validate user is not transferring money to the same account
-			if (accountFromBalance.getAccountNumber().equals(accountNumberTransferTo)) {
+			if (accountFromBalance.getAccountNumber().equals(accountNumber)) {
 	
 				redirectAttributes.addAttribute("SameAccountError", "true");
 				LOGGER.info("SameAccount");
 				return "redirect:/bankaccount/transfer";
 				}
-			// validate user has sufficient in account
+			// validate user has sufficient amount in account
 			else if (accountFromBalance.getBalance() < transferAmount) {
 				redirectAttributes.addAttribute("InsufficientBalanceError", "true");
 				LOGGER.info("InsufficientBalance");
 				return "redirect:/bankaccount/transfer";
 			} else {
-
-				Account accountToBalance = accountService.findAccountByAccountNumber(accountNumberTransferTo);
-	
-				// update the accounts' balance
-				accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
-				accountService.update(accountFromBalance);
-	
-				accountToBalance.setBalance(accountToBalance.getBalance() + transferAmount);
-				accountService.update(accountToBalance);
-	
-				// Transaction
-//				double cashback = 0;
-	
-				Transaction transaction = new Transaction("transfer",accountFromBalance, accountToBalance,transferAmount, accountNumberTransferTo,
-						null );
-	
-				transactionService.persist(transaction);
-			
-			
-			
-				LOGGER.info("Transfer Success!");
-	
-				return "redirect:/bankaccount/dashboard";
-		}
-	}
-	
+			//Check if recipientAccount exists in database. If exists, operate normally, if not, consider one sided transfer.
+				Optional<Account> recipientAccount = Optional.ofNullable(accountService.findAccountByAccountNumber(accountNumber));
+				//When recipientAccount is internal & existing
+				if (!recipientAccount.isEmpty()) {
+					// update the accounts' balance
+					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+					accountService.update(accountFromBalance);
+					
+					recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
+					accountService.update(recipientAccount.get());
+					
+					// Transaction
+//					double cashback = 0;
+		
+					Transaction internalTransaction = new Transaction("Internal Transfer",accountFromBalance, recipientAccount.get(),transferAmount, recipientAccount.get().getAccountNumber(), null);
+		
+					transactionService.persist(internalTransaction);
+					LOGGER.info("Internal Transfer Success!");
+					return "redirect:/bankaccount/dashboard";
+					
+				} else {
+					// update the accounts' balance
+					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+					accountService.update(accountFromBalance);
+					
+					Account externalAccount = new Account();
+					externalAccount.setAccountNumber(accountNumber);
+					externalAccount.setBalance(transferAmount);
+					
+					//Transactions
+//					double cashback = 0;
+					Transaction externalTransaction = new Transaction("External Transfer", accountFromBalance, null, transferAmount, accountNumber, null);
+					transactionService.persist(externalTransaction);
+					LOGGER.info("External Transfer Success!");
+					return "redirect:/bankaccount/dashboard";
+				}
+			}
+	} 
 }

@@ -38,9 +38,9 @@ public class TransactionController {
 	private TransactionService transactionService;
 
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
-	
+
 	private List<ForeignExchangeCurrency> currencies;
-	
+
 	@PostMapping("/viewTransactions")
 	public String viewCardTransactions(@RequestParam(name = "transactionType", required = false) String transactionType,
 			@RequestParam(name = "month", required = false) String month,
@@ -60,9 +60,7 @@ public class TransactionController {
 				Account userAccount = accountService.findById(Long.parseLong(accountId));
 
 				if (month == null || month == "") {
-
-					transactions = transactionService.findByTransactionAccountOrRecipientAccount(userAccount,
-							userAccount);
+					transactions = userAccount.getTransactions();
 					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 
 				} else {

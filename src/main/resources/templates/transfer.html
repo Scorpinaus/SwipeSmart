@@ -38,7 +38,7 @@
 						<!-- Use the 'placeholder' tag to be more helpful -->
 				
 					<select name="account">
-				    	<option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountName}"></option>
+				    	<option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountNumber}"></option>
 				    <!-- Add more options as needed -->
 					</select>
 						

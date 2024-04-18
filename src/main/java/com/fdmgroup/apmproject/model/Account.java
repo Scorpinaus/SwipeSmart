@@ -7,7 +7,6 @@ import java.util.Objects;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,22 +21,21 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "listOfAccounts")
 public class Account {
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Account ID")
 	private long accountId;
-	
+
 	@Column(name = "Account Name")
 	private String accountName;
-	
+
 	@Column(name = "Account Balance")
 	private double balance;
-	
+
 	@Column(name = "Account Number")
 	private String accountNumber;
-	
+
 	@Column(name = "Currency Code")
 	private String currencyCode;
 
@@ -61,25 +59,27 @@ public class Account {
 
 	@OneToMany(mappedBy = "transactionAccount", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
-	
-	public Account() {};
+
+	public Account() {
+	};
 
 	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus) {
-	        setAccountName(accountName);
-	        setBalance(balance);
-	        setAccountNumber(accountNumber);
-	        setAccountUser(accountUser);
-	        setAccountStatus(accountStatus);
+		setAccountName(accountName);
+		setBalance(balance);
+		setAccountNumber(accountNumber);
+		setAccountUser(accountUser);
+		setAccountStatus(accountStatus);
 	}
-	
-	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus, String currencyCode) {
-        setAccountName(accountName);
-        setBalance(balance);
-        setAccountNumber(accountNumber);
-        setAccountUser(accountUser);
-        setAccountStatus(accountStatus);
-        setCurrencyCode(currencyCode);
-}
+
+	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus,
+			String currencyCode) {
+		setAccountName(accountName);
+		setBalance(balance);
+		setAccountNumber(accountNumber);
+		setAccountUser(accountUser);
+		setAccountStatus(accountStatus);
+		setCurrencyCode(currencyCode);
+	}
 
 	public long getAccountId() {
 		return accountId;
@@ -104,7 +104,7 @@ public class Account {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-	
+
 	public String getAccountNumber() {
 		return accountNumber;
 	}
@@ -112,7 +112,7 @@ public class Account {
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
 	}
-	
+
 	public User getAccountUser() {
 		return accountUser;
 	}
@@ -135,6 +135,10 @@ public class Account {
 
 	public void setTransactions(Transaction transaction) {
 		this.transactions.add(transaction);
+	}
+
+	public void setTransactionList(List<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 
 	@Override
@@ -164,8 +168,5 @@ public class Account {
 				&& Double.doubleToLongBits(balance) == Double.doubleToLongBits(other.balance)
 				&& Objects.equals(transactions, other.transactions);
 	}
-	
-	
-	
-	
+
 }

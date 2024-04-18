@@ -83,6 +83,13 @@ public class UserController {
 		return "adminprofile";
 	}
 
+	@GetMapping("/admin/transactions")
+	public String adminTransactionsPage(HttpSession session, Model model) {
+		User returnedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", returnedUser);
+		return "admintransactions";
+	}
+
 	@GetMapping("/dashboard")
 	public String dashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");

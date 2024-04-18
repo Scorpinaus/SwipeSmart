@@ -38,10 +38,6 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
-.closeSidebar:hover{
-	opacity: 0.5;
-}
-
 .sidebarLinks{
 	padding-left: 20px;
 }
@@ -58,6 +54,8 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	background-color: white;
+	animation: transitionIn 0.75s;
 }
 
 .cards{
@@ -72,18 +70,9 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-	background-color: white;
-	animation:transitionIn 0.75s;
 }
 
 .logout{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-}
-
-.dashboard{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
 	text-align: center;
@@ -103,7 +92,7 @@ a#dashboard {
 	padding: 10px;
 }
 
-a#profile {
+a#accounts {
 	color: white;
 	text-decoration:none;
 	padding: 10px;
@@ -121,8 +110,8 @@ a#cards{
 	padding: 10px;
 }
 
-a#accounts{
-	color:black;
+a#profile{
+	color: black;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -138,67 +127,37 @@ a#transactions {
 	margin-left: 200px;
 }
 
-h1, h2{
+h1{
 	margin-left: 5%;
+}
+
+.userDetailsList{
+	width: 500px;
+	margin: 100px auto;
+	padding: 50px;
+	border-radius: 10px;
+	background-color: #4F96A9;
+	animation:transitionIn 0.75s;
+}
+
+.userDetails{
 	padding-bottom: 15px;
-}
-
-h2 {
-	animation:transitionIn 1.5s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-.noAccounts{
-	display: flex;
-	justify-content: center;
-}
-
-.accountCRUD{
-	display: flex;
-	justify-content: center;
-	gap: 15px;
-	padding-bottom: 15px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-a#accountCRUD{
 	color: white;
-	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
-	background-color: #4F96A9;
-	text-align: center;
 }
 
-.accountDetails{
-	width: 35%;
-	margin-top: 5%;
-	margin-left: 5%;
-	border-radius: 15px;
-	padding: 15px;
-	background-color: #4F96A9;
-	animation:transitionIn 2s;
-	opacity: 0;
-	animation-fill-mode: forwards;
+.link {
+	font-family: 'Actor', sans-serif;
+	margin-top: 30px;
 }
 
-a#accountDetails{
+.link a {
+	text-decoration: none;
 	color: white;
-	text-decoration:none;
 	background-color: #4F96A9;
-	text-align: center;
-	margin: 15px;
 }
 
-span#accountDetails{
-	color: white;
-	text-decoration:none;
-	background-color: #4F96A9;
-	text-align: center;
-	margin: 15px;
+.link a:hover {
+  text-decoration: underline;
 }
 
 .openSidebar{

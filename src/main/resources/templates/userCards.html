@@ -18,29 +18,11 @@
 			<div class="dashboard">
 				<a id="dashboard" href="/dashboard">Dashboard</a>
 			</div>
-		</div>
-		<div class="mainPage" id="main">
-			<button class="openSidebar">☰</button>
-			<h1 th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
-			<div class="button-container">
-		        <a id="cardTransactions" href="#">Pay Bill</a>
-		        <a id="cardTransactions" href="#">Rewards</a>
-	    	</div>
-			
-			<h2>Your Credit Cards</h2>
-			<div class="cardCreation">
-				<a id="cardTransactions" href="/applyCreditCard">Apply for a new credit card</a>
+			<div class="cards">
+				<a id="cards" href="/userCards">Cards</a>
 			</div>
-			<div class="secondary-content-container" th:each="creditCard : ${cards}">    
-	           <div class="cardDetails">
-		           <a id="cardDetails" th:href="@{'/viewTransactions?creditCardId=' + ${creditCard.creditCardId}}">
-			           <h3 th:text="${creditCard.cardType}"></h3>
-			           <p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
-			           <p id="cardDetails" >Amount Used</p>
-			           <p id="cardDetails" th:text="${creditCard.amountUsed}"></p>
-		           </a>
-		       </div>
-
+			<div class="accounts">
+				<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
 			</div>
 			<div class="logout">
 				<a id="logout" href="/logout">Logout</a>
@@ -48,32 +30,34 @@
 		</div>
 	</div>
 	<div class="mainPage" id="main">
-		<button onclick="openSidebar()" class="openSidebar">☰</button>
-		<h1
-			th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
-		<div class="button-container">
-			<a href="#">Pay Bill</a> <a href="#">Rewards</a>
-		</div>
-
-		<h2>Your Credit Cards</h2>
-		<a href="/applyCreditCard">Apply for a new credit card</a>
-		<div class="secondary-content-container"
-			th:each="creditCard : ${cards}">
-			<a href="#" th:onclick="'submitForm(' + ${creditCard.creditCardId} + ')'">
-				<h3 th:text="${creditCard.cardType}"></h3>
-				<p th:text="${creditCard.creditCardNumber}"></p>
-				<p>Current Balance</p>
-				<p th:text="${creditCard.amountUsed}"></p>
-				<p>Statement Balance</p>
-				<p th:text="${creditCard.monthlyBalance}"></p>
-				
-			</a>
-		</div>
-
-		<form id="viewTransactionsForm" th:action="@{/viewTransactions}"
-			method="post" style="display: none;">
-			<input type="hidden" id="creditCardIdInput" name="creditCardId">	
-		</form>
+		<button class="openSidebar">☰</button>
+		<h1 th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
+			<div class="button-container">
+		        <a id="cardTransactions" href="#">Pay Bill</a>
+		        <a id="cardTransactions" href="#">Rewards</a>
+	    	</div>
+			
+			<h2>Your Credit Cards</h2>
+			<div class="cardCreation">
+			</div>
+			<div class="secondary-content-container"
+				th:each="creditCard : ${cards}">
+				<div class="cardDetails">
+					<a id="cardDetails" href="#" th:onclick="'submitForm(' + ${creditCard.creditCardId} + ')'">
+						<h3 th:text="${creditCard.cardType}"></h3>
+						<p th:text="${creditCard.creditCardNumber}"></p>
+						<p>Current Balance:</p>
+						<p th:text="${creditCard.amountUsed}"></p>
+						<p>Statement Balance:</p>
+						<p th:text="${creditCard.monthlyBalance}"></p>
+					</a>
+				</div>
+			</div>
+	
+			<form id="viewTransactionsForm" th:action="@{/viewTransactions}"
+				method="post" style="display: none;">
+				<input type="hidden" id="creditCardIdInput" name="creditCardId">	
+			</form>
 	</div>
 	<script>
 			let menuOpen = false;
@@ -82,8 +66,8 @@
 			const button = document.querySelector('.openSidebar')
 			
 			button.addEventListener('click', () => {menuOpen = !menuOpen;
-			mainpage.style.marginLeft = menuOpen ? '0' : '160px';
-			sidebar.style.width = menuOpen ? '0' : '160px';})
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
 			
 			function submitForm(creditCardId) {
 					    document.getElementById("creditCardIdInput").value = creditCardId;

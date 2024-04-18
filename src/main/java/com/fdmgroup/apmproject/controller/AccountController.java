@@ -285,9 +285,9 @@ public class AccountController {
 					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
 					accountService.update(accountFromBalance);
 					
-					Account externalAccount = new Account();
-					externalAccount.setAccountNumber(accountNumber);
-					externalAccount.setBalance(transferAmount);
+//					Account externalAccount = new Account();
+//					externalAccount.setAccountNumber(accountNumber);
+//					externalAccount.setBalance(transferAmount);
 					
 					//Transactions
 //					double cashback = 0;

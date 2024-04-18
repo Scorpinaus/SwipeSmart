@@ -17,6 +17,7 @@ import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
+import com.fdmgroup.apmproject.repository.CreditCardRepository;
 import com.fdmgroup.apmproject.repository.UserRepository;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
@@ -41,31 +42,58 @@ public class AdminController {
 	@Autowired
 	private CreditCardService creditCardService;
 	
+	@Autowired
+	private CreditCardRepository creditCardRepository;
+	
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 	
 	@GetMapping("/admin/accounts")
 	public String accountPage(@RequestParam("userId") long userId, HttpSession session, Model model) {
+		//add  returned user to the model
 		User returnedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", returnedUser);
 		
+		//find all account by user Id
 		List<Account> requiredAccounts = accountRepository.findByAccountUserUserId(userId);
 		model.addAttribute("requiredAccounts", requiredAccounts);
+		
+		
+		
+		
+		
+		
+		
 		return "adminaccount";
 	}
 	
 
 	@GetMapping("/admin/creditcards")
-	public String creditcardPage(HttpSession session, Model model) {
+	public String creditcardPage(@RequestParam("userId")long userId,HttpSession session, Model model) {
+		//add  returned user to the model
 		User returnedUser = (User) session.getAttribute("loggedUser");
-		List<CreditCard> ccList = creditCardService.findAllCreditCards();
-		List<Transaction> transactionList = new ArrayList<Transaction>();
-		for (CreditCard cc : ccList) {
-			List<Transaction> transaction = cc.getTransactions();
-			transactionList.addAll(transaction);
-		}
-		model.addAttribute("transactions", transactionList);
 		model.addAttribute("user", returnedUser);
-		model.addAttribute("creditCards", ccList);
+		
+		
+		//find all credit card by user Id
+		List<CreditCard> requiredCreditCards = creditCardRepository.findByCreditCardUserUserId(userId);
+		
+		model.addAttribute("requiredCreditCards", requiredCreditCards);
+		
+		
+//		List<CreditCard> ccList = creditCardService.findAllCreditCards();
+//		
+//		List<Transaction> transactionList = new ArrayList<Transaction>();
+//		for (CreditCard cc : ccList) {
+//			List<Transaction> transaction = cc.getTransactions();
+//			transactionList.addAll(transaction);
+//		}
+//		
+//		model.addAttribute("transactions", transactionList);
+//		
+//		model.addAttribute("user", returnedUser);
+//		
+//		model.addAttribute("creditCards", ccList);
+		
 		return "admincreditcard";
 	}
 
@@ -107,6 +135,17 @@ public class AdminController {
 		account.setAccountStatus(statusService.findByStatusName("Approved"));
 		accountService.update(account);
 		long userId = account.getAccountUser().getUserId();
+		return "redirect:/admin/accounts?userId=" + userId;
+	}
+	
+	@PostMapping("/admin/credicardApproval")
+	public String approveCredicard (@RequestParam("creditCardNumber") String creditCardNumber) {
+		System.out.println("approve");
+		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
+		
+		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
+		creditCardService.update(creditCard);
+		long userId = creditCard.getCreditCardUser().getUserId();
 		return "redirect:/admin/accounts?userId=" + userId;
 	}
 	

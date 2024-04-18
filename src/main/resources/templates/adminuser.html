@@ -23,11 +23,18 @@
 				<div class="dashboard">
 					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
 				</div>
+				<div class="user">
+					<a id="user" href="/admin/users">Users</a>
+				</div>
 				<div class="cards">
 					<a id="cards" href="/admin/creditcards">Cards</a>
 				</div>
+				
 				<div class="accounts">
 					<a id="accounts" href="/admin/accounts">Accounts</a>
+				</div>
+				<div class="transactions">
+					<a class="transactionsText" id="transactions" href="/admin/transactions">Transactions</a>
 				</div>
 				<div class="logout">
 					<a id="logout" href="/logout">Logout</a>
@@ -42,37 +49,51 @@
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
 			<p id="headerIntro"> This is for you, at a glance: </p>	
 			
-		<table>
-		    <thead>
-		        <tr>
-		            <th>User ID</th>
-		            <th>Name</th>
-		            <th>No. of Pending Accounts</th>
-		            <th>Action</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-		        <tr th:each="user : ${users}">
-		            <td th:text="${user.userId}"></td>
-		            <td th:text="${user.username}"></td>
-		            <td>
-		                <span th:text="${user.accounts.?[accountStatus.statusName == 'Pending'].size()}"></span>
-		            </td>
-		            <td>
-		                <form method="get" action="/admin/accounts">
-		                    <input type="hidden" name="userId" th:value="${user.userId}" />
-		                    <button
-		                        class="manage-button"
-		                        th:class="${user.accounts.?[accountStatus.statusName == 'Pending'].size() == 0} ? 'manage-button-green' : 'manage-button-red'"
-		                        type="submit"
-		                    >
-		                        Manage
-		                    </button>
-		                </form>
-		            </td>
-		        </tr>
-		    </tbody>
-		</table>
+		
+		
+<table>
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>No. of Pending Bank Accounts</th>
+            <th>Manage Bank Accounts</th>
+            <th>No. of Pending Credit Cards</th>
+            <th>Manage Credit Cards</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.username}"></td>
+            <td>
+                <span th:text="${user.accounts.?[accountStatus.statusName == 'Pending'].size()}"></span>
+            </td>
+            <td>
+                <form method="get" action="/admin/accounts">
+                    <input type="hidden" name="userId" th:value="${user.userId}" />
+                    <button class="manage-button"
+                        th:class="${user.accounts.?[accountStatus.statusName == 'Pending'].size() == 0}
+                                    ? 'manage-button-green' : 'manage-button-red'"
+                        type="submit">Manage</button>
+                </form>
+            </td>
+            <td>
+                <span th:text="${user.creditCards.?[creditCardStatus.statusName == 'Pending'].size()}"></span>
+            </td>
+            
+            <td>
+                <form method="get" action="/admin/creditcards">
+                    <input type="hidden" name="userId" th:value="${user.userId}" />
+                    <button class="manage-button"
+                        th:class="${user.creditCards.?[creditCardStatus.statusName == 'Pending'].size() == 0}
+                                    ? 'manage-button-green' : 'manage-button-red'"
+                        type="submit">Manage</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
 			
 			
 		</div>

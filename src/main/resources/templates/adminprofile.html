@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="/profile.css">
+		<meta charset="UTF-8">
+		<title>User Profile Page</title>
+	</head>
+	<body>
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
+			<div class="sidebarLinks">
+				<div class="profile">
+					<a id="profile" href="/admin/profile">Profile Page</a>
+				</div>
+				<div class="dashboard">
+					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
+				</div>
+				<div class="cards">
+					<a id="cards" href="/admin/creditcards">Cards</a>
+				</div>
+				<div class="accounts">
+					<a id="accounts" href="/admin/accounts">Accounts</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
+		</div>
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<div class="mainPageContent">
+				<h1><span th:text="'Hi ' + ${user.username} + ', this is your profile page'"></span></h1>
+				<div class="userDetailsList" th:object="${user}">
+					<div class="userDetails">
+						Username: <span th:text="*{username}"></span>
+					</div>
+					<div class="userDetails">
+						Address: <span th:text="*{address}"></span>
+					</div >
+					<div class="userDetails">
+						First Name: <span th:text="*{firstName}"></span>
+					</div>
+					<div class="userDetails">
+						Last Name: <span th:text="*{lastName}"></span>	
+					</div>
+					<div class="link">
+						<a th:href="@{/users/{id}/details(id=${user.userId})}">Edit Profile Details</a>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<script>
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
+		</script>
+	</body>
+</html>

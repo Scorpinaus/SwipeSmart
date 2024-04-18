@@ -54,16 +54,33 @@ public class UserController {
 		return "login";
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/account")
-	public String accountPage() {
-		return "account";
+	@GetMapping("/admin/accounts")
+	public String accountPage(HttpSession session, Model model) {
+		User returnedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", returnedUser);
+		return "adminaccount";
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/creditcard")
-	public String creditcardPage() {
-		return "creditcard";
+	@GetMapping("/admin/creditcards")
+	public String creditcardPage(HttpSession session, Model model) {
+		User returnedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", returnedUser);
+		return "admincreditcard";
+	}
+
+	@GetMapping("/admin/dashboard")
+	public String adminDashboardPage(HttpSession session, Model model) {
+		User returnedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", returnedUser);
+		logger.info("Redirecting to dashboard");
+		return "admindashboard";
+	}
+
+	@GetMapping("/admin/profile")
+	public String adminProfilePage(HttpSession session, Model model) {
+		User returnedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", returnedUser);
+		return "adminprofile";
 	}
 
 	@GetMapping("/dashboard")
@@ -141,7 +158,7 @@ public class UserController {
 			tempUser.setAddress(address);
 		}
 		if (!address.isEmpty()) {
-			tempUser.setFirstName(firstName);		
+			tempUser.setFirstName(firstName);
 		}
 		if (!address.isEmpty()) {
 			tempUser.setLastName(lastName);

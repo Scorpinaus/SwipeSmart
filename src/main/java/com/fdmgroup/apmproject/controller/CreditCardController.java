@@ -38,6 +38,7 @@ public class CreditCardController {
 	@Autowired
 	private UserService userService;
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
+	private List<ForeignExchangeCurrency> currencies;
 
 	@GetMapping("/userCards")
 	public String viewCreditCards(Model model, HttpSession session) {

@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
+
+
 	<head>
-		<link rel="stylesheet" href="/admindashboard.css">
+		<link rel="stylesheet" href="/adminuser.css">
 		<meta charset="UTF-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>User Dashboard</title>
 	</head>
+	
 	<body>
 		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
@@ -19,17 +23,11 @@
 				<div class="dashboard">
 					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
 				</div>
-				<div class="users">
-					<a id="users" href="/admin/users">Users</a>
-				</div>
 				<div class="cards">
 					<a id="cards" href="/admin/creditcards">Cards</a>
 				</div>
 				<div class="accounts">
 					<a id="accounts" href="/admin/accounts">Accounts</a>
-				</div>
-				<div class="transactions">
-					<a class="transactionsText" id="transactions" href="/admin/transactions">Transactions</a>
 				</div>
 				<div class="logout">
 					<a id="logout" href="/logout">Logout</a>
@@ -37,12 +35,49 @@
 			</div>
 		</div>
 		
-		<!-- dashboard -->
+		
+		<!-- users -->
 		<div class="mainPage" id="main">
 			<button class="openSidebar">☰</button>
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
 			<p id="headerIntro"> This is for you, at a glance: </p>	
+			
+		<table>
+		    <thead>
+		        <tr>
+		            <th>User ID</th>
+		            <th>Name</th>
+		            <th>No. of Pending Accounts</th>
+		            <th>Action</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr th:each="user : ${users}">
+		            <td th:text="${user.userId}"></td>
+		            <td th:text="${user.username}"></td>
+		            <td>
+		                <span th:text="${user.accounts.?[accountStatus.statusName == 'Pending'].size()}"></span>
+		            </td>
+		            <td>
+		                <form method="get" action="/admin/accounts">
+		                    <input type="hidden" name="userId" th:value="${user.userId}" />
+		                    <button
+		                        class="manage-button"
+		                        th:class="${user.accounts.?[accountStatus.statusName == 'Pending'].size() == 0} ? 'manage-button-green' : 'manage-button-red'"
+		                        type="submit"
+		                    >
+		                        Manage
+		                    </button>
+		                </form>
+		            </td>
+		        </tr>
+		    </tbody>
+		</table>
+			
+			
 		</div>
+		
+		
 		<script>
 			let menuOpen = false;
 			const sidebar = document.querySelector('.linkContainerSideBar');

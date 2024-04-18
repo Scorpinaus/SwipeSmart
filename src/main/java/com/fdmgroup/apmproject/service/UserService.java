@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -76,6 +77,11 @@ public class UserService {
 		}
 	}
 
+	public List<User> findAllUsers() {
+		List<User> users = userRepo.findAll();
+		return users;
+	}
+
 	@PostConstruct
 	public void initUsers() {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -85,4 +91,6 @@ public class UserService {
 		persist(user);
 		persist(user2);
 	}
+	
+	
 }

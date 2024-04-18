@@ -15,12 +15,14 @@ import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
+import com.fdmgroup.apmproject.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 
 
 @Service
 public class AccountService {
+	
 	@Autowired
 	private AccountRepository accountRepo;
 	@Autowired
@@ -130,11 +132,23 @@ public class AccountService {
 	public void intiAccounts() {
 		User userJacky = userService.findUserByUsername("jackytan");
 		Status statusName = statusService.findByStatusName("Approved");
-		String currencyCode = "SGD";
-		Account account = new Account("Savings", 5000, "123-123-123", userJacky, statusName, currencyCode);
-		Account account2 = new Account("Current", 10000, "124-124-124", userJacky, statusName, currencyCode);
+//<<<<<<< HEAD
+		Account account = new Account("Savings", 5000, "123-123-123", userJacky, statusName);
+		Account account2 = new Account("Current", 10000, "124-124-124", userJacky, statusName);
+		Account accountPending = new Account("pending ac", 10000, "125-125-125", userJacky, statusService.findByStatusName("Pending"));
+		Account accountPending2 = new Account("pending ac2", 10123, "126-126-126", userJacky, statusService.findByStatusName("Pending"));
+////=======
+//		String currencyCode = "SGD";
+//		Account account = new Account("Savings", 5000, "123-123-123", userJacky, statusName, currencyCode);
+//		Account account2 = new Account("Current", 10000, "124-124-124", userJacky, statusName, currencyCode);
+//>>>>>>> 9ef4376cc1629b9dee391399d58bc611f0d358bb
 		persist(account);
 		persist(account2);
+		persist(accountPending);
+		persist(accountPending2);
 	}
+	
+	
+	
 	
 }

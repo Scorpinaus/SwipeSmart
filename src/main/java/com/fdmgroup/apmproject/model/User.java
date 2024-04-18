@@ -38,6 +38,13 @@ public class User {
 
 	@OneToMany(mappedBy = "accountUser", fetch = FetchType.EAGER)
 	private List<Account> accounts = new ArrayList<>();
+	
+	public User(String username, String password) {
+		setUsername(username);
+		setPassword(password);
+		setRole("ROLE_USER");
+	}
+	
 
 	public User(String username, String password, String address, String firstName, String lastName) {
 		setUsername(username);

@@ -54,42 +54,6 @@ public class UserController {
 		return "login";
 	}
 
-	@GetMapping("/admin/accounts")
-	public String accountPage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		return "adminaccount";
-	}
-
-	@GetMapping("/admin/creditcards")
-	public String creditcardPage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		return "admincreditcard";
-	}
-
-	@GetMapping("/admin/dashboard")
-	public String adminDashboardPage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		logger.info("Redirecting to dashboard");
-		return "admindashboard";
-	}
-
-	@GetMapping("/admin/profile")
-	public String adminProfilePage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		return "adminprofile";
-	}
-
-	@GetMapping("/admin/transactions")
-	public String adminTransactionsPage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		return "admintransactions";
-	}
-
 	@GetMapping("/dashboard")
 	public String dashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");

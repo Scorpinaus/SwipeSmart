@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,10 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.Status;
+import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
@@ -99,7 +100,7 @@ public class CreditCardController {
 			}
 		}
 	}
-	
+
 	@GetMapping("/creditCard/paybills")
 	public String goToPaybillsPage(Model model, HttpSession session) {
 
@@ -114,4 +115,5 @@ public class CreditCardController {
 		return "paybills";
 	}
 
+	
 }

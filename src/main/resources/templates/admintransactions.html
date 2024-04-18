@@ -33,6 +33,54 @@
 		</div>
 		<div class="mainPage" id="main">
 			<button class="openSidebar">☰</button>
+			<div class="transactionTable">
+				<h3>Transactions</h3>
+				<form method="post">
+					<label for="month">Month:</label> 
+					<input type="month" id="month" name="month">
+					<button type="submit">Filter</button>
+				</form>
+				<div>
+					<div class="secondary-content-container">
+						<table>
+							<thead>
+								<tr>
+									<th>Category</th>
+									<th>Date</th>
+									<th>Time</th>
+									<th>User</th>
+									<th>Credit Card Number</th>
+									<th>Account</th>
+									<th>Recipient</th>
+									<th>Amount</th>
+									<th>Currency</th>
+									<th>Transaction Type</th>
+									<th>CashBack</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="transaction : ${transactions}">
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory}"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.transactionType}"></td>
+									<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+									<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardUser.getUsername}"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountUser.getUsername}"></td>
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardNumber}"></td>
+									<td th:text="'-'"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountNumber}"></td>
+									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
+									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="'-'"></td>
+									<td th:text="${transaction.transactionAmount}"></td>
+									<td th:text="${transaction.transactionCurrency}"></td>
+									<td th:if="${transaction.transactionType != null}" th:text="${transaction.transactionType}"></td>
+									<td th:text="${transaction.cashback}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 		<script>
 			let menuOpen = false;

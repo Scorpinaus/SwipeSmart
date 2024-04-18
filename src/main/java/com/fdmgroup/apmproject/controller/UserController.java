@@ -61,13 +61,6 @@ public class UserController {
 		return "adminaccount";
 	}
 
-	@GetMapping("/admin/creditcards")
-	public String creditcardPage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		return "admincreditcard";
-	}
-
 	@GetMapping("/admin/dashboard")
 	public String adminDashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");
@@ -81,13 +74,6 @@ public class UserController {
 		User returnedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", returnedUser);
 		return "adminprofile";
-	}
-
-	@GetMapping("/admin/transactions")
-	public String adminTransactionsPage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		return "admintransactions";
 	}
 
 	@GetMapping("/dashboard")

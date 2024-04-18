@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 
 @keyframes transitionIn {
 	from{
@@ -12,8 +12,13 @@
 	}
 }
 
-body{
-	font-family: 'Actor', sans-serif;
+:root {
+  --darkgreen: #2b6777;
+  --lightblue:#c8d8e4;
+  --white: #ffffff;
+  --lightgrey:#f2f2f2;
+  --lightgreen:#52ab98;
+  --fadedgreen:#4F96A9;
 }
 
 .linkContainerSideBar{
@@ -116,75 +121,14 @@ a#accounts{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
-}
-
-h1, h2{
-	margin-left: 5%;
-	padding-bottom: 15px;
-}
-
-h2 {
-	animation:transitionIn 1.5s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-.noAccounts{
-	display: flex;
-	justify-content: center;
-}
-
-.accountCRUD{
-	display: flex;
-	justify-content: center;
-	gap: 15px;
-	padding-bottom: 15px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-a#accountCRUD{
-	color: white;
-	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
-	background-color: #4F96A9;
-	text-align: center;
-}
-
-.accountDetails{
-	width: 35%;
-	margin-top: 5%;
-	margin-left: 5%;
-	border-radius: 15px;
-	padding: 15px;
-	background-color: #4F96A9;
-	animation:transitionIn 2s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-a#accountDetails{
-	color: white;
-	text-decoration:none;
-	background-color: #4F96A9;
-	text-align: center;
-	margin: 15px;
-}
-
-span#accountDetails{
-	color: white;
-	text-decoration:none;
-	background-color: #4F96A9;
-	text-align: center;
-	margin: 15px;
+	padding: 10px;
+	padding-top: 5px;
 }
 
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color: var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }
@@ -192,3 +136,123 @@ span#accountDetails{
 .openSidebar:hover{
 	opacity: 0.6;
 }
+
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
+}
+
+body{
+	font-family: "Nunito Sans", sans-serif;
+	min-width: 600px;
+}
+
+.noAccounts{
+	display: flex;
+	justify-content: center;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
+	min-width: 600px;
+}
+
+.accountCRUD{
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
+	min-width: 600px;
+}
+
+a#accountCRUD{
+	color: black;
+	font-weight: bold;
+	min-width: 100px;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: var(--lightgrey);
+	text-align: center;
+}
+
+a#accountCRUD:hover {
+	background-color: var(--lightblue);
+}
+
+a#accountDetails {
+	text-decoration: none;
+}
+.account-details-container{
+	flex: 1 1 35%;
+    min-width: 300px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  	border-radius: 10px;
+  	background-color: var(--lightgrey);
+  	
+}
+
+.account-details{
+	display: flex;
+    text-align: left;
+    width: 100%;
+    min-height: 100px;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.details-account-name,
+.details-account-number{
+	padding-left: 15px;
+}
+
+.details-account-name p {
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	color: black;
+} 
+
+.details-account-number p {
+	margin-top: 0px;
+	margin-bottom: 10px;
+	color: black;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+}
+
+.details-account-balance-status p{
+    display: block;
+    color: black;
+    margin: 0px;
+    padding-bottom: 5px;
+}
+
+.details-account-balance-status  {
+	text-align: right;
+    padding-right: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc; 
+}
+
+.details-account-balance-status p.status-pending{
+	color: red;
+}
+.account-details:hover {
+	background-color: var(--lightblue);
+}
+
+

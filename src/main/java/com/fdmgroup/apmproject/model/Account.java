@@ -71,6 +71,15 @@ public class Account {
 	        setAccountUser(accountUser);
 	        setAccountStatus(accountStatus);
 	}
+	
+	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus, String currencyCode) {
+        setAccountName(accountName);
+        setBalance(balance);
+        setAccountNumber(accountNumber);
+        setAccountUser(accountUser);
+        setAccountStatus(accountStatus);
+        setCurrencyCode(currencyCode);
+}
 
 	public long getAccountId() {
 		return accountId;

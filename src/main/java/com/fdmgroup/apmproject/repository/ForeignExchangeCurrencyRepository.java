@@ -7,5 +7,7 @@ import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 
 @Repository
 public interface ForeignExchangeCurrencyRepository extends JpaRepository<ForeignExchangeCurrency, Integer> {
+	
+	ForeignExchangeCurrency findByCurrencyCode(String currencyCode);
 
 }

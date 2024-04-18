@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.CreditCardService;
+import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.UserService;
 
@@ -26,9 +28,13 @@ public class CreditCardController {
 
 	@Autowired
 	private CreditCardService creditCardService;
+	
+	@Autowired
+	private ForeignExchangeCurrencyService currencyService;
 
 	@Autowired
 	private StatusService statusService;
+	
 	@Autowired
 	private UserService userService;
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
@@ -78,9 +84,11 @@ public class CreditCardController {
 				String pin = creditCardService.generatePinNumber();
 				double cardLimit = Double.parseDouble(monthlySalary) * 3;
 				// Default approved
+				
+				ForeignExchangeCurrency localCurrency = currencyService.getCurrencyByCode("SGD");
+				
 				Status statusName = statusService.findByStatusName("Approved");
-				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0,
-						loggedUser);
+				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0, loggedUser, localCurrency.getCode());
 				creditCardService.persist(createCreditCard);
 				logger.info("Credit card of number " + creditCardNumber + " created");
 				loggedUser.setCreditCards(createCreditCard);

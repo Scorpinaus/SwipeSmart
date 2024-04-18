@@ -115,11 +115,12 @@ public class CreditCardService {
 		User userJacky = userService.findUserByUsername("jackytan");
 		String creditCardNumber = "1234-5678-1234-5678";
 		String pin = "123";
+		String currencyCode = "SGD";
 		Status statusName = statusService.findByStatusName("Approved");
-		CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, 3000, "Ultimate Cashback Card", statusName, 0, userJacky);
+		CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, 3000, "Ultimate Cashback Card", statusName, 0, userJacky, currencyCode);
 		String creditCardNumber2 = "2345-5678-2398-5678";
 		String pin2 = "124";
-		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "Ultimate Slay Card", statusName, 0, userJacky);
+		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "Ultimate Slay Card", statusName, 0, userJacky, currencyCode);
 		persist(createCreditCard);
 		persist(createCreditCard2);
 		

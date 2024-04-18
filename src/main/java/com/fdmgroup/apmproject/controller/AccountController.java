@@ -137,10 +137,11 @@ public class AccountController {
 			return "redirect:/bankaccount/withdrawal";
 		}
 		
+		//Assuming sufficient amount, proceed and log withdrawal.
 		 LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
 		 BigDecimal newAccountBalance = retrievedAccountBalance.subtract(amount);
 		    retrievedAccount.setBalance(newAccountBalance.doubleValue());
-		    transactionService.persist(new Transaction("withdraw", retrievedAccount, amount.doubleValue(), null, currencyService.getCurrencyByCode(withdrawalCurrencyCode)));
+		    transactionService.persist(new Transaction("Withdrawal", retrievedAccount, amount.doubleValue(), null, currencyService.getCurrencyByCode(withdrawalCurrencyCode)));
 		    accountService.update(retrievedAccount);
 		    return "redirect:/bankaccount/dashboard";
 	}
@@ -157,23 +158,30 @@ public class AccountController {
 
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-
+		currenciesList = currencyService.getAllCurrencies();
+		
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
-
+		model.addAttribute("currencies", currenciesList);
+		
 		return ("deposit");
 	}
 
 	@PostMapping("/bankaccount/deposit")
 	public String deposit(@RequestParam("account") long accountId,
-			@RequestParam("deposit amount") double depositAmount) {
+			@RequestParam("depositAmount") double depositAmount, @RequestParam("currency") String currencyCode) {
 
 		// get the required account
 		Account accountDeposited = accountService.findById(accountId);
+		ForeignExchangeCurrency accountCurrency = currencyService.getCurrencyByCode(accountDeposited.getCurrencyCode());
+		
+		//Get the exchange rate and the converted amount after exchange
+		BigDecimal exchangeRate = currencyService.getExchangeRate(currencyCode, accountCurrency.getCode());
+		BigDecimal convertedAmount = BigDecimal.valueOf(depositAmount).multiply(exchangeRate);
 
 		// Calculate the balance after deposit
-		Double updatedBalance = accountDeposited.getBalance() + depositAmount;
+		Double updatedBalance = accountDeposited.getBalance() + convertedAmount.doubleValue();
 
 		// update the account balance
 		accountDeposited.setBalance(updatedBalance);
@@ -183,7 +191,7 @@ public class AccountController {
 		//Transaction
 		double cashback = 0;
 		
-		Transaction transaction = new Transaction("deposit",depositAmount ,accountDeposited.getAccountNumber(),cashback,null,accountDeposited,null,null );
+		Transaction transaction = new Transaction("deposit",depositAmount ,accountDeposited.getAccountNumber(),cashback,null,accountDeposited,null,currencyService.getCurrencyByCode(currencyCode));
 
 		transactionService.persist(transaction);
 		
@@ -228,7 +236,7 @@ public class AccountController {
 			accountService.persist(accountCreated);
 
 			double cashback = 0;			
-			Transaction transaction = new Transaction("deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null, localCurrency);
+			Transaction transaction = new Transaction("Deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null, localCurrency);
 			transactionService.persist(transaction);
 			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");	
 			return "redirect:/bankaccount/dashboard";

@@ -125,7 +125,7 @@ public class CreditCardService {
 		Status statusName = statusService.findByStatusName("Approved");
 		CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, 3000, "Ultimate Cashback Card", statusName,
 				0, userJacky, currencyCode);
-		String creditCardNumber2 = "2345-5678-2398-5678";
+		String creditCardNumber2 = "2345-5678-2398-5128";
 		String pin2 = "124";
 		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "SwipeSmart Platinium Card", statusName,
 				0, userJacky, currencyCode);

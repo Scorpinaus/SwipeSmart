@@ -1,6 +1,6 @@
 /* copy from admindashboard.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 @keyframes transitionIn {
 	from{
 		opacity:0;
@@ -156,8 +156,8 @@ p#headerIntro{
 }
 
 body{
-	font-family: 'Actor', sans-serif;
-	width: 100%;
+	font-family: "Nunito Sans", sans-serif;
+	min-width: 500px;
 }
 
 .summary-container {

@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
+import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.repository.TransactionRepository;
 
@@ -30,6 +32,12 @@ public class TransactionService {
 
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
+	
+	@Autowired
+	private ForeignExchangeCurrencyService currencyService;
+	
+	@Autowired
+	private StatusService statusService;
 
 	private static Logger logger = LogManager.getLogger(TransactionService.class);
 
@@ -94,10 +102,9 @@ public class TransactionService {
 			}
 			creditCard.addTransaction(transaction.getTransactionAmount() - transaction.getCashback());
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
-			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
-				creditCard.addTransactionMonthly(transaction.getTransactionAmount() - transaction.getCashback());
-				System.out.println(transactionDateAsLocalDate);
-			}
+//			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
+//				creditCard.addTransactionMonthly(transaction.getTransactionAmount() - transaction.getCashback());
+//			}
 			creditCardService.update(creditCard);
 			
 		} else if (transaction.getTransactionCreditCard() != null
@@ -105,10 +112,9 @@ public class TransactionService {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
 			creditCard.addTransaction(-transaction.getTransactionAmount());
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
-			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
-				creditCard.addTransactionMonthly(-transaction.getTransactionAmount());
-				System.out.println(transactionDateAsLocalDate);
-			}
+//			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
+//				creditCard.addTransactionMonthly(-transaction.getTransactionAmount());
+//			}
 			creditCardService.update(creditCard);
 		}
 	}
@@ -170,28 +176,31 @@ public class TransactionService {
 		MerchantCategoryCode mcc1 = merchantCategoryCodeService.findByMerchantCategory("Shopping");
 		MerchantCategoryCode mcc2 = merchantCategoryCodeService.findByMerchantCategory("Travel");
 		MerchantCategoryCode mcc3 = merchantCategoryCodeService.findByMerchantCategory("Bill");
+		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
+		Status statusName = statusService.findByStatusName("Approved");
 		Transaction transaction = new Transaction(LocalDateTime.of(2024, 4, 15, 12, 34, 56), "CC Payment", 20.5, null,
-				0.00, creditCard, null, mcc, null);
+				0.00, creditCard, null, mcc, currency);
 		Transaction transaction1 = new Transaction(LocalDateTime.of(2024, 4, 12, 12, 34, 56), "CC Payment", 10, null,
-				0.00, creditCard, null, mcc, null);
+				0.00, creditCard, null, mcc, currency);
 		Transaction transaction2 = new Transaction(LocalDateTime.of(2024, 3, 12, 11, 33, 56), "CC Payment", 10, null,
-				0.00, creditCard, null, mcc1, null);
+				0.00, creditCard, null, mcc1, currency);
 		Transaction transaction3 = new Transaction(LocalDateTime.of(2024, 3, 28, 11, 33, 56), "CC Payment", 50, null,
-				0.00, creditCard, null, mcc2, null);
+				0.00, creditCard, null, mcc2, currency);
 		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Payment", 150.10, null,
-				0.00, creditCard, null, mcc2, null);
+				0.00, creditCard, null, mcc2, currency);
 		Transaction transaction5 = new Transaction(LocalDateTime.of(2024, 2, 12, 11, 33, 56), "CC Payment", 20, null,
-				0.00, creditCard, null, mcc, null);
+				0.00, creditCard, null, mcc, currency);
 		Transaction transaction6 = new Transaction(LocalDateTime.of(2024, 2, 13, 11, 33, 56), "CC Bill Payment", 20,
-				null, 0.00, creditCard, null, mcc3, null);
+				null, 0.00, creditCard, null, mcc3, currency);
 		Transaction transaction7 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 33, 56), "CC Bill Payment", 100,
-				null, 0.00, creditCard, null, mcc3, null);
+				null, 0.00, creditCard, null, mcc3, currency);
 		Transaction transaction8 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Payment", 1100.10, null,
-				0.00, creditCard2, null, mcc1, null);
+				0.00, creditCard2, null, mcc1, currency);
 		Transaction transaction9 = new Transaction(LocalDateTime.of(2024, 2, 9, 11, 33, 56), "CC Payment", 100.10, null,
-				0.00, creditCard2, null, mcc2, null);
+				0.00, creditCard2, null, mcc2, currency);
 		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Payment", 100.10, null,
-				0.00, creditCard2, null, mcc2, null);
+				0.00, creditCard2, null, mcc2, currency);
+		System.out.println(currency);
 		persist(transaction);
 		persist(transaction1);
 		persist(transaction2);
@@ -214,6 +223,8 @@ public class TransactionService {
 		updateCreditCardBalance(transaction8);
 		updateCreditCardBalance(transaction9);
 		updateCreditCardBalance(transaction10);
+		List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
+		creditCardService.calculateMonthlyBalance(approvedCreditCards);
 	}
 
 }

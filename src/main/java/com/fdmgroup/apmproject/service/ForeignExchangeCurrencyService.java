@@ -157,6 +157,7 @@ public class ForeignExchangeCurrencyService {
 	}
 
 	public ForeignExchangeCurrency getCurrencyByCode(String currencyCode) {
+		logger.info("Currency obtained");
 		return currencyRepo.findByCurrencyCode(currencyCode);
 	}
 
@@ -228,7 +229,6 @@ public class ForeignExchangeCurrencyService {
 		currencyOne.setInverseRate(1.00);
 		currencyOne.setRate(1.00);
 		persist(currencyOne);
-
 	}
 
 }

@@ -37,6 +37,9 @@ public class CreditCard {
 	private double amountUsed;
 	@Column(name = "Monthly Balance")
 	private double monthlyBalance;
+	
+	@Column(name = "Interest")
+	private double interest;
 
 	@Column(name = "Currency Code")
 	private String currencyCode;
@@ -191,14 +194,14 @@ public class CreditCard {
 	public String toString() {
 		return "CreditCard [creditCardId=" + creditCardId + ", creditCardNumber=" + creditCardNumber + ", pin=" + pin
 				+ ", cardLimit=" + cardLimit + ", cardType=" + cardType + ", amountUsed=" + amountUsed
-				+ ", monthlyBalance=" + monthlyBalance + ", creditCardStatus=" + creditCardStatus + ", transactions="
-				+ transactions + "]";
+				+ ", monthlyBalance=" + monthlyBalance + ", interest=" + interest + ", currencyCode=" + currencyCode
+				+ ", creditCardStatus=" + creditCardStatus + ", transactions=" + transactions + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(amountUsed, cardLimit, cardType, creditCardId, creditCardNumber, creditCardStatus,
-				monthlyBalance, pin, transactions);
+				creditCardUser, currencyCode, interest, monthlyBalance, pin, transactions);
 	}
 
 	@Override
@@ -215,8 +218,21 @@ public class CreditCard {
 				&& Objects.equals(cardType, other.cardType) && creditCardId == other.creditCardId
 				&& Objects.equals(creditCardNumber, other.creditCardNumber)
 				&& Objects.equals(creditCardStatus, other.creditCardStatus)
+				&& Objects.equals(creditCardUser, other.creditCardUser)
+				&& Objects.equals(currencyCode, other.currencyCode)
+				&& Double.doubleToLongBits(interest) == Double.doubleToLongBits(other.interest)
 				&& Double.doubleToLongBits(monthlyBalance) == Double.doubleToLongBits(other.monthlyBalance)
 				&& Objects.equals(pin, other.pin) && Objects.equals(transactions, other.transactions);
 	}
+
+	public double getInterest() {
+		return interest;
+	}
+
+	public void setInterest(double interest) {
+		this.interest = interest;
+	}
+
+	
 
 }

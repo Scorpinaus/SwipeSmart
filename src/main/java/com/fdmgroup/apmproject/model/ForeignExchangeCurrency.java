@@ -150,6 +150,14 @@ public class ForeignExchangeCurrency {
 				&& Double.doubleToLongBits(currencyValue) == Double.doubleToLongBits(other.currencyValue);
 	}
 
+	@Override
+	public String toString() {
+		return "ForeignExchangeCurrency [currencyId=" + currencyId + ", currencyName=" + currencyName
+				+ ", currencyValue=" + currencyValue + ", currencyInverseValue=" + currencyInverseValue
+				+ ", currencyDate=" + currencyDate + ", currencyAlphaCode=" + currencyAlphaCode
+				+ ", currencyNumericCode=" + currencyNumericCode + ", currencyCode=" + currencyCode + "]";
+	}
+
 	
 	
 	

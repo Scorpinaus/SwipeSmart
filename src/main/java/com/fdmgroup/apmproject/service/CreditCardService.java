@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Status;
+import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.CreditCardRepository;
 
@@ -30,6 +31,8 @@ public class CreditCardService {
 	private UserService userService;
 	@Autowired
 	private StatusService statusService;
+	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
+	private static final double interestRate = 0.1;
 
 	private static Logger logger = LogManager.getLogger(CreditCardService.class);
 
@@ -88,6 +91,11 @@ public class CreditCardService {
 			return returnedCreditCard.get();
 		}
 	}
+	
+	public List<CreditCard> findCreditCardsByStatus(Status status) {
+        logger.info("Finding all credit card with " + status.getStatusName() + " Status");
+		return creditCardRepo.findByCreditCardStatus(status);
+    }
 
 	public String generateCreditCardNumber() {
 		StringBuilder sb = new StringBuilder();
@@ -143,10 +151,6 @@ public class CreditCardService {
 	}
 	
 	
-	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
-
-	// this is the interest rate, since we only have 1 card
-	private static final double interestRate = 0.03;
 
 	private long calculateDelayToNextMonth() {
 		LocalDate currentDate = LocalDate.now();
@@ -172,17 +176,43 @@ public class CreditCardService {
 		}, delay, ONE_MONTH_IN_MILLISECONDS);
 	}
 
-	private void chargeInterest(CreditCard creditCardApproved) {
-
-		double interest = calculateInterest(creditCardApproved.getAmountUsed());
-		double updatedBalance = creditCardApproved.getAmountUsed() + interest;
-		creditCardApproved.setAmountUsed(updatedBalance);
-
-		// Save the updated account details back to your repository or service
-		update(creditCardApproved);
-		logger.info(creditCardApproved.getCreditCardNumber() + "balance : " + creditCardApproved.getAmountUsed()
-				+ "charged for " + interest);
-
+	public void chargeInterest(List<CreditCard> approvedCreditCards) {
+		// Subtract one month from the current date
+		LocalDate curMonth = LocalDate.now().withDayOfMonth(1);
+		LocalDate previousMonth = LocalDate.now().minusMonths(1);
+		LocalDate firstDayOfPreviousMonth = previousMonth.withDayOfMonth(1);
+		for (CreditCard creditCard : approvedCreditCards) {
+			double interestPayable = creditCard.getMonthlyBalance();
+			List<Transaction> transactions = creditCard.getTransactions();
+			for (Transaction transaction : transactions) {
+				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth) && transaction.getTransactionDate().toLocalDate().isAfter(firstDayOfPreviousMonth) && transaction.getTransactionType().equals("CC Payment")) {
+					interestPayable -= transaction.getTransactionAmount() + transaction.getCashback();
+				}
+				if (interestPayable > 0 ) {
+					creditCard.setInterest(interestPayable*interestRate);
+					logger.info(creditCard.getCreditCardNumber() + "charged for " + interestPayable*interestRate);
+					update(creditCard);
+				}
+			}
+		}
+	}
+	
+	public void calculateMonthlyBalance(List<CreditCard> approvedCreditCards) {
+		// Subtract one month from the current date
+		LocalDate curMonth = LocalDate.now().withDayOfMonth(1);
+		for (CreditCard creditCard : approvedCreditCards) {
+			double monthlyBalance = 0;
+			List<Transaction> transactions = creditCard.getTransactions();
+			for (Transaction transaction : transactions) {
+				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth) && transaction.getTransactionType().equals("CC Payment")) {
+					monthlyBalance += transaction.getTransactionAmount() - transaction.getCashback();
+				} else if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth) && transaction.getTransactionType().equals("CC Bill Payment")) {
+					monthlyBalance -= transaction.getTransactionAmount();
+				}
+				creditCard.setMonthlyBalance(monthlyBalance);
+				update(creditCard);
+			}
+		}
 	}
 
 	private double calculateInterest(double balance) {

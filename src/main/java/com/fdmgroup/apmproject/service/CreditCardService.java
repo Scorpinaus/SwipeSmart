@@ -171,11 +171,14 @@ public class CreditCardService {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				chargeInterest(creditCardApproved);
+				List<CreditCard> approvedCreditCards = findCreditCardsByStatus(statusService.findByStatusName("Approved"));
+				chargeInterest(approvedCreditCards);
+				chargeInterest(approvedCreditCards);
 			}
 		}, delay, ONE_MONTH_IN_MILLISECONDS);
 	}
 
+	
 	public void chargeInterest(List<CreditCard> approvedCreditCards) {
 		// Subtract one month from the current date
 		LocalDate curMonth = LocalDate.now().withDayOfMonth(1);

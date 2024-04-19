@@ -296,8 +296,6 @@ public class AdminController {
 		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
 		creditCardService.update(creditCard);
 
-		creditCardService.scheduleInterestCharging(creditCard);
-
 		long userId = creditCard.getCreditCardUser().getUserId();
 		return "redirect:/admin/users";
 	}

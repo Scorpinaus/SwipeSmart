@@ -102,7 +102,7 @@ tr:hover {
 								<td th:unless="${transaction.transactionType == 'CC Bill Payment'}" th:text="'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
 								<td th:if="${transaction.getTransactionCurrency != null}" th:text="${transaction.getTransactionCurrency.getName}"></td>
 								<td th:text="${transaction.transactionType}"></td>
-								<td th:text="${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
+								<td th:text="'$' + ${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
 								<td th:text="${transaction.description}"></td>
 							</tr>
 						</tbody>

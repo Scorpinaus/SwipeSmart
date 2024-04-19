@@ -47,10 +47,10 @@ public class AdminController {
 	@GetMapping("/admin/accounts")
 	public String accountPage(@RequestParam("userId") long userId, HttpSession session, Model model) {
 		// add returned user to the model
-		User returnedUser = (User) session.getAttribute("loggedUser");
+		User returnedUser = userService.findUserById(userId);
 		model.addAttribute("user", returnedUser);
 		// find all account by user Id
-		List<Account> requiredAccounts = accountService.getAllAccounts();
+		List<Account> requiredAccounts = returnedUser.getAccounts();
 		model.addAttribute("requiredAccounts", requiredAccounts);
 		return "adminaccount";
 	}
@@ -58,11 +58,11 @@ public class AdminController {
 	@GetMapping("/admin/creditcards")
 	public String creditcardPage(@RequestParam("userId") long userId, HttpSession session, Model model) {
 		// add returned user to the model
-		User returnedUser = (User) session.getAttribute("loggedUser");
+		User returnedUser = userService.findUserById(userId);
 		model.addAttribute("user", returnedUser);
 
 		// find all credit card by user Id
-		List<CreditCard> requiredCreditCards = creditCardService.findAllCreditCards();
+		List<CreditCard> requiredCreditCards = returnedUser.getCreditCards();
 
 		model.addAttribute("requiredCreditCards", requiredCreditCards);
 

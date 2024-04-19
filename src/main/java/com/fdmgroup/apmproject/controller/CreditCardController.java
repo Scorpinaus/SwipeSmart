@@ -1,8 +1,8 @@
 package com.fdmgroup.apmproject.controller;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +34,7 @@ public class CreditCardController {
 
 	@Autowired
 	private CreditCardService creditCardService;
-	
+
 	@Autowired
 	private ForeignExchangeCurrencyService currencyService;
 
@@ -42,10 +42,10 @@ public class CreditCardController {
 	private StatusService statusService;
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
-	
+
 	@Autowired
 	private TransactionService transactionService;
-	
+
 	@Autowired
 	private UserService userService;
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
@@ -58,12 +58,14 @@ public class CreditCardController {
 			List<CreditCard> userCreditCards = loggedUser.getCreditCards();
 			model.addAttribute("cards", userCreditCards);
 			model.addAttribute("user", loggedUser);
+			Collections.sort(userCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
 			return "userCards";
 		} else {
 			model.addAttribute("error", true);
 			logger.warn("User Is not logged-in. Please login first");
 			return "userCards";
 		}
+
 	}
 
 	@GetMapping("/applyCreditCard")
@@ -96,63 +98,88 @@ public class CreditCardController {
 				String pin = creditCardService.generatePinNumber();
 				double cardLimit = Double.parseDouble(monthlySalary) * 3;
 				// Default approved
-				
+
 				ForeignExchangeCurrency localCurrency = currencyService.getCurrencyByCode("SGD");
-				
-				
-				//set credit card as pending when they apply for the card
+
+				// set credit card as pending when they apply for the card
 				Status statusName = statusService.findByStatusName("Pending");
-				
+
 //				//set credit card as Approved when they apply for the card
 //				Status statusName = statusService.findByStatusName("Approved");
-				
-				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0, loggedUser, localCurrency.getCode());
+
+				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0,
+						loggedUser, localCurrency.getCode());
 				creditCardService.persist(createCreditCard);
 				logger.info("Credit card of number " + creditCardNumber + " created");
 				loggedUser.setCreditCards(createCreditCard);
 				userService.update(loggedUser);
 
 				return "redirect:/userCards";
-			}
+			} 
 		}
 	}
 
 	@GetMapping("/creditCard/paybills")
-	public String goToPaybillsPage(Model model, HttpSession session) {
-
-		// Get logged user
-		User currentUser = (User) session.getAttribute("loggedUser");
-		List<CreditCard> ccList = currentUser.getCreditCards();
-
-		// add user and account list to the model
-		model.addAttribute("user", currentUser);
-		model.addAttribute("CcList", ccList);
-
-		return "paybills";
-	}
+	public String paybills(Model model, HttpSession session) {
+		if (session != null && session.getAttribute("loggedUser") != null) {
+			// Get logged user
+			User currentUser = (User) session.getAttribute("loggedUser");
+			List<CreditCard> ccList = currentUser.getCreditCards();
 	
+			// add user and account list to the model
+			model.addAttribute("user", currentUser);
+			model.addAttribute("CcList", ccList);
+	
+			return "paybills";
+		} else {
+			model.addAttribute("error", true);
+			logger.warn("User Is not logged-in. Please login first");
+			return "login";
+		}
+	}
+
 	@PostMapping("/creditCard/paybills")
-	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCard") Long creditCardId, @RequestParam(name ="payment", required = false) Double paymentAmount, @RequestParam("balanceType") String balanceType) {
+	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCard") Long creditCardId,
+			@RequestParam(name = "payment", required = false) Double paymentAmount,
+			@RequestParam("balanceType") String balanceType) {
 
 		// Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
 		CreditCard creditCard = creditCardService.findById(creditCardId);
 		MerchantCategoryCode mccBill = merchantCategoryCodeService.findByMerchantCategory("Bill");
 		Transaction transaction = null;
+		
 		if (balanceType.equals("custom")) {
-			transaction = new Transaction("CC Bill Payment", paymentAmount,null,0.00, creditCard,null,mccBill,null);
+			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, null, mccBill,
+					null);
+		} else if (balanceType.equals("minimum")) {
+			if (creditCard.getMonthlyBalance() < 50) transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard, null, mccBill,null);
+			else transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, null, mccBill,null);
+		} else if (balanceType.equals("statement")) {
+			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard, null, mccBill, null);
+		} else if (balanceType.equals("current")) {
+			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, null, mccBill, null);
 		}
-		
-		
+
 		transactionService.persist(transaction);
 		transactionService.updateCreditCardBalance(transaction);
-		logger.info("Payment of" + balanceType + " balance to credit card " + creditCard.getCreditCardNumber() + " completed");
-		System.out.println(creditCard.getAmountUsed());
-//		userService.update(currentUser);
-//		session.setAttribute("loggedUser", currentUser);
 
+		logger.info("Payment of" + balanceType + " balance to credit card " + creditCard.getCreditCardNumber()
+				+ " completed");
+
+		List<CreditCard> userCreditCards = currentUser.getCreditCards();
+		List<CreditCard> newUserCreditCards = new ArrayList<>();
+		for (CreditCard c : userCreditCards) {
+			if (c.getCreditCardId() != creditCardId) {
+				newUserCreditCards.add(c);
+			}
+		}
+		newUserCreditCards.add(creditCard);
+		currentUser.setCreditCardList(newUserCreditCards);
+		userService.update(currentUser);
+		session.setAttribute("loggedUser", currentUser);
+		Collections.sort(newUserCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
 		return "redirect:/userCards";
 	}
 
-	
 }

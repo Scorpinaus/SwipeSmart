@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<link rel="stylesheet" href="/transfer.css">
+		<link rel="stylesheet" href="/paybills.css">
 		<meta charset="UTF-8">
 		<title>Transfer page</title>
 	</head>
@@ -46,8 +46,9 @@
 						<button type="button" onclick="getBalance('minimum')">Minimum Balance</button>
 					    <button type="button" onclick="getBalance('current')">Current Balance</button>
 					    <button type="button" onclick="getBalance('statement')">Statement Balance</button>
-						<span th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</span>
-						
+						<div th:if="${error}"> 
+				            <p style="color: red;">Negative Current Balance, no payment required</p>
+						</div>
 <!-- 						<div th:if="${param.SameAccountError}"> -->
 <!-- 				            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p> -->
 <!-- 				        </div> -->

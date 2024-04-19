@@ -70,12 +70,10 @@ tr:hover {
 		<div class="transactionTable">
 			<h3>Transactions</h3>
 			<form th:action="@{/viewTransactions}" method="post">
-				<label for="month">Month:</label> <input type="month" id="month"
-					name="month"> <input type="hidden" id="accountId"
-					name="accountId" th:if="${account != null}"
-					th:value="${account.accountId}"> <input type="hidden"
-					id="creditCardId" name="creditCardId" th:if="${creditCard != null}"
-					th:value="${creditCard.creditCardId}">
+				<label for="month">Month:</label> 
+				<input type="month" id="month" name="month"> 
+				<input type="hidden" id="accountId" name="accountId" th:if="${account != null}" th:value="${account.accountId}"> 
+				<input type="hidden" id="creditCardId" name="creditCardId" th:if="${creditCard != null}" th:value="${creditCard.creditCardId}">
 				<button type="submit">Filter</button>
 			</form>
 			<div th:if="${creditCard != null}">
@@ -128,9 +126,9 @@ tr:hover {
 						        <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
 						        <td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
 						        <td th:text="${transaction.transactionAmount}"></td>
-						        <td th:if="${transaction.transactionAccount != null}"
-						            th:text="${transaction.transactionAccount.accountNumber}"></td>
-						        <td th:text="${transaction.transactionCurrency.code}"></td>
+						        <td th:if="${transaction.transactionAccount != null}" th:text="${transaction.transactionAccount.accountNumber}"></td>
+						        <td th:if="${transaction.getTransactionCurrency != null}" th:text="${transaction.getTransactionCurrency.getName}"></td>
+						        <td th:if="${transaction.getTransactionCurrency != null}" th:text="'-'"></td>
 						        <td th:unless="${transaction.recipientAccountNumber == null}">
 						            <span th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></span>
 						        </td>

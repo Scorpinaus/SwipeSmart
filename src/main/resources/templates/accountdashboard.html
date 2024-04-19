@@ -60,13 +60,14 @@
                         
                         <div class="details-account-number">
                          <p th:text="${account.accountNumber}"></p>
+                         <p th:if="${account.accountStatus.statusName == 'Approved'}" style="color:green" th:text="${account.accountStatus.statusName}"></p>
                         </div>
                         
                         <div class="details-account-balance-status">
                          <label class="detail-label">Account Balance </label>
-                         <p th:text="${account.balance}"></p>
-                         <label class="detail-label">Account Status </label>
-                         <p th:text="${account.accountStatus.statusName}"></p>
+                         <p th:if="${account.balance == 0}"  th:text="'$0.00'"></p>
+                         <p th:if="${account.balance != 0}" th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
+                         
                         </div>
                         
 					</a> 
@@ -77,13 +78,14 @@
                         
                         <div class="details-account-number">
                          <p th:text="${account.accountNumber}"></p>
+                         <p th:if="${account.accountStatus.statusName != 'Approved'}" style="color:red" th:text="${account.accountStatus.statusName}"></p>
                         </div>
                         
 						<div class="details-account-balance-status">
                          <label class="detail-label">Account Balance </label>
-                         <p th:text="${account.balance}"></p>
-                         <label class="detail-label">Account Status </label>
-                         <p class="status-pending" th:text="${account.accountStatus.statusName}"></p>
+                         <p th:if="${account.balance == 0}"  th:text="'$0.00'"></p>
+                         <p th:if="${account.balance != 0}" th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
+                         
                         </div>
 					  
                     </div>
@@ -119,7 +121,6 @@
 		    function submitForm(accountId) {
 		        document.getElementById("accountIdInput").value = accountId;
 		        document.getElementById("viewTransactionsForm").submit();
-		        return false; // Prevent default action of the anchor tag
 		    }
 
 		</script>

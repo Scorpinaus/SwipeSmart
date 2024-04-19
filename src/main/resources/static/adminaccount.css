@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
-
 @keyframes transitionIn {
 	from{
 		opacity:0;
@@ -58,6 +57,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	background-color: white;
 }
 
 .profile{
@@ -67,30 +67,8 @@ p#sidebarHeader{
 	padding: 20px;
 }
 
-.cards{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-}
-
-.accounts{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-	background-color: white;
-	animation:transitionIn 0.75s;
-}
 
 .logout{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-}
-
-.dashboard{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
 	text-align: center;
@@ -128,20 +106,8 @@ a#logout {
 	padding: 10px;
 }
 
-a#cards{
-	color: white;
-	text-decoration:none;
-	padding: 10px;
-}
-
-a#accounts{
-	color:black;
-	text-decoration:none;
-	padding: 10px;
-}
-
-a#transactions {
-	color: white;
+a#transactions{
+	color:white;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -151,15 +117,30 @@ a#transactions {
 	margin-left: 200px;
 }
 
-h1, h2{
-	margin-left: 5%;
-	padding-bottom: 15px;
+.account, .creditCard{
+	display:flex;
+	margin-bottom: 5%;
 }
 
-h2 {
-	animation:transitionIn 1.5s;
+.creditCardDetails, .accountDetails{
+	width: 35%;
+	margin-left:5%;
+	margin-bottom: 2%;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	animation:transitionIn 1s;
 	opacity: 0;
 	animation-fill-mode: forwards;
+}
+
+.accountLinkContainer{
+	display: flex;
+	justify-content: center;
+}
+
+h1{
+	padding-bottom: 15px;
 }
 
 .noAccounts{
@@ -168,13 +149,10 @@ h2 {
 }
 
 .accountCRUD{
-	display: flex;
+	display: inline-flex;
 	justify-content: center;
 	gap: 15px;
 	padding-bottom: 15px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
 }
 
 a#accountCRUD{
@@ -186,33 +164,13 @@ a#accountCRUD{
 	text-align: center;
 }
 
-.accountDetails{
-	width: 35%;
-	margin-top: 5%;
-	margin-left: 5%;
-	border-radius: 15px;
-	padding: 15px;
-	background-color: #4F96A9;
-	animation:transitionIn 2s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
 
 a#accountDetails{
 	color: white;
 	text-decoration:none;
-	background-color: #4F96A9;
-	text-align: center;
-	margin: 15px;
+	border-radius: 15px;
 }
 
-span#accountDetails{
-	color: white;
-	text-decoration:none;
-	background-color: #4F96A9;
-	text-align: center;
-	margin: 15px;
-}
 
 .openSidebar{
 	color: white;
@@ -225,3 +183,13 @@ span#accountDetails{
 .openSidebar:hover{
 	opacity: 0.6;
 }
+
+.transactionTable{
+	background-color:#4F96A9;
+	padding: 15px;
+	border-radius: 15px;
+	animation:transitionIn 1.5s;
+	opacity: 0;
+	animation-fill-mode: forwards;
+}
+

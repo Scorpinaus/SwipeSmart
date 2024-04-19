@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,34 +19,31 @@ import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
-
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.TransactionService;
 import com.fdmgroup.apmproject.service.UserService;
 
-
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AccountController {
-	
-	@Autowired 
+
+	@Autowired
 	private StatusService statusService;
-	
+
 	@Autowired
 	private AccountService accountService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private ForeignExchangeCurrencyService currencyService;
-	
+
 	@Autowired
 	private TransactionService transactionService;
-		
 
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
@@ -66,7 +62,7 @@ public class AccountController {
 			// retrieves current user from current session
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
-			//retrieves all active bank accounts under current user
+			// retrieves all active bank accounts under current user
 			List<Account> userBankAccounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
@@ -90,7 +86,7 @@ public class AccountController {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
 			List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
-			currenciesList = currencyService.getAllCurrencies();
+			currenciesList = currencyService.getSupportedCurrencies();
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
 				return "accountdashboard";
@@ -98,56 +94,64 @@ public class AccountController {
 			model.addAttribute("accounts", accounts);
 			LOGGER.info("Currencies List: " + currenciesList);
 			model.addAttribute("currencies", currenciesList);
-			// Check for the flash attribute directly in the model. If present, it adds to the current model as true.
-		    if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
-		        model.addAttribute("errorInsufficient", true);
-		    }
+			// Check for the flash attribute directly in the model. If present, it adds to
+			// the current model as true.
+			if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
+				model.addAttribute("errorInsufficient", true);
+			}
 			return "withdrawal";
-		}
-		else {
+		} else {
 			return "redirect:/login";
 		}
 
 	}
-	
-	//Function which processes the bank account withdrawal request.
+
+	// Function which processes the bank account withdrawal request.
 	@PostMapping("/bankaccount/withdrawal")
-	public String processWithdrawal(@RequestParam("account") long accountId, @RequestParam("currency") String withdrawalCurrencyCode, @RequestParam BigDecimal amount, HttpSession session, RedirectAttributes redirectAttributes) {
-		//Checks if user is logged on, if not user will be brought to login page.
-		if (session.getAttribute("loggedUser") == null ) {
+	public String processWithdrawal(@RequestParam("account") long accountId,
+			@RequestParam("currency") String withdrawalCurrencyCode, @RequestParam BigDecimal amount,
+			HttpSession session, RedirectAttributes redirectAttributes) {
+		// Checks if user is logged on, if not user will be brought to login page.
+		if (session.getAttribute("loggedUser") == null) {
 			return "redirect:/login";
 		}
-		
-		//Retrieve currentUser and selectedAccount for withdrawal
+
+		// Retrieve currentUser and selectedAccount for withdrawal
 		Account retrievedAccount = accountService.findById(accountId);
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
 		String baseCurrencyCode = retrievedAccount.getCurrencyCode();
-		LOGGER.info("Withdrawal request: Currency={} Amount={} AccountID={}", withdrawalCurrencyCode, amount, accountId);
-		
-		//Conversion of withdrawal amount from target currency to base currency if required
+		LOGGER.info("Withdrawal request: Currency={} Amount={} AccountID={}", withdrawalCurrencyCode, amount,
+				accountId);
+
+		// Conversion of withdrawal amount from target currency to base currency if
+		// required
 		BigDecimal adjustedAmount = amount;
 		if (!withdrawalCurrencyCode.equals(baseCurrencyCode)) {
 			BigDecimal exchangeRate = currencyService.getExchangeRate(baseCurrencyCode, withdrawalCurrencyCode);
 			adjustedAmount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
 			LOGGER.info("Converted amount: {} (Exchange rate: {})", adjustedAmount, exchangeRate);
 		}
-		
-		//If balance in account is less than withdrawal amount, user redirected back to withdrawal page + errorInsufficient flash attribute added for subsequent use.
+
+		// If balance in account is less than withdrawal amount, user redirected back to
+		// withdrawal page + errorInsufficient flash attribute added for subsequent use.
 		if (retrievedAccountBalance.compareTo(adjustedAmount) < 0) {
-			LOGGER.info("Bank account id"+ retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
-			redirectAttributes.addFlashAttribute("errorInsufficient",true);
+			LOGGER.info(
+					"Bank account id" + retrievedAccount.getAccountName() + "has insufficient money for withdrawal");
+			redirectAttributes.addFlashAttribute("errorInsufficient", true);
 			return "redirect:/bankaccount/withdrawal";
 		}
-		
-		//Assuming sufficient amount, proceed and log withdrawal.
-		 LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
-		 BigDecimal newAccountBalance = retrievedAccountBalance.subtract(adjustedAmount);
-		    retrievedAccount.setBalance(newAccountBalance.doubleValue());
-		    transactionService.persist(new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null, currencyService.getCurrencyByCode(withdrawalCurrencyCode)));
-		    accountService.update(retrievedAccount);
-		    return "redirect:/bankaccount/dashboard";
+
+		// Assuming sufficient amount, proceed and log withdrawal.
+		LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
+		BigDecimal newAccountBalance = retrievedAccountBalance.subtract(adjustedAmount);
+		retrievedAccount.setBalance(newAccountBalance.doubleValue());
+		Transaction transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
+				currencyService.getCurrencyByCode(withdrawalCurrencyCode));
+		transactionService.persist(transaction);
+		retrievedAccount.setTransactions(transaction);
+		accountService.update(retrievedAccount);
+		return "redirect:/bankaccount/dashboard";
 	}
-	
 
 	@GetMapping("/bankaccount/deposit")
 	public String goToDepositPage(Model model, HttpSession session) {
@@ -160,25 +164,25 @@ public class AccountController {
 
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-		currenciesList = currencyService.getAllCurrencies();
-		
+		currenciesList = currencyService.getSupportedCurrencies();
+
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
 		model.addAttribute("currencies", currenciesList);
-		
+
 		return ("deposit");
 	}
 
 	@PostMapping("/bankaccount/deposit")
-	public String deposit(@RequestParam("account") long accountId,
-			@RequestParam("depositAmount") double depositAmount, @RequestParam("currency") String currencyCode) {
+	public String deposit(@RequestParam("account") long accountId, @RequestParam("depositAmount") double depositAmount,
+			@RequestParam("currency") String currencyCode) {
 
 		// get the required account
 		Account accountDeposited = accountService.findById(accountId);
 		ForeignExchangeCurrency accountCurrency = currencyService.getCurrencyByCode(accountDeposited.getCurrencyCode());
-		
-		//Get the exchange rate and the converted amount after exchange
+
+		// Get the exchange rate and the converted amount after exchange
 		BigDecimal exchangeRate = currencyService.getExchangeRate(currencyCode, accountCurrency.getCode());
 		BigDecimal convertedAmount = BigDecimal.valueOf(depositAmount).multiply(exchangeRate);
 
@@ -189,21 +193,22 @@ public class AccountController {
 		accountDeposited.setBalance(updatedBalance);
 		accountService.update(accountDeposited);
 
-		
-		//Transaction
+		// Transaction
 		double cashback = 0;
-		
-		Transaction transaction = new Transaction("deposit",depositAmount ,accountDeposited.getAccountNumber(),cashback,null,accountDeposited,null,currencyService.getCurrencyByCode(currencyCode));
+
+		Transaction transaction = new Transaction("deposit", depositAmount, accountDeposited.getAccountNumber(),
+				cashback, null, accountDeposited, null, currencyService.getCurrencyByCode(currencyCode));
 
 		transactionService.persist(transaction);
-		
+		accountDeposited.setTransactions(transaction);
+		accountService.update(accountDeposited);
 		return "redirect:/bankaccount/dashboard";
 	}
 
 	@GetMapping("/bankaccount/create")
 	public String goToCreateBankAccountPage(HttpSession session, Model model) {
 		User loggedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user",loggedUser);
+		model.addAttribute("user", loggedUser);
 		return "createbankaccount";
 	}
 
@@ -223,28 +228,27 @@ public class AccountController {
 		} else if (accountName.isEmpty()) {
 			LOGGER.info("The account name can not be blank");
 			return "redirect:/bankaccount/create";
-		}
-			 else {
-
+		} else {
 
 			// Get logged user
 			User currentUser = (User) session.getAttribute("loggedUser");
 			String accountnumber = accountService.generateUniqueAccountNumber();
-			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser, statusService.findByStatusName("Pending") );
+			Account accountCreated = new Account(accountName, initialDeposit, accountnumber, currentUser,
+					statusService.findByStatusName("Pending"));
 			ForeignExchangeCurrency localCurrency = currencyService.getCurrencyByCode("SGD");
 			accountCreated.setCurrencyCode(localCurrency.getCode());
-			
-			//persist new account
+
+			// persist new account
 			accountService.persist(accountCreated);
 
-			double cashback = 0;			
-			Transaction transaction = new Transaction("Deposit",initialDeposit,accountCreated.getAccountNumber(),cashback,null,accountCreated,null, localCurrency);
+			double cashback = 0;
+			Transaction transaction = new Transaction("Deposit", initialDeposit, accountCreated.getAccountNumber(),
+					cashback, null, accountCreated, null, localCurrency);
 			transactionService.persist(transaction);
-			LOGGER.info("Bank account number "+ accountCreated.getAccountNumber() + "created");	
+			LOGGER.info("Bank account number " + accountCreated.getAccountNumber() + "created");
 			return "redirect:/bankaccount/dashboard";
 		}
 	}
-
 
 	@GetMapping("/bankaccount/transfer")
 	public String goToTransferPage(Model model, HttpSession session) {
@@ -257,36 +261,44 @@ public class AccountController {
 
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-
+		currenciesList = currencyService.getSupportedCurrencies();
+		
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
-
+		model.addAttribute("currencies", currenciesList);
+		
 		return "transfer";
 	}
 
 	@PostMapping("/bankaccount/transfer")
 	public String transferMoney(@RequestParam("account") long accountId,
 			@RequestParam("transferAmount") Double transferAmount,
-			@RequestParam("accountNumberTransferTo") String accountNumberTransferTo, HttpSession session,
+			@RequestParam("accountNumberTransferTo") String accountNumberTransferTo, @RequestParam("currency") String currencyCode, HttpSession session,
 			RedirectAttributes redirectAttributes) {
-
+		
 			// get the required accounts
 			Account accountFromBalance = accountService.findById(accountId);
 			String accountNumber = accountNumberTransferTo.replace(" ","-");
+			
+			//Handle currency conversion
+			double exchangeRate = currencyService.getExchangeRate(accountFromBalance.getCurrencyCode(), currencyCode).doubleValue();
+			double convertedAmount = transferAmount * exchangeRate;
+			
 			// validate user is not transferring money to the same account
 			if (accountFromBalance.getAccountNumber().equals(accountNumber)) {
 	
 				redirectAttributes.addAttribute("SameAccountError", "true");
-				LOGGER.info("SameAccount");
+				LOGGER.info("Attempted to transfer to the same account");
 				return "redirect:/bankaccount/transfer";
 				}
 			// validate user has sufficient amount in account
-			else if (accountFromBalance.getBalance() < transferAmount) {
+			else if (accountFromBalance.getBalance() < convertedAmount) {
 				redirectAttributes.addAttribute("InsufficientBalanceError", "true");
 				LOGGER.info("InsufficientBalance");
 				return "redirect:/bankaccount/transfer";
-			} else {
+		} else {
+			
 			//Check if recipientAccount exists in database. If exists, operate normally, if not, consider one sided transfer.
 				Optional<Account> recipientAccount = Optional.ofNullable(accountService.findAccountByAccountNumber(accountNumber));
 				//When recipientAccount is internal & existing
@@ -300,10 +312,10 @@ public class AccountController {
 						
 					}else if(!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() != statusService.findByStatusName("Pending")) {
 						// update the accounts' balance
-						accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+						accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
 						accountService.update(accountFromBalance);
-						
-						recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
+						//Need to check logic for internal (single currency account)
+						recipientAccount.get().setBalance(recipientAccount.get().getBalance() + convertedAmount);
 						accountService.update(recipientAccount.get());
 						
 						// Transaction
@@ -326,7 +338,7 @@ public class AccountController {
 					
 					//Transactions
 //					double cashback = 0;
-					Transaction externalTransaction = new Transaction("External Transfer", accountFromBalance, null, transferAmount, accountNumber, null);
+					Transaction externalTransaction = new Transaction("External Transfer", accountFromBalance, null, transferAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode));
 					transactionService.persist(externalTransaction);
 					LOGGER.info("External Transfer Success!");
 					return "redirect:/bankaccount/dashboard";
@@ -334,7 +346,3 @@ public class AccountController {
 			}
 	} 
 }
-	
-	
-	
-

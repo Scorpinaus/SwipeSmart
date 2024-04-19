@@ -1,23 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
 @keyframes transitionIn {
-	0% {
+	from{
 		opacity:0;
 		transform:rotateX(-10deg);
 	}
 	
-	100% {
+	to {
 		opacity:1;
 		transform:rotateX(0);
 	}
-}
-
-:root {
-  --darkgreen: #2b6777;
-  --lightblue:#c8d8e4;
-  --white: #ffffff;
-  --lightgrey:#f2f2f2;
-  --lightgreen:#52ab98;
-  --fadedgreen:#4F96A9;
 }
 
 body{
@@ -46,6 +37,10 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
+.closeSidebar:hover{
+	opacity: 0.5;
+}
+
 .sidebarLinks{
 	padding-left: 20px;
 }
@@ -57,34 +52,12 @@ p#sidebarHeader{
 	padding: 20px;
 }
 
-.profile{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-}
-
 .user{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-}
-
-.cards{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
 	background-color: white;
-	animation: transitionIn 0.75s;
-}
-
-.accounts{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
 }
 
 .logout{
@@ -113,17 +86,6 @@ a#user {
 	padding: 10px;
 }
 
-a#profile {
-	color: white;
-	text-decoration:none;
-	padding: 10px;
-}
-
-a#accounts {
-	color: white;
-	text-decoration:none;
-	padding: 10px;
-}
 
 a#logout {
 	color: white;
@@ -131,33 +93,72 @@ a#logout {
 	padding: 10px;
 }
 
-a#cards{
-	color: black;
+a#transactions{
+	color:white;
 	text-decoration:none;
 	padding: 10px;
-}
-
-a#transactions {
-	color: white;
-	text-decoration:none;
-	padding: 10px;
-}
-
-h1, h2{
-	margin-left: 5%;
-}
-
-h2 {
-	animation:transitionIn 1.5s;
-	opacity: 0;
-	animation-fill-mode: forwards;
 }
 
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
-	padding: 10px;
-	padding-top: 5px;
+}
+
+.account, .creditCard{
+	display:flex;
+	margin-bottom: 5%;
+}
+
+.creditCardDetails, .accountDetails, .card-details{
+	width: 35%;
+	margin-left:5%;
+	margin-bottom: 2%;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	animation:transitionIn 1s;
+	opacity: 0;
+	animation-fill-mode: forwards;
+}
+
+.accountLinkContainer{
+	display: flex;
+	justify-content: center;
+}
+
+h1{
+	padding-bottom: 15px;
+}
+
+.noAccounts{
+	display: flex;
+	justify-content: center;
+}
+
+.accountCRUD{
+	display: inline-flex;
+	justify-content: center;
+	gap: 15px;
+	padding-bottom: 15px;
+}
+
+a#accountCRUD{
+	color: white;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	background-color: #4F96A9;
+	text-align: center;
+}
+
+
+a#card-details{
+	text-decoration:none;
+}
+
+p, label{
+	color: white;
+	border-radius: 15px;
 }
 
 .openSidebar{
@@ -172,109 +173,12 @@ h2 {
 	opacity: 0.6;
 }
 
-.button-container{
-	display:flex;
-	justify-content: center;
-	gap: 15px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-a#cardTransactions{
-	color: white;
-	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
-	background-color: #4F96A9;
-	text-align: center;
-}
-
-.cardCreation{
-	display:flex;
-	justify-content: center;
-	animation:transitionIn 2s;
-	opacity: 0;
-	animation-fill-mode: forwards;
-}
-
-.secondary-content-container{
-	display: flex;
-	margin-left: 5%;
-}
-
-.cardDetails{
-	width: 35%;
-	margin-top: 5%;
-	border-radius: 15px;
+.transactionTable{
+	background-color:#4F96A9;
 	padding: 15px;
-	background-color: #4F96A9;
-	animation:transitionIn 2.5s;
+	border-radius: 15px;
+	animation:transitionIn 1.5s;
 	opacity: 0;
 	animation-fill-mode: forwards;
 }
 
-a#cardDetails{
-	text-decoration: none;
-}
-
-a#cardDetails:hover{
-	opacity: 0.6;
-}
-
-/* p#cardDetails, h3{ */
-/* 	color: white; */
-/* } */
-a#card-details{
-	text-decoration: none;
-}
-
-.details-card-type,
-.details-card-number{
-	padding-left: 15px;
-} 
-
-.details-card-type p {
-	font-weight: bold;
-	margin-top: 10px;
-	margin-bottom: 0px;
-	color: black;
-}
-
-.details-card-number p {
-	margin-top: 0px;
-	margin-bottom: 10px;
-	color: black;
-}
-
-.detail-label {
-    font-weight: bold;
-    color: black;
-}
-
-.details-card-amount p{
-    display: block;
-    color: black;
-    margin: 0px;
-    padding-bottom: 5px;
-}
-
-.details-card-amount {
-	text-align: right;
-    padding-right: 15px;
-    padding-top: 10px;
-    border-top: 1px solid #ccc;
-    
-}
-
-.details-card-status p{
-    display: block;
-    color: black;
-    margin: 0px;
-    padding-bottom: 5px;
-}
-
-
-.card-details:hover {
-	background-color: var(--lightblue);
-}

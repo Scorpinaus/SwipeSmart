@@ -177,6 +177,7 @@ public class CreditCardService {
 		}, delay, ONE_MONTH_IN_MILLISECONDS);
 	}
 
+	
 	public void chargeInterest(List<CreditCard> approvedCreditCards) {
 		// Subtract one month from the current date
 		LocalDate curMonth = LocalDate.now().withDayOfMonth(1);

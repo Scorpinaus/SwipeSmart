@@ -123,7 +123,7 @@ a#cards{
 .openSidebar{
 	color: white;
 	border:none;
-	background-color: var(--darkgreen);
+	background-color:var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }
@@ -144,7 +144,7 @@ body{
 }
 
 .deposit-form-container{
-	width: 80%;
+	width: 90%;
     margin: 20px auto;
     padding: 20px;
     background: var(--lightgrey);
@@ -172,26 +172,30 @@ select {
     border-radius: 4px;
     background-color: white;
     font-size: 16px;
-    color: grey;
+    color: black;
     font-family: "Nunito Sans", sans-serif;
     appearance: none;
 }
 
-.deposit-amount input {
-	width: 97.5%;
-    padding: 10px 5px;
+select option {
+	color: black;
+}
+
+input[type="number"] {
+	width: calc(100% - 30px);
+    padding: 10px 15px;
     border: 1px solid #ccc;
-    border-radius: 2px;
+    border-radius: 4px;
     background-color: white;
     font-size: 16px;
-    color: grey;
+    color: black;
     font-family: "Nunito Sans", sans-serif;
     appearance: none;
 }
 
 select:focus {
-    border-color: black;
-    border-radius: 6px;
+    border-color: #ccc;
+    border-radius: 4px;
     outline: none;
 }
 
@@ -201,19 +205,20 @@ select:focus {
 
 #submitButton {
 	font-family: "Nunito Sans", sans-serif;
-    background-color: var(--lightblue);
-    color: black;
+    background-color: var(--darkgreen);
+    color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
     font-weight: bold;
-    min-width: 100px;
+    width: 100%;
+    font-size: 15px;
 }
 
 #submitButton:hover {
-    background-color: var(--darkgreen);
-    color: white;
+    background-color: var(--lightblue);
+    color: black;
     font-weight: bold;
 }

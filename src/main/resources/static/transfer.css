@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 @keyframes transitionIn {
 	from{
 		opacity:0;
@@ -116,16 +116,14 @@ a#cards{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
-}
-
-body{
-	font-family: 'Actor', sans-serif;
+	padding: 10px;
+	padding-top: 5px;
 }
 
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color:var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }
@@ -134,43 +132,125 @@ body{
 	opacity: 0.6;
 }
 
-.secondary-content-container{
-	margin-left: 5%;
-	display: flex;
-	justify-content: center;
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
 }
 
-h1{
-	margin-left: 5%;
+body{
+	font-family: "Nunito Sans", sans-serif;
+	min-width: 600px;
 }
 
-.form{
-	border-radius: 15px;
-	background-color:#4F96A9;
-	padding: 50px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
+.transfer-form-container{
+	width: 90%;
+    margin: auto;
+    padding: auto;
+    border-radius: 8px;
 }
 
-input{
-	margin-bottom: 5%;
-}
-
-option{
-	margin-bottom: 5%;
-}
-
-input#submitButton{
-	color: white;
-	text-decoration:none;
-	border-radius: 15px;
+.from-to-transfer-container {
 	padding: 20px;
-	background-color: #4F96A9;
-	text-align: center;
-	border: none;
+	background-color: var(--lightgrey);
+	border-radius: 8px;
+	margin-bottom: 10px;
+	min-width: 600px;
 }
 
-input#submitButton:hover{
-	opacity: 0.6;
+.amount-currency-container{
+	padding: 20px;
+	display: grid;
+	background-color: var(--lightgrey);
+	border-radius: 8px;
+    grid-template-columns: 2fr 1fr;
+    margin-bottom: 10px;
+    min-width: 600px;
+}
+
+.account-transfer-from,
+.select-currency, 
+.transfer-amount {
+	margin-bottom: 15px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: black;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: black;
+    font-family: "Nunito Sans", sans-serif;
+    appearance: none;
+}
+
+.account-transfer-to input[type="text"] {
+    width: calc(100% - 30px);
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: black;
+    font-family: "Nunito Sans", sans-serif;
+    appearance: none;
+    margin-bottom: 10px;
+}
+
+.transfer-amount input[type="number"] {
+	width: calc(100% - 40px);
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: black;
+    font-family: "Nunito Sans", sans-serif;
+    appearance: none;
+    margin-bottom: 10px;
+}
+
+select:focus {
+    border-color: black;
+    border-radius: 6px;
+    outline: none;
+}
+
+select option {
+	color: black;
+}
+
+.submit-button {
+	text-align: center;
+}
+
+#submitButton {
+	font-family: "Nunito Sans", sans-serif;
+    background-color: var(--darkgreen);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    width: 100%;
+    min-width: 640px;
+    font-size: 15px;
+}
+
+#submitButton:hover {
+    background-color: var(--lightblue);
+    color: black;
+    font-weight: bold;
 }

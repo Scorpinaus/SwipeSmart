@@ -115,22 +115,27 @@ public class CreditCardController {
 				userService.update(loggedUser);
 
 				return "redirect:/userCards";
-			}
+			} 
 		}
 	}
 
 	@GetMapping("/creditCard/paybills")
-	public String goToPaybillsPage(Model model, HttpSession session) {
-
-		// Get logged user
-		User currentUser = (User) session.getAttribute("loggedUser");
-		List<CreditCard> ccList = currentUser.getCreditCards();
-
-		// add user and account list to the model
-		model.addAttribute("user", currentUser);
-		model.addAttribute("CcList", ccList);
-
-		return "paybills";
+	public String paybills(Model model, HttpSession session) {
+		if (session != null && session.getAttribute("loggedUser") != null) {
+			// Get logged user
+			User currentUser = (User) session.getAttribute("loggedUser");
+			List<CreditCard> ccList = currentUser.getCreditCards();
+	
+			// add user and account list to the model
+			model.addAttribute("user", currentUser);
+			model.addAttribute("CcList", ccList);
+	
+			return "paybills";
+		} else {
+			model.addAttribute("error", true);
+			logger.warn("User Is not logged-in. Please login first");
+			return "login";
+		}
 	}
 
 	@PostMapping("/creditCard/paybills")
@@ -143,9 +148,17 @@ public class CreditCardController {
 		CreditCard creditCard = creditCardService.findById(creditCardId);
 		MerchantCategoryCode mccBill = merchantCategoryCodeService.findByMerchantCategory("Bill");
 		Transaction transaction = null;
+		
 		if (balanceType.equals("custom")) {
 			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, null, mccBill,
 					null);
+		} else if (balanceType.equals("minimum")) {
+			if (creditCard.getMonthlyBalance() < 50) transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard, null, mccBill,null);
+			else transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, null, mccBill,null);
+		} else if (balanceType.equals("statement")) {
+			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard, null, mccBill, null);
+		} else if (balanceType.equals("current")) {
+			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, null, mccBill, null);
 		}
 
 		transactionService.persist(transaction);
@@ -153,9 +166,7 @@ public class CreditCardController {
 
 		logger.info("Payment of" + balanceType + " balance to credit card " + creditCard.getCreditCardNumber()
 				+ " completed");
-		System.out.println(creditCard.getAmountUsed());
-//		userService.update(currentUser);
-//		session.setAttribute("loggedUser", currentUser);
+
 		List<CreditCard> userCreditCards = currentUser.getCreditCards();
 		List<CreditCard> newUserCreditCards = new ArrayList<>();
 		for (CreditCard c : userCreditCards) {
@@ -167,10 +178,8 @@ public class CreditCardController {
 		currentUser.setCreditCardList(newUserCreditCards);
 		userService.update(currentUser);
 		session.setAttribute("loggedUser", currentUser);
-		model.addAttribute("user", currentUser);
-		model.addAttribute("cards", newUserCreditCards);
 		Collections.sort(newUserCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
-		return "userCards";
+		return "redirect:/userCards";
 	}
 
 }

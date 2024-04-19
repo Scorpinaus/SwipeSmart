@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +25,7 @@ import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.UserService;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -44,10 +47,10 @@ public class AdminController {
 	@GetMapping("/admin/accounts")
 	public String accountPage(@RequestParam("userId") long userId, HttpSession session, Model model) {
 		// add returned user to the model
-		User returnedUser = (User) session.getAttribute("loggedUser");
+		User returnedUser = userService.findUserById(userId);
 		model.addAttribute("user", returnedUser);
 		// find all account by user Id
-		List<Account> requiredAccounts = accountService.getAllAccounts();
+		List<Account> requiredAccounts = returnedUser.getAccounts();
 		model.addAttribute("requiredAccounts", requiredAccounts);
 		return "adminaccount";
 	}
@@ -55,11 +58,11 @@ public class AdminController {
 	@GetMapping("/admin/creditcards")
 	public String creditcardPage(@RequestParam("userId") long userId, HttpSession session, Model model) {
 		// add returned user to the model
-		User returnedUser = (User) session.getAttribute("loggedUser");
+		User returnedUser = userService.findUserById(userId);
 		model.addAttribute("user", returnedUser);
 
 		// find all credit card by user Id
-		List<CreditCard> requiredCreditCards = creditCardService.findAllCreditCards();
+		List<CreditCard> requiredCreditCards = returnedUser.getCreditCards();
 
 		model.addAttribute("requiredCreditCards", requiredCreditCards);
 
@@ -202,7 +205,14 @@ public class AdminController {
 
 		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
 		creditCardService.update(creditCard);
+		
+		creditCardService.scheduleInterestCharging(creditCard);
+		
 		long userId = creditCard.getCreditCardUser().getUserId();
 		return "redirect:/admin/accounts?userId=" + userId;
 	}
+	
+	
+	
+
 }

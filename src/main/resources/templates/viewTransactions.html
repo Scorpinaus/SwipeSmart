@@ -54,9 +54,9 @@ tr:hover {
 				<p th:text="${creditCard.creditCardNumber}"></p>
 				<p th:text="${creditCard.pin}"></p>
 				<p> Amount Used: </p>
-				<p th:text="${creditCard.amountUsed}">></p>
+				<p th:text="'$' + ${#numbers.formatDecimal(creditCard.amountUsed,0,'COMMA',2,'POINT')}">></p>
 				<p> Statement Balance: </p>
-				<p th:text="${creditCard.monthlyBalance}"></p>
+				<p th:text="'$' + ${#numbers.formatDecimal(creditCard.monthlyBalance,0,'COMMA',2,'POINT')}"></p> 
 			</div>
 		</div>
 
@@ -102,7 +102,7 @@ tr:hover {
 								<td th:unless="${transaction.transactionType == 'CC Bill Payment'}" th:text="${transaction.transactionAmount}"></td>
 								<td th:text="${transaction.transactionCurrency}"></td>
 								<td th:text="${transaction.transactionType}"></td>
-								<td th:text="${transaction.cashback}"></td>
+								<td th:text="${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
 							</tr>
 						</tbody>
 					</table>

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
@@ -150,10 +151,22 @@ public class CreditCardController {
 	}
 
 	@PostMapping("/creditCard/paybills")
-	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCard") Long creditCardId,
+	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCardId") Long creditCardId,
 			@RequestParam(name = "payment", required = false) Double paymentAmount,
 			@RequestParam("balanceType") String balanceType,
-			@RequestParam("accountId") long accountId) {
+			@RequestParam("accountId") long accountId,
+			RedirectAttributes redirectAttributes) {
+		
+		
+		
+		
+		if (accountId == 0) {
+	        redirectAttributes.addAttribute("NotChooseAccountError", "true");
+	        return "redirect:/creditCard/paybills";
+	    }else if(creditCardId == 0) {
+	        redirectAttributes.addAttribute("NotChooseCreditCardError", "true");
+	        return "redirect:/creditCard/paybills";
+	    }
 		
 		// Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
@@ -163,7 +176,11 @@ public class CreditCardController {
 		Transaction transaction = null;
 
 		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
-
+		
+		
+		
+		
+		
 		if (balanceType.equals("custom")) {
 			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, account, mccBill,
 					currency);

@@ -3,7 +3,10 @@ package com.fdmgroup.apmproject.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -11,9 +14,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParseException;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -34,7 +41,9 @@ public class ForeignExchangeCurrencyService {
 	private ResourceLoader resourceLoader;
 
 	private static Logger logger = LogManager.getLogger(ForeignExchangeCurrencyService.class);
-
+	
+	private static final String URL = "http://www.floatrates.com/daily/usd.json";
+	
 	public ForeignExchangeCurrencyService(ForeignExchangeCurrencyRepository currencyRepo) {
 		this.currencyRepo = currencyRepo;
 	}
@@ -138,12 +147,13 @@ public class ForeignExchangeCurrencyService {
 			SimpleModule module = new SimpleModule();
 			module.addDeserializer(List.class, new CurrencyDeserializer());
 			mapper.registerModule(module);
+			logger.info("Mapper module ready for Json deserialization");
 
 			List<ForeignExchangeCurrency> currencies = mapper.readValue(inputStream,
 					new TypeReference<List<ForeignExchangeCurrency>>() {
 					});
 			currencyRepo.saveAll(currencies);
-
+			logger.info("Currencies list is successfully updated to " + currencies.get(1).getDate());
 		} catch (JsonParseException e) {
 			logger.warn("Failed to parse JSON file: Invalid JSON format");
 			throw new RuntimeException("Failed to parse JSON file: Invalid JSON format.", e);
@@ -219,8 +229,24 @@ public class ForeignExchangeCurrencyService {
 		return exchangeRate;
 	}
 
+	public void fetchAndSaveExchangeRates() {
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Map<String, ForeignExchangeCurrency>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, ForeignExchangeCurrency>>() {});
+		Map<String, ForeignExchangeCurrency> foreignCurrencies = response.getBody();
+		logger.info("Foreign Currencies Object ready for fetching");
+		try {
+			String json = new ObjectMapper().writeValueAsString(foreignCurrencies);
+			Files.write(Paths.get("src/main/resources/fx_rates.json"), json.getBytes());
+			logger.info("fx_rates.json file successfully updated");
+		}	catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@PostConstruct
 	public void initCurrency() {
+		fetchAndSaveExchangeRates();
+		loadAndSaveForeignCurrencyJSON();
 		ForeignExchangeCurrency currencyOne = new ForeignExchangeCurrency();
 		currencyOne.setCode("USD");
 		currencyOne.setAlphaCode("USD");
@@ -229,7 +255,7 @@ public class ForeignExchangeCurrencyService {
 		currencyOne.setInverseRate(1.00);
 		currencyOne.setRate(1.00);
 		persist(currencyOne);
-		loadAndSaveForeignCurrencyJSON();
+		
 	}
 
 }

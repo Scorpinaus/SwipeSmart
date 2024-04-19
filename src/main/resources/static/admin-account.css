@@ -11,8 +11,23 @@
 	}
 }
 
+:root {
+  --darkgreen: #2b6777;
+  --lightblue:#c8d8e4;
+  --white: #ffffff;
+  --lightgrey:#f2f2f2;
+  --lightgreen:#52ab98;
+  --fadedgreen:#4F96A9;
+}
+
 body{
 	font-family: 'Actor', sans-serif;
+}
+
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
 }
 
 .linkContainerSideBar{
@@ -120,6 +135,8 @@ a#transactions{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
+	padding: 10px;
+	padding-top: 5px;
 }
 
 .account, .creditCard{
@@ -133,7 +150,7 @@ a#transactions{
 	margin-bottom: 2%;
 	border-radius: 15px;
 	padding: 20px;
-	background-color: #4F96A9;
+	background-color: var(--lightgrey);
 	animation:transitionIn 1s;
 	opacity: 0;
 	animation-fill-mode: forwards;
@@ -144,34 +161,9 @@ a#transactions{
 	justify-content: center;
 }
 
-h1{
-	padding-bottom: 15px;
-}
-
-.noAccounts{
-	display: flex;
-	justify-content: center;
-}
-
-.accountCRUD{
-	display: inline-flex;
-	justify-content: center;
-	gap: 15px;
-	padding-bottom: 15px;
-}
-
-a#accountCRUD{
-	color: white;
-	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
-	background-color: #4F96A9;
-	text-align: center;
-}
-
 
 a#accountDetails{
-	color: white;
+	color: black;
 	text-decoration:none;
 	border-radius: 15px;
 }
@@ -180,7 +172,7 @@ a#accountDetails{
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color: var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }
@@ -198,3 +190,8 @@ a#accountDetails{
 	animation-fill-mode: forwards;
 }
 
+.accountDetails2{
+	background-color: white;
+	padding: 5px;
+	border-radius:15px;
+}

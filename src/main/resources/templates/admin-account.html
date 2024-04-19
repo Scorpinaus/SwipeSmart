@@ -26,27 +26,29 @@
 			</div>
 		</div>
 		<div class="mainPage" id="main">
-			<button class="openSidebar">☰</button>
-		</div>
-		
-		
-		<div class="mainPage" id="main">
-			<h2>Bank Accounts handler</h2>
+			<header>
+				<button class="openSidebar">☰</button>		
+			</header>
+			<h2 th:text="${user.getUsername} + '\'s Bank Accounts'"></h2>
 			
 			<div class="accountDetails"
 					th:each="account : ${requiredAccounts}">
-					<a id="accountDetails"
-						th:if="${account.accountStatus.statusName != 'Pending'}" href="#"
-						th:onclick="'submitForm(' + ${account.accountId} + ')'"
-						style="text-decoration: none;"> <span
-						th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
-							<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span>
-							<br /> <span th:text=" 'Account Balance: $' + ${account.balance}"></span>
-							<br /> <span
-							th:text=" 'Account Status: ' + ${account.accountStatus.statusName}"></span>
-					</a> 
-					
-					<div id="accountDetails" th:if="${account.accountStatus.statusName == 'Pending'}">
+					<div class="accountDetails2">
+						<a id="accountDetails"
+							th:if="${account.accountStatus.statusName != 'Pending'}" href="#"
+							th:onclick="'submitForm(' + ${account.accountId} + ')'"
+							style="text-decoration: none;"> <span
+							th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
+								<span th:text=" 'Account Number: ' + ${account.accountNumber}"></span>
+								<br /> <span th:text=" 'Account Balance: $' + ${account.balance}"></span>
+								<br /> <span
+								th:text=" 'Account Status: ' "></span>
+								<span th:if="${account.accountStatus.statusName == 'Approved'}" style="color:green" th:text="${account.accountStatus.statusName}"></span>
+								<span th:if="${account.accountStatus.statusName != 'Approved'}" style="color:red" th:text="${account.accountStatus.statusName}"></span>
+						</a> 
+					</div>
+				<div id="accountDetails" th:if="${account.accountStatus.statusName == 'Pending'}">
+					<div class="accountDetails2">
 					    <span th:text=" 'Account Name: ' + ${account.accountName}"></span> <br />
 					    <span th:text=" 'Account Number: ' + ${account.accountNumber}"></span> <br />
 					    <span th:text=" 'Account Balance: $' + ${account.balance}"></span> <br />
@@ -58,12 +60,8 @@
 					    </form>
 					</div>
 				</div>
+			</div>
 		</div>
-	
-			
-
-		
-		
 		<script>
 			let menuOpen = false;
 			const sidebar = document.querySelector('.linkContainerSideBar');

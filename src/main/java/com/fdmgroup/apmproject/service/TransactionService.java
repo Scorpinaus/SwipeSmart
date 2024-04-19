@@ -225,6 +225,7 @@ public class TransactionService {
 		updateCreditCardBalance(transaction10);
 		List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
 		creditCardService.calculateMonthlyBalance(approvedCreditCards);
+		creditCardService.chargeInterest(approvedCreditCards);
 	}
 
 }

@@ -13,13 +13,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
+import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.MerchantCategoryCodeService;
@@ -48,6 +51,10 @@ public class CreditCardController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AccountService accountService;
+	
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	private List<ForeignExchangeCurrency> currencies;
 
@@ -126,7 +133,12 @@ public class CreditCardController {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			List<CreditCard> ccList = currentUser.getCreditCards();
 
+			List<Account> AccountList = accountService.findAllAccountsByUserId(currentUser.getUserId());
+			
+			
+			
 			// add user and account list to the model
+			model.addAttribute("AccountList", AccountList);
 			model.addAttribute("user", currentUser);
 			model.addAttribute("CcList", ccList);
 
@@ -139,34 +151,56 @@ public class CreditCardController {
 	}
 
 	@PostMapping("/creditCard/paybills")
-	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCard") Long creditCardId,
+	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCardId") Long creditCardId,
 			@RequestParam(name = "payment", required = false) Double paymentAmount,
-			@RequestParam("balanceType") String balanceType) {
-
+			@RequestParam("balanceType") String balanceType,
+			@RequestParam("accountId") long accountId,
+			RedirectAttributes redirectAttributes) {
+		
+		
+		
+		
+		if (accountId == 0) {
+	        redirectAttributes.addAttribute("NotChooseAccountError", "true");
+	        return "redirect:/creditCard/paybills";
+	    }else if(creditCardId == 0) {
+	        redirectAttributes.addAttribute("NotChooseCreditCardError", "true");
+	        return "redirect:/creditCard/paybills";
+	    }
+		
 		// Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
+		Account account = accountService.findById(accountId);
 		CreditCard creditCard = creditCardService.findById(creditCardId);
 		MerchantCategoryCode mccBill = merchantCategoryCodeService.findByMerchantCategory("Bill");
 		Transaction transaction = null;
-		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
 
+		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
+		
+		
+		
+		
+		
 		if (balanceType.equals("custom")) {
-			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, null, mccBill,
+			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, account, mccBill,
 					currency);
 		} else if (balanceType.equals("minimum")) {
 			if (creditCard.getMonthlyBalance() < 50)
 				transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-						null, mccBill, currency);
+						account, mccBill, currency);
+
 			else
-				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, null, mccBill, null);
+				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, account, mccBill, null);
 		} else if (balanceType.equals("statement")) {
 			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-					null, mccBill, currency);
+
+					account, mccBill, currency);
 		} else if (balanceType.equals("current")) {
-			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, null,
+			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, account,
 					mccBill, currency);
 		}
-
+		account.setBalance(account.getBalance()-transaction.getTransactionAmount());
+		accountService.update(account);
 		transactionService.persist(transaction);
 		transactionService.updateCreditCardBalance(transaction);
 
@@ -179,6 +213,7 @@ public class CreditCardController {
 			if (c.getCreditCardId() != creditCardId) {
 				newUserCreditCards.add(c);
 			}
+			
 		}
 		newUserCreditCards.add(creditCard);
 		currentUser.setCreditCardList(newUserCreditCards);

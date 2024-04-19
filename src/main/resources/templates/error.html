@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .button-container button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Error</h1>
+    <p>Sorry, an error occurred while processing your request.</p>
+    <p>Error message: <span id="error-message"></span></p>
+
+    <div class="button-container">
+        <button onclick="goBack()">Return</button>
+        <button onclick="retryAction()">Try Again
+        The button is not working, feel free to edit this page, i hope no one is going to see this message as well, hehe!</button>
+    </div>
+
+    <script>
+        // Retrieve the error message from the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMessage = urlParams.get('message');
+
+        // Display the error message on the page
+        const errorMessageElement = document.getElementById('error-message');
+        if (errorMessage) {
+            errorMessageElement.textContent = errorMessage;
+        } else {
+            errorMessageElement.textContent = 'Unknown error occurred.';
+        }
+
+        // Go back to the previous page
+        function goBack() {
+            window.history.back();
+        }
+
+        // Retry the action by refreshing the current page
+        function retryAction() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>

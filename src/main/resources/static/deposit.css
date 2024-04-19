@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Actor&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 @keyframes transitionIn {
 	from{
 		opacity:0;
@@ -116,16 +116,14 @@ a#cards{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
-}
-
-body{
-	font-family: 'Actor', sans-serif;
+	padding: 10px;
+	padding-top: 5px;
 }
 
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color: var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }
@@ -134,40 +132,88 @@ body{
 	opacity: 0.6;
 }
 
-h1{
-	margin-left: 5%;
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
 }
 
-.secondary-content-container{
-	margin-left: 5%;
-	display: flex;
-	justify-content: center;
+body{
+	font-family: "Nunito Sans", sans-serif;
+	min-width: 500px;
 }
 
-.form{
-	border-radius: 15px;
-	background-color:#4F96A9;
-	padding: 50px;
-	animation:transitionIn 1s;
-	opacity: 0;
-	animation-fill-mode: forwards;
+.deposit-form-container{
+	width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background: var(--lightgrey);
+    border-radius: 8px;
 }
 
-input, option, select{
-	margin-bottom: 5%;
+.select-account, 
+.select-currency,
+.deposit-amount {
+	margin-bottom: 15px;
 }
 
+.input-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: black;
+    font-weight: bold;
+}
 
-input#submitButton{
-	color: white;
-	text-decoration:none;
-	border-radius: 15px;
-	padding: 20px;
-	background-color: #4F96A9;
+select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    color: grey;
+    font-family: "Nunito Sans", sans-serif;
+    appearance: none;
+}
+
+.deposit-amount input {
+	width: 97.5%;
+    padding: 10px 5px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    background-color: white;
+    font-size: 16px;
+    color: grey;
+    font-family: "Nunito Sans", sans-serif;
+    appearance: none;
+}
+
+select:focus {
+    border-color: black;
+    border-radius: 6px;
+    outline: none;
+}
+
+.submit-button {
 	text-align: center;
-	border: none;
 }
 
-input#submitButton:hover{
-	opacity: 0.6;
+#submitButton {
+	font-family: "Nunito Sans", sans-serif;
+    background-color: var(--lightblue);
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+#submitButton:hover {
+    background-color: var(--darkgreen);
+    color: white;
+    font-weight: bold;
 }

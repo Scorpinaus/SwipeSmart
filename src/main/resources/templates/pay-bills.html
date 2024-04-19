@@ -37,17 +37,36 @@
 			<div class="secondary-content-container">   
 				<div class="form"> 
 					<form id="paymentForm" method="post" action="/creditCard/paybills">
-					<select id="creditCardSelect" name="creditCard">
-				    	<option th:each="creditCard : ${CcList}" th:if="${creditCard.creditCardStatus.statusName != 'Pending'}" th:value="${creditCard.creditCardId}" th:text="${creditCard.creditCardNumber}"></option>
-					</select>
+						
+						
+						<label class="input-label" for="account">Bank Account:</label>
+						<select name="accountId">
+						    <option value=0 >Select Account...</option>
+						    <option th:each="account : ${AccountList}" th:if="${account.accountStatus.statusName != 'Pending'}" th:value="${account.accountId}" th:text="${account.accountName} + '   ' + ${account.accountNumber}"></option>
+						</select>
+						
+						<label class="input-label" for="creditcard">Credit Card:</label>
+						<select id="creditCardSelect" name="creditCardId">
+						    <option value=0 >Select Credit Card...</option>
+						    <option th:each="creditCard : ${CcList}" th:if="${creditCard.creditCardStatus.statusName != 'Pending'}" th:value="${creditCard.creditCardId}" th:text="${creditCard.creditCardNumber}"></option>
+						</select>
 						
 						<input type="number" name="payment" placeholder="Payment Amount" min = "0" step="0.01" required>
 						<input type="hidden" id="balanceType" name="balanceType">
+<!-- 						<input type="hidden" id="accountId" name="account.accountId"> -->
 						<button type="button" onclick="getBalance('custom')">Custom Balance</button>
 						<br>	
 						<button type="button" onclick="getBalance('minimum')">Minimum Balance</button>
 					    <button type="button" onclick="getBalance('current')">Amount Used</button>
 					    <button type="button" onclick="getBalance('statement')">Statement Balance</button>
+					    
+					    <div class="error-message" th:if="${param.NotChooseAccountError}">
+			            <p style="color: red;">Could not pay bill without a bank account. Please select a bank account.</p>
+			            </div>
+			            <div class="error-message" th:if="${param.NotChooseCreditCardError}">
+			            <p style="color: red;">Which credit card do you want to pay?. Please select a credit card.</p>
+			            
+			        </div>
 					</form>
 				</div>	
 			</div>		
@@ -75,6 +94,8 @@
 		        // Submit the form
 		        document.getElementById("paymentForm").submit();
 			}
+			
+			
 		</script>
 	</body>
 </html>

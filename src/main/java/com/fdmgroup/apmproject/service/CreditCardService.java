@@ -137,7 +137,7 @@ public class CreditCardService {
 		
 		String creditCardNumberPending = "3456-5678-1234-5678";
 		String pinPending = "125";
-		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000, "Ultimate Slay Card", statusService.findByStatusName("Pending"),
+		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000, "SwipeSmart Platinium Card", statusService.findByStatusName("Pending"),
 				0, userJacky, currencyCode);
 		persist(createCreditCardPending);
 	}

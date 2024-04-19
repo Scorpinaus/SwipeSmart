@@ -234,6 +234,7 @@ public class ForeignExchangeCurrencyService {
 		ResponseEntity<Map<String, ForeignExchangeCurrency>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, ForeignExchangeCurrency>>() {});
 		Map<String, ForeignExchangeCurrency> foreignCurrencies = response.getBody();
 		logger.info("Foreign Currencies Object ready for fetching");
+		
 		try {
 			String json = new ObjectMapper().writeValueAsString(foreignCurrencies);
 			Files.write(Paths.get("src/main/resources/fx_rates.json"), json.getBytes());

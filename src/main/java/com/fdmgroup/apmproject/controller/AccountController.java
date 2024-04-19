@@ -146,7 +146,7 @@ public class AccountController {
 		BigDecimal newAccountBalance = retrievedAccountBalance.subtract(adjustedAmount);
 		retrievedAccount.setBalance(newAccountBalance.doubleValue());
 		Transaction transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
-				currencyService.getCurrencyByCode(withdrawalCurrencyCode));
+				currencyService.getCurrencyByCode(withdrawalCurrencyCode), withdrawalCurrencyCode + amount.toString());
 		transactionService.persist(transaction);
 		retrievedAccount.setTransactions(transaction);
 		accountService.update(retrievedAccount);
@@ -196,8 +196,7 @@ public class AccountController {
 		// Transaction
 		double cashback = 0;
 
-		Transaction transaction = new Transaction("Deposit", convertedAmount.doubleValue(), null, cashback, null,
-				accountDeposited, null, currencyService.getCurrencyByCode(currencyCode));
+		Transaction transaction = new Transaction("Deposit", accountDeposited, convertedAmount.doubleValue(), null, currencyService.getCurrencyByCode(currencyCode), currencyCode + "depositAmount");
 
 		transactionService.persist(transaction);
 		accountDeposited.setTransactions(transaction);
@@ -242,8 +241,7 @@ public class AccountController {
 			accountService.persist(accountCreated);
 
 			double cashback = 0;
-			Transaction transaction = new Transaction("Deposit", initialDeposit, accountCreated.getAccountNumber(),
-					cashback, null, accountCreated, null, localCurrency);
+			Transaction transaction = new Transaction("Initial Deposit", accountCreated, initialDeposit, null, localCurrency, localCurrency.getCode() + "initialDeposit" );
 			transactionService.persist(transaction);
 			LOGGER.info("Bank account number " + accountCreated.getAccountNumber() + "created");
 			return "redirect:/bankaccount/dashboard";
@@ -328,12 +326,12 @@ public class AccountController {
 				// For account which funds are flowing out of during internal transfer
 				Transaction internalTransactionOutflow = new Transaction("Internal Transfer - Outflow",
 						accountFromBalance, recipientAccount.get(), convertedAmount,
-						recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
+						recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode), currencyCode + "transferAmount");
 
 				// For account which funds are flowing into during internal transfer
 				Transaction internalTransactionInflow = new Transaction("Internal Transfer - Inflow",
 						recipientAccount.get(), accountFromBalance, convertedAmount,
-						accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
+						accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode), currencyCode + "transferAmount" );
 
 				transactionService.persist(internalTransactionOutflow);
 				transactionService.persist(internalTransactionInflow);
@@ -348,7 +346,7 @@ public class AccountController {
 				// Transactions
 //					double cashback = 0;
 				Transaction externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
-						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode));
+						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode), currencyCode + "transferAmount");
 				transactionService.persist(externalTransactionOutflow);
 				LOGGER.info("External Transfer Success!");
 				return "redirect:/bankaccount/dashboard";

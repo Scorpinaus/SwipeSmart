@@ -83,10 +83,19 @@ public class TransactionService {
 		// ensure amount used in credit card is updated
 		if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("CC Payment")) {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
-			creditCard.addTransaction(transaction.getTransactionAmount());
+			if (creditCard.getCardType().equals("Ultimate Cashback Card")) {
+				if (transaction.getTransactionMerchantCategoryCode().getMerchantCategory().equals("Dining")) {
+					transaction.setCashback(transaction.getTransactionAmount()*0.02);
+					update(transaction);
+				} else if (creditCard.getCardType().equals("Ultimate Slay Card")) {
+					transaction.setCashback(transaction.getTransactionAmount()*0.015);
+					update(transaction);
+				}
+			}
+			creditCard.addTransaction(transaction.getTransactionAmount() - transaction.getCashback());
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
 			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
-				creditCard.addTransactionMonthly(transaction.getTransactionAmount());
+				creditCard.addTransactionMonthly(transaction.getTransactionAmount() - transaction.getCashback());
 			}
 			creditCardService.update(creditCard);
 		} else if (transaction.getTransactionCreditCard() != null

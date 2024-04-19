@@ -120,14 +120,12 @@ public class AccountController {
 		Account retrievedAccount = accountService.findById(accountId);
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
 		String baseCurrencyCode = retrievedAccount.getCurrencyCode();
-		LOGGER.info("Withdrawal request: Currency={} Amount={} AccountID={}", withdrawalCurrencyCode, amount,
-				accountId);
+		LOGGER.info("Withdrawal request: Currency={} Amount={} AccountID={}", withdrawalCurrencyCode, amount,accountId);
 
-		// Conversion of withdrawal amount from target currency to base currency if
-		// required
+		// Conversion of withdrawal amount from target currency to base currency if required, where amount is the amount requested in target currency
 		BigDecimal adjustedAmount = amount;
 		if (!withdrawalCurrencyCode.equals(baseCurrencyCode)) {
-			BigDecimal exchangeRate = currencyService.getExchangeRate(baseCurrencyCode, withdrawalCurrencyCode);
+			BigDecimal exchangeRate = currencyService.getExchangeRate(withdrawalCurrencyCode, baseCurrencyCode);
 			adjustedAmount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
 			LOGGER.info("Converted amount: {} (Exchange rate: {})", adjustedAmount, exchangeRate);
 		}
@@ -195,8 +193,8 @@ public class AccountController {
 
 		// Transaction
 		double cashback = 0;
-
-		Transaction transaction = new Transaction("deposit", depositAmount, accountDeposited.getAccountNumber(),
+		
+		Transaction transaction = new Transaction("Deposit", convertedAmount.doubleValue(), null,
 				cashback, null, accountDeposited, null, currencyService.getCurrencyByCode(currencyCode));
 
 		transactionService.persist(transaction);
@@ -262,87 +260,95 @@ public class AccountController {
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
 		currenciesList = currencyService.getSupportedCurrencies();
-		
+
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
 		model.addAttribute("currencies", currenciesList);
-		
+
 		return "transfer";
 	}
 
 	@PostMapping("/bankaccount/transfer")
 	public String transferMoney(@RequestParam("account") long accountId,
 			@RequestParam("transferAmount") Double transferAmount,
-			@RequestParam("accountNumberTransferTo") String accountNumberTransferTo, @RequestParam("currency") String currencyCode, HttpSession session,
-			RedirectAttributes redirectAttributes) {
-		
-			// get the required accounts
-			Account accountFromBalance = accountService.findById(accountId);
-			String accountNumber = accountNumberTransferTo.replace(" ","-");
-			
-			//Handle currency conversion
-			double exchangeRate = currencyService.getExchangeRate(accountFromBalance.getCurrencyCode(), currencyCode).doubleValue();
-			double convertedAmount = transferAmount * exchangeRate;
-			
-			// validate user is not transferring money to the same account
-			if (accountFromBalance.getAccountNumber().equals(accountNumber)) {
-	
-				redirectAttributes.addAttribute("SameAccountError", "true");
-				LOGGER.info("Attempted to transfer to the same account");
-				return "redirect:/bankaccount/transfer";
-				}
-			// validate user has sufficient amount in account
-			else if (accountFromBalance.getBalance() < convertedAmount) {
-				redirectAttributes.addAttribute("InsufficientBalanceError", "true");
-				LOGGER.info("InsufficientBalance");
-				return "redirect:/bankaccount/transfer";
+			@RequestParam("accountNumberTransferTo") String accountNumberTransferTo,
+			@RequestParam("currency") String currencyCode, HttpSession session, RedirectAttributes redirectAttributes) {
+
+		// get the required accounts
+		Account accountFromBalance = accountService.findById(accountId);
+		String accountNumber = accountNumberTransferTo.replace(" ", "-");
+
+		// Handle currency conversion
+		double exchangeRate = currencyService.getExchangeRate(accountFromBalance.getCurrencyCode(), currencyCode)
+				.doubleValue();
+		double convertedAmount = transferAmount * exchangeRate;
+
+		// validate user is not transferring money to the same account
+		if (accountFromBalance.getAccountNumber().equals(accountNumber)) {
+			redirectAttributes.addAttribute("SameAccountError", "true");
+			LOGGER.info("Attempted to transfer to the same account");
+			return "redirect:/bankaccount/transfer";
+		}
+		// validate user has sufficient amount in account
+		else if (accountFromBalance.getBalance() < convertedAmount) {
+			redirectAttributes.addAttribute("InsufficientBalanceError", "true");
+			LOGGER.info("InsufficientBalance");
+			return "redirect:/bankaccount/transfer";
 		} else {
-			
-			//Check if recipientAccount exists in database. If exists, operate normally, if not, consider one sided transfer.
-				Optional<Account> recipientAccount = Optional.ofNullable(accountService.findAccountByAccountNumber(accountNumber));
-				//When recipientAccount is internal & existing
-				if (!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() == statusService.findByStatusName("Pending")) {
-					
-					//validate if account status is approved or not
-						
-						redirectAttributes.addAttribute("RecipientAccountPendingError", "true");
-						LOGGER.info("Recipient Account is still pending");
-						return "redirect:/bankaccount/transfer";
-						
-					}else if(!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() != statusService.findByStatusName("Pending")) {
-						// update the accounts' balance
-						accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
-						accountService.update(accountFromBalance);
-						//Need to check logic for internal (single currency account)
-						recipientAccount.get().setBalance(recipientAccount.get().getBalance() + convertedAmount);
-						accountService.update(recipientAccount.get());
-						
-						// Transaction
-	//					double cashback = 0;
-			
-						Transaction internalTransaction = new Transaction("Internal Transfer",accountFromBalance, recipientAccount.get(),transferAmount, recipientAccount.get().getAccountNumber(), null);
-			
-						transactionService.persist(internalTransaction);
-						LOGGER.info("Internal Transfer Success!");
-						return "redirect:/bankaccount/dashboard";
-					}	
-				else {
-					// update the accounts' balance
-					accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
-					accountService.update(accountFromBalance);
-					
-//					Account externalAccount = new Account();
-//					externalAccount.setAccountNumber(accountNumber);
-//					externalAccount.setBalance(transferAmount);
-					
-					//Transactions
+
+			// Check if recipientAccount exists in database. If exists, operate normally, if
+			// not, consider one sided transfer.
+			Optional<Account> recipientAccount = Optional
+					.ofNullable(accountService.findAccountByAccountNumber(accountNumber));
+			// When recipientAccount is internal & existing
+			if (!recipientAccount.isEmpty()
+					&& recipientAccount.get().getAccountStatus() == statusService.findByStatusName("Pending")) {
+
+				// validate if account status is approved or not
+				redirectAttributes.addAttribute("RecipientAccountPendingError", "true");
+				LOGGER.info("Recipient Account is still pending");
+				return "redirect:/bankaccount/transfer";
+
+			} else if (!recipientAccount.isEmpty()
+					&& recipientAccount.get().getAccountStatus() != statusService.findByStatusName("Pending")) {
+				// update the accounts' balance
+				accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
+				accountService.update(accountFromBalance);
+				
+				//Update internal account for both recipient and originalAccount
+				recipientAccount.get().setBalance(recipientAccount.get().getBalance() + convertedAmount);
+				accountService.update(recipientAccount.get());
+
+				// Transaction
+				// double cashback = 0;
+				
+				//For account which funds are flowing out of during internal transfer
+				Transaction internalTransactionOutflow = new Transaction("Internal Transfer - Outflow", accountFromBalance,
+						recipientAccount.get(), convertedAmount, recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
+				
+				//For account which funds are flowing into during internal transfer
+				Transaction internalTransactionInflow = new Transaction("Internal Transfer - Inflow", recipientAccount.get(),
+						accountFromBalance, convertedAmount, accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
+				
+				transactionService.persist(internalTransactionOutflow);
+				transactionService.persist(internalTransactionInflow);
+				LOGGER.info("Internal Transfer Success!");
+				return "redirect:/bankaccount/dashboard";
+			} else {
+				//Transferred to external account.
+				// update the accounts' balance
+				accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
+				accountService.update(accountFromBalance);
+
+				// Transactions
 //					double cashback = 0;
-					Transaction externalTransaction = new Transaction("External Transfer", accountFromBalance, null, transferAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode));
-					transactionService.persist(externalTransaction);
-					LOGGER.info("External Transfer Success!");
-					return "redirect:/bankaccount/dashboard";
-				}
+				Transaction externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
+						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode));
+				transactionService.persist(externalTransactionOutflow);
+				LOGGER.info("External Transfer Success!");
+				return "redirect:/bankaccount/dashboard";
 			}
-	} 
+		}
+	}
 }

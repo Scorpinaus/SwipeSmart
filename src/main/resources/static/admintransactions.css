@@ -229,5 +229,18 @@ span#accountDetails{
 	animation:transitionIn 1.5s;
 	opacity: 0;
 	animation-fill-mode: forwards;
+	text-align:center;
 }
 
+.secondary-content-container{
+	display:flex;
+	justify-content: center;
+}
+
+th {
+	padding: 15px;
+}
+
+td{
+	padding: 15px;
+}

@@ -33,8 +33,13 @@
 					<label for="month">Month:</label> 
 					<input type="month" id="month" name="month">
 					<select name="pickedUser">
-					 	<option value="" disabled selected>Select Category</option>
+					 	<option value="" disabled selected hidden>Select Username</option>
 					    <option th:each="pickedUser : ${users}" th:if="${pickedUser.getRole != 'ROLE_ADMIN'}" th:value="${pickedUser.getUsername}" th:text="${pickedUser.getUsername}"></option>
+					 </select>
+					 <select name="pickedType">
+					 	<option value="" disabled selected hidden>Select Transaction Source</option>
+					 	<option value="card">Credit Card</option>
+					 	<option value="account">Account</option>
 					 </select>
 					<button type="submit">Filter</button>
 				</form>
@@ -69,8 +74,9 @@
 									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountNumber}"></td>
 									<td th:if="${transaction.getRecipientAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
 									<td th:if="${transaction.getRecipientAccount == null}" th:text="'-'"></td>
-									<td th:text="${transaction.transactionAmount}"></td>
-									<td th:text="${transaction.transactionCurrency}"></td>
+									<td th:text= "'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
+									<td th:if="${transaction.transactionCurrency != null}" th:text="${transaction.transactionCurrency}"></td>
+									<td th:if="${transaction.transactionCurrency == null}" th:text="'-'"></td>
 									<td th:text="${transaction.transactionType}"></td>
 									<td th:text="${transaction.cashback}"></td>
 								</tr>

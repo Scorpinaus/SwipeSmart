@@ -54,16 +54,18 @@ tr:hover {
 				<p th:text="${creditCard.creditCardNumber}"></p>
 				<p th:text="${creditCard.pin}"></p>
 				<p> Amount Used: </p>
-				<p th:text="${creditCard.amountUsed}">></p>
+				<p th:text="'$' + ${#numbers.formatDecimal(creditCard.amountUsed,0,'COMMA',2,'POINT')}">></p>
 				<p> Statement Balance: </p>
-				<p th:text="${creditCard.monthlyBalance}"></p>
+				<p th:text="'$' + ${#numbers.formatDecimal(creditCard.monthlyBalance,0,'COMMA',2,'POINT')}"></p> 
 			</div>
 		</div>
 
 		<div class="account" th:if="${account != null}">
 			<div class="accountDetails">
 				<h2 th:text="${account.accountName}"></h2>
+				<p> Bank Account Number: </p>
 				<p th:text="${account.accountNumber}"></p>
+				<p> Bank Account Balance: </p>
 				<p th:text="${account.balance}"></p>
 			</div>
 		</div>
@@ -100,7 +102,7 @@ tr:hover {
 								<td th:unless="${transaction.transactionType == 'CC Bill Payment'}" th:text="${transaction.transactionAmount}"></td>
 								<td th:text="${transaction.transactionCurrency}"></td>
 								<td th:text="${transaction.transactionType}"></td>
-								<td th:text="${transaction.cashback}"></td>
+								<td th:text="${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -114,10 +116,10 @@ tr:hover {
 								<th>Transaction Type</th>
 								<th>Date</th>
 								<th>Time</th>
-								<th>Transaction Amount</th>
-								<th>Transaction Account Number</th>
-								<th>Transaction Currency</th>
-								<th>Recipient Account Number</th>
+								<th>Transaction Amount in SGD</th>
+								<th>Bank Account Number</th>
+								<th>Foreign Currency</th>
+								<th>External Account Number In Transaction</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -126,9 +128,10 @@ tr:hover {
 						        <td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
 						        <td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
 						        <td th:text="${transaction.transactionAmount}"></td>
-						        <td th:if="${transaction.transactionAccount != null}" th:text="${transaction.transactionAccount.accountNumber}"></td>
+						        <td th:unless="${transaction.transactionAccount == null}">
+						            <span th:text="${#strings.length(transaction.transactionAccount.accountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.transactionAccount.accountNumber, #strings.length(transaction.transactionAccount.accountNumber) - 3) : transaction.transactionAccount.accountNumber}"></span>
+						        </td>
 						        <td th:if="${transaction.getTransactionCurrency != null}" th:text="${transaction.getTransactionCurrency.getName}"></td>
-						        <td th:if="${transaction.getTransactionCurrency != null}" th:text="'-'"></td>
 						        <td th:unless="${transaction.recipientAccountNumber == null}">
 						            <span th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></span>
 						        </td>

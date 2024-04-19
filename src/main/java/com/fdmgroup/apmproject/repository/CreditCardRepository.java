@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.User;
 
 @Repository
@@ -17,4 +18,6 @@ public interface CreditCardRepository extends JpaRepository<CreditCard, Long> {
 	List<CreditCard> findByCreditCardUserUserId(long userId);
 	
 	List<CreditCard> findAll();
+	
+	List<CreditCard> findByCreditCardStatus(Status status);
 }

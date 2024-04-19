@@ -89,7 +89,7 @@ public class TransactionController {
 				model.addAttribute("creditCard", userCreditCard);
 				model.addAttribute("transactions", transactions);
 			}
-			return "viewTransactions";
+			return "view-transactions";
 
 		}
 	}

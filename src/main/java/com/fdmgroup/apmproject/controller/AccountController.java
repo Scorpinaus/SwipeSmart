@@ -67,11 +67,11 @@ public class AccountController {
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 				LOGGER.info("User is redirected to bank account dashboard");
-				return "accountdashboard";
+				return "account-dashboard";
 			} else {
 				LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				return "accountdashboard";
+				return "account-dashboard";
 			}
 		} else {
 			return "redirect:/login";
@@ -89,7 +89,7 @@ public class AccountController {
 			currenciesList = currencyService.getSupportedCurrencies();
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
-				return "accountdashboard";
+				return "account-dashboard";
 			}
 			model.addAttribute("accounts", accounts);
 			LOGGER.info("Currencies List: " + currenciesList);
@@ -120,9 +120,11 @@ public class AccountController {
 		Account retrievedAccount = accountService.findById(accountId);
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());
 		String baseCurrencyCode = retrievedAccount.getCurrencyCode();
-		LOGGER.info("Withdrawal request: Currency={} Amount={} AccountID={}", withdrawalCurrencyCode, amount,accountId);
+		LOGGER.info("Withdrawal request: Currency={} Amount={} AccountID={}", withdrawalCurrencyCode, amount,
+				accountId);
 
-		// Conversion of withdrawal amount from target currency to base currency if required, where amount is the amount requested in target currency
+		// Conversion of withdrawal amount from target currency to base currency if
+		// required, where amount is the amount requested in target currency
 		BigDecimal adjustedAmount = amount;
 		if (!withdrawalCurrencyCode.equals(baseCurrencyCode)) {
 			BigDecimal exchangeRate = currencyService.getExchangeRate(withdrawalCurrencyCode, baseCurrencyCode);
@@ -193,9 +195,9 @@ public class AccountController {
 
 		// Transaction
 		double cashback = 0;
-		
-		Transaction transaction = new Transaction("Deposit", convertedAmount.doubleValue(), null,
-				cashback, null, accountDeposited, null, currencyService.getCurrencyByCode(currencyCode));
+
+		Transaction transaction = new Transaction("Deposit", convertedAmount.doubleValue(), null, cashback, null,
+				accountDeposited, null, currencyService.getCurrencyByCode(currencyCode));
 
 		transactionService.persist(transaction);
 		accountDeposited.setTransactions(transaction);
@@ -207,7 +209,7 @@ public class AccountController {
 	public String goToCreateBankAccountPage(HttpSession session, Model model) {
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", loggedUser);
-		return "createbankaccount";
+		return "create-bank-account";
 	}
 
 	@PostMapping("/bankaccount/create")
@@ -315,28 +317,30 @@ public class AccountController {
 				// update the accounts' balance
 				accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
 				accountService.update(accountFromBalance);
-				
-				//Update internal account for both recipient and originalAccount
+
+				// Update internal account for both recipient and originalAccount
 				recipientAccount.get().setBalance(recipientAccount.get().getBalance() + convertedAmount);
 				accountService.update(recipientAccount.get());
 
 				// Transaction
 				// double cashback = 0;
-				
-				//For account which funds are flowing out of during internal transfer
-				Transaction internalTransactionOutflow = new Transaction("Internal Transfer - Outflow", accountFromBalance,
-						recipientAccount.get(), convertedAmount, recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
-				
-				//For account which funds are flowing into during internal transfer
-				Transaction internalTransactionInflow = new Transaction("Internal Transfer - Inflow", recipientAccount.get(),
-						accountFromBalance, convertedAmount, accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
-				
+
+				// For account which funds are flowing out of during internal transfer
+				Transaction internalTransactionOutflow = new Transaction("Internal Transfer - Outflow",
+						accountFromBalance, recipientAccount.get(), convertedAmount,
+						recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
+
+				// For account which funds are flowing into during internal transfer
+				Transaction internalTransactionInflow = new Transaction("Internal Transfer - Inflow",
+						recipientAccount.get(), accountFromBalance, convertedAmount,
+						accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode));
+
 				transactionService.persist(internalTransactionOutflow);
 				transactionService.persist(internalTransactionInflow);
 				LOGGER.info("Internal Transfer Success!");
 				return "redirect:/bankaccount/dashboard";
 			} else {
-				//Transferred to external account.
+				// Transferred to external account.
 				// update the accounts' balance
 				accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
 				accountService.update(accountFromBalance);

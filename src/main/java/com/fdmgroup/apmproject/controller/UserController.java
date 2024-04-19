@@ -128,10 +128,10 @@ public class UserController {
 		if (!address.isEmpty()) {
 			tempUser.setAddress(address);
 		}
-		if (!address.isEmpty()) {
+		if (!firstName.isEmpty()) {
 			tempUser.setFirstName(firstName);
 		}
-		if (!address.isEmpty()) {
+		if (!lastName.isEmpty()) {
 			tempUser.setLastName(lastName);
 		}
 		session.setAttribute("loggedUser", tempUser);

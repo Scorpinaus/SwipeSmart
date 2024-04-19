@@ -1,5 +1,7 @@
 package com.fdmgroup.apmproject.model;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -231,6 +233,14 @@ public class Transaction {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public void setCreditCardDescription(String text, double rate) {
+		BigDecimal value = new BigDecimal(this.transactionAmount / rate);
+		DecimalFormat df = new DecimalFormat("#.##");
+		String formattedString = df.format(value);
+		String finalDescription = text + " " + formattedString + " " + this.getTransactionCurrency().getCode();
+		setDescription(finalDescription);
 	}
 
 	@Override

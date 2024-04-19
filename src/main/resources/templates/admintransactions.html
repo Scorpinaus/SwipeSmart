@@ -33,11 +33,11 @@
 					<label for="month">Month:</label> 
 					<input type="month" id="month" name="month">
 					<select name="pickedUser">
-					 	<option value="" hidden>Select Username</option>
+					 	<option value="" disabled selected hidden>Select Username</option>
 					    <option th:each="pickedUser : ${users}" th:if="${pickedUser.getRole != 'ROLE_ADMIN'}" th:value="${pickedUser.getUsername}" th:text="${pickedUser.getUsername}"></option>
 					 </select>
 					 <select name="pickedType">
-					 	<option value="" disabled selected>Select Transaction Source</option>
+					 	<option value="" disabled selected hidden>Select Transaction Source</option>
 					 	<option value="card">Credit Card</option>
 					 	<option value="account">Account</option>
 					 </select>

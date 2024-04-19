@@ -1,8 +1,14 @@
 package com.fdmgroup.apmproject.service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -126,6 +132,8 @@ public class CreditCardService {
 		persist(createCreditCard);
 		persist(createCreditCard2);
 		
+		scheduleInterestCharging(findById(1));
+		
 		
 		String creditCardNumberPending = "3456-5678-1234-5678";
 		String pinPending = "125";
@@ -133,4 +141,54 @@ public class CreditCardService {
 				0, userJacky, currencyCode);
 		persist(createCreditCardPending);
 	}
+	
+	
+	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
+
+	// this is the interest rate, since we only have 1 card
+	private static final double interestRate = 0.03;
+
+	private long calculateDelayToNextMonth() {
+		LocalDate currentDate = LocalDate.now();
+		LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
+		LocalDateTime nextMonthStartOfDay = nextMonth.atStartOfDay();
+		Duration duration = Duration.between(LocalDateTime.now(), nextMonthStartOfDay);
+		return duration.toMillis();
+	}
+
+	public void scheduleInterestCharging(CreditCard creditCardApproved) {
+		Timer timer = new Timer();
+
+		// Calculate the delay until the next 1st day of the month
+		long delay = calculateDelayToNextMonth();
+
+		// Schedule the task to run every month, starting from the next 1st day of the
+		// month
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				chargeInterest(creditCardApproved);
+			}
+		}, delay, ONE_MONTH_IN_MILLISECONDS);
+	}
+
+	private void chargeInterest(CreditCard creditCardApproved) {
+
+		double interest = calculateInterest(creditCardApproved.getAmountUsed());
+		double updatedBalance = creditCardApproved.getAmountUsed() + interest;
+		creditCardApproved.setAmountUsed(updatedBalance);
+
+		// Save the updated account details back to your repository or service
+		update(creditCardApproved);
+		logger.info(creditCardApproved.getCreditCardNumber() + "balance : " + creditCardApproved.getAmountUsed()
+				+ "charged for " + interest);
+
+	}
+
+	private double calculateInterest(double balance) {
+
+		return balance * interestRate;
+	}
+
+
 }

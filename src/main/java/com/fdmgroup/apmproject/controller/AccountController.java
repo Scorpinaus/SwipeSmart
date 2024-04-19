@@ -257,32 +257,39 @@ public class AccountController {
 
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-
+		currenciesList = currencyService.getAllCurrencies();
+		
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);
 		model.addAttribute("AccountList", AccountList);
-
+		model.addAttribute("currencies", currenciesList);
+		
 		return "transfer";
 	}
 
 	@PostMapping("/bankaccount/transfer")
 	public String transferMoney(@RequestParam("account") long accountId,
 			@RequestParam("transferAmount") Double transferAmount,
-			@RequestParam("accountNumberTransferTo") String accountNumberTransferTo, HttpSession session,
+			@RequestParam("accountNumberTransferTo") String accountNumberTransferTo, @RequestParam("currency") String currencyCode, HttpSession session,
 			RedirectAttributes redirectAttributes) {
 
 			// get the required accounts
 			Account accountFromBalance = accountService.findById(accountId);
 			String accountNumber = accountNumberTransferTo.replace(" ","-");
+			
+			//Handle currency conversion
+			double exchangeRate = currencyService.getExchangeRate(accountFromBalance.getCurrencyCode(), currencyCode).doubleValue();
+			double convertedAmount = transferAmount * exchangeRate;
+			
 			// validate user is not transferring money to the same account
 			if (accountFromBalance.getAccountNumber().equals(accountNumber)) {
 	
 				redirectAttributes.addAttribute("SameAccountError", "true");
-				LOGGER.info("SameAccount");
+				LOGGER.info("Attempted to transfer to the same account");
 				return "redirect:/bankaccount/transfer";
 				}
 			// validate user has sufficient amount in account
-			else if (accountFromBalance.getBalance() < transferAmount) {
+			else if (accountFromBalance.getBalance() < convertedAmount) {
 				redirectAttributes.addAttribute("InsufficientBalanceError", "true");
 				LOGGER.info("InsufficientBalance");
 				return "redirect:/bankaccount/transfer";
@@ -300,10 +307,10 @@ public class AccountController {
 						
 					}else if(!recipientAccount.isEmpty() && recipientAccount.get().getAccountStatus() != statusService.findByStatusName("Pending")) {
 						// update the accounts' balance
-						accountFromBalance.setBalance(accountFromBalance.getBalance() - transferAmount);
+						accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
 						accountService.update(accountFromBalance);
-						
-						recipientAccount.get().setBalance(recipientAccount.get().getBalance() + transferAmount);
+						//Need to check logic for internal (single currency account)
+						recipientAccount.get().setBalance(recipientAccount.get().getBalance() + convertedAmount);
 						accountService.update(recipientAccount.get());
 						
 						// Transaction
@@ -326,7 +333,7 @@ public class AccountController {
 					
 					//Transactions
 //					double cashback = 0;
-					Transaction externalTransaction = new Transaction("External Transfer", accountFromBalance, null, transferAmount, accountNumber, null);
+					Transaction externalTransaction = new Transaction("External Transfer", accountFromBalance, null, transferAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode));
 					transactionService.persist(externalTransaction);
 					LOGGER.info("External Transfer Success!");
 					return "redirect:/bankaccount/dashboard";

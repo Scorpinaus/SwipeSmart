@@ -116,6 +116,8 @@ a#cards{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
+	padding: 10px;
+	padding-top: 5px;
 }
 
 .openSidebar{

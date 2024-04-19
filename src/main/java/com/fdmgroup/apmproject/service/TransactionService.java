@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -32,10 +33,10 @@ public class TransactionService {
 
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
-	
+
 	@Autowired
 	private ForeignExchangeCurrencyService currencyService;
-	
+
 	@Autowired
 	private StatusService statusService;
 
@@ -93,12 +94,12 @@ public class TransactionService {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
 			if (creditCard.getCardType().equals("Ultimate Cashback Card")) {
 				if (transaction.getTransactionMerchantCategoryCode().getMerchantCategory().equals("Dining")) {
-					transaction.setCashback(transaction.getTransactionAmount()*0.02);
+					transaction.setCashback(transaction.getTransactionAmount() * 0.02);
 					update(transaction);
 				}
 			} else if (creditCard.getCardType().equals("SwipeSmart Platinium Card")) {
-				if (transaction.getTransactionMerchantCategoryCode().getMerchantCategory() != "Interest") {
-					transaction.setCashback(transaction.getTransactionAmount()*0.015);
+				if (transaction.getTransactionMerchantCategoryCode().getMerchantCategoryCodeNumber() != 1005) {
+					transaction.setCashback(transaction.getTransactionAmount() * 0.015);
 					update(transaction);
 				}
 			}
@@ -108,7 +109,7 @@ public class TransactionService {
 //				creditCard.addTransactionMonthly(transaction.getTransactionAmount() - transaction.getCashback());
 //			}
 			creditCardService.update(creditCard);
-			
+
 		} else if (transaction.getTransactionCreditCard() != null
 				&& transaction.getTransactionType().equals("CC Bill Payment")) {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
@@ -169,15 +170,16 @@ public class TransactionService {
 
 		return Transactions;
 	}
-	
+
 	private void updateInterest(List<CreditCard> approvedCreditCards) {
 		MerchantCategoryCode mcc4 = merchantCategoryCodeService.findByMerchantCategory("Interest");
 		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
 		for (CreditCard creditCard : approvedCreditCards) {
 			if (creditCard.getInterest() > 0) {
-			Transaction transaction = new Transaction(LocalDateTime.now(), "CC Payment", creditCard.getInterest(), null, 0.00, creditCard, null, mcc4, currency);
-			persist(transaction);
-			updateCreditCardBalance(transaction);
+				Transaction transaction = new Transaction(LocalDateTime.now(), "CC Payment", creditCard.getInterest(),
+						null, 0.00, creditCard, null, mcc4, currency);
+				persist(transaction);
+				updateCreditCardBalance(transaction);
 			}
 		}
 	}
@@ -191,17 +193,18 @@ public class TransactionService {
 		MerchantCategoryCode mcc2 = merchantCategoryCodeService.findByMerchantCategory("Travel");
 		MerchantCategoryCode mcc3 = merchantCategoryCodeService.findByMerchantCategory("Bill");
 		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
+		ForeignExchangeCurrency currencyUSD = currencyService.getCurrencyByCode("USD");
 		Status statusName = statusService.findByStatusName("Approved");
 		Transaction transaction = new Transaction(LocalDateTime.of(2024, 4, 15, 12, 34, 56), "CC Payment", 20.5, null,
 				0.00, creditCard, null, mcc, currency);
 		Transaction transaction1 = new Transaction(LocalDateTime.of(2024, 4, 12, 12, 34, 56), "CC Payment", 10, null,
 				0.00, creditCard, null, mcc, currency);
 		Transaction transaction2 = new Transaction(LocalDateTime.of(2024, 3, 12, 11, 33, 56), "CC Payment", 10, null,
-				0.00, creditCard, null, mcc1, currency);
+				0.00, creditCard, null, mcc1, currencyUSD);
 		Transaction transaction3 = new Transaction(LocalDateTime.of(2024, 3, 28, 11, 33, 56), "CC Payment", 50, null,
 				0.00, creditCard, null, mcc2, currency);
 		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Payment", 150.10, null,
-				0.00, creditCard, null, mcc2, currency);
+				0.00, creditCard, null, mcc2, currencyUSD);
 		Transaction transaction5 = new Transaction(LocalDateTime.of(2024, 2, 12, 11, 33, 56), "CC Payment", 20, null,
 				0.00, creditCard, null, mcc, currency);
 		Transaction transaction6 = new Transaction(LocalDateTime.of(2024, 2, 13, 11, 33, 56), "CC Bill Payment", 20,
@@ -214,29 +217,24 @@ public class TransactionService {
 				0.00, creditCard2, null, mcc2, currency);
 		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Payment", 100.10, null,
 				0.00, creditCard2, null, mcc2, currency);
-		System.out.println(currency);
-		persist(transaction);
-		persist(transaction1);
-		persist(transaction2);
-		persist(transaction3);
-		persist(transaction4);
-		persist(transaction5);
-		persist(transaction6);
-		persist(transaction7);
-		persist(transaction8);
-		persist(transaction9);
-		persist(transaction10);
-		updateCreditCardBalance(transaction);
-		updateCreditCardBalance(transaction1);
-		updateCreditCardBalance(transaction2);
-		updateCreditCardBalance(transaction3);
-		updateCreditCardBalance(transaction4);
-		updateCreditCardBalance(transaction5);
-		updateCreditCardBalance(transaction6);
-		updateCreditCardBalance(transaction7);
-		updateCreditCardBalance(transaction8);
-		updateCreditCardBalance(transaction9);
-		updateCreditCardBalance(transaction10);
+		Double exchangeRateUSD = currencyService.getExchangeRate(currencyUSD.getCode(), currency.getCode()).doubleValue();
+		transaction.setCreditCardDescription("Astons", 1);
+		transaction1.setCreditCardDescription("Kopitiam", 1);
+		transaction2.setCreditCardDescription("Amzaon", exchangeRateUSD);
+		transaction3.setCreditCardDescription("SIA", 1);
+		transaction4.setCreditCardDescription("United", exchangeRateUSD);
+		transaction5.setCreditCardDescription("Collins", 1);
+		transaction8.setCreditCardDescription("Hermes", 1);
+		transaction5.setCreditCardDescription("SIA", 1);
+		transaction5.setCreditCardDescription("SCOOT", 1);
+		
+		Transaction[] transactions = { transaction, transaction1, transaction2, transaction3, transaction4, 
+                transaction5, transaction6, transaction7, transaction8, transaction9,
+                transaction10 };
+		for (Transaction t : transactions) {
+				persist(t);
+				updateCreditCardBalance(t);
+		}
 		List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
 		creditCardService.calculateMonthlyBalance(approvedCreditCards);
 		creditCardService.chargeInterest(approvedCreditCards);

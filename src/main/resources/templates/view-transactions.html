@@ -90,6 +90,7 @@ tr:hover {
 								<th>Transaction Currency</th>
 								<th>Transaction Type</th>
 								<th>CashBack</th>
+								<th>Description</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -102,6 +103,7 @@ tr:hover {
 								<td th:if="${transaction.getTransactionCurrency != null}" th:text="${transaction.getTransactionCurrency.getName}"></td>
 								<td th:text="${transaction.transactionType}"></td>
 								<td th:text="${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
+								<td th:text="${transaction.description}"></td>
 							</tr>
 						</tbody>
 					</table>

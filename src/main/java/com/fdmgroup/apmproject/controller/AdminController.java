@@ -100,14 +100,29 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/bankaccountApproval")
-	public String approveBankAccount(@RequestParam("accountNumber") String accountNumber) {
-		System.out.println("approve");
+	public String approveBankAccount(@RequestParam("accountNumber") String accountNumber,HttpSession session) {
+		
 		Account account = accountService.findAccountByAccountNumber(accountNumber);
 
 		account.setAccountStatus(statusService.findByStatusName("Approved"));
 		accountService.update(account);
+		
+		LOGGER.info("Account Id: " +account.getAccountId()+ " has been approved by " + ((User) session.getAttribute("loggedUser")).getUsername() );
 		long userId = account.getAccountUser().getUserId();
-		return "redirect:/admin/users";
+		return "redirect:/admin/accounts?userId=" +userId;
+	}
+	
+
+	@PostMapping("/admin/credicardApproval")
+	public String approveCredicard(@RequestParam("creditCardNumber") String creditCardNumber,HttpSession session) {
+		
+		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
+
+		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
+		creditCardService.update(creditCard);
+		LOGGER.info("creditcard Id: " +creditCard.getCreditCardId()+ " has been approved by " + ((User) session.getAttribute("loggedUser")).getUsername() );
+		long userId = creditCard.getCreditCardUser().getUserId();
+		return "redirect:/admin/creditcards?userId=" +userId;
 	}
 
 	@GetMapping("/admin/transactions")
@@ -288,16 +303,6 @@ public class AdminController {
 		return "admin-transactions";
 	}
 
-	@PostMapping("/admin/credicardApproval")
-	public String approveCredicard(@RequestParam("creditCardNumber") String creditCardNumber) {
-		System.out.println("approve");
-		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
-
-		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
-		creditCardService.update(creditCard);
-
-		long userId = creditCard.getCreditCardUser().getUserId();
-		return "redirect:/admin/users";
-	}
+	
 
 }

@@ -9,6 +9,7 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -147,6 +148,12 @@ public class ForeignExchangeCurrencyService {
 	
 	public List<ForeignExchangeCurrency> getAllCurrencies() {
 		return currencyRepo.findAll();
+	}
+	
+	public List<ForeignExchangeCurrency> getSupportedCurrencies() {
+		List<String> supportedCurrencyCodes = List.of("SGD", "USD", "HKD");
+		List<ForeignExchangeCurrency> supportedCurrencies = getAllCurrencies().stream().filter(currency -> supportedCurrencyCodes.contains(currency.getCode())).collect(Collectors.toList());
+		return supportedCurrencies;
 	}
 	
 	public BigDecimal getExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {

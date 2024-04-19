@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="/admincreditcard.css">
+		<meta charset="UTF-8">
+		<title>User Credit Cards</title>
+	</head>
+	<body>
+		<div class="linkContainerSideBar" id="sidebar">
+			<div class="sidebarHeader">
+				<p id="sidebarHeader" >SwipeSmart</p>
+			</div>
+			<div class="sidebarLinks">
+				<div class="dashboard">
+					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
+				</div>
+				<div class="user">
+					<a id="user" href="/admin/users">Users</a>
+				</div>
+				<div class="transactions">
+					<a id="transactions" href="/admin/transactions">Transactions</a>
+				</div>
+				<div class="logout">
+					<a id="logout" href="/logout">Logout</a>
+				</div>
+			</div>
+		</div>
+		<div class="mainPage" id="main">
+			<button class="openSidebar">☰</button>
+			<h1 th:text="'What can we do for you today, ' + ${session.loggedUser.username} + '?'"></h1>
+		
+			<div class="card-details-container">
+			    <div class="card-details" th:each="creditCard : ${requiredCreditCards}">
+			        <a id="card-details" th:href="@{'/viewTransactions?creditCardId=' + ${creditCard.creditCardId}}">
+			            <!-- Card details content -->
+			            <div class="details-card-type">
+			                <p th:text="${creditCard.cardType}"></p>
+			            </div>
+			            <div class="details-card-number">
+			                <p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
+			            </div>
+			            <div class="details-card-amount">
+			                <label class="detail-label">Amount Used </label>
+			                <p id="cardDetails" th:text="${creditCard.amountUsed}"></p>
+			            </div>
+			            <div class="details-card-status">
+			                <p th:text="${creditCard.creditCardStatus.statusName}"></p>
+			            </div>
+			            <form method="post" action="/admin/credicardApproval">
+			                <input type="hidden" name="creditCardNumber" th:value="${creditCard.creditCardNumber}" />
+			                <!-- Add the if statement to conditionally show the submit button -->
+			                <button type="submit" th:if="${creditCard.creditCardStatus.statusName == 'Pending'}">Approve</button>
+			            </form>
+			        </a>
+			    </div>
+			</div>
+			<form id="viewTransactionsForm" th:action="@{/viewTransactions}"
+				method="post" style="display: none;">
+				<input type="hidden" id="creditCardIdInput" name="creditCardId">	
+			</form>		
+		</div>
+	</body>
+	
+	<script>
+			let menuOpen = false;
+			const sidebar = document.querySelector('.linkContainerSideBar');
+			const mainpage = document.querySelector('.mainPage');
+			const button = document.querySelector('.openSidebar')
+			
+			button.addEventListener('click', () => {menuOpen = !menuOpen;
+			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+			sidebar.style.width = menuOpen ? '0' : '200px';})
+			
+			function submitForm(creditCardId) {
+					    document.getElementById("creditCardIdInput").value = creditCardId;
+					    document.getElementById("viewTransactionsForm").submit();
+					}
+		</script>
+</html>

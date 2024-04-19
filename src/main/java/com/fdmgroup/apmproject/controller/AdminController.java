@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +25,7 @@ import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.UserService;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -284,7 +287,14 @@ public class AdminController {
 
 		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
 		creditCardService.update(creditCard);
+		
+		creditCardService.scheduleInterestCharging(creditCard);
+		
 		long userId = creditCard.getCreditCardUser().getUserId();
 		return "redirect:/admin/accounts?userId=" + userId;
 	}
+	
+	
+	
+
 }

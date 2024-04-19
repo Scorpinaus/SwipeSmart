@@ -44,17 +44,8 @@
 						<button type="button" onclick="getBalance('custom')">Custom Balance</button>
 						<br>	
 						<button type="button" onclick="getBalance('minimum')">Minimum Balance</button>
-					    <button type="button" onclick="getBalance('current')">Current Balance</button>
+					    <button type="button" onclick="getBalance('current')">Amount Used</button>
 					    <button type="button" onclick="getBalance('statement')">Statement Balance</button>
-						<div th:if="${error}"> 
-				            <p style="color: red;">Negative Current Balance, no payment required</p>
-						</div>
-<!-- 						<div th:if="${param.SameAccountError}"> -->
-<!-- 				            <p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p> -->
-<!-- 				        </div> -->
-<!-- 				        <div th:if="${param.InsufficientBalanceError}"> -->
-<!-- 				            <p style="color: red;">Insufficient balance. Please check your account balance.</p> -->
-<!-- 				        </div> -->
 					</form>
 				</div>	
 			</div>		

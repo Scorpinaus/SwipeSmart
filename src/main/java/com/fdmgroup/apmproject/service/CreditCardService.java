@@ -121,7 +121,7 @@ public class CreditCardService {
 				0, userJacky, currencyCode);
 		String creditCardNumber2 = "2345-5678-2398-5678";
 		String pin2 = "124";
-		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "Ultimate Slay Card", statusName,
+		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "SwipeSmart Platinium Card", statusName,
 				0, userJacky, currencyCode);
 		persist(createCreditCard);
 		persist(createCreditCard2);

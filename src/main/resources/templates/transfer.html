@@ -30,56 +30,68 @@
 		</div>
 	</div>
 	<div class="mainPage" id="main">
-		<button class="openSidebar">☰</button>
+		<header>
+           <button class="openSidebar">☰</button>
+        </header>
+        
 		<h1>Transfer</h1>
-		<!--  Try changing the method to 'get' below -->
-		<div class="secondary-content-container">
-			<div class="form">
-				<form method="post" action="/bankaccount/transfer">
-					<!-- Use the 'placeholder' tag to be more helpful -->
-					<label for="account">Select account to transfer from: </label> <select
-						name="account">
-						<option th:each="account : ${AccountList}"
-							th:if="${account.accountStatus.statusName != 'Pending'}"
-							th:value="${account.accountId}"
-							th:text="${account.accountNumber}"></option>
-						<!-- Add more options as needed -->
-					</select>
-					<p>
-						<label for="currency">Select currency for transfer: </label> <select
-							name="currency">
-							<option th:each="currency : ${currencies}"
-								th:value="${currency.code}" th:text="${currency.name}"></option>
-						</select>
-					<p>
-						<label for="transferAmount">Input transfer amount: </label> <input
-							type="number" name="transferAmount" placeholder="Transfer Amount"
-							min="0" step="0.01" required>
-					<p>
-						<label for="transferAmount">Recipient Account Number:</label> <input
-							type="text" name="accountNumberTransferTo"
-							id="accountNumberTransferTo"
-							placeholder="Account Number Transfer To"
-							onkeydown="validateNumericInput(event)"> <span
-							th:if="${param.error}" class="alert alert-danger">Account
-							Number cannot be blank.</span> <p>
-					<input id="submitButton" type="submit"
-							value="Transfer"><div th:if="${param.SameAccountError}">
-						<p style="color: red;">Could not transfer money to the same
-							account. Please check your input account number.</p>
-					</div>
-					<div th:if="${param.InsufficientBalanceError}">
-						<p style="color: red;">Insufficient balance. Please check your
-							account balance.</p>
-					</div>
-					<div th:if="${param.RecipientAccountPendingError}">
-						<p style="color: red;">Recipient Account is still pending.
-							Please try again later.</p>
-					</div>
-				</form>
+    
+		<div class="transfer-form-container">
+		  <form method="post" action="/bankaccount/transfer">
+            <div class="from-to-transfer-container">
+    			<div class="account-transfer-from">
+                  <label class="input-label" for="account">From: </label> 
+                  <select name="account">
+                   <option value="" disabled selected hidden>Select Account...</option>
+    			   <option th:each="account : ${AccountList}"
+    					   th:if="${account.accountStatus.statusName != 'Pending'}"
+    					   th:value="${account.accountId}"
+    					   th:text="${account.accountName} + '   ' + ${account.accountNumber}">
+                   </option>
+                  </select>
+                </div>
+                
+                <div class="account-transfer-to">
+                  <label class="input-label" for="account-transfer-to">To:</label>
+                  <input type="text" name="accountNumberTransferTo" id="accountNumberTransferTo" placeholder="Account Number" onkeydown="validateNumericInput(event)">
+                  <p th:if="${param.error}" class="alert alert-danger">Account Number cannot be blank.</p>
+                </div>
+                
+            </div>
+            
+            <div class="amount-currency-container">
+              <div class="transfer-amount">
+                <label class="input-label" for="transferAmount">Amount: </label>
+                <input type="number" name="transferAmount" placeholder="Transfer Amount" min="0" step="0.01" required>
+              </div>
+  			
+              <div class="select-currency">
+                <label class="input-label" for="currency">Currency: </label> 
+                <select name="currency">
+                  <option value="" disabled selected hidden>Select Currency...</option>
+                  <option th:each="currency : ${currencies}"
+                          th:value="${currency.code}" th:text="${currency.name}">
+                  </option>
+                 </select>
+              </div>
+            </div>
+      		<div class="submit-button">
+              <input id="submitButton" type="submit" value="Transfer">
+            </div>	
+						
+			<div th:if="${param.SameAccountError}">
+				<p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>
 			</div>
+			<div th:if="${param.InsufficientBalanceError}">
+				<p style="color: red;">Insufficient balance. Please check your account balance.</p>
+			</div>
+			<div th:if="${param.RecipientAccountPendingError}">
+				<p style="color: red;">Recipient Account is still pending. Please try again later.</p>
+			</div>
+		 </form>
 		</div>
 	</div>
+	
 	<script>
 			const input = document.getElementById("accountNumberTransferTo");
 			input.addEventListener("input", () => input.value = formatNumber(input.value.replaceAll(" ", "")));

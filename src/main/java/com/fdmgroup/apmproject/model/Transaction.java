@@ -38,6 +38,9 @@ public class Transaction {
 	
 	@Column(name = "Cashback")
 	private double cashback;
+	
+	@Column(name = "Description")
+	private String description;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -222,7 +225,13 @@ public class Transaction {
 		this.recipientAccount = recipientAccount;
 	}
 
-	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	@Override
 	public String toString() {

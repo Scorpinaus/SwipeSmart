@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<link rel="stylesheet" href="/admintransactions.css">
+		<link rel="stylesheet" href="/admin-transactions.css">
 		<meta charset="UTF-8">
 		<title>Transactions</title>
 	</head>
@@ -75,10 +75,10 @@
 									<td th:if="${transaction.getRecipientAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
 									<td th:if="${transaction.getRecipientAccount == null}" th:text="'-'"></td>
 									<td th:text= "'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
-									<td th:if="${transaction.transactionCurrency != null}" th:text="${transaction.transactionCurrency}"></td>
+									<td th:if="${transaction.transactionCurrency != null}" th:text="${transaction.transactionCurrency.getName}"></td>
 									<td th:if="${transaction.transactionCurrency == null}" th:text="'-'"></td>
 									<td th:text="${transaction.transactionType}"></td>
-									<td th:text="${transaction.cashback}"></td>
+									<td th:text="${transaction.cashback*100 + '%'}"></td>
 								</tr>
 							</tbody>
 						</table>

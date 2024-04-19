@@ -59,11 +59,11 @@ public class CreditCardController {
 			model.addAttribute("cards", userCreditCards);
 			model.addAttribute("user", loggedUser);
 			Collections.sort(userCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
-			return "userCards";
+			return "card-dashboard";
 		} else {
 			model.addAttribute("error", true);
 			logger.warn("User Is not logged-in. Please login first");
-			return "userCards";
+			return "card-dashboard";
 		}
 
 	}
@@ -73,9 +73,9 @@ public class CreditCardController {
 		if (session != null && session.getAttribute("loggedUser") != null) {
 			User loggedUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", loggedUser);
-			return "applyCreditCard";
+			return "apply-credit-card";
 		} else {
-			return "applyCreditCard";
+			return "apply-credit-card";
 		}
 	}
 
@@ -87,12 +87,12 @@ public class CreditCardController {
 		if (monthlySalary.isBlank() || cardType.isBlank()) {
 			logger.warn("There are empty fields, please fill up");
 			model.addAttribute("error", true);
-			return "applyCreditCard";
+			return "apply-credit-card";
 		} else {
 			if (Double.parseDouble(monthlySalary) < 1000) {
 				logger.warn("Your salary is too low. You are required to have a monthly salary above $1000");
 				model.addAttribute("error2", true);
-				return "applyCreditCard";
+				return "apply-credit-card";
 			} else {
 				String creditCardNumber = creditCardService.generateCreditCardNumber();
 				String pin = creditCardService.generatePinNumber();
@@ -115,7 +115,7 @@ public class CreditCardController {
 				userService.update(loggedUser);
 
 				return "redirect:/userCards";
-			} 
+			}
 		}
 	}
 
@@ -125,12 +125,12 @@ public class CreditCardController {
 			// Get logged user
 			User currentUser = (User) session.getAttribute("loggedUser");
 			List<CreditCard> ccList = currentUser.getCreditCards();
-	
+
 			// add user and account list to the model
 			model.addAttribute("user", currentUser);
 			model.addAttribute("CcList", ccList);
-	
-			return "paybills";
+
+			return "pay-bills";
 		} else {
 			model.addAttribute("error", true);
 			logger.warn("User Is not logged-in. Please login first");
@@ -148,17 +148,22 @@ public class CreditCardController {
 		CreditCard creditCard = creditCardService.findById(creditCardId);
 		MerchantCategoryCode mccBill = merchantCategoryCodeService.findByMerchantCategory("Bill");
 		Transaction transaction = null;
-		
+
 		if (balanceType.equals("custom")) {
 			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, null, mccBill,
 					null);
 		} else if (balanceType.equals("minimum")) {
-			if (creditCard.getMonthlyBalance() < 50) transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard, null, mccBill,null);
-			else transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, null, mccBill,null);
+			if (creditCard.getMonthlyBalance() < 50)
+				transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
+						null, mccBill, null);
+			else
+				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, null, mccBill, null);
 		} else if (balanceType.equals("statement")) {
-			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard, null, mccBill, null);
+			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
+					null, mccBill, null);
 		} else if (balanceType.equals("current")) {
-			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, null, mccBill, null);
+			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, null,
+					mccBill, null);
 		}
 
 		transactionService.persist(transaction);

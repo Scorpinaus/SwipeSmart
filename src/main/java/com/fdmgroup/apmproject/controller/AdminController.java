@@ -49,7 +49,7 @@ public class AdminController {
 		// find all account by user Id
 		List<Account> requiredAccounts = returnedUser.getAccounts();
 		model.addAttribute("requiredAccounts", requiredAccounts);
-		return "adminaccount";
+		return "admin-account";
 	}
 
 	@GetMapping("/admin/creditcards")
@@ -77,7 +77,7 @@ public class AdminController {
 //		
 //		model.addAttribute("creditCards", ccList);
 
-		return "admincreditcard";
+		return "admin-creditcard";
 	}
 
 	@GetMapping("/admin/dashboard")
@@ -85,14 +85,7 @@ public class AdminController {
 		User returnedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", returnedUser);
 		LOGGER.info("Redirecting to dashboard");
-		return "admindashboard";
-	}
-
-	@GetMapping("/admin/profile")
-	public String adminProfilePage(HttpSession session, Model model) {
-		User returnedUser = (User) session.getAttribute("loggedUser");
-		model.addAttribute("user", returnedUser);
-		return "adminprofile";
+		return "admin-dashboard";
 	}
 
 	@GetMapping("/admin/users")
@@ -103,7 +96,7 @@ public class AdminController {
 		List<User> users = userService.findAllUsers();
 		model.addAttribute("users", users);
 
-		return "adminuser";
+		return "admin-user";
 	}
 
 	@PostMapping("/admin/bankaccountApproval")
@@ -135,7 +128,7 @@ public class AdminController {
 		model.addAttribute("transactions", transactionList);
 		model.addAttribute("user", returnedUser);
 		model.addAttribute("users", userList);
-		return "admintransactions";
+		return "admin-transactions";
 	}
 
 	@PostMapping("/admin/transactions")
@@ -182,19 +175,37 @@ public class AdminController {
 					}
 				}
 			} else if (pickedType.equals("card")) {
-				for (CreditCard cc : creditCards) {
-					List<Transaction> transaction = cc.getTransactions();
-					for (Transaction tx : transaction) {
-						if (tx.getTransactionCreditCard().getCreditCardUser().getUsername().equals(pickedUser)) {
+				if (pickedUser != null) {
+					for (CreditCard cc : creditCards) {
+						List<Transaction> transaction = cc.getTransactions();
+						for (Transaction tx : transaction) {
+							if (tx.getTransactionCreditCard().getCreditCardUser().getUsername().equals(pickedUser)) {
+								transactions.add(tx);
+							}
+						}
+					}
+				} else {
+					for (CreditCard cc : creditCards) {
+						List<Transaction> transaction = cc.getTransactions();
+						for (Transaction tx : transaction) {
 							transactions.add(tx);
 						}
 					}
 				}
 			} else if (pickedType.equals("account")) {
-				for (Account a : accountList) {
-					List<Transaction> transaction = a.getTransactions();
-					for (Transaction tx : transaction) {
-						if (tx.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser)) {
+				if (pickedUser != null) {
+					for (Account a : accountList) {
+						List<Transaction> transaction = a.getTransactions();
+						for (Transaction tx : transaction) {
+							if (tx.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser)) {
+								transactions.add(tx);
+							}
+						}
+					}
+				} else {
+					for (Account a : accountList) {
+						List<Transaction> transaction = a.getTransactions();
+						for (Transaction tx : transaction) {
 							transactions.add(tx);
 						}
 					}
@@ -274,7 +285,7 @@ public class AdminController {
 		Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 		model.addAttribute("users", userList);
 		model.addAttribute("transactions", transactions);
-		return "admintransactions";
+		return "admin-transactions";
 	}
 
 	@PostMapping("/admin/credicardApproval")

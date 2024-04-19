@@ -29,7 +29,9 @@
 			</div>
 		</div>
 		<div class="mainPage" id="main">
-			<button class="openSidebar">☰</button>
+			<header>
+				<button class="openSidebar">☰</button>
+			</header>
 			<div class="mainPageContent">
 				<h1><span th:text="'Hi ' + ${user.username} + ', this is your profile page'"></span></h1>
 				<div class="userDetailsList" th:object="${user}">

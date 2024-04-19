@@ -140,8 +140,6 @@ public class CreditCardService {
 		persist(createCreditCard);
 		persist(createCreditCard2);
 		
-		scheduleInterestCharging(findById(1));
-		
 		
 		String creditCardNumberPending = "3456-5678-1234-5678";
 		String pinPending = "125";
@@ -151,7 +149,7 @@ public class CreditCardService {
 	}
 	
 	
-
+	// run this method at the start of every month 
 	private long calculateDelayToNextMonth() {
 		LocalDate currentDate = LocalDate.now();
 		LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
@@ -160,7 +158,7 @@ public class CreditCardService {
 		return duration.toMillis();
 	}
 
-	public void scheduleInterestCharging(CreditCard creditCardApproved) {
+	public void scheduleInterestCharging() {
 		Timer timer = new Timer();
 
 		// Calculate the delay until the next 1st day of the month
@@ -171,8 +169,9 @@ public class CreditCardService {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				List<CreditCard> approvedCreditCards = findCreditCardsByStatus(statusService.findByStatusName("Approved"));
-				chargeInterest(approvedCreditCards);
+				Status statusName = statusService.findByStatusName("Approved");
+				List<CreditCard> approvedCreditCards = findCreditCardsByStatus(statusName);
+				calculateMonthlyBalance(approvedCreditCards);
 				chargeInterest(approvedCreditCards);
 			}
 		}, delay, ONE_MONTH_IN_MILLISECONDS);

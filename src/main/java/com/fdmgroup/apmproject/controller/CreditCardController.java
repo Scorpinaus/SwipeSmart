@@ -153,7 +153,7 @@ public class CreditCardController {
 	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCard") Long creditCardId,
 			@RequestParam(name = "payment", required = false) Double paymentAmount,
 			@RequestParam("balanceType") String balanceType,
-			@RequestParam("account") long accountId) {
+			@RequestParam("accountId") long accountId) {
 		
 		// Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
@@ -161,23 +161,26 @@ public class CreditCardController {
 		CreditCard creditCard = creditCardService.findById(creditCardId);
 		MerchantCategoryCode mccBill = merchantCategoryCodeService.findByMerchantCategory("Bill");
 		Transaction transaction = null;
-		
+
+		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
 
 		if (balanceType.equals("custom")) {
 			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, account, mccBill,
-					null);
+					currency);
 		} else if (balanceType.equals("minimum")) {
 			if (creditCard.getMonthlyBalance() < 50)
 				transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-						account, mccBill, null);
+						account, mccBill, currency);
+
 			else
 				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, account, mccBill, null);
 		} else if (balanceType.equals("statement")) {
 			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-					account, mccBill, null);
+
+					account, mccBill, currency);
 		} else if (balanceType.equals("current")) {
 			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, account,
-					mccBill, null);
+					mccBill, currency);
 		}
 		account.setBalance(account.getBalance()-transaction.getTransactionAmount());
 		accountService.update(account);

@@ -175,7 +175,7 @@ public class AccountController {
 	}
 
 	@PostMapping("/bankaccount/deposit")
-	public String deposit(@RequestParam("account") long accountId, @RequestParam("depositAmount") double depositAmount,
+	public String deposit(@RequestParam("accountId") long accountId, @RequestParam("depositAmount") double depositAmount,
 			@RequestParam("currency") String currencyCode) {
 
 		// get the required account

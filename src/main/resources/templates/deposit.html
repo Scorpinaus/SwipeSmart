@@ -43,7 +43,7 @@
          
             <div class="select-account">
     			<label class="input-label" for="account">Account:</label>
-    			<select name="account">
+    			<select name="accountId">
                     <option value="" disabled selected hidden=>Select Account...</option>
         			<option th:each="account : ${AccountList}"
         				th:if="${account.accountStatus.statusName != 'Pending'}"

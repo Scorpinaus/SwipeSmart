@@ -37,8 +37,8 @@
 					<form id="paymentForm" method="post" action="/creditCard/paybills">
 						
 						
-						<label class="input-label" for="account">Account:</label>
-			    			<select name="account">
+						<label class="input-label" for="account">Bank Account:</label>
+			    			<select name="accountId">
 			                    <option value="" disabled selected hidden =>Select Account...</option>
 			        			<option th:each="account : ${AccountList}"
 			        				th:if="${account.accountStatus.statusName != 'Pending'}"
@@ -46,13 +46,14 @@
 			    			</select>
 						
 						
-						
+						<label class="input-label" for="creditcard">Credit Card:</label>
 						<select id="creditCardSelect" name="creditCard">
 					    	<option th:each="creditCard : ${CcList}" th:if="${creditCard.creditCardStatus.statusName != 'Pending'}" th:value="${creditCard.creditCardId}" th:text="${creditCard.creditCardNumber}"></option>
 						</select>
 						
 						<input type="number" name="payment" placeholder="Payment Amount" min = "0" step="0.01" required>
 						<input type="hidden" id="balanceType" name="balanceType">
+<!-- 						<input type="hidden" id="accountId" name="account.accountId"> -->
 						<button type="button" onclick="getBalance('custom')">Custom Balance</button>
 						<br>	
 						<button type="button" onclick="getBalance('minimum')">Minimum Balance</button>

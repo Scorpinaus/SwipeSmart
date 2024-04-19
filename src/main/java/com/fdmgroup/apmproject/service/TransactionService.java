@@ -97,8 +97,10 @@ public class TransactionService {
 					update(transaction);
 				}
 			} else if (creditCard.getCardType().equals("SwipeSmart Platinium Card")) {
-				transaction.setCashback(transaction.getTransactionAmount()*0.015);
-				update(transaction);
+				if (transaction.getTransactionMerchantCategoryCode().getMerchantCategory() != "Interest") {
+					transaction.setCashback(transaction.getTransactionAmount()*0.015);
+					update(transaction);
+				}
 			}
 			creditCard.addTransaction(transaction.getTransactionAmount() - transaction.getCashback());
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
@@ -168,7 +170,17 @@ public class TransactionService {
 		return Transactions;
 	}
 	
-	private updateInterest()
+	private void updateInterest(List<CreditCard> approvedCreditCards) {
+		MerchantCategoryCode mcc4 = merchantCategoryCodeService.findByMerchantCategory("Interest");
+		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
+		for (CreditCard creditCard : approvedCreditCards) {
+			if (creditCard.getInterest() > 0) {
+			Transaction transaction = new Transaction(LocalDateTime.now(), "CC Payment", creditCard.getInterest(), null, 0.00, creditCard, null, mcc4, currency);
+			persist(transaction);
+			updateCreditCardBalance(transaction);
+			}
+		}
+	}
 
 	@PostConstruct
 	public void initTransactions() {
@@ -228,6 +240,7 @@ public class TransactionService {
 		List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
 		creditCardService.calculateMonthlyBalance(approvedCreditCards);
 		creditCardService.chargeInterest(approvedCreditCards);
+		updateInterest(approvedCreditCards);
 	}
 
 }

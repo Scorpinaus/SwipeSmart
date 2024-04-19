@@ -229,6 +229,7 @@ public class ForeignExchangeCurrencyService {
 		currencyOne.setInverseRate(1.00);
 		currencyOne.setRate(1.00);
 		persist(currencyOne);
+		loadAndSaveForeignCurrencyJSON();
 	}
 
 }

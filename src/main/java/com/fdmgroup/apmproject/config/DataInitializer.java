@@ -45,15 +45,15 @@ import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
  * @see ApplicationReadyEvent
  */
 
-@Component
-public class DataInitializer implements ApplicationListener<ApplicationReadyEvent> {
-	
-	@Autowired
-	private ForeignExchangeCurrencyService currencyService;
-	
-	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
-		currencyService.loadAndSaveForeignCurrencyJSON();
-	}
-
-}
+//@Component
+//public class DataInitializer implements ApplicationListener<ApplicationReadyEvent> {
+//	
+//	@Autowired
+//	private ForeignExchangeCurrencyService currencyService;
+//	
+//	@Override
+//	public void onApplicationEvent(ApplicationReadyEvent event) {
+//		currencyService.loadAndSaveForeignCurrencyJSON();
+//	}
+//
+//}

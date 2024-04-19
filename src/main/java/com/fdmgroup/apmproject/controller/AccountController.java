@@ -86,7 +86,7 @@ public class AccountController {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", currentUser);
 			List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
-			currenciesList = currencyService.getAllCurrencies();
+			currenciesList = currencyService.getSupportedCurrencies();
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
 				return "accountdashboard";
@@ -164,7 +164,7 @@ public class AccountController {
 
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-		currenciesList = currencyService.getAllCurrencies();
+		currenciesList = currencyService.getSupportedCurrencies();
 
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);
@@ -261,7 +261,7 @@ public class AccountController {
 
 		// get all the accounts owned by that user
 		List<Account> AccountList = accountService.findAllAccountsByUserId(userId);
-		currenciesList = currencyService.getAllCurrencies();
+		currenciesList = currencyService.getSupportedCurrencies();
 		
 		// add user and account list to the model
 		model.addAttribute("user", currentUser);

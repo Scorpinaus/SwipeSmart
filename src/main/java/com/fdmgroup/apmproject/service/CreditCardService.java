@@ -186,13 +186,13 @@ public class CreditCardService {
 			List<Transaction> transactions = creditCard.getTransactions();
 			for (Transaction transaction : transactions) {
 				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth) && transaction.getTransactionDate().toLocalDate().isAfter(firstDayOfPreviousMonth) && transaction.getTransactionType().equals("CC Payment")) {
-					interestPayable -= transaction.getTransactionAmount() + transaction.getCashback();
+					interestPayable -= (transaction.getTransactionAmount() - transaction.getCashback());
 				}
-				if (interestPayable > 0 ) {
-					creditCard.setInterest(interestPayable*interestRate);
-					logger.info(creditCard.getCreditCardNumber() + "charged for " + interestPayable*interestRate);
-					update(creditCard);
-				}
+			}
+			if (interestPayable > 0 ) {
+				creditCard.setInterest(interestPayable*interestRate);
+				logger.info(creditCard.getCreditCardNumber() + " charged for " + interestPayable*interestRate + " as interest. Balance charged for interest: " + interestPayable);
+				update(creditCard);
 			}
 		}
 	}
@@ -213,11 +213,6 @@ public class CreditCardService {
 				update(creditCard);
 			}
 		}
-	}
-
-	private double calculateInterest(double balance) {
-
-		return balance * interestRate;
 	}
 
 

@@ -82,6 +82,7 @@ public class MerchantCategoryCodeService {
 		MerchantCategoryCode mcc2 = new MerchantCategoryCode(1002, "Transport");
 		MerchantCategoryCode mcc3 = new MerchantCategoryCode(1003, "Travel");
 		MerchantCategoryCode mcc4 = new MerchantCategoryCode(1004, "Bill");
+		MerchantCategoryCode mcc5 = new MerchantCategoryCode(1004, "Interest");
 		persist(mcc);
 		persist(mcc1);
 		persist(mcc2);

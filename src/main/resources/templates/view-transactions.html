@@ -162,8 +162,7 @@ tbody tr:hover {
 									<span
 									th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></span>
 								</td>
-								<td th:if="${transaction.recipientAccountNumber == null}"
-									colspan="2"></td>
+								<td th:if="${transaction.recipientAccountNumber == null}"></td>
 								<td th:text="${transaction.description}"></td>
 							</tr>
 						</tbody>

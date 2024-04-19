@@ -74,10 +74,15 @@
                   </option>
                  </select>
               </div>
+              
+                
             </div>
-      		<div class="submit-button">
-              <input id="submitButton" type="submit" value="Transfer">
-            </div>	
+            
+            <div class="submit-button">
+                      <input id="submitButton" type="submit" value="Transfer">
+            </div>
+            
+            	
 						
 			<div th:if="${param.SameAccountError}">
 				<p style="color: red;">Could not transfer money to the same account. Please check your input account number.</p>

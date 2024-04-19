@@ -132,15 +132,15 @@ a#cards{
 	opacity: 0.6;
 }
 
+body{
+	font-family: "Nunito Sans", sans-serif;
+	min-width: 500px;
+}
+
 header {
 	background-color: var(--darkgreen);
 	padding-top:0px;
 	margin:0px;
-}
-
-body{
-	font-family: "Nunito Sans", sans-serif;
-	min-width: 500px;
 }
 
 .deposit-form-container{

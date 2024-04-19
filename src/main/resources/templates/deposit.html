@@ -44,7 +44,7 @@
             <div class="select-account">
     			<label class="input-label" for="account">Account:</label>
     			<select name="account">
-                    <option value="" disabled selected hidden>Select Account...</option>
+                    <option value="" disabled selected hidden=>Select Account...</option>
         			<option th:each="account : ${AccountList}"
         				th:if="${account.accountStatus.statusName != 'Pending'}"
         				th:value="${account.accountId}" th:text="${account.accountName} + '   ' + ${account.accountNumber}"></option>
@@ -54,7 +54,7 @@
   			<div class="select-currency">
     			<label class="input-label" for="currency">Currency:</label> 
     			<select id="currency" name="currency" required>
-                    <option value="" disabled selected hidden>Select Currency...</option>
+                    <option value="" disabled selected hidden=>Select Currency...</option>
         			<option th:each="currency : ${currencies}"
         					th:value="${currency.code}" th:text="${currency.name}"></option>
   			    </select>

@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
+import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.MerchantCategoryCodeService;
@@ -48,6 +50,10 @@ public class CreditCardController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AccountService accountService;
+	
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	private List<ForeignExchangeCurrency> currencies;
 
@@ -126,7 +132,12 @@ public class CreditCardController {
 			User currentUser = (User) session.getAttribute("loggedUser");
 			List<CreditCard> ccList = currentUser.getCreditCards();
 
+			List<Account> AccountList = accountService.findAllAccountsByUserId(currentUser.getUserId());
+			
+			
+			
 			// add user and account list to the model
+			model.addAttribute("AccountList", AccountList);
 			model.addAttribute("user", currentUser);
 			model.addAttribute("CcList", ccList);
 
@@ -141,31 +152,35 @@ public class CreditCardController {
 	@PostMapping("/creditCard/paybills")
 	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCard") Long creditCardId,
 			@RequestParam(name = "payment", required = false) Double paymentAmount,
-			@RequestParam("balanceType") String balanceType) {
-
+			@RequestParam("balanceType") String balanceType,
+			@RequestParam("account") long accountId) {
+		
 		// Get logged user
 		User currentUser = (User) session.getAttribute("loggedUser");
+		Account account = accountService.findById(accountId);
 		CreditCard creditCard = creditCardService.findById(creditCardId);
 		MerchantCategoryCode mccBill = merchantCategoryCodeService.findByMerchantCategory("Bill");
 		Transaction transaction = null;
+		
 
 		if (balanceType.equals("custom")) {
-			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, null, mccBill,
+			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, account, mccBill,
 					null);
 		} else if (balanceType.equals("minimum")) {
 			if (creditCard.getMonthlyBalance() < 50)
 				transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-						null, mccBill, null);
+						account, mccBill, null);
 			else
-				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, null, mccBill, null);
+				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, account, mccBill, null);
 		} else if (balanceType.equals("statement")) {
 			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-					null, mccBill, null);
+					account, mccBill, null);
 		} else if (balanceType.equals("current")) {
-			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, null,
+			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, account,
 					mccBill, null);
 		}
-
+		account.setBalance(account.getBalance()-transaction.getTransactionAmount());
+		accountService.update(account);
 		transactionService.persist(transaction);
 		transactionService.updateCreditCardBalance(transaction);
 
@@ -178,6 +193,7 @@ public class CreditCardController {
 			if (c.getCreditCardId() != creditCardId) {
 				newUserCreditCards.add(c);
 			}
+			
 		}
 		newUserCreditCards.add(creditCard);
 		currentUser.setCreditCardList(newUserCreditCards);

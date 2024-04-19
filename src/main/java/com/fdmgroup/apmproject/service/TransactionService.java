@@ -87,17 +87,19 @@ public class TransactionService {
 				if (transaction.getTransactionMerchantCategoryCode().getMerchantCategory().equals("Dining")) {
 					transaction.setCashback(transaction.getTransactionAmount()*0.02);
 					update(transaction);
-				} else if (creditCard.getCardType().equals("Ultimate Slay Card")) {
-					transaction.setCashback(transaction.getTransactionAmount()*0.015);
-					update(transaction);
 				}
+			} else if (creditCard.getCardType().equals("SwipeSmart Platinium Card")) {
+				transaction.setCashback(transaction.getTransactionAmount()*0.015);
+				update(transaction);
 			}
 			creditCard.addTransaction(transaction.getTransactionAmount() - transaction.getCashback());
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
 			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
 				creditCard.addTransactionMonthly(transaction.getTransactionAmount() - transaction.getCashback());
+				System.out.println(transactionDateAsLocalDate);
 			}
 			creditCardService.update(creditCard);
+			
 		} else if (transaction.getTransactionCreditCard() != null
 				&& transaction.getTransactionType().equals("CC Bill Payment")) {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
@@ -105,6 +107,7 @@ public class TransactionService {
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
 			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
 				creditCard.addTransactionMonthly(-transaction.getTransactionAmount());
+				System.out.println(transactionDateAsLocalDate);
 			}
 			creditCardService.update(creditCard);
 		}
@@ -162,6 +165,7 @@ public class TransactionService {
 	@PostConstruct
 	public void initTransactions() {
 		CreditCard creditCard = creditCardService.findByCreditCardNumber("1234-5678-1234-5678");
+		CreditCard creditCard2 = creditCardService.findByCreditCardNumber("2345-5678-2398-5128");
 		MerchantCategoryCode mcc = merchantCategoryCodeService.findByMerchantCategory("Dining");
 		MerchantCategoryCode mcc1 = merchantCategoryCodeService.findByMerchantCategory("Shopping");
 		MerchantCategoryCode mcc2 = merchantCategoryCodeService.findByMerchantCategory("Travel");
@@ -182,6 +186,12 @@ public class TransactionService {
 				null, 0.00, creditCard, null, mcc3, null);
 		Transaction transaction7 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 33, 56), "CC Bill Payment", 100,
 				null, 0.00, creditCard, null, mcc3, null);
+		Transaction transaction8 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Payment", 1100.10, null,
+				0.00, creditCard2, null, mcc1, null);
+		Transaction transaction9 = new Transaction(LocalDateTime.of(2024, 2, 9, 11, 33, 56), "CC Payment", 100.10, null,
+				0.00, creditCard2, null, mcc2, null);
+		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Payment", 100.10, null,
+				0.00, creditCard2, null, mcc2, null);
 		persist(transaction);
 		persist(transaction1);
 		persist(transaction2);
@@ -190,6 +200,9 @@ public class TransactionService {
 		persist(transaction5);
 		persist(transaction6);
 		persist(transaction7);
+		persist(transaction8);
+		persist(transaction9);
+		persist(transaction10);
 		updateCreditCardBalance(transaction);
 		updateCreditCardBalance(transaction1);
 		updateCreditCardBalance(transaction2);
@@ -198,6 +211,9 @@ public class TransactionService {
 		updateCreditCardBalance(transaction5);
 		updateCreditCardBalance(transaction6);
 		updateCreditCardBalance(transaction7);
+		updateCreditCardBalance(transaction8);
+		updateCreditCardBalance(transaction9);
+		updateCreditCardBalance(transaction10);
 	}
 
 }

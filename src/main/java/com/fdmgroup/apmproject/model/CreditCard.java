@@ -184,7 +184,7 @@ public class CreditCard {
 	}
 
 	public void addTransactionMonthly(double amount) {
-		setMonthlyBalance(amountUsed + amount);
+		setMonthlyBalance(monthlyBalance + amount);
 	}
 
 	@Override

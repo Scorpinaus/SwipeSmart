@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +23,6 @@ import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.UserService;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -117,7 +114,7 @@ public class AdminController {
 		account.setAccountStatus(statusService.findByStatusName("Approved"));
 		accountService.update(account);
 		long userId = account.getAccountUser().getUserId();
-		return "redirect:/admin/creditcards?userId=" + userId;
+		return "redirect:/admin/users";
 	}
 
 	@GetMapping("/admin/transactions")
@@ -143,7 +140,8 @@ public class AdminController {
 
 	@PostMapping("/admin/transactions")
 	public String adminViewAllTransactions(@RequestParam(name = "month", required = false) String month,
-			@RequestParam(name = "pickedUser", required = false) String pickedUser, Model model, HttpSession session) {
+			@RequestParam(name = "pickedUser", required = false) String pickedUser,
+			@RequestParam(name = "pickedType", required = false) String pickedType, Model model, HttpSession session) {
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", loggedUser);
 		List<User> userList = userService.findAllUsers();
@@ -151,48 +149,129 @@ public class AdminController {
 		List<CreditCard> creditCards = creditCardService.findAllCreditCards();
 		List<Account> accountList = accountService.getAllAccounts();
 		if (month == null || month == "") {
-			for (CreditCard cc : creditCards) {
-				List<Transaction> transaction = cc.getTransactions();
-				for (Transaction tx : transaction) {
-					if (tx.getTransactionCreditCard().getCreditCardUser().getUsername().equals(pickedUser)) {
-						transactions.add(tx);
+			if (pickedType == null) {
+				if (pickedUser != null) {
+					for (CreditCard cc : creditCards) {
+						List<Transaction> transaction = cc.getTransactions();
+						for (Transaction tx : transaction) {
+							if (tx.getTransactionCreditCard().getCreditCardUser().getUsername().equals(pickedUser)) {
+								transactions.add(tx);
+							}
+						}
+					}
+					for (Account a : accountList) {
+						List<Transaction> transaction = a.getTransactions();
+						for (Transaction tx : transaction) {
+							if (tx.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser)) {
+								transactions.add(tx);
+							}
+						}
+					}
+				} else {
+					for (CreditCard cc : creditCards) {
+						List<Transaction> transaction = cc.getTransactions();
+						for (Transaction tx : transaction) {
+							transactions.add(tx);
+						}
+					}
+					for (Account a : accountList) {
+						List<Transaction> transaction = a.getTransactions();
+						for (Transaction tx : transaction) {
+							transactions.add(tx);
+						}
+					}
+				}
+			} else if (pickedType.equals("card")) {
+				for (CreditCard cc : creditCards) {
+					List<Transaction> transaction = cc.getTransactions();
+					for (Transaction tx : transaction) {
+						if (tx.getTransactionCreditCard().getCreditCardUser().getUsername().equals(pickedUser)) {
+							transactions.add(tx);
+						}
+					}
+				}
+			} else if (pickedType.equals("account")) {
+				for (Account a : accountList) {
+					List<Transaction> transaction = a.getTransactions();
+					for (Transaction tx : transaction) {
+						if (tx.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser)) {
+							transactions.add(tx);
+						}
 					}
 				}
 			}
-			for (Account a : accountList) {
-				List<Transaction> transaction = a.getTransactions();
-				for (Transaction tx : transaction) {
-					if (tx.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser)) {
-						transactions.add(tx);
-					}
-				}
-			}
-			Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 		} else {
 			int year = Integer.parseInt(month.substring(0, 4));
 			int monthValue = Integer.parseInt(month.substring(5, 7));
-			for (CreditCard cc : creditCards) {
-				List<Transaction> transaction = cc.getTransactions();
-				for (Transaction t : transaction) {
-					if ((t.getTransactionDate().getMonthValue() == monthValue
-							&& t.getTransactionDate().getYear() == year)
-							&& (t.getTransactionCreditCard().getCreditCardUser().getUsername().equals(pickedUser))) {
-						transactions.add(t);
+			if (pickedType == null) {
+				if (pickedUser != null) {
+					for (CreditCard cc : creditCards) {
+						List<Transaction> transaction = cc.getTransactions();
+						for (Transaction t : transaction) {
+							if ((t.getTransactionDate().getMonthValue() == monthValue
+									&& t.getTransactionDate().getYear() == year)
+									&& (t.getTransactionCreditCard().getCreditCardUser().getUsername()
+											.equals(pickedUser))) {
+								transactions.add(t);
+							}
+						}
+					}
+					for (Account a : accountList) {
+						List<Transaction> transaction = a.getTransactions();
+						for (Transaction t : transaction) {
+							if ((t.getTransactionDate().getMonthValue() == monthValue
+									&& t.getTransactionDate().getYear() == year)
+									&& (t.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser))) {
+								transactions.add(t);
+							}
+						}
+					}
+				} else {
+					for (CreditCard cc : creditCards) {
+						List<Transaction> transaction = cc.getTransactions();
+						for (Transaction t : transaction) {
+							if (t.getTransactionDate().getMonthValue() == monthValue
+									&& t.getTransactionDate().getYear() == year) {
+								transactions.add(t);
+							}
+						}
+					}
+					for (Account a : accountList) {
+						List<Transaction> transaction = a.getTransactions();
+						for (Transaction t : transaction) {
+							if (t.getTransactionDate().getMonthValue() == monthValue
+									&& t.getTransactionDate().getYear() == year) {
+								transactions.add(t);
+							}
+						}
+					}
+				}
+			} else if (pickedType.equals("card")) {
+				for (CreditCard cc : creditCards) {
+					List<Transaction> transaction = cc.getTransactions();
+					for (Transaction t : transaction) {
+						if ((t.getTransactionDate().getMonthValue() == monthValue
+								&& t.getTransactionDate().getYear() == year)
+								&& (t.getTransactionCreditCard().getCreditCardUser().getUsername()
+										.equals(pickedUser))) {
+							transactions.add(t);
+						}
+					}
+				}
+			} else if (pickedType.equals("account")) {
+				for (Account a : accountList) {
+					List<Transaction> transaction = a.getTransactions();
+					for (Transaction t : transaction) {
+						if ((t.getTransactionDate().getMonthValue() == monthValue
+								&& t.getTransactionDate().getYear() == year)
+								&& (t.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser))) {
+							transactions.add(t);
+						}
 					}
 				}
 			}
-			for (Account a : accountList) {
-				List<Transaction> transaction = a.getTransactions();
-				for (Transaction t : transaction) {
-					if ((t.getTransactionDate().getMonthValue() == monthValue
-							&& t.getTransactionDate().getYear() == year)
-							&& (t.getTransactionAccount().getAccountUser().getUsername().equals(pickedUser))) {
-						transactions.add(t);
-					}
-				}
-			}
-			Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 		}
+		Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 		model.addAttribute("users", userList);
 		model.addAttribute("transactions", transactions);
 		return "admintransactions";
@@ -205,14 +284,11 @@ public class AdminController {
 
 		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
 		creditCardService.update(creditCard);
-		
+
 		creditCardService.scheduleInterestCharging(creditCard);
-		
+
 		long userId = creditCard.getCreditCardUser().getUserId();
-		return "redirect:/admin/accounts?userId=" + userId;
+		return "redirect:/admin/users";
 	}
-	
-	
-	
 
 }

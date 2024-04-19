@@ -1,73 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<link rel="stylesheet" href="/deposit.css">
-<meta charset="UTF-8">
-<title>Deposit page</title>
-</head>
-<body>
-	<div class="linkContainerSideBar" id="sidebar">
-		<div class="sidebarHeader">
-			<p id="sidebarHeader">SwipeSmart</p>
-		</div>
-		<div class="sidebarLinks">
-			<div class="profile">
-				<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile
-					Page</a>
-			</div>
-			<div class="dashboard">
-				<a id="dashboard" href="/dashboard">Dashboard</a>
-			</div>
-			<div class="cards">
-				<a class="cardsText" id="cards" href="/userCards">Cards</a>
-			</div>
-			<div class="accounts">
-				<a class="accountsText" id="accounts" href="/bankaccount/dashboard">Accounts</a>
-			</div>
-			<div class="logout">
-				<a id="logout" href="/logout">Logout</a>
-			</div>
-		</div>
-	</div>
-	<div class="mainPage" id="main">
-		<button class="openSidebar">☰</button>
-		<h1>Deposit</h1>
-		<!--  Try changing the method to 'get' below -->
-		<div class="secondary-content-container">
-			<div class="form">
-				<form method="post" action="/bankaccount/deposit">
-					<!-- Use the 'placeholder' tag to be more helpful -->
-					<label for="account">Select Account:</label>
-					<select name="account">
-						<option th:each="account : ${AccountList}"
-							th:if="${account.accountStatus.statusName != 'Pending'}"
-							th:value="${account.accountId}" th:text="${account.accountNumber}"></option>
-					</select>
-					<!-- Add more options as needed -->
-					<div>
-						<label for="currency">Select Currency:</label> 
-						<select id="currency" name="currency" required>
-							<option th:each="currency : ${currencies}"
-								th:value="${currency.code}" th:text="${currency.name}"></option>
-						</select>
-					</div>
-					<label for="deposit amount">Deposit Amount:</label>
-					<input type="number" name="depositAmount"
-						placeholder="Deposit Amount" min="0" step="0.01" required>
-					<input id="submitButton" type="submit" value="Submit">
-				</form>
-			</div>
-		</div>
-	</div>
-	<script>
-			let menuOpen = false;
-			const sidebar = document.querySelector('.linkContainerSideBar');
-			const mainpage = document.querySelector('.mainPage');
-			const button = document.querySelector('.openSidebar')
-			
-			button.addEventListener('click', () => {menuOpen = !menuOpen;
-			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
-			sidebar.style.width = menuOpen ? '0' : '200px';})
-		</script>
-</body>
+
+  <head>
+  <link rel="stylesheet" href="/deposit.css">
+  <meta charset="UTF-8">
+  <title>Deposit page</title>
+  </head>
+  <body>
+  	<div class="linkContainerSideBar" id="sidebar">
+  		<div class="sidebarHeader">
+  			<p id="sidebarHeader">SwipeSmart</p>
+  		</div>
+  		<div class="sidebarLinks">
+  			<div class="profile">
+  				<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile
+  					Page</a>
+  			</div>
+  			<div class="dashboard">
+  				<a id="dashboard" href="/dashboard">Dashboard</a>
+  			</div>
+  			<div class="cards">
+  				<a class="cardsText" id="cards" href="/userCards">Cards</a>
+  			</div>
+  			<div class="accounts">
+  				<a class="accountsText" id="accounts" href="/bankaccount/dashboard">Accounts</a>
+  			</div>
+  			<div class="logout">
+  				<a id="logout" href="/logout">Logout</a>
+  			</div>
+  		</div>
+  	</div>
+    
+  	<div class="mainPage" id="main">
+  		<header>
+           <button class="openSidebar">☰</button>
+        </header>
+        
+  		<h1>Deposit</h1>
+      
+  		<div class="deposit-form-container">
+  		   <form method="post" action="/bankaccount/deposit">
+         
+            <div class="select-account">
+    			<label class="input-label" for="account">Account:</label>
+    			<select name="account">
+                    <option value="" disabled selected hidden>Select Account...</option>
+        			<option th:each="account : ${AccountList}"
+        				th:if="${account.accountStatus.statusName != 'Pending'}"
+        				th:value="${account.accountId}" th:text="${account.accountName} + '   ' + ${account.accountNumber}"></option>
+    			</select>
+            </div>
+            
+  			<div class="select-currency">
+    			<label class="input-label" for="currency">Currency:</label> 
+    			<select id="currency" name="currency" required>
+                    <option value="" disabled selected hidden>Select Currency...</option>
+        			<option th:each="currency : ${currencies}"
+        					th:value="${currency.code}" th:text="${currency.name}"></option>
+  			    </select>
+  			</div>
+        
+            <div class="deposit-amount">
+    			<label class="input-label" for="deposit amount">Deposit Amount:</label>
+    			<input type="number" name="depositAmount"
+    			placeholder="  Deposit Amount" min="0" step="0.01" required>
+  			</div>
+        
+            <div class="submit-button">
+                <input id="submitButton" type="submit" value="Submit">
+            </div>
+            
+  		    </form>
+            
+  		</div>
+  	</div>
+  	
+  	<script>
+  			let menuOpen = false;
+  			const sidebar = document.querySelector('.linkContainerSideBar');
+  			const mainpage = document.querySelector('.mainPage');
+  			const button = document.querySelector('.openSidebar')
+  			
+  			button.addEventListener('click', () => {menuOpen = !menuOpen;
+  			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+  			sidebar.style.width = menuOpen ? '0' : '200px';})
+  		</script>
+  </body>
 </html>

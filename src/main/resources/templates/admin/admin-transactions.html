@@ -26,62 +26,66 @@
 			</div>
 		</div>
 		<div class="mainPage" id="main">
-			<button class="openSidebar">☰</button>
-			<div class="transactionTable">
-				<h3>Transactions</h3>
-				<form method="post">
-					<label for="month">Month:</label> 
-					<input type="month" id="month" name="month">
-					<select name="pickedUser">
-					 	<option value="" disabled selected hidden>Select Username</option>
-					    <option th:each="pickedUser : ${users}" th:if="${pickedUser.getRole != 'ROLE_ADMIN'}" th:value="${pickedUser.getUsername}" th:text="${pickedUser.getUsername}"></option>
-					 </select>
-					 <select name="pickedType">
-					 	<option value="" disabled selected hidden>Select Transaction Source</option>
-					 	<option value="card">Credit Card</option>
-					 	<option value="account">Account</option>
-					 </select>
-					<button type="submit">Filter</button>
-				</form>
-				<div>
-					<div class="secondary-content-container">
-						<table>
-							<thead>
-								<tr>
-									<th>Category</th>
-									<th>Date</th>
-									<th>Time</th>
-									<th>User</th>
-									<th>Credit Card Number</th>
-									<th>Account</th>
-									<th>Recipient</th>
-									<th>Amount</th>
-									<th>Currency</th>
-									<th>Transaction Type</th>
-									<th>CashBack</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="transaction : ${transactions}">
-									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory}"></td>
-									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.transactionType}"></td>
-									<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
-									<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
-									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardUser.getUsername}"></td>
-									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountUser.getUsername}"></td>
-									<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardNumber}"></td>
-									<td th:text="'-'"></td>
-									<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountNumber}"></td>
-									<td th:if="${transaction.getRecipientAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
-									<td th:if="${transaction.getRecipientAccount == null}" th:text="'-'"></td>
-									<td th:text= "'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
-									<td th:if="${transaction.transactionCurrency != null}" th:text="${transaction.transactionCurrency.getName}"></td>
-									<td th:if="${transaction.transactionCurrency == null}" th:text="'-'"></td>
-									<td th:text="${transaction.transactionType}"></td>
-									<td th:text="${transaction.cashback*100 + '%'}"></td>
-								</tr>
-							</tbody>
-						</table>
+			<header>
+				<button class="openSidebar">☰</button>
+			</header>
+			<h1>Transactions</h1>
+			<div class="allTransactions">
+				<div class="transactionTable">
+					<form method="post">
+						<label for="month">Month:</label> 
+						<input type="month" id="month" name="month">
+						<select name="pickedUser">
+						 	<option value="" disabled selected hidden>Select Username</option>
+						    <option th:each="pickedUser : ${users}" th:if="${pickedUser.getRole != 'ROLE_ADMIN'}" th:value="${pickedUser.getUsername}" th:text="${pickedUser.getUsername}"></option>
+						 </select>
+						 <select name="pickedType">
+						 	<option value="" disabled selected hidden>Select Transaction Source</option>
+						 	<option value="card">Credit Card</option>
+						 	<option value="account">Account</option>
+						 </select>
+						<button type="submit">Filter</button>
+					</form>
+					<div>
+						<div class="secondary-content-container">
+							<table>
+								<thead>
+									<tr>
+										<th>Category</th>
+										<th>Date</th>
+										<th>Time</th>
+										<th>User</th>
+										<th>Credit Card Number</th>
+										<th>Account</th>
+										<th>Recipient</th>
+										<th>Amount</th>
+										<th>Currency</th>
+										<th>Transaction Type</th>
+										<th>CashBack</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="transaction : ${transactions}">
+										<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory}"></td>
+										<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.transactionType}"></td>
+										<td th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+										<td th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
+										<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardUser.getUsername}"></td>
+										<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountUser.getUsername}"></td>
+										<td th:if="${transaction.getTransactionCreditCard != null}" th:text="${transaction.getTransactionCreditCard.getCreditCardNumber}"></td>
+										<td th:text="'-'"></td>
+										<td th:if="${transaction.getTransactionAccount != null}" th:text="${transaction.getTransactionAccount.getAccountNumber}"></td>
+										<td th:if="${transaction.getRecipientAccount != null}" th:text="${transaction.getRecipientAccount.getAccountNumber}"></td>
+										<td th:if="${transaction.getRecipientAccount == null}" th:text="'-'"></td>
+										<td th:text= "'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
+										<td th:if="${transaction.transactionCurrency != null}" th:text="${transaction.transactionCurrency.getName}"></td>
+										<td th:if="${transaction.transactionCurrency == null}" th:text="'-'"></td>
+										<td th:text="${transaction.transactionType}"></td>
+										<td th:text="'$' + ${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

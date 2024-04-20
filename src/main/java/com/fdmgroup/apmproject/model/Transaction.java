@@ -103,8 +103,8 @@ public class Transaction {
 		setTransactionMerchantCategoryCode(mcc);
 		setTransactionCurrency(transactionCurrency);
 	}
-	//record transaction for bank account
-	public Transaction(String transactionType, Account transactionAccount, double transactionAmount,String recipientAccountNumber, ForeignExchangeCurrency transactionCurrency
+	//record transaction for bank accounts - no cashback or rewards
+	public Transaction(String transactionType, Account transactionAccount, double transactionAmount,String recipientAccountNumber, ForeignExchangeCurrency transactionCurrency, String transactionDescription
 			) {
 		setTransactionDate(LocalDateTime.now());
 		
@@ -117,9 +117,11 @@ public class Transaction {
 		setRecipientAccountNumber(recipientAccountNumber);
 		
 		setTransactionCurrency(transactionCurrency);
+		
+		setDescription(transactionDescription);
 	}
 
-	public Transaction(String transactionType, Account transactionAccount,Account recipientAccount, double transactionAmount,String recipientAccountNumber, ForeignExchangeCurrency transactionCurrency
+	public Transaction(String transactionType, Account transactionAccount,Account recipientAccount, double transactionAmount,String recipientAccountNumber, ForeignExchangeCurrency transactionCurrency, String transactionDescription
 			) {
 		setTransactionDate(LocalDateTime.now());
 		
@@ -134,6 +136,8 @@ public class Transaction {
 		setTransactionCurrency(transactionCurrency);
 		
 		setRecipientAccount(recipientAccount);
+		
+		setDescription(transactionDescription);
 	}
 	
 	

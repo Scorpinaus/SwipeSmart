@@ -51,6 +51,12 @@ body{
 	min-width: 500px;
 }
 
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
+}
+
 .dashboard{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
@@ -147,15 +153,10 @@ a#transactions {
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
+	padding: 10px;
+	padding-top: 5px;
 }
 
-h1{
-	margin-left: 5%;
-}
-
-p#headerIntro{
-	margin-left: 5%;
-}
 
 .summary-container {
 	display: flex;
@@ -228,7 +229,7 @@ p#headerIntro{
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color: var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }

@@ -11,9 +11,24 @@
 	}
 }
 
+:root {
+  --darkgreen: #2b6777;
+  --lightblue:#c8d8e4;
+  --white: #ffffff;
+  --lightgrey:#f2f2f2;
+  --lightgreen:#52ab98;
+  --fadedgreen:#4F96A9;
+}
+
 body{
 	font-family: "Nunito Sans", sans-serif;
 	min-width: 500px;
+}
+
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
 }
 
 .linkContainerSideBar{
@@ -142,6 +157,8 @@ a#transactions{
 .mainPage{
 	transition: margin-left .5s;
 	margin-left: 200px;
+	padding: 10px;
+	padding-top: 5px;
 }
 
 .account, .creditCard{
@@ -214,7 +231,7 @@ span#accountDetails{
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color: var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }
@@ -223,9 +240,16 @@ span#accountDetails{
 	opacity: 0.6;
 }
 
+.allTransactions{
+	display:flex;
+	justify-content: center;
+}
+
 .transactionTable{
-	background-color:#4F96A9;
+	background-color:var(--lightgrey);
 	padding: 15px;
+	width: 80%;
+	
 	border-radius: 15px;
 	animation:transitionIn 1.5s;
 	opacity: 0;
@@ -238,10 +262,17 @@ span#accountDetails{
 	justify-content: center;
 }
 
-th {
-	padding: 15px;
+th, td {
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
 }
 
-td{
-	padding: 15px;
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+tbody tr:hover {
+	background-color: white;
 }

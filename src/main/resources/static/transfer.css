@@ -143,15 +143,10 @@ body{
 	min-width: 600px;
 }
 
-.transfer-form-container{
-	width: 90%;
-    margin: auto;
-    padding: auto;
-    border-radius: 8px;
-}
-
 .from-to-transfer-container {
-	padding: 20px;
+	width: 90%;
+    margin: 20px auto;
+    padding: 20px;
 	background-color: var(--lightgrey);
 	border-radius: 8px;
 	margin-bottom: 10px;
@@ -159,7 +154,9 @@ body{
 }
 
 .amount-currency-container{
-	padding: 20px;
+	width: 90%;
+    margin: 20px auto;
+    padding: 20px;
 	display: grid;
 	background-color: var(--lightgrey);
 	border-radius: 8px;
@@ -232,6 +229,11 @@ select option {
 
 .submit-button {
 	text-align: center;
+	width: 92%;
+    margin: 20px auto;
+	border-radius: 8px;
+	margin-bottom: 10px;
+	min-width: 600px;
 }
 
 #submitButton {
@@ -245,7 +247,6 @@ select option {
     transition: background-color 0.3s ease;
     font-weight: bold;
     width: 100%;
-    min-width: 640px;
     font-size: 15px;
 }
 

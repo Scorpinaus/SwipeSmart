@@ -51,7 +51,7 @@ public class AdminController {
 		// find all account by user Id
 		List<Account> requiredAccounts = returnedUser.getAccounts();
 		model.addAttribute("requiredAccounts", requiredAccounts);
-		return "admin-account";
+		return "admin/admin-account";
 	}
 
 	@GetMapping("/admin/creditcards")
@@ -79,7 +79,7 @@ public class AdminController {
 //		
 //		model.addAttribute("creditCards", ccList);
 
-		return "admin-creditcard";
+		return "admin/admin-creditcard";
 	}
 
 	@GetMapping("/admin/dashboard")
@@ -87,7 +87,7 @@ public class AdminController {
 		User returnedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", returnedUser);
 		LOGGER.info("Redirecting to dashboard");
-		return "admin-dashboard";
+		return "admin/admin-dashboard";
 	}
 
 	@GetMapping("/admin/users")
@@ -98,7 +98,7 @@ public class AdminController {
 		List<User> users = userService.findAllUsers();
 		model.addAttribute("users", users);
 
-		return "admin-user";
+		return "admin/admin-user";
 	}
 
 	@PostMapping("/admin/bankaccountApproval")
@@ -145,7 +145,7 @@ public class AdminController {
 		model.addAttribute("transactions", transactionList);
 		model.addAttribute("user", returnedUser);
 		model.addAttribute("users", userList);
-		return "admin-transactions";
+		return "admin/admin-transactions";
 	}
 
 	@PostMapping("/admin/transactions")

@@ -91,11 +91,11 @@ public class CreditCardService {
 			return returnedCreditCard.get();
 		}
 	}
-	
+
 	public List<CreditCard> findCreditCardsByStatus(Status status) {
-        logger.info("Finding all credit card with " + status.getStatusName() + " Status");
+		logger.info("Finding all credit card with " + status.getStatusName() + " Status");
 		return creditCardRepo.findByCreditCardStatus(status);
-    }
+	}
 
 	public String generateCreditCardNumber() {
 		StringBuilder sb = new StringBuilder();
@@ -135,21 +135,19 @@ public class CreditCardService {
 				0, userJacky, currencyCode);
 		String creditCardNumber2 = "2345-5678-2398-5128";
 		String pin2 = "124";
-		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "SwipeSmart Platinium Card", statusName,
-				0, userJacky, currencyCode);
+		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "SwipeSmart Platinium Card",
+				statusName, 0, userJacky, currencyCode);
 		persist(createCreditCard);
 		persist(createCreditCard2);
-		
-		
+
 		String creditCardNumberPending = "3456-5678-1234-5678";
 		String pinPending = "125";
-		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000, "SwipeSmart Platinium Card", statusService.findByStatusName("Pending"),
-				0, userJacky, currencyCode);
+		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
+				"SwipeSmart Platinium Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
 		persist(createCreditCardPending);
 	}
-	
-	
-	// run this method at the start of every month 
+	//Tests not implemented from this line onwards
+	// run this method at the start of every month
 	private long calculateDelayToNextMonth() {
 		LocalDate currentDate = LocalDate.now();
 		LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
@@ -177,7 +175,6 @@ public class CreditCardService {
 		}, delay, ONE_MONTH_IN_MILLISECONDS);
 	}
 
-	
 	public void chargeInterest(List<CreditCard> approvedCreditCards) {
 		// Subtract one month from the current date
 		LocalDate curMonth = LocalDate.now().withDayOfMonth(1);
@@ -187,18 +184,21 @@ public class CreditCardService {
 			double interestPayable = creditCard.getMonthlyBalance();
 			List<Transaction> transactions = creditCard.getTransactions();
 			for (Transaction transaction : transactions) {
-				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth) && transaction.getTransactionDate().toLocalDate().isAfter(firstDayOfPreviousMonth) && transaction.getTransactionType().equals("CC Payment")) {
+				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth)
+						&& transaction.getTransactionDate().toLocalDate().isAfter(firstDayOfPreviousMonth)
+						&& transaction.getTransactionType().equals("CC Payment")) {
 					interestPayable -= (transaction.getTransactionAmount() - transaction.getCashback());
 				}
 			}
-			if (interestPayable > 0 ) {
-				creditCard.setInterest(interestPayable*interestRate);
-				logger.info(creditCard.getCreditCardNumber() + " charged for " + interestPayable*interestRate + " as interest. Balance charged for interest: " + interestPayable);
+			if (interestPayable > 0) {
+				creditCard.setInterest(interestPayable * interestRate);
+				logger.info(creditCard.getCreditCardNumber() + " charged for " + interestPayable * interestRate
+						+ " as interest. Balance charged for interest: " + interestPayable);
 				update(creditCard);
 			}
 		}
 	}
-	
+
 	public void calculateMonthlyBalance(List<CreditCard> approvedCreditCards) {
 		// Subtract one month from the current date
 		LocalDate curMonth = LocalDate.now().withDayOfMonth(1);
@@ -206,9 +206,11 @@ public class CreditCardService {
 			double monthlyBalance = 0;
 			List<Transaction> transactions = creditCard.getTransactions();
 			for (Transaction transaction : transactions) {
-				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth) && transaction.getTransactionType().equals("CC Payment")) {
+				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth)
+						&& transaction.getTransactionType().equals("CC Payment")) {
 					monthlyBalance += transaction.getTransactionAmount() - transaction.getCashback();
-				} else if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth) && transaction.getTransactionType().equals("CC Bill Payment")) {
+				} else if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth)
+						&& transaction.getTransactionType().equals("CC Bill Payment")) {
 					monthlyBalance -= transaction.getTransactionAmount();
 				}
 				creditCard.setMonthlyBalance(monthlyBalance);
@@ -216,6 +218,5 @@ public class CreditCardService {
 			}
 		}
 	}
-
 
 }

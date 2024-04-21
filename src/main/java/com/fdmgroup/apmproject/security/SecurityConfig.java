@@ -41,7 +41,9 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
 				.requestMatchers("/", "/register", "/login", "/login_error", "/*.css", "/*.png", "/*.js", "/*.jpeg")
-				.permitAll().requestMatchers("/admin/**").hasRole("ADMIN").anyRequest().authenticated())
+				.permitAll().requestMatchers("/admin/**").hasRole("ADMIN")
+				.requestMatchers("/**").hasRole("USER")
+				.anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").failureUrl("/login_error")
 						.successHandler(authenticationSuccessHandlerSecurity))
 				.logout(logout -> logout.logoutSuccessUrl("/login").invalidateHttpSession(true)

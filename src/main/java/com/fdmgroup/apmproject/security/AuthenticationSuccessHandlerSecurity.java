@@ -36,10 +36,12 @@ public class AuthenticationSuccessHandlerSecurity implements AuthenticationSucce
 			Authentication authentication) throws IOException, ServletException {
 		UserSecurityDetails loggedUser = (UserSecurityDetails) authentication.getPrincipal();
 		session.setAttribute("loggedUser", loggedUser.getUser());
-		logger.info("User has logged in");
+		
 		if (loggedUser.getUser().getRole().equals("ROLE_ADMIN")) {
+			logger.info("Admin has logged in");
 			redirectStrategy.sendRedirect(request, response, "/admin/dashboard");
 		} else {
+			logger.info("User has logged in");
 			redirectStrategy.sendRedirect(request, response, "/dashboard");
 		}
 

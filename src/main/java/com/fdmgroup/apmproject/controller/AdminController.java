@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import com.fdmgroup.apmproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
 	@Autowired
@@ -49,7 +51,7 @@ public class AdminController {
 		// find all account by user Id
 		List<Account> requiredAccounts = returnedUser.getAccounts();
 		model.addAttribute("requiredAccounts", requiredAccounts);
-		return "admin-account";
+		return "admin/admin-account";
 	}
 
 	@GetMapping("/admin/creditcards")
@@ -77,7 +79,7 @@ public class AdminController {
 //		
 //		model.addAttribute("creditCards", ccList);
 
-		return "admin-creditcard";
+		return "admin/admin-creditcard";
 	}
 
 	@GetMapping("/admin/dashboard")
@@ -85,7 +87,7 @@ public class AdminController {
 		User returnedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", returnedUser);
 		LOGGER.info("Redirecting to dashboard");
-		return "admin-dashboard";
+		return "admin/admin-dashboard";
 	}
 
 	@GetMapping("/admin/users")
@@ -96,18 +98,33 @@ public class AdminController {
 		List<User> users = userService.findAllUsers();
 		model.addAttribute("users", users);
 
-		return "admin-user";
+		return "admin/admin-user";
 	}
 
 	@PostMapping("/admin/bankaccountApproval")
-	public String approveBankAccount(@RequestParam("accountNumber") String accountNumber) {
-		System.out.println("approve");
+	public String approveBankAccount(@RequestParam("accountNumber") String accountNumber,HttpSession session) {
+		
 		Account account = accountService.findAccountByAccountNumber(accountNumber);
 
 		account.setAccountStatus(statusService.findByStatusName("Approved"));
 		accountService.update(account);
+		
+		LOGGER.info("Account Id: " +account.getAccountId()+ " has been approved by " + ((User) session.getAttribute("loggedUser")).getUsername() );
 		long userId = account.getAccountUser().getUserId();
-		return "redirect:/admin/users";
+		return "redirect:/admin/accounts?userId=" +userId;
+	}
+	
+
+	@PostMapping("/admin/credicardApproval")
+	public String approveCredicard(@RequestParam("creditCardNumber") String creditCardNumber,HttpSession session) {
+		
+		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
+
+		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
+		creditCardService.update(creditCard);
+		LOGGER.info("creditcard Id: " +creditCard.getCreditCardId()+ " has been approved by " + ((User) session.getAttribute("loggedUser")).getUsername() );
+		long userId = creditCard.getCreditCardUser().getUserId();
+		return "redirect:/admin/creditcards?userId=" +userId;
 	}
 
 	@GetMapping("/admin/transactions")
@@ -128,7 +145,7 @@ public class AdminController {
 		model.addAttribute("transactions", transactionList);
 		model.addAttribute("user", returnedUser);
 		model.addAttribute("users", userList);
-		return "admin-transactions";
+		return "admin/admin-transactions";
 	}
 
 	@PostMapping("/admin/transactions")
@@ -288,16 +305,6 @@ public class AdminController {
 		return "admin-transactions";
 	}
 
-	@PostMapping("/admin/credicardApproval")
-	public String approveCredicard(@RequestParam("creditCardNumber") String creditCardNumber) {
-		System.out.println("approve");
-		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
-
-		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
-		creditCardService.update(creditCard);
-
-		long userId = creditCard.getCreditCardUser().getUserId();
-		return "redirect:/admin/users";
-	}
+	
 
 }

@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.creditCard.restcontroller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fdmgroup.apmproject.controller.AccountController;
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.repository.CreditCardRepository;
@@ -24,6 +26,9 @@ import com.fdmgroup.apmproject.repository.MerchantCategoryCodeRepository;
 import com.fdmgroup.apmproject.repository.StatusRepository;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
+import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
+import com.fdmgroup.apmproject.service.PurchaseService;
+import com.fdmgroup.apmproject.service.TransactionService;
 
 /**
  * This class is a REST controller that handles purchase requests for credit cards.
@@ -51,7 +56,21 @@ public class PurchaseController {
 	@Autowired
 	private MerchantCategoryCodeRepository merchantCategoryCodeRepository;
 	
+	@Autowired
+	private PurchaseService purchaseService;
+	
+	@Autowired
+	private ForeignExchangeCurrencyService foreignExchangeCurrencyService;
+	
+	@Autowired
+	private TransactionService transactionService;
+	
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
+	
+	@GetMapping("/purchase")
+	public String purchase() {
+		return "purchase";
+	}
 	
 	//can test with this json
 //	{
@@ -72,9 +91,10 @@ public class PurchaseController {
      * @param request The purchase request containing the necessary details.
      * @return A response entity containing the result of the purchase transaction.
      */
-	@PostMapping("purchase")
+	@PostMapping("/purchase")
 	public ResponseEntity<PaymentResponse> purchase(@RequestBody PurchaseRequest request) {
 		try {
+			//validation
 			if (request.getAccountName() == null || request.getAccountNumber() == null || request.getCreditCardNumber() == null || request.getAmount() == 0 || request.getPin() == null || request.getMcc() == null || request.getCurrency() == null || request.getDescription() == null) {
 				LOGGER.info("All fields are required.");
 				return ResponseEntity.badRequest().body(new PaymentResponse(false, "All fields are required."));
@@ -106,22 +126,27 @@ public class PurchaseController {
 		    	LOGGER.info("Invalid PIN.");
 		    	return ResponseEntity.badRequest().body(new PaymentResponse(false, "Invalid PIN."));
 			}else {
-				// process transaction
 				
-				System.out.print("purchase");
-				System.out.print(request.toString());
+				
+				// Get the exchange rate and the converted amount after exchange
+				BigDecimal exchangeRate = foreignExchangeCurrencyService.getExchangeRate(request.getCurrency(), accountService.findAccountByAccountNumber(request.getAccountNumber()).getCurrencyCode());
+				BigDecimal convertedAmount = BigDecimal.valueOf(request.getAmount()).multiply(exchangeRate);
+				request.setAmount(convertedAmount.doubleValue());
+				// process transaction
 				Optional<MerchantCategoryCode> transactionMerchantCategoryCode = merchantCategoryCodeRepository.findByMerchantCategory(request.getMcc());
 				String currencyCode = request.getCurrency();
+				ForeignExchangeCurrency foreignExchangeCurrency = foreignExchangeCurrencyService.getCurrencyByCode( request.getCurrency());
 				
+				//record transaction
+				Transaction transaction = new Transaction("CC Payment",request.getAmount(),null,0,creditCard,accountService.findAccountByAccountNumber(request.getAccountNumber()),transactionMerchantCategoryCode.get(),foreignExchangeCurrency);
+				transactionService.persist(transaction);
+				//update creditcard and account
+				purchaseService.purchase(request);
+						
+						
+						
 				//modify here
 				//update the transaction here! thanks
-				
-
-				
-				
-				
-				
-				
 				
 				
 				

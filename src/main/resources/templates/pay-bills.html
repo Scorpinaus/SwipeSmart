@@ -57,10 +57,10 @@
 						<input type="hidden" id="balanceType" name="balanceType">
 <!-- 						<input type="hidden" id="accountId" name="account.accountId"> -->
 						<div class="submit-button">
-							<button type="button" onclick="getBalance('custom')">Custom Balance</button>
-							<button type="button" onclick="getBalance('minimum')">Minimum Balance</button>
-						    <button type="button" onclick="getBalance('current')">Amount Used</button>
-						    <button type="button" onclick="getBalance('statement')">Statement Balance</button>
+							<button id="paymentButton" type="button" onclick="getBalance('custom')">Custom Balance</button>
+							<button id="paymentButton" type="button" onclick="getBalance('minimum')">Minimum Balance</button>
+						    <button id="paymentButton" type="button" onclick="getBalance('current')">Amount Used</button>
+						    <button id="paymentButton" type="button" onclick="getBalance('statement')">Statement Balance</button>
 						</div>
 						
 					    <div class="error-message" th:if="${param.NotChooseAccountError}">
@@ -75,14 +75,6 @@
 			</div>		
 		</div>
 		<script>
-			const input = document.getElementById("accountNumberTransferTo");
-			input.addEventListener("input", () => input.value = formatNumber(input.value.replaceAll(" ", "")));
-		
-			const formatNumber = (number) => number.split("").reduce((seed, next, index) => {
-			  if (index !== 0 && !(index % 3)) seed += " ";
-			  return seed + next;
-			}, "");
-			
 			let menuOpen = false;
 			const sidebar = document.querySelector('.linkContainerSideBar');
 			const mainpage = document.querySelector('.mainPage');

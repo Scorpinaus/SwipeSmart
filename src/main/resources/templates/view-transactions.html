@@ -34,7 +34,7 @@
 			<button class="openSidebar">☰</button>
 		</header>
 		<div class="credit-card"
-			th:if="${creditCard != null}">
+			th:if="${creditCard != null}" id="sidebarChecker">
 			<h2>Credit Card Transactions</h2>
 			<div class="card-details-container">
 				<div class="card-details">
@@ -114,8 +114,8 @@
 						<thead>
 							<tr>
 								<th>Category</th>
-								<th>Date</th>
-								<th>Time</th>
+								<th>Date <br>(YYYY-MM-DD) </th>
+								<th>Time <br> (HH-MM-SS)</th>
 								<th>Amount (SGD)</th>
 								<th>Transaction Type</th>
 								<th>CashBack</th>

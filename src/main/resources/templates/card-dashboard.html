@@ -48,7 +48,7 @@
 		<div class="card-details-container">
 			<div class="card-details" th:each="creditCard : ${cards}">
 				<a id="card-details"
-					th:if="${creditCard.creditCardStatus.statusName != 'Pending'}"
+					th:if="${creditCard.creditCardStatus.statusName == 'Approved'}"
 					href="#"
 					th:onclick="'submitForm(' + ${creditCard.creditCardId} + ')'">
 					<div class="details-card-type">
@@ -79,12 +79,11 @@
 					</div>
 
 				</a>
-				<div th:if="${creditCard.creditCardStatus.statusName == 'Pending'}">
+				<div th:if="${creditCard.creditCardStatus.statusName != 'Approved'}">
 					<div class="details-card-type">
 						<p th:text="${creditCard.cardType}"></p>
 					</div>
 					<div class="details-card-number">
-						<p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
 						<p
 							th:if="${creditCard.getCreditCardStatus.getStatusName == 'Approved'}"
 							id="cardDetails" style="color: green"
@@ -93,18 +92,6 @@
 							th:if="${creditCard.getCreditCardStatus.getStatusName != 'Approved'}"
 							id="cardDetails" style="color: red"
 							th:text="${creditCard.getCreditCardStatus.getStatusName}"></p>
-					</div>
-					<div class="details-card-amount">
-						<label class="detail-label">Amount Used </label>
-						<p th:if="${creditCard.amountUsed != 0}" id="cardDetails"
-							th:text="'$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
-						<p th:if="${creditCard.amountUsed == 0}" id="cardDetails"
-							th:text="'$0.00'"></p>
-						<label class="detail-label">Statement Balance </label>
-						<p th:if="${creditCard.monthlyBalance != 0}" id="cardDetails"
-							th:text="'$' + ${#numbers.formatDecimal(creditCard.getMonthlyBalance,0,'COMMA',2,'POINT')}"></p>
-						<p th:if="${creditCard.monthlyBalance == 0}" id="cardDetails"
-							th:text="'$0.00'"></p>
 					</div>
 				</div>
 

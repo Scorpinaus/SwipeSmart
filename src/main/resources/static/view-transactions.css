@@ -25,6 +25,12 @@ body{
 	min-width: 500px;
 }
 
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
@@ -203,7 +209,7 @@ span#accountDetails{
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color:var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }

@@ -18,6 +18,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+
+
+/**
+ * This class represents a credit card in the banking system.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Entity
 @Table(name = "listOfCreditCards")
 public class CreditCard {
@@ -59,10 +68,25 @@ public class CreditCard {
 
 	@OneToMany(mappedBy = "transactionCreditCard", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
-
+	
+	/**
+     * Constructs a new CreditCard object with the specified details.
+     */
 	public CreditCard() {
 	};
 
+	/**
+     * Constructs a new CreditCard object with the specified details.
+     *
+     * @param creditCardNumber The credit card number.
+     * @param pin              The PIN for the credit card.
+     * @param cardLimit        The credit limit for the card.
+     * @param cardType         The type of credit card.
+     * @param status           The status of the credit card.
+     * @param amountUsed       The amount of credit used.
+     * @param creditCardUser   The user associated with the credit card.
+     * @param currencyCode     The currency code of the credit card.
+     */
 	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status,
 			double amountUsed, User creditCardUser, String currencyCode) {
 		setCreditCardNumber(creditCardNumber);
@@ -76,7 +100,18 @@ public class CreditCard {
 		setCurrencyCode(currencyCode);
 		setMinBalancePaid(0);
 	}
-
+	
+	/**
+     * Constructs a new CreditCard object with the specified details.
+     *
+     * @param creditCardNumber The credit card number.
+     * @param pin              The PIN for the credit card.
+     * @param cardLimit        The credit limit for the card.
+     * @param cardType         The type of credit card.
+     * @param status           The status of the credit card.
+     * @param amountUsed       The amount of credit used.
+     * @param creditCardUser   The user associated with the credit card.
+     */
 	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status,
 			double amountUsed, User creditCardUser) {
 		setCreditCardNumber(creditCardNumber);

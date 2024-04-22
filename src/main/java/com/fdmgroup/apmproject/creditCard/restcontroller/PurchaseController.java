@@ -25,6 +25,14 @@ import com.fdmgroup.apmproject.repository.StatusRepository;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
 
+/**
+ * This class is a REST controller that handles purchase requests for credit cards.
+ * It provides an endpoint for initiating a purchase transaction using a credit card.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @RestController
 @RequestMapping("/api/credit-card")
 public class PurchaseController {
@@ -44,43 +52,6 @@ public class PurchaseController {
 	private MerchantCategoryCodeRepository merchantCategoryCodeRepository;
 	
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
-	//need a dto class
-//	@GetMapping("")
-//	public List<CreditCard> getAllCreditCard() {
-//
-//		return creditCardRepository.findAll();
-//	}
-//
-//	@GetMapping("/{creditCardNumber}")
-//	public CreditCard getCreditCard(@PathVariable String creditCardNumber) {
-//		return creditCardService.findByCreditCardNumber(creditCardNumber);
-//	}
-//
-	
-	
-	
-//	private Boolean valdiateTransaction (PurchaseRequest request) {
-//		 if (request.getAccountName() == null || request.getAccountNumber() == null || request.getCreditCardNumber() == null || request.getAmount() == 0 || request.getPin() == null || request.getTransacitionType() == null || request.getMcc() == null || request.getCurrency() == null || request.getDescription() == null) {
-//			 throw new PaymentException("All fields are required.");
-//		    }
-//		
-//		
-//		CreditCard creditCard = creditCardService.findByCreditCardNumber(request.getCreditCardNumber());
-//		if (!(accountService.findAccountByAccountNumber(request.getAccountNumber()).equals(request.getAccountName())))
-//			throw new PaymentException("Invalid account or account name");
-//		else if (!(creditCard.getPin().equals(request.getPin()))) 
-//			throw new PaymentException("Invalid credit card or pin");
-//		else
-//			return true;
-//	}
-//	
-	
-	
-
-	
-	
-	
-	
 	
 	//can test with this json
 //	{
@@ -94,6 +65,13 @@ public class PurchaseController {
 //    "description" : "purchase simulation"
 //	}
 	
+	
+	/**
+     * Handles a purchase request for a credit card.
+     *
+     * @param request The purchase request containing the necessary details.
+     * @return A response entity containing the result of the purchase transaction.
+     */
 	@PostMapping("purchase")
 	public ResponseEntity<PaymentResponse> purchase(@RequestBody PurchaseRequest request) {
 		try {

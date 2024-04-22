@@ -190,7 +190,7 @@ public class CreditCardController {
 						account, mccBill, currency);
 
 			else
-				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, account, mccBill, null);
+				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, account, mccBill, currency);
 		} else if (balanceType.equals("statement")) {
 			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
 

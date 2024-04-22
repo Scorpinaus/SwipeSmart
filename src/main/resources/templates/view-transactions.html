@@ -5,22 +5,6 @@
 <meta charset="UTF-8">
 <title>Transactions</title>
 </head>
-<style>
-table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-th, td {
-	padding: 8px;
-	text-align: left;
-	border-bottom: 1px solid #ddd;
-}
-
-tbody tr:hover {
-	background-color: white;
-}
-</style>
 <body>
 	<div class="linkContainerSideBar" id="sidebar">
 		<div class="sidebarHeader">
@@ -46,39 +30,72 @@ tbody tr:hover {
 		</div>
 	</div>
 	<div class="mainPage" id="main">
-		<button class="openSidebar">☰</button>
-		<div class="creditCard" id="sidebarChecker"
+		<header>
+			<button class="openSidebar">☰</button>
+		</header>
+		<div class="credit-card"
 			th:if="${creditCard != null}">
-			<div class="creditCardDetails">
-				<div class="creditCardDetails2">
-					<h2 th:text="${creditCard.cardType}"></h2>
-					<p th:text="${creditCard.creditCardNumber}"></p>
-					<p th:text="${creditCard.pin}"></p>
-					<p>Amount Used:</p>
-					<p
-						th:text="'$' + ${#numbers.formatDecimal(creditCard.amountUsed,0,'COMMA',2,'POINT')}">></p>
-					<p>Statement Balance:</p>
-					<p
-						th:text="'$' + ${#numbers.formatDecimal(creditCard.monthlyBalance,0,'COMMA',2,'POINT')}"></p>
-				</div>
+			<h2>Credit Card Transactions</h2>
+			<div class="card-details-container">
+				<div class="card-details">
+					<div class="details-card-type">
+						<p th:text="${creditCard.cardType}"></p>
+					</div>
+					<div class="details-card-number">
+						<p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
+						<p
+							th:if="${creditCard.getCreditCardStatus.getStatusName == 'Approved'}"
+							id="cardDetails" style="color: green"
+							th:text="${creditCard.getCreditCardStatus.getStatusName}"></p>
+						<p
+							th:if="${creditCard.getCreditCardStatus.getStatusName != 'Approved'}"
+							id="cardDetails" style="color: red"
+							th:text="${creditCard.getCreditCardStatus.getStatusName}"></p>
+					</div>
+					<div class="details-card-amount">
+						<label class="detail-label">Amount Used </label>
+						<p th:if="${creditCard.amountUsed != 0}" id="cardDetails"
+							th:text="'$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
+						<p th:if="${creditCard.amountUsed == 0}" id="cardDetails"
+							th:text="'$0.00'"></p>
+						<label class="detail-label">Statement Balance </label>
+						<p th:if="${creditCard.monthlyBalance != 0}" id="cardDetails"
+							th:text="'$' + ${#numbers.formatDecimal(creditCard.getMonthlyBalance,0,'COMMA',2,'POINT')}"></p>
+						<p th:if="${creditCard.monthlyBalance == 0}" id="cardDetails"
+							th:text="'$0.00'"></p>
+					</div>
+				</div>	
 			</div>
 		</div>
 
 		<div class="account" th:if="${account != null}">
-			<div class="accountDetails">
-				<div class="accountDetails2">
-					<h2 th:text="${account.accountName}"></h2>
-					<p>Bank Account Number:</p>
-					<p th:text="${account.accountNumber}"></p>
-					<p>Bank Account Balance:</p>
-					<p
-						th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
-				</div>
+		  <h2>Account Transactions</h2>
+		  <div class="account-details-container"> 
+			<div class="account-details">	
+					<div class="details-account-name">
+                         <p th:text="${account.accountName}"></p>
+                    </div>
+                        
+                    <div class="details-account-number">
+                       <p th:text="${account.accountNumber}"></p>
+                       <p th:if="${account.accountStatus.statusName == 'Approved'}" style="color:green" th:text="${account.accountStatus.statusName}"></p>
+                    </div>
+                        
+                    <div class="details-account-balance-status">
+                         <label class="detail-label">Account Balance </label>
+                         <p th:if="${account.balance == 0}"  th:text="'$0.00'"></p>
+                         <p th:if="${account.balance != 0}" th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
+                         
+                    </div>
 			</div>
+			</div>
+			
 		</div>
+		
 		<div class="transactionTable">
 			<div class="transactionsHeader">
-				<h3>Transactions</h3>
+				<h3>Your Transactions</h3>
+				<div class="filter-month">
 				<form th:action="@{/viewTransactions}" method="post">
 					<label for="month">Month:</label> <input type="month" id="month"
 						name="month"> <input type="hidden" id="accountId"
@@ -89,23 +106,27 @@ tbody tr:hover {
 						th:value="${creditCard.creditCardId}">
 					<button type="submit">Filter</button>
 				</form>
+				</div>
 			</div>
 			<div th:if="${creditCard != null}">
-				<div class="secondary-content-container">
+				<div class="card-transaction-container">
 					<table>
 						<thead>
 							<tr>
 								<th>Category</th>
 								<th>Date</th>
 								<th>Time</th>
-								<th>Transaction Amount in SGD</th>
-								<th>Transaction Currency</th>
+								<th>Amount (SGD)</th>
 								<th>Transaction Type</th>
 								<th>CashBack</th>
 								<th>Description</th>
 							</tr>
 						</thead>
 						<tbody>
+							<tr th:if="${#lists.isEmpty(transactions)}">
+					            <td colspan="6">No transactions available.</td>
+					        </tr>
+							
 							<tr th:each="transaction : ${transactions}">
 								<td
 									th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
@@ -118,8 +139,7 @@ tbody tr:hover {
 								<td
 									th:unless="${transaction.transactionType == 'CC Bill Payment'}"
 									th:text="'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
-								<td th:if="${transaction.getTransactionCurrency != null}"
-									th:text="${transaction.getTransactionCurrency.getName}"></td>
+								
 								<td th:text="${transaction.transactionType}"></td>
 								<td
 									th:text="'$' + ${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
@@ -130,40 +150,37 @@ tbody tr:hover {
 				</div>
 			</div>
 			<div th:if="${account != null}">
-				<div class="secondary-content-container">
+				<div class="account-transaction-container">
 					<table>
 						<thead>
 							<tr>
 								<th>Transaction Type</th>
 								<th>Date</th>
 								<th>Time</th>
-								<th>Transaction Amount in SGD</th>
-								<th>Bank Account Number</th>
-								<th>Transaction Currency</th>
-								<th>External Account Number</th>
+								<th>Amount (SGD)</th>
+								<th>Recipient Account</th>
 								<th>Description</th>
 							</tr>
 						</thead>
 						<tbody>
+							<tr th:if="${#lists.isEmpty(transactions)}">
+					            <td colspan="6">No transactions available.</td>
+					        </tr>
+							
 							<tr th:each="transaction : ${transactions}">
-								<td th:text="${transaction.transactionType}"></td>
+								<td th:text="${transaction.transactionType}">Transaction Type</td>
 								<td
-									th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
+									th:text="${#strings.substring(transaction.transactionDate, 0, 10)}">Date</td>
 								<td
-									th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
-								<td th:text="${transaction.transactionAmount}"></td>
-								<td th:unless="${transaction.transactionAccount == null}">
-									<span
-									th:text="${#strings.length(transaction.transactionAccount.accountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.transactionAccount.accountNumber, #strings.length(transaction.transactionAccount.accountNumber) - 3) : transaction.transactionAccount.accountNumber}"></span>
-								</td>
-								<td th:if="${transaction.getTransactionCurrency != null}"
-									th:text="${transaction.getTransactionCurrency.getName}"></td>
+									th:text="${#strings.substring(transaction.transactionDate, 11, 19)}">Time</td>
+								<td th:text="'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}">Amount (SGD)</td>
+								
 								<td th:unless="${transaction.recipientAccountNumber == null}">
 									<span
 									th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></span>
-								</td>
+								Recipient Account</td>
 								<td th:if="${transaction.recipientAccountNumber == null}"></td>
-								<td th:text="${transaction.description}"></td>
+								<td th:text="${transaction.description}">Description</td>
 							</tr>
 						</tbody>
 					</table>

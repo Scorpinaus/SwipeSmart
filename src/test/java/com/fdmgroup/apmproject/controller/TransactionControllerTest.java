@@ -1,16 +1,10 @@
 package com.fdmgroup.apmproject.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +20,6 @@ import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
-import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.TransactionService;
 import com.fdmgroup.apmproject.service.UserService;
 

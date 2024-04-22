@@ -100,7 +100,7 @@ public class TransactionService {
 					transaction.setCashback(transaction.getTransactionAmount() * 0.02);
 					update(transaction);
 				}
-			} else if (creditCard.getCardType().equals("SwipeSmart Platinium Card")) {
+			} else if (creditCard.getCardType().equals("SwipeSmart Platinum Card")) {
 				if (transaction.getTransactionMerchantCategoryCode().getMerchantCategoryCodeNumber() != 1005) {
 					transaction.setCashback(transaction.getTransactionAmount() * 0.015);
 					update(transaction);

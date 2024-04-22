@@ -135,7 +135,7 @@ public class CreditCardService {
 				0, userJacky, currencyCode);
 		String creditCardNumber2 = "2345-5678-2398-5128";
 		String pin2 = "124";
-		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "SwipeSmart Platinium Card",
+		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "SwipeSmart Platinum Card",
 				statusName, 0, userJacky, currencyCode);
 		persist(createCreditCard);
 		persist(createCreditCard2);
@@ -143,7 +143,7 @@ public class CreditCardService {
 		String creditCardNumberPending = "3456-5678-1234-5678";
 		String pinPending = "125";
 		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
-				"SwipeSmart Platinium Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
+				"SwipeSmart Platinum Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
 		persist(createCreditCardPending);
 	}
 	//Tests not implemented from this line onwards

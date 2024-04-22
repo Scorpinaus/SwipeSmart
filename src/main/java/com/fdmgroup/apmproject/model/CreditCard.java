@@ -43,6 +43,9 @@ public class CreditCard {
 
 	@Column(name = "Currency Code")
 	private String currencyCode;
+	
+	@Column(name = "Mininum Balance Paid?")
+	private int minBalancePaid;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -71,6 +74,7 @@ public class CreditCard {
 		setAmountUsed(amountUsed);
 		setMonthlyBalance(0);
 		setCurrencyCode(currencyCode);
+		setMinBalancePaid(0);
 	}
 
 	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status,
@@ -83,6 +87,7 @@ public class CreditCard {
 		setCreditCardUser(creditCardUser);
 		setAmountUsed(amountUsed);
 		setMonthlyBalance(0);
+		setMinBalancePaid(0);
 	}
 
 	public long getCreditCardId() {
@@ -180,6 +185,15 @@ public class CreditCard {
 	public void setCurrencyCode(String currencyCode) {
 		this.currencyCode = currencyCode;
 	}
+		
+	
+	public int getMinBalancePaid() {
+		return minBalancePaid;
+	}
+
+	public void setMinBalancePaid(int minBalancePaid) {
+		this.minBalancePaid = minBalancePaid;
+	}
 
 	// Add balance when transactions are made
 	public void addTransaction(double amount) {
@@ -190,18 +204,27 @@ public class CreditCard {
 		setMonthlyBalance(monthlyBalance + amount);
 	}
 
+	public double getInterest() {
+		return interest;
+	}
+
+	public void setInterest(double interest) {
+		this.interest = interest;
+	}
+
 	@Override
 	public String toString() {
 		return "CreditCard [creditCardId=" + creditCardId + ", creditCardNumber=" + creditCardNumber + ", pin=" + pin
 				+ ", cardLimit=" + cardLimit + ", cardType=" + cardType + ", amountUsed=" + amountUsed
 				+ ", monthlyBalance=" + monthlyBalance + ", interest=" + interest + ", currencyCode=" + currencyCode
-				+ ", creditCardStatus=" + creditCardStatus + ", transactions=" + transactions + "]";
+				+ ", minBalancePaid=" + minBalancePaid + ", creditCardStatus=" + creditCardStatus + ", transactions="
+				+ transactions + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(amountUsed, cardLimit, cardType, creditCardId, creditCardNumber, creditCardStatus,
-				creditCardUser, currencyCode, interest, monthlyBalance, pin, transactions);
+				currencyCode, interest, minBalancePaid, monthlyBalance, pin, transactions);
 	}
 
 	@Override
@@ -218,21 +241,14 @@ public class CreditCard {
 				&& Objects.equals(cardType, other.cardType) && creditCardId == other.creditCardId
 				&& Objects.equals(creditCardNumber, other.creditCardNumber)
 				&& Objects.equals(creditCardStatus, other.creditCardStatus)
-				&& Objects.equals(creditCardUser, other.creditCardUser)
 				&& Objects.equals(currencyCode, other.currencyCode)
 				&& Double.doubleToLongBits(interest) == Double.doubleToLongBits(other.interest)
+				&& minBalancePaid == other.minBalancePaid
 				&& Double.doubleToLongBits(monthlyBalance) == Double.doubleToLongBits(other.monthlyBalance)
 				&& Objects.equals(pin, other.pin) && Objects.equals(transactions, other.transactions);
 	}
-
-	public double getInterest() {
-		return interest;
-	}
-
-	public void setInterest(double interest) {
-		this.interest = interest;
-	}
-
+	
+	
 	
 
 }

@@ -118,9 +118,9 @@ public class TransactionService {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
 			creditCard.addTransaction(-transaction.getTransactionAmount());
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
-//			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
-//				creditCard.addTransactionMonthly(-transaction.getTransactionAmount());
-//			}
+			if (transaction.getTransactionAmount() >= 50 || transaction.getTransactionAmount() == creditCard.getMonthlyBalance()) {
+				creditCard.setMinBalancePaid(1);
+			}
 			creditCardService.update(creditCard);
 		}
 	}
@@ -181,6 +181,20 @@ public class TransactionService {
 			if (creditCard.getInterest() > 0) {
 				Transaction transaction = new Transaction(LocalDateTime.now(), "CC Purchase", creditCard.getInterest(),
 						null, 0.00, creditCard, null, mcc4, currency);
+				persist(transaction);
+				updateCreditCardBalance(transaction);
+			}
+		}
+	}
+	
+	public void chargeMinimumBalanceFee(List<CreditCard> approvedCreditCards) {
+		MerchantCategoryCode mcc4 = merchantCategoryCodeService.findByMerchantCategory("Interest");
+		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
+		for (CreditCard creditCard : approvedCreditCards) {
+			if (creditCard.getMinBalancePaid() == 0) {
+				Transaction transaction = new Transaction(LocalDateTime.now(), "CC Purchase", 100,
+						null, 0.00, creditCard, null, mcc4, currency);
+				transaction.setDescription("Unpaid Minimum Balance Fee");
 				persist(transaction);
 				updateCreditCardBalance(transaction);
 			}
@@ -248,6 +262,7 @@ public class TransactionService {
 		creditCardService.calculateMonthlyBalance(approvedCreditCards);
 		creditCardService.chargeInterest(approvedCreditCards);
 		updateInterest(approvedCreditCards);
+		chargeMinimumBalanceFee(approvedCreditCards);
 	}
 
 }

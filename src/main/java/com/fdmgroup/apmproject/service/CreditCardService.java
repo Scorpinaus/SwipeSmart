@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
+import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
@@ -218,5 +220,5 @@ public class CreditCardService {
 			}
 		}
 	}
-
+	
 }

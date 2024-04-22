@@ -118,6 +118,7 @@ a#cards{
 	margin-left: 200px;
 	padding: 10px;
 	padding-top: 5px;
+	min-width: 600px;
 }
 
 .openSidebar{
@@ -141,6 +142,7 @@ header {
 	background-color: var(--darkgreen);
 	padding-top:0px;
 	margin:0px;
+	min-width: 600px;
 }
 
 .withdraw-form-container{
@@ -220,6 +222,7 @@ select:focus {
 
 .submit-button {
 	text-align: center;
+	min-width: 600px;
 }
 
 #submitButton {

@@ -123,6 +123,7 @@ a#accounts{
 	margin-left: 200px;
 	padding: 10px;
 	padding-top: 5px;
+	min-width: 600px;
 }
 
 .openSidebar{

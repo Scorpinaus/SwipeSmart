@@ -58,6 +58,21 @@ public class CreditCardController {
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 	private List<ForeignExchangeCurrency> currencies;
 
+	public CreditCardController() {
+		
+	}
+
+	public CreditCardController(CreditCardService creditCardService, ForeignExchangeCurrencyService currencyService,
+			StatusService statusService, UserService userService, AccountService accountService, MerchantCategoryCodeService merchantCategoryCodeService, TransactionService transactionService) {
+		this.creditCardService = creditCardService;
+		this.currencyService = currencyService;
+		this.statusService = statusService;
+		this.userService = userService;
+		this.accountService = accountService;
+		this.merchantCategoryCodeService = merchantCategoryCodeService;
+		this.transactionService = transactionService;
+	}
+
 	@GetMapping("/userCards")
 	public String viewCreditCards(Model model, HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {

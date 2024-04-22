@@ -30,6 +30,9 @@ public class TransactionService {
 
 	@Autowired
 	private CreditCardService creditCardService;
+	
+	@Autowired
+	private AccountService accountService;
 
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
@@ -217,6 +220,12 @@ public class TransactionService {
 				0.00, creditCard2, null, mcc2, currency);
 		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Payment", 100.10, null,
 				0.00, creditCard2, null, mcc2, currency);
+		Account account1 = accountService.findAccountByAccountNumber("123-123-123");
+		Account account2 = accountService.findAccountByAccountNumber("124-124-124");
+		Transaction transactionA1 = new Transaction("Initial Deposit", account1, account1.getBalance(), null, currency, currency.getCode() + " " + account1.getBalance());
+		Transaction transactionA2 = new Transaction("Initial Deposit", account2, account2.getBalance(), null, currency, currency.getCode() + " " + account2.getBalance());
+		persist(transactionA1);
+		persist(transactionA2);
 		Double exchangeRateUSD = currencyService.getExchangeRate(currencyUSD.getCode(), currency.getCode()).doubleValue();
 		transaction.setCreditCardDescription("Astons", 1);
 		transaction1.setCreditCardDescription("Kopitiam", 1);

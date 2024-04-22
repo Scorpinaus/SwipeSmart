@@ -136,6 +136,7 @@ a#accounts{
 .account, .creditCard{
 	display:flex;
 	margin-bottom: 5%;
+	margin-top: 2%;
 }
 
 .creditCardDetails, .accountDetails{

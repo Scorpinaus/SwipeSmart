@@ -76,7 +76,6 @@ public class AccountController {
 		} else {
 			return "redirect:/login";
 		}
-
 	}
 
 	// Function which brings user to Bank Account withdrawal page

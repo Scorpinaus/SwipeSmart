@@ -25,6 +25,12 @@ body{
 	min-width: 500px;
 }
 
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
@@ -130,6 +136,7 @@ a#accounts{
 .account, .creditCard{
 	display:flex;
 	margin-bottom: 5%;
+	margin-top: 2%;
 }
 
 .creditCardDetails, .accountDetails{
@@ -203,7 +210,7 @@ span#accountDetails{
 .openSidebar{
 	color: white;
 	border:none;
-	background-color:#4F96A9;
+	background-color:var(--darkgreen);
 	padding: 15px;
 	border-radius: 15px;
 }

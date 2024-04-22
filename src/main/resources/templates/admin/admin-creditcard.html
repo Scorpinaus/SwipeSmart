@@ -6,66 +6,82 @@
 		<title>User Credit Cards</title>
 	</head>
 	<body>
-		<div class="linkContainerSideBar" id="sidebar">
-			<div class="sidebarHeader">
-				<p id="sidebarHeader" >SwipeSmart</p>
+	<div class="linkContainerSideBar" id="sidebar">
+		<div class="sidebarHeader">
+			<p id="sidebarHeader">SwipeSmart</p>
+		</div>
+		<div class="sidebarLinks">
+			<div class="dashboard">
+				<a id="dashboard" href="/admin/dashboard">Dashboard</a>
 			</div>
-			<div class="sidebarLinks">
-				<div class="dashboard">
-					<a id="dashboard" href="/admin/dashboard">Dashboard</a>
-				</div>
-				<div class="user">
-					<a id="user" href="/admin/users">Users</a>
-				</div>
-				<div class="transactions">
-					<a id="transactions" href="/admin/transactions">Transactions</a>
-				</div>
-				<div class="logout">
-					<a id="logout" href="/logout">Logout</a>
+			<div class="user">
+				<a id="user" href="/admin/users">Users</a>
+			</div>
+			<div class="transactions">
+				<a id="transactions" href="/admin/transactions">Transactions</a>
+			</div>
+			<div class="logout">
+				<a id="logout" href="/logout">Logout</a>
+			</div>
+		</div>
+	</div>
+	<div class="mainPage" id="main">
+		<header>
+			<button class="openSidebar">☰</button>
+		</header>
+		<h1 th:text="${user.getUsername} + '\'s Credit Cards'"></h1>
+
+		<div class="card-details-container">
+			<div class="card-details"
+				th:each="creditCard : ${requiredCreditCards}">
+				<div class="card-details-2">
+
+					<div id="card-details">
+						<!-- Card details content -->
+						<div class="details-card-type">
+							<p th:text="${creditCard.cardType}"></p>
+						</div>
+						<div class="details-card-number">
+							<p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
+						</div>
+						<div class="details-card-amount">
+							<label class="detail-label">Amount Used </label>
+							<p id="cardDetails" th:if="${creditCard.getAmountUsed != 0}"
+								th:text="'$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
+							<p id="cardDetails" th:if="${creditCard.getAmountUsed == 0}"
+								th:text="'$0.00'"></p>
+						</div>
+						<div class="details-card-status">
+							<p
+								th:if="${creditCard.creditCardStatus.statusName == 'Approved'}"
+								style="color: green"
+								th:text="${creditCard.creditCardStatus.statusName}"></p>
+							<p
+								th:if="${creditCard.creditCardStatus.statusName != 'Approved'}"
+								style="color: red"
+								th:text="${creditCard.creditCardStatus.statusName}"></p>
+						</div>
+						<form method="post" action="/admin/credicardStatus">
+							<input type="hidden" name="creditCardNumber"
+								th:value="${creditCard.creditCardNumber}" />
+							<!-- Add the if statement to conditionally show the submit button -->
+							<select name="status">
+								<option value="Approved">Approved</option>
+								<option value="Pending">Pending</option>
+								<option value="Disabled">Disabled</option>
+							</select>
+							<button type="submit">update</button>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="mainPage" id="main">
-			<header>
-				<button class="openSidebar">☰</button>
-			</header>
-			<h1 th:text="${user.getUsername} + '\'s Credit Cards'"></h1>
-		
-			<div class="card-details-container">
-			    <div class="card-details" th:each="creditCard : ${requiredCreditCards}">
-			    	<div class="card-details-2">
-				        <a id="card-details" th:href="@{'/viewTransactions?creditCardId=' + ${creditCard.creditCardId}}">
-				            <!-- Card details content -->
-				            <div class="details-card-type">
-				                <p th:text="${creditCard.cardType}"></p>
-				            </div>
-				            <div class="details-card-number">
-				                <p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
-				            </div>
-				            <div class="details-card-amount">
-				                <label class="detail-label">Amount Used </label>
-				                <p id="cardDetails" th:if="${creditCard.getAmountUsed != 0}" th:text="'$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
-				                <p id="cardDetails" th:if="${creditCard.getAmountUsed == 0}" th:text="'$0.00'"></p>
-				            </div>
-				            <div class="details-card-status">
-				                <p th:if="${creditCard.creditCardStatus.statusName == 'Approved'}" style="color:green" th:text="${creditCard.creditCardStatus.statusName}"></p>
-				                <p th:if="${creditCard.creditCardStatus.statusName != 'Approved'}" style="color:red" th:text="${creditCard.creditCardStatus.statusName}"></p>
-				            </div>
-				            <form method="post" action="/admin/credicardApproval">
-				                <input type="hidden" name="creditCardNumber" th:value="${creditCard.creditCardNumber}" />
-				                <!-- Add the if statement to conditionally show the submit button -->
-				                <button type="submit" th:if="${creditCard.creditCardStatus.statusName == 'Pending'}">Approve</button>
-				            </form>
-				        </a>
-				     </div>
-			    </div>
-			</div>
-			<form id="viewTransactionsForm" th:action="@{/viewTransactions}"
-				method="post" style="display: none;">
-				<input type="hidden" id="creditCardIdInput" name="creditCardId">	
-			</form>		
-		</div>
-	</body>
+		<!-- 			<form id="viewTransactionsForm" th:action="@{/viewTransactions}" -->
+		<!-- 				method="post" style="display: none;"> -->
+		<!-- 				<input type="hidden" id="creditCardIdInput" name="creditCardId">	 -->
+		<!-- 			</form>		 -->
+	</div>
+</body>
 	
 	<script>
 			let menuOpen = false;

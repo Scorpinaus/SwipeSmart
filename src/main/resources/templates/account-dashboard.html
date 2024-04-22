@@ -45,22 +45,24 @@
 					<a id="accountCRUD" href="/bankaccount/transfer">Transfer</a>
 					<a id="accountCRUD" href="/bankaccount/withdrawal">Withdraw</a>
 				</div>
-        
+        	<div class="view-details-button">
 				<h2>Your Bank Accounts</h2>
-        
+				<button id="view-account-number" onclick="toggleAccountNumber()">&#128065;</button>
+        	</div>
 				<div class="account-details-container">
                   <div class="account-details" th:each="account : ${currentUserBankAccounts}">
 					<a id="accountDetails"
-						th:if="${account.accountStatus.statusName != 'Pending'}" href="#"
+						th:if="${account.accountStatus.statusName == 'Approved'}" href="#"
 						th:onclick="'submitForm(' + ${account.accountId} + ')'">
                         
                         <div class="details-account-name">
-                         <p th:text="${account.accountName}"></p>
+                        <p th:text="${account.accountName}"></p>
                         </div>
                         
                         <div class="details-account-number">
-                         <p th:text="${account.accountNumber}"></p>
-                         <p th:if="${account.accountStatus.statusName == 'Approved'}" style="color:green" th:text="${account.accountStatus.statusName}"></p>
+                        <p class="hide-account-number" th:text="'***-***-' + ${#strings.substring(account.accountNumber, account.accountNumber.length() - 3)}"></p>
+                        <p class="show-account-number" style="display:none" th:text="${account.accountNumber}"></p>
+                         <p style="color:green" th:text="${account.accountStatus.statusName}"></p>
                         </div>
                         
                         <div class="details-account-balance-status">
@@ -71,23 +73,13 @@
                         </div>
                         
 					</a> 
-                    <div th:if="${account.accountStatus.statusName == 'Pending'}">
+                    <div th:if="${account.accountStatus.statusName != 'Approved'}">
                         <div class="details-account-name">
                          <p th:text="${account.accountName}"></p>
                         </div>
-                        
                         <div class="details-account-number">
-                         <p th:text="${account.accountNumber}"></p>
-                         <p th:if="${account.accountStatus.statusName != 'Approved'}" style="color:red" th:text="${account.accountStatus.statusName}"></p>
+                         <p style="color:red" th:text="${account.accountStatus.statusName}"></p>
                         </div>
-                        
-						<div class="details-account-balance-status">
-                         <label class="detail-label">Account Balance </label>
-                         <p th:if="${account.balance == 0}"  th:text="'$0.00'"></p>
-                         <p th:if="${account.balance != 0}" th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
-                         
-                        </div>
-					  
                     </div>
                  </div>
 			   </div>
@@ -122,7 +114,22 @@
 		        document.getElementById("accountIdInput").value = accountId;
 		        document.getElementById("viewTransactionsForm").submit();
 		    }
-
+			
+			function toggleAccountNumber(){
+				var hiddenAccountNumbers = document.querySelectorAll('.hide-account-number');
+				var shownAccountNumbers = document.querySelectorAll('.show-account-number');
+				for (var i = 0; i < hiddenAccountNumbers.length; i++){
+					if (shownAccountNumbers[i].style.display === 'none'){
+						shownAccountNumbers[i].style.display = 'block';
+						hiddenAccountNumbers[i].style.display = 'none';
+					}
+					else {
+						shownAccountNumbers[i].style.display = 'none';
+						hiddenAccountNumbers[i].style.display = 'block';
+					}
+				}
+			}
+			
 		</script>
 </body>
 </html>

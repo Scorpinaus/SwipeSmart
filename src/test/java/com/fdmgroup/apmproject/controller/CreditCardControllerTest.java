@@ -23,7 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
+import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Status;
+import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.CreditCardService;
@@ -254,7 +256,7 @@ class CreditCardControllerTest {
 		when(redirectAttributes.addAttribute(any(String.class), any(String.class))).thenReturn(redirectAttributes);
 		
         // Act
-        String viewName = creditCardController.makeCcbills(model, session, 0L, null, "custom", 1L, redirectAttributes);
+        String viewName = creditCardController.makeCcbills(model, session, 1L, null, "custom", 0L, redirectAttributes);
 
         // Assert
         assertEquals("redirect:/creditCard/paybills", viewName);
@@ -270,11 +272,11 @@ class CreditCardControllerTest {
 		when(redirectAttributes.addAttribute(any(String.class), any(String.class))).thenReturn(redirectAttributes);
 		
         // Act
-        String viewName = creditCardController.makeCcbills(model, session, 1L, null, "custom", 0L, redirectAttributes);
+        String viewName = creditCardController.makeCcbills(model, session, 0L, null, "custom", 1L, redirectAttributes);
 
         // Assert
         assertEquals("redirect:/creditCard/paybills", viewName);
-        verify(redirectAttributes).addAttribute("NotChooseAccountError", "true");
+        verify(redirectAttributes).addAttribute("NotChooseCreditCardError", "true");
         verifyNoMoreInteractions(accountService, creditCardService, mccService, currencyService,
                 transactionService, userService);
 	}
@@ -282,24 +284,140 @@ class CreditCardControllerTest {
 	@Test
 	@DisplayName("Test for post request to make custom payment")
 	void test12() {
-		
+		// Arrange
+	    Long creditCardId = 1L;
+	    Double paymentAmount = 500.0;
+	    String balanceType = "custom";
+	    Long accountId = 2L;
+	    User currentUser = new User();
+	    CreditCard creditCard = new CreditCard();
+	    Account account = new Account();
+	    creditCard.setCreditCardId(creditCardId);
+	    account.setAccountId(accountId);
+	    when(session.getAttribute("loggedUser")).thenReturn(currentUser);
+	    when(creditCardService.findById(creditCardId)).thenReturn(creditCard);
+	    when(accountService.findById(accountId)).thenReturn(account);
+	    when(currencyService.getCurrencyByCode("SGD")).thenReturn(new ForeignExchangeCurrency());
+
+	    // Act
+	    String viewName = creditCardController.makeCcbills(model, session, creditCardId, paymentAmount, balanceType, accountId, redirectAttributes);
+
+	    // Assert
+	    assertEquals("redirect:/userCards", viewName);
+	    verify(accountService).findById(account.getAccountId());
+	    verify(creditCardService).findById(creditCard.getCreditCardId());
+	    verify(mccService).findByMerchantCategory("Bill");
+	    verify(currencyService).getCurrencyByCode("SGD");
+	    verify(transactionService).persist(any(Transaction.class));
+	    verify(transactionService).updateCreditCardBalance(any(Transaction.class));
+	    verify(accountService).update(account);
+	    verify(userService).update(currentUser);
+	    verify(session).setAttribute("loggedUser", currentUser);
+	    verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("Test for post request to make minimum payment")
 	void test13() {
-		
+		// Arrange
+	    Long creditCardId = 1L;
+	    Double paymentAmount = 500.0;
+	    String balanceType = "minimum";
+	    Long accountId = 2L;
+	    User currentUser = new User();
+	    CreditCard creditCard = new CreditCard();
+	    Account account = new Account();
+	    creditCard.setCreditCardId(creditCardId);
+	    account.setAccountId(accountId);
+	    when(session.getAttribute("loggedUser")).thenReturn(currentUser);
+	    when(creditCardService.findById(creditCardId)).thenReturn(creditCard);
+	    when(accountService.findById(accountId)).thenReturn(account);
+	    when(currencyService.getCurrencyByCode("SGD")).thenReturn(new ForeignExchangeCurrency());
+
+	    // Act
+	    String viewName = creditCardController.makeCcbills(model, session, creditCardId, paymentAmount, balanceType, accountId, redirectAttributes);
+
+	    // Assert
+	    assertEquals("redirect:/userCards", viewName);
+	    verify(accountService).findById(account.getAccountId());
+	    verify(creditCardService).findById(creditCard.getCreditCardId());
+	    verify(mccService).findByMerchantCategory("Bill");
+	    verify(currencyService).getCurrencyByCode("SGD");
+	    verify(transactionService).persist(any(Transaction.class));
+	    verify(transactionService).updateCreditCardBalance(any(Transaction.class));
+	    verify(accountService).update(account);
+	    verify(userService).update(currentUser);
+	    verify(session).setAttribute("loggedUser", currentUser);
+	    verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("Test for post request to make statement payment")
 	void test14() {
-		
+		// Arrange
+	    Long creditCardId = 1L;
+	    Double paymentAmount = 500.0;
+	    String balanceType = "statement";
+	    Long accountId = 2L;
+	    User currentUser = new User();
+	    CreditCard creditCard = new CreditCard();
+	    Account account = new Account();
+	    creditCard.setCreditCardId(creditCardId);
+	    account.setAccountId(accountId);
+	    when(session.getAttribute("loggedUser")).thenReturn(currentUser);
+	    when(creditCardService.findById(creditCardId)).thenReturn(creditCard);
+	    when(accountService.findById(accountId)).thenReturn(account);
+	    when(currencyService.getCurrencyByCode("SGD")).thenReturn(new ForeignExchangeCurrency());
+
+	    // Act
+	    String viewName = creditCardController.makeCcbills(model, session, creditCardId, paymentAmount, balanceType, accountId, redirectAttributes);
+
+	    // Assert
+	    assertEquals("redirect:/userCards", viewName);
+	    verify(accountService).findById(account.getAccountId());
+	    verify(creditCardService).findById(creditCard.getCreditCardId());
+	    verify(mccService).findByMerchantCategory("Bill");
+	    verify(currencyService).getCurrencyByCode("SGD");
+	    verify(transactionService).persist(any(Transaction.class));
+	    verify(transactionService).updateCreditCardBalance(any(Transaction.class));
+	    verify(accountService).update(account);
+	    verify(userService).update(currentUser);
+	    verify(session).setAttribute("loggedUser", currentUser);
+	    verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("Test for post request to make current payment")
 	void test15() {
-		
+		// Arrange
+	    Long creditCardId = 1L;
+	    Double paymentAmount = 500.0;
+	    String balanceType = "current";
+	    Long accountId = 2L;
+	    User currentUser = new User();
+	    CreditCard creditCard = new CreditCard();
+	    Account account = new Account();
+	    creditCard.setCreditCardId(creditCardId);
+	    account.setAccountId(accountId);
+	    when(session.getAttribute("loggedUser")).thenReturn(currentUser);
+	    when(creditCardService.findById(creditCardId)).thenReturn(creditCard);
+	    when(accountService.findById(accountId)).thenReturn(account);
+	    when(currencyService.getCurrencyByCode("SGD")).thenReturn(new ForeignExchangeCurrency());
+
+	    // Act
+	    String viewName = creditCardController.makeCcbills(model, session, creditCardId, paymentAmount, balanceType, accountId, redirectAttributes);
+
+	    // Assert
+	    assertEquals("redirect:/userCards", viewName);
+	    verify(accountService).findById(account.getAccountId());
+	    verify(creditCardService).findById(creditCard.getCreditCardId());
+	    verify(mccService).findByMerchantCategory("Bill");
+	    verify(currencyService).getCurrencyByCode("SGD");
+	    verify(transactionService).persist(any(Transaction.class));
+	    verify(transactionService).updateCreditCardBalance(any(Transaction.class));
+	    verify(accountService).update(account);
+	    verify(userService).update(currentUser);
+	    verify(session).setAttribute("loggedUser", currentUser);
+	    verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 }

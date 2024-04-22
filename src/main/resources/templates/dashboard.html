@@ -42,44 +42,69 @@
 			
 			<div class="summary-container">
 			<div class="accounts-summary" >
-				<h4>Your Accounts:</h4>
+				<div class="view-details-button">
+					<h4>Your Accounts:</h4>
+					<button id="view-account-number" onclick="toggleAccountNumber()">&#128065;</button>
+				</div>
 				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
-					<div class="details-account-name">
-						<p th:text="${account.accountName}"></p>
+					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
+						<div class="details-account-name">
+							<p th:text="${account.accountName}"></p>
+						</div>
+						<div class="details-account-number">
+							<p class="hide-account-number" th:text="'***-***-' + ${#strings.substring(account.accountNumber, account.accountNumber.length() - 3)}"></p>
+							<p style="display:none" class="show-account-number" th:text="${account.accountNumber}"></p>
+						</div>
+						<div class="details-account-balance">
+							<label class="detail-label">Balance </label>
+							<p th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
+						</div>
 					</div>
-					<div class="details-account-number">
-						<p th:text="${account.accountNumber}"></p>
+					<div th:if="${account.getAccountStatus.getStatusName != 'Approved'}">
+						<div class="details-account-name">
+							<p th:text="${account.accountName}"></p>
+						</div>
+						<div class="details-account-name">
+							<p style="color:red" th:text="${account.getAccountStatus.getStatusName}"></p>
+						</div>
 					</div>
-					<div class="details-account-balance">
-						<label class="detail-label">Balance </label>
-						<p th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
-					</div>
-					
-				
 				</div>
 			</div>
 
 				<div class="cards-summary" >
-					<h4>Your Cards:</h4>
+					<div class="view-details-button">
+						<h4>Your Cards:</h4>
+						<button id="view-card-number" onclick="toggleCardNumber()">&#128065;</button>
+					</div>
 					<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
-						<div class="details-card-type">
-							<p th:text="${card.cardType}"></p>
+						<div th:if="${card.getCreditCardStatus.getStatusName == 'Approved'}">
+							<div class="details-card-type">
+								<p th:text="${card.cardType}"></p>
+							</div>
+							<div class="details-card-number">
+								<p class="hide-card-number" th:text="'****-****-****-' + ${#strings.substring(card.creditCardNumber, card.creditCardNumber.length() - 4)}"></p>
+								<p style="display:none" class="show-card-number" th:text="${card.creditCardNumber}"></p>
+							</div>
+							<div class="details-card-limit">
+								<label class="detail-label">Card Limit</label>
+								<p th:if="${card.cardLimit != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.cardLimit,0,'COMMA',2,'POINT')}"></p>
+	                         	<p th:if="${card.cardLimit == 0}" id="cardDetails" th:text="'$0.00'"></p>
+							</div>
+							<div class="details-card-amount">
+								<label class="detail-label">Amount Used</label>
+								<p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
+	                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
+							</div>
 						</div>
-						
-						<div class="details-card-number">
-							<p th:text="'****-****-****-' + ${#strings.substring(card.creditCardNumber, card.creditCardNumber.length() - 4)}"></p>
-						</div>
-						
-						<div class="details-card-limit">
-							<label class="detail-label">Card Limit</label>
-							<p th:if="${card.cardLimit != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.cardLimit,0,'COMMA',2,'POINT')}"></p>
-                         	<p th:if="${card.cardLimit == 0}" id="cardDetails" th:text="'$0.00'"></p>
-						</div>
-						
-						<div class="details-card-amount">
-							<label class="detail-label">Amount Used</label>
-							<p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
-                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
+						<div th:if="${card.getCreditCardStatus.getStatusName != 'Approved'}">
+							<div class="details-card-type">
+								<p th:text="${card.cardType}"></p>
+							</div>
+							<div class="details-card-number">
+								<div class="detail-label">
+									<p style="color:red" th:text="${card.getCreditCardStatus.getStatusName}"></p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -98,6 +123,36 @@
 			button.addEventListener('click', () => {menuOpen = !menuOpen;
 			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
 			sidebar.style.width = menuOpen ? '0' : '200px';})
+			
+			function toggleAccountNumber(){
+				var hiddenAccountNumbers = document.querySelectorAll('.hide-account-number');
+				var shownAccountNumbers = document.querySelectorAll('.show-account-number');
+				for (var i = 0; i < hiddenAccountNumbers.length; i++){
+					if (shownAccountNumbers[i].style.display === 'none'){
+						shownAccountNumbers[i].style.display = 'block';
+						hiddenAccountNumbers[i].style.display = 'none';
+					}
+					else {
+						shownAccountNumbers[i].style.display = 'none';
+						hiddenAccountNumbers[i].style.display = 'block';
+					}
+				}
+			}
+			
+			function toggleCardNumber(){
+				var hiddenCardNumbers = document.querySelectorAll('.hide-card-number');
+				var shownCardNumbers = document.querySelectorAll('.show-card-number');
+				for (var i = 0; i < hiddenCardNumbers.length; i++){
+					if (shownCardNumbers[i].style.display === 'none'){
+						shownCardNumbers[i].style.display = 'block';
+						hiddenCardNumbers[i].style.display = 'none';
+					}
+					else {
+						shownCardNumbers[i].style.display = 'none';
+						hiddenCardNumbers[i].style.display = 'block';
+					}
+				}
+			}
 		</script>
 	</body>	
 </html>

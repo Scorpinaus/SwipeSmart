@@ -145,7 +145,7 @@ header {
 	opacity: 0.6;
 }
 
-.secondary-content-container{
+.card-payment-container{
 	display: flex;
 	justify-content: center;
 }

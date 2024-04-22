@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -230,6 +231,13 @@ public class ForeignExchangeCurrencyService {
 	}
 
 	public void fetchAndSaveExchangeRates() {
+		//Check if fx_rates file exists
+		if (Files.exists(Paths.get("src/main/resources/fx_rates.json"))) {
+			logger.info("fx_rates.json file already exists and will not be updated.");
+			return;
+		}
+		
+		//Proceed to fetch data from the API
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<Map<String, ForeignExchangeCurrency>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, ForeignExchangeCurrency>>() {});
 		Map<String, ForeignExchangeCurrency> foreignCurrencies = response.getBody();
@@ -243,10 +251,10 @@ public class ForeignExchangeCurrencyService {
 			e.printStackTrace();
 		}
 	}
-	
+		
 	@PostConstruct
 	public void initCurrency() {
-//		fetchAndSaveExchangeRates();
+		fetchAndSaveExchangeRates();
 		loadAndSaveForeignCurrencyJSON();
 		ForeignExchangeCurrency currencyOne = new ForeignExchangeCurrency();
 		currencyOne.setCode("USD");

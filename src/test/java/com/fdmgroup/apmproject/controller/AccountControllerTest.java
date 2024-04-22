@@ -307,10 +307,24 @@ public class AccountControllerTest {
 	@DisplayName("Test for deposit with currency conversion")
 	void testDepositTwo() {
 		//Arrange
+		Account accountOne = account;
+		accountOne.setAccountId(1L);
+		accountOne.setCurrencyCode("USD");
+		accountOne.setBalance(10.00);
+		BigDecimal depositAmount = BigDecimal.valueOf(100.0);
+		BigDecimal exchangeRate = new BigDecimal("1.2");
+		BigDecimal expectedConvertedAmount = depositAmount.multiply(exchangeRate);
+		ForeignExchangeCurrency currencyUSD = foreignCurrency;
+		currencyUSD.setCode("USD");
+		when(accountService.findById(1L)).thenReturn(accountOne);
+		when(currencyService.getCurrencyByCode("USD")).thenReturn(currencyUSD);
+		when(currencyService.getExchangeRate("EUR", "USD")).thenReturn(exchangeRate);
 		
 		//Act
+		String redirectUrl = accountController.deposit(1L, depositAmount.doubleValue(), "EUR");
 		
 		//Arrange
+		assertEquals("redirect:/bankaccount/dashboard", redirectUrl);
 	}
 	
 	

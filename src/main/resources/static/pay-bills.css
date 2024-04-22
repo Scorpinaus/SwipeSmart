@@ -189,7 +189,7 @@ input#submitButton, button#paymentButton{
     margin-top: 2%;
 }
 
-input#submitButton:hover, button:hover{
+input#submitButton:hover, button#paymentButton:hover{
 	background-color: var(--darkgreen);
     color: white;
     font-weight: bold;

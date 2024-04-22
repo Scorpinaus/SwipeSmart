@@ -23,10 +23,16 @@ import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.TransactionService;
-import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
-
+/**
+ * This class is a Spring MVC controller responsible for handling requests related to bank accounts.
+ * It provides methods for displaying account information, performing withdrawals, deposits, transfers, and creating new accounts.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Controller
 public class AccountController {
 
@@ -35,9 +41,6 @@ public class AccountController {
 
 	@Autowired
 	private AccountService accountService;
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private ForeignExchangeCurrencyService currencyService;
@@ -54,7 +57,14 @@ public class AccountController {
 		this.accountService = accountService;
 	}
 
-	// Function brings logged on user to BankAccounts page.
+	
+	/**
+	 * This method retrieves the logged-in user's bank accounts and displays them on the "Bank Accounts" page.
+	 *
+	 * @param session The HTTP session object.
+	 * @param model The model object used to pass data to the view.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/bankaccount/dashboard")
 	public String showBankAccountDashboard(HttpSession session, Model model) {
 
@@ -79,7 +89,15 @@ public class AccountController {
 
 	}
 
-	// Function which brings user to Bank Account withdrawal page
+	
+	/**
+	 * This method retrieves the logged-in user's bank accounts and displays them on the "Withdrawal" page.
+	 *
+	 * @param session The HTTP session object.
+	 * @param model The model object used to pass data to the view.
+	 * @param redirectAttributes The redirect attributes object used to pass error messages to the next request.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/bankaccount/withdrawal")
 	public String withdrawalBankAccount(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
@@ -105,8 +123,18 @@ public class AccountController {
 		}
 
 	}
-
-	// Function which processes the bank account withdrawal request.
+	
+	
+	/**
+	 * This method handles the withdrawal request by checking the balance, updating the account balance, and creating a transaction record.
+	 *
+	 * @param accountId The ID of the account to withdraw from.
+	 * @param withdrawalCurrencyCode The currency code of the withdrawal amount.
+	 * @param amount The withdrawal amount.
+	 * @param session The HTTP session object.
+	 * @param redirectAttributes The redirect attributes object used to pass error messages to the next request.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/bankaccount/withdrawal")
 	public String processWithdrawal(@RequestParam("account") long accountId,
 			@RequestParam("currency") String withdrawalCurrencyCode, @RequestParam BigDecimal amount,
@@ -152,7 +180,15 @@ public class AccountController {
 		accountService.update(retrievedAccount);
 		return "redirect:/bankaccount/dashboard";
 	}
-
+	
+	
+	/**
+	 * This method retrieves the logged-in user's bank accounts and displays them on the "Deposit" page.
+	 *
+	 * @param model The model object used to pass data to the view.
+	 * @param session The HTTP session object.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/bankaccount/deposit")
 	public String goToDepositPage(Model model, HttpSession session) {
 
@@ -173,7 +209,16 @@ public class AccountController {
 
 		return ("deposit");
 	}
-
+	
+	
+	/**
+	 * This method handles the deposit request by updating the account balance and creating a transaction record.
+	 *
+	 * @param accountId The ID of the account to deposit into.
+	 * @param depositAmount The deposit amount.
+	 * @param currencyCode The currency code of the deposit amount.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/bankaccount/deposit")
 	public String deposit(@RequestParam("accountId") long accountId, @RequestParam("depositAmount") double depositAmount,
 			@RequestParam("currency") String currencyCode) {
@@ -203,14 +248,31 @@ public class AccountController {
 		accountService.update(accountDeposited);
 		return "redirect:/bankaccount/dashboard";
 	}
-
+	
+	
+	/**
+	 * This method displays the "Create Bank Account" page.
+	 *
+	 * @param session The HTTP session object.
+	 * @param model The model object used to pass data to the view.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/bankaccount/create")
 	public String goToCreateBankAccountPage(HttpSession session, Model model) {
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", loggedUser);
 		return "create-bank-account";
 	}
-
+	
+	/**
+	 * This method creates a new bank account for the logged-in user.
+	 *
+	 * @param accountName The name of the new account.
+	 * @param initialDeposit The initial deposit amount.
+	 * @param session The HTTP session object.
+	 * @param redirectAttributes The redirect attributes object used to pass error messages to the next request.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/bankaccount/create")
 	public String createBankAccount(@RequestParam("accountName") String accountName,
 			@RequestParam("initialDeposit") double initialDeposit, HttpSession session,
@@ -247,7 +309,14 @@ public class AccountController {
 			return "redirect:/bankaccount/dashboard";
 		}
 	}
-
+	
+	/**
+	 * This method retrieves the logged-in user's bank accounts and displays them on the "Transfer" page.
+	 *
+	 * @param model The model object used to pass data to the view.
+	 * @param session The HTTP session object.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/bankaccount/transfer")
 	public String goToTransferPage(Model model, HttpSession session) {
 
@@ -268,7 +337,19 @@ public class AccountController {
 
 		return "transfer";
 	}
-
+	
+	
+	/**
+	 * This method handles the transfer request by checking the balance, updating the account balances, and creating transaction records.
+	 *
+	 * @param accountId The ID of the account to transfer from.
+	 * @param transferAmount The transfer amount.
+	 * @param accountNumberTransferTo The account number to transfer to.
+	 * @param currencyCode The currency code of the transfer amount.
+	 * @param session The HTTP session object.
+	 * @param redirectAttributes The redirect attributes object used to pass error messages to the next request.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/bankaccount/transfer")
 	public String transferMoney(@RequestParam("account") long accountId,
 			@RequestParam("transferAmount") Double transferAmount,

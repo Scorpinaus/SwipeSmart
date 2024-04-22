@@ -145,6 +145,8 @@ public class CreditCardService {
 		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
 				"SwipeSmart Platinum Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
 		persist(createCreditCardPending);
+		
+		scheduleInterestCharging();
 	}
 	//Tests not implemented from this line onwards
 	// run this method at the start of every month

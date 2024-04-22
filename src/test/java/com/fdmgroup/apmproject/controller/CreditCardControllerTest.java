@@ -254,7 +254,7 @@ class CreditCardControllerTest {
 		when(redirectAttributes.addAttribute(any(String.class), any(String.class))).thenReturn(redirectAttributes);
 		
         // Act
-        String viewName = creditCardController.makeCcbills(model, session, 0L, null, "custom", 0L, redirectAttributes);
+        String viewName = creditCardController.makeCcbills(model, session, 0L, null, "custom", 1L, redirectAttributes);
 
         // Assert
         assertEquals("redirect:/creditCard/paybills", viewName);
@@ -264,13 +264,23 @@ class CreditCardControllerTest {
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("Test for post request to make payment when Credit Card is not chosen")
 	void test11() {
+		// Arrange
+		when(redirectAttributes.addAttribute(any(String.class), any(String.class))).thenReturn(redirectAttributes);
 		
+        // Act
+        String viewName = creditCardController.makeCcbills(model, session, 1L, null, "custom", 0L, redirectAttributes);
+
+        // Assert
+        assertEquals("redirect:/creditCard/paybills", viewName);
+        verify(redirectAttributes).addAttribute("NotChooseAccountError", "true");
+        verifyNoMoreInteractions(accountService, creditCardService, mccService, currencyService,
+                transactionService, userService);
 	}
 	
 	@Test
-	@DisplayName("")
+	@DisplayName("Test for post request to make custom payment")
 	void test12() {
 		
 	}

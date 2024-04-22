@@ -137,7 +137,6 @@ header {
 	border:none;
 	background-color:var(--darkgreen);
 	padding: 15px;
-	border-radius: 15px;
 }
 
 
@@ -180,7 +179,7 @@ h1{
 }
 
 
-input#submitButton, button{
+input#submitButton, button#paymentButton{
 	font-family: "Nunito Sans", sans-serif;
     background-color: var(--lightblue);
     color: black;

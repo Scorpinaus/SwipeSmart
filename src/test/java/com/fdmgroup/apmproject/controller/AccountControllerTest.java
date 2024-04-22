@@ -1,6 +1,8 @@
 package com.fdmgroup.apmproject.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -326,6 +328,36 @@ public class AccountControllerTest {
 		//Arrange
 		assertEquals("redirect:/bankaccount/dashboard", redirectUrl);
 	}
+	
+	@Test
+	@DisplayName("Test viewCreateBankAccountPage for logged in user")
+	void testViewCreateBankAccountOne() {
+		//Arrange
+		User currentUser = user;
+		currentUser.setUsername("jackyTan");
+		session.setAttribute("loggedUser", currentUser);
+		
+		//Act
+		String viewName = accountController.goToCreateBankAccountPage(session, model);
+		
+		//Assert
+		assertEquals("create-bank-account", viewName);
+		verify(model).addAttribute("user", currentUser);
+	}
+	
+	@Test
+	@DisplayName("Test viewCreateBankAccountPage for user not logged on")
+	void testViewCreateBankAccountTwo() {
+		//Arrange
+		User currentUser = user;
+		
+		//Act
+		String viewName = accountController.goToCreateBankAccountPage(session, model);
+		
+		//Assert
+		assertEquals("create-bank-account", viewName);
+	}
+	
 	
 	
 	

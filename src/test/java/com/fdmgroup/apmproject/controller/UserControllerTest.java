@@ -156,8 +156,67 @@ public class UserControllerTest {
         assertNull(resultUser);
     }
     
-    
+    @Test
+    public void testEditCustomerProfile_UpdateAddress() {
+        // Arrange
+        String address = "New Address";
+        User loggedUser = userService.findUserByUsername("jackytan"); 
+        when(session.getAttribute("loggedUser")).thenReturn(loggedUser);
+        
+        // Act
+        String viewName = userController.editCustomerProfile(loggedUser.getUserId(), address, loggedUser.getFirstName(), loggedUser.getLastName(), session, model);
+        User updatedUser = userService.findUserByUsername("jackytan");
 
+        // Assert
+        assertEquals("profile", viewName);
+        assertEquals(address, updatedUser.getAddress());
+    }
+    
+    @Test
+    public void testEditCustomerProfile_UpdateFirstName() {
+        // Arrange
+        String firstName = "New First Name";
+        User loggedUser = userService.findUserByUsername("jackytan"); 
+        when(session.getAttribute("loggedUser")).thenReturn(loggedUser);
+        
+        // Act
+        String viewName = userController.editCustomerProfile(loggedUser.getUserId(), loggedUser.getAddress(), firstName, loggedUser.getLastName(), session, model);
+        User updatedUser = userService.findUserByUsername("jackytan");
+
+        // Assert
+        assertEquals("profile", viewName);
+        assertEquals(firstName, updatedUser.getFirstName());
+    }
+
+    @Test
+    public void testEditCustomerProfile_UpdateLastName() {
+        String lastName = "New Last Name";
+        User loggedUser = userService.findUserByUsername("jackytan"); 
+        when(session.getAttribute("loggedUser")).thenReturn(loggedUser);
+
+        // Act
+        String viewName = userController.editCustomerProfile(loggedUser.getUserId(), loggedUser.getAddress(), loggedUser.getFirstName(), lastName, session, model);
+        User updatedUser = userService.findUserByUsername("jackytan");
+
+        // Assert
+        assertEquals("profile", viewName);
+        assertEquals(lastName, updatedUser.getLastName());
+    }
+
+    @Test
+    public void testEditCustomerProfile_NoUpdates() {
+        // Arrange
+    	User loggedUser = userService.findUserByUsername("jackytan"); 
+        when(session.getAttribute("loggedUser")).thenReturn(loggedUser);
+
+        // Act
+        String viewName = userController.editCustomerProfile(loggedUser.getUserId(), "", "", "", session, model);
+        User updatedUser = userService.findUserByUsername("jackytan");
+        
+        // Assert
+        assertEquals("profile", viewName);
+        when(model.getAttribute("user")).thenReturn(updatedUser);
+    }
     
     
 

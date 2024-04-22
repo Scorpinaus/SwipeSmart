@@ -101,21 +101,8 @@ public class AdminController {
 		return "admin/admin-user";
 	}
 
-	@PostMapping("/admin/bankaccountApproval")
-	public String approveBankAccount(@RequestParam("accountNumber") String accountNumber,HttpSession session) {
-		
-		Account account = accountService.findAccountByAccountNumber(accountNumber);
-
-		account.setAccountStatus(statusService.findByStatusName("Approved"));
-		accountService.update(account);
-		
-		LOGGER.info("Account Id: " +account.getAccountId()+ " has been approved by " + ((User) session.getAttribute("loggedUser")).getUsername() );
-		long userId = account.getAccountUser().getUserId();
-		return "redirect:/admin/accounts?userId=" +userId;
-	}
-	
 	@PostMapping("/admin/bankaccountStatus")
-	public String disabledBankAccount(@RequestParam("status") String status,@RequestParam("accountNumber") String accountNumber,HttpSession session) {
+	public String setBankAccountStatus(@RequestParam("status") String status,@RequestParam("accountNumber") String accountNumber,HttpSession session) {
 		
 		Account account = accountService.findAccountByAccountNumber(accountNumber);
 
@@ -136,6 +123,18 @@ public class AdminController {
 		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
 		creditCardService.update(creditCard);
 		LOGGER.info("creditcard Id: " +creditCard.getCreditCardId()+ " has been approved by " + ((User) session.getAttribute("loggedUser")).getUsername() );
+		long userId = creditCard.getCreditCardUser().getUserId();
+		return "redirect:/admin/creditcards?userId=" +userId;
+	}
+	
+	@PostMapping("/admin/credicardStatus")
+	public String setCredicardStatus(@RequestParam("status") String status,@RequestParam("creditCardNumber") String creditCardNumber,HttpSession session) {
+		
+		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
+
+		creditCard.setCreditCardStatus(statusService.findByStatusName(status));
+		creditCardService.update(creditCard);
+		LOGGER.info("creditcard Id: " +creditCard.getCreditCardId()+  "'s status has been setted to " + status +" by " + ((User) session.getAttribute("loggedUser")).getUsername() );
 		long userId = creditCard.getCreditCardUser().getUserId();
 		return "redirect:/admin/creditcards?userId=" +userId;
 	}

@@ -42,9 +42,9 @@ public class ForeignExchangeCurrencyService {
 	private ResourceLoader resourceLoader;
 
 	private static Logger logger = LogManager.getLogger(ForeignExchangeCurrencyService.class);
-	
+
 	private static final String URL = "http://www.floatrates.com/daily/usd.json";
-	
+
 	public ForeignExchangeCurrencyService(ForeignExchangeCurrencyRepository currencyRepo) {
 		this.currencyRepo = currencyRepo;
 	}
@@ -231,27 +231,40 @@ public class ForeignExchangeCurrencyService {
 	}
 
 	public void fetchAndSaveExchangeRates() {
-		//Check if fx_rates file exists
+		// Check if fx_rates file exists
 		if (Files.exists(Paths.get("src/main/resources/fx_rates.json"))) {
 			logger.info("fx_rates.json file already exists and will not be updated.");
 			return;
 		}
-		
-		//Proceed to fetch data from the API
+
+		// Proceed to fetch data from the API
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<Map<String, ForeignExchangeCurrency>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<Map<String, ForeignExchangeCurrency>>() {});
+		ResponseEntity<Map<String, ForeignExchangeCurrency>> response;
+		try {
+			response = restTemplate.exchange(URL, HttpMethod.GET, null,
+				new ParameterizedTypeReference<Map<String, ForeignExchangeCurrency>>() {
+				});
+			if (response.getBody() == null) {
+				throw new Exception("Failed to fetch data: No data received");
+			}
+		} catch (Exception e) {
+			logger.warn("Error fetching currency data: " + e.getMessage());
+			return;
+		}
+		
 		Map<String, ForeignExchangeCurrency> foreignCurrencies = response.getBody();
 		logger.info("Foreign Currencies Object ready for fetching");
-		
+
 		try {
 			String json = new ObjectMapper().writeValueAsString(foreignCurrencies);
 			Files.write(Paths.get("src/main/resources/fx_rates.json"), json.getBytes());
 			logger.info("fx_rates.json file successfully updated");
-		}	catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.warn("Error saving currency data: ", e.getMessage());
+			return;
 		}
 	}
-		
+
 	@PostConstruct
 	public void initCurrency() {
 		fetchAndSaveExchangeRates();
@@ -264,7 +277,7 @@ public class ForeignExchangeCurrencyService {
 		currencyOne.setInverseRate(1.00);
 		currencyOne.setRate(1.00);
 		persist(currencyOne);
-		
+
 	}
 
 }

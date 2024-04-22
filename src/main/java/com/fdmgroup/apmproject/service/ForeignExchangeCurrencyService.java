@@ -246,7 +246,7 @@ public class ForeignExchangeCurrencyService {
 	
 	@PostConstruct
 	public void initCurrency() {
-		fetchAndSaveExchangeRates();
+//		fetchAndSaveExchangeRates();
 		loadAndSaveForeignCurrencyJSON();
 		ForeignExchangeCurrency currencyOne = new ForeignExchangeCurrency();
 		currencyOne.setCode("USD");

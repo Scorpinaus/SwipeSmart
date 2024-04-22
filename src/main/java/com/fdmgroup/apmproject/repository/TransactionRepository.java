@@ -19,7 +19,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 	
 	List<Transaction> findByTransactionAccountOrRecipientAccount(Account transactionAccount, Account recipientAccount);
 
-	List<Transaction> findByAccountAndDateTimeBetween(Account newAccount, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
+	List<Transaction> findByTransactionAccountAndTransactionDateBetween(Account newAccount, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 	
 	
 	

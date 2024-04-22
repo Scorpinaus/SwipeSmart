@@ -114,8 +114,8 @@
 						<thead>
 							<tr>
 								<th>Category</th>
-								<th>Date</th>
-								<th>Time</th>
+								<th>Date <br>(YYYY-MM-DD) </th>
+								<th>Time <br> (HH-MM-SS)</th>
 								<th>Amount (SGD)</th>
 								<th>Transaction Type</th>
 								<th>CashBack</th>
@@ -134,10 +134,10 @@
 									th:text="${#strings.substring(transaction.transactionDate, 0, 10)}"></td>
 								<td
 									th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
-								<td th:if="${transaction.transactionType == 'CC Bill Payment'}"
+								<td th:if="${transaction.transactionType == 'CC Payment'}"
 									th:text="'-$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
 								<td
-									th:unless="${transaction.transactionType == 'CC Bill Payment'}"
+									th:unless="${transaction.transactionType == 'CC Payment'}"
 									th:text="'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
 								
 								<td th:text="${transaction.transactionType}"></td>

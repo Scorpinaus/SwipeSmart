@@ -244,21 +244,21 @@ public class CreditCardController {
 		
 		
 		if (balanceType.equals("custom")) {
-			transaction = new Transaction("CC Bill Payment", paymentAmount, null, 0.00, creditCard, account, mccBill,
+			transaction = new Transaction("CC Payment", paymentAmount, null, 0.00, creditCard, account, mccBill,
 					currency);
 		} else if (balanceType.equals("minimum")) {
 			if (creditCard.getMonthlyBalance() < 50)
-				transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
+				transaction = new Transaction("CC Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
 						account, mccBill, currency);
 
 			else
-				transaction = new Transaction("CC Bill Payment", 50, null, 0.00, creditCard, account, mccBill, currency);
+				transaction = new Transaction("CC Payment", 50, null, 0.00, creditCard, account, mccBill, currency);
 		} else if (balanceType.equals("statement")) {
-			transaction = new Transaction("CC Bill Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
+			transaction = new Transaction("CC Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
 
 					account, mccBill, currency);
 		} else if (balanceType.equals("current")) {
-			transaction = new Transaction("CC Bill Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, account,
+			transaction = new Transaction("CC Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, account,
 					mccBill, currency);
 		}
 		account.setBalance(account.getBalance()-transaction.getTransactionAmount());

@@ -3,7 +3,7 @@
 	<head>
 		<link rel="stylesheet" href="/profile.css">
 		<meta charset="UTF-8">
-		<title>User Profile Page</title>
+		<title>Profile</title>
 	</head>
 	<body>
 		<div class="linkContainerSideBar" id="sidebar">
@@ -32,20 +32,24 @@
 			<header>
 				<button class="openSidebar">☰</button>
 			</header>
-			<div class="mainPageContent">
-				<h1><span th:text="'Hi ' + ${user.username} + ', this is your profile page'"></span></h1>
+			<div class="profile-summary-container">
+				<h1><span th:text="'Profile Summary'"></span></h1>
 				<div class="userDetailsList" th:object="${user}">
 					<div class="userDetails">
-						Username: <span th:text="*{username}"></span>
+						<label class="label-details" for="username">Username</label>
+						<p th:text="*{username}"></p>
 					</div>
 					<div class="userDetails">
-						Address: <span th:text="*{address}"></span>
+						<label class="label-details" for="username">Address</label>
+						<p th:text="*{address}"></p>
 					</div >
 					<div class="userDetails">
-						First Name: <span th:text="*{firstName}"></span>
+						<label class="label-details" for="username">First Name</label>
+						<p th:text="*{firstName}"></p>
 					</div>
 					<div class="userDetails">
-						Last Name: <span th:text="*{lastName}"></span>	
+						<label class="label-details" for="username">Last Name</label>
+						<p th:text="*{lastName}"></p>	
 					</div>
 					<div class="link">
 						<a th:href="@{/users/{id}/details(id=${user.userId})}">Edit Profile Details</a>

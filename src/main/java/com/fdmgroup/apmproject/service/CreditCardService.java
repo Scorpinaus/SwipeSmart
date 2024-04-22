@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.CreditCard;
+import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
+import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
@@ -188,7 +190,7 @@ public class CreditCardService {
 			for (Transaction transaction : transactions) {
 				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth)
 						&& transaction.getTransactionDate().toLocalDate().isAfter(firstDayOfPreviousMonth)
-						&& transaction.getTransactionType().equals("CC Payment")) {
+						&& transaction.getTransactionType().equals("CC Purchase")) {
 					interestPayable -= (transaction.getTransactionAmount() - transaction.getCashback());
 				}
 			}
@@ -209,10 +211,10 @@ public class CreditCardService {
 			List<Transaction> transactions = creditCard.getTransactions();
 			for (Transaction transaction : transactions) {
 				if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth)
-						&& transaction.getTransactionType().equals("CC Payment")) {
+						&& transaction.getTransactionType().equals("CC Purchase")) {
 					monthlyBalance += transaction.getTransactionAmount() - transaction.getCashback();
 				} else if (transaction.getTransactionDate().toLocalDate().isBefore(curMonth)
-						&& transaction.getTransactionType().equals("CC Bill Payment")) {
+						&& transaction.getTransactionType().equals("CC Payment")) {
 					monthlyBalance -= transaction.getTransactionAmount();
 				}
 				creditCard.setMonthlyBalance(monthlyBalance);
@@ -220,5 +222,5 @@ public class CreditCardService {
 			}
 		}
 	}
-
+	
 }

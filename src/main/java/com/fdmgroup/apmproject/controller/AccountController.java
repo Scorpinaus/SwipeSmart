@@ -86,7 +86,6 @@ public class AccountController {
 		} else {
 			return "redirect:/login";
 		}
-
 	}
 
 	

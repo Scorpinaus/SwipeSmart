@@ -38,15 +38,21 @@
 			
 			<div class="secondary-content-container">   
 				<div class="form"> 
-		           	<form method="post" action="applyCreditCard" class="applyCreditCard">					
-						<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
-						<br>
-						<select name="cardType">
-					    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
-					    <option value="SwipeSmart Platinium Card">SwipeSmart Platinium Card</option>
-					  	</select>
-					  	<br>
-						<input id="submitButton" type="submit" value="Apply" class="button">
+		           	<form method="post" action="applyCreditCard" class="applyCreditCard">	
+		           		<div class="monthly-salary">
+		           			<label class="input-label">Monthly Salary</label>
+							<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
+		           		</div>
+						<div class="select-card">
+							<label class="input-label">Select Card:</label>
+							<select name="cardType">
+						    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
+						    <option value="SwipeSmart Platinium Card">SwipeSmart Platinium Card</option>
+						  	</select>
+						</div>
+						<div class="submit-button">
+						  	<input id="submitButton" type="submit" value="Apply" class="button">
+					  	</div>
 					</form>
 					<div th:if="${error}">
 		   				 <p style="color: red;">There are empty fields, please fill up</p>

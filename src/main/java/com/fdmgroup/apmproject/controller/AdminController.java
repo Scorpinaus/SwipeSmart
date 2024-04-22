@@ -114,6 +114,19 @@ public class AdminController {
 		return "redirect:/admin/accounts?userId=" +userId;
 	}
 	
+	@PostMapping("/admin/bankaccountStatus")
+	public String disabledBankAccount(@RequestParam("status") String status,@RequestParam("accountNumber") String accountNumber,HttpSession session) {
+		
+		Account account = accountService.findAccountByAccountNumber(accountNumber);
+
+		account.setAccountStatus(statusService.findByStatusName(status));
+		accountService.update(account);
+		
+		LOGGER.info("Account Id: " +account.getAccountId()+ "'s status has been setted to " + status +" by " + ((User) session.getAttribute("loggedUser")).getUsername() );
+		long userId = account.getAccountUser().getUserId();
+		return "redirect:/admin/accounts?userId=" +userId;
+	}
+	
 
 	@PostMapping("/admin/credicardApproval")
 	public String approveCredicard(@RequestParam("creditCardNumber") String creditCardNumber,HttpSession session) {

@@ -51,7 +51,7 @@
 				<div class="account-details-container">
                   <div class="account-details" th:each="account : ${currentUserBankAccounts}">
 					<a id="accountDetails"
-						th:if="${account.accountStatus.statusName != 'Pending'}" href="#"
+						th:if="${account.accountStatus.statusName == 'Approved'}" href="#"
 						th:onclick="'submitForm(' + ${account.accountId} + ')'">
                         
                         <div class="details-account-name">
@@ -60,7 +60,7 @@
                         
                         <div class="details-account-number">
                          <p th:text="${account.accountNumber}"></p>
-                         <p th:if="${account.accountStatus.statusName == 'Approved'}" style="color:green" th:text="${account.accountStatus.statusName}"></p>
+                         <p style="color:green" th:text="${account.accountStatus.statusName}"></p>
                         </div>
                         
                         <div class="details-account-balance-status">
@@ -71,23 +71,13 @@
                         </div>
                         
 					</a> 
-                    <div th:if="${account.accountStatus.statusName == 'Pending'}">
+                    <div th:if="${account.accountStatus.statusName != 'Approved'}">
                         <div class="details-account-name">
                          <p th:text="${account.accountName}"></p>
                         </div>
-                        
                         <div class="details-account-number">
-                         <p th:text="${account.accountNumber}"></p>
-                         <p th:if="${account.accountStatus.statusName != 'Approved'}" style="color:red" th:text="${account.accountStatus.statusName}"></p>
+                         <p style="color:red" th:text="${account.accountStatus.statusName}"></p>
                         </div>
-                        
-						<div class="details-account-balance-status">
-                         <label class="detail-label">Account Balance </label>
-                         <p th:if="${account.balance == 0}"  th:text="'$0.00'"></p>
-                         <p th:if="${account.balance != 0}" th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
-                         
-                        </div>
-					  
                     </div>
                  </div>
 			   </div>

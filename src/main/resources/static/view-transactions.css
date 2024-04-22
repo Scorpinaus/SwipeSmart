@@ -219,11 +219,246 @@ span#accountDetails{
 	opacity: 0.6;
 }
 
-.transactionTable{
-	background-color: var(--lightgrey);
-	padding: 15px;
-	border-radius: 15px;
-	animation:transitionIn 1.5s;
-	opacity: 0;
-	animation-fill-mode: forwards;
+.account {
+	display: block;
 }
+
+.account-details-container{
+	flex: 1 1 35%;
+    min-width: 300px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  	border-radius: 10px;
+  	margin-top: 10px;
+  	margin-bottom: 10px;
+  	background-color: var(--lightgrey);
+}
+
+.account-details{
+    display: flex;
+    text-align: left;
+    width: 100%;
+    min-height: 100px;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.details-account-name,
+.details-account-number{
+	padding-left: 15px;
+}
+
+.details-account-name p {
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	color: black;
+} 
+
+.details-account-number p {
+	margin-top: 0px;
+	margin-bottom: 10px;
+	color: black;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+}
+
+.details-account-balance-status p{
+    display: block;
+    color: black;
+    margin: 0px;
+    padding-bottom: 5px;
+}
+
+.details-account-balance-status  {
+	text-align: right;
+    padding-right: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc; 
+}
+
+.details-account-balance-status p.status-pending{
+	color: red;
+}
+
+.card-details-container{
+	flex: 1 1 35%;
+    min-width: 300px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  	border-radius: 10px;
+  	margin-top: 10px;
+  	margin-bottom: 10px;
+  	background-color: var(--lightgrey);
+}
+
+.card-details{
+	display: flex;
+    text-align: left;
+    width: 100%;
+    min-height: 100px;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.details-card-type,
+.details-card-number{
+	padding-left: 15px;
+} 
+
+.details-card-type p {
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	color: black;
+}
+
+.details-card-number p {
+	margin-top: 0px;
+	margin-bottom: 10px;
+	color: black;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: black;
+}
+
+.details-card-amount p{
+    display: block;
+    color: black;
+    margin: 0px;
+    padding-bottom: 5px;
+}
+
+.details-card-amount {
+	text-align: right;
+    padding-right: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.filter-month {
+	display: inline-block;
+	padding: 10px;
+	margin-bottom: 5px;
+	border-radius: 8px;
+	background-color: var(--lightgrey);
+}
+
+
+.transaction-container {
+	flex: 1 1 35%;
+	overflow-x: auto;
+    min-width: 620px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  	border-radius: 10px;
+  	background-color: var(--lightgrey);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+}
+
+table th, table td {
+    text-align: left;
+    padding: 12px 15px;
+}
+
+table thead {
+    background-color: #f5f5f5;
+    color: #333;
+    font-weight: bold;
+}
+
+.card-transaction-container tbody tr:hover {
+        background-color: var(--lightblue);
+    }
+
+.account-transaction-container th:nth-child(1),
+.account-transaction-container td:nth-child(1) {
+    width: 15%; 
+}
+
+.account-transaction-container th:nth-child(2),
+.account-transaction-container td:nth-child(2) {
+    width: 15%;
+}
+
+.account-transaction-container th:nth-child(3),
+.account-transaction-container td:nth-child(3) {
+    width: 15%;
+}
+
+.account-transaction-container th:nth-child(4),
+.account-transaction-container td:nth-child(4) {
+    width: 5%;
+}
+
+.account-transaction-container th:nth-child(5),
+.account-transaction-container td:nth-child(5) {
+    width: 15%;
+}
+
+.account-transaction-container th:nth-child(6),
+.account-transaction-container td:nth-child(6) {
+    width: 20%;
+}
+
+.card-transaction-container th:nth-child(1),
+.card-transaction-container td:nth-child(1) {
+    width: 10%; 
+}
+
+.card-transaction-container th:nth-child(2),
+.card-transaction-container td:nth-child(2) {
+    width: 10%;
+}
+
+.card-transaction-container th:nth-child(3),
+.card-transaction-container td:nth-child(3) {
+    width: 10%;
+}
+
+.card-transaction-container th:nth-child(4),
+.card-transaction-container td:nth-child(4) {
+    width: 5%;
+}
+
+.card-transaction-container th:nth-child(5),
+.card-transaction-container td:nth-child(5) {
+    width: 10%;
+}
+
+.card-transaction-container th:nth-child(6),
+.card-transaction-container td:nth-child(6) {
+    width: 5%;
+}
+
+.card-transaction-container th:nth-child(7),
+.card-transaction-container td:nth-child(7) {
+    width: 15%;
+}
+

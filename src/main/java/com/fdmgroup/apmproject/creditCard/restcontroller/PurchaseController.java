@@ -78,6 +78,22 @@ public class PurchaseController {
 	
 
 	
+	
+	
+	
+	
+	//can test with this json
+//	{
+//    "accountName" : "Current",
+//    "accountNumber" : "124-124-124",
+//    "creditCardNumber" : "1234-5678-1234-5678",
+//    "amount" : 123.00,
+//    "pin" : "123",
+//    "mcc" : "Shopping",
+//    "currency" : "USD",
+//    "description" : "purchase simulation"
+//	}
+	
 	@PostMapping("purchase")
 	public ResponseEntity<PaymentResponse> purchase(@RequestBody PurchaseRequest request) {
 		try {

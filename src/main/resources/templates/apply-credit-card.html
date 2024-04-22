@@ -32,20 +32,21 @@
 			<header>
 				<button class="openSidebar">☰</button>
 			</header>
-			<h1 th:text="'Hi ' + ${session.loggedUser.username} + ', please select your credit card to apply for.'"></h1>
+			<h1 th:text="'Hi ' + ${session.loggedUser.username} + ', ready to join the family?'"></h1>
 			
-			<h2>Our available credit card</h2>
+			<h2>Credit Card Application</h2>
 			
 			<div class="secondary-content-container">   
 				<div class="form"> 
 		           	<form method="post" action="applyCreditCard" class="applyCreditCard">	
 		           		<div class="monthly-salary">
 		           			<label class="input-label">Monthly Salary</label>
-							<input type="number" name="monthlySalary" placeholder="Monthly Salary" min="0" step="1">
+							<input type="number" name="monthlySalary" placeholder="Enter monthly salary" min="0" step="1">
 		           		</div>
 						<div class="select-card">
-							<label class="input-label">Select Card:</label>
+							<label class="input-label">Card of Choice:</label>
 							<select name="cardType">
+							<option value="" disabled selected hidden>Select Card...</option>
 						    <option value="Ultimate Cashback Card">Ultimate Cashback Card</option>
 						    <option value="SwipeSmart Platinum Card">SwipeSmart Platinum Card</option>
 						  	</select>

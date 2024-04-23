@@ -51,7 +51,6 @@ public class ForeignExchangeCurrencyService {
 
 	private static final String URL = "http://www.floatrates.com/daily/usd.json";
 
-<<<<<<< HEAD
 	public ForeignExchangeCurrencyService(ForeignExchangeCurrencyRepository currencyRepo) {
 		this.currencyRepo = currencyRepo;
 	}
@@ -67,8 +66,6 @@ public class ForeignExchangeCurrencyService {
 	 * @see CurrencyRepo#findById(Object) Method to check if a foreign exchange currency already exists.
 	 * @see CurrencyRepo#save(Object) Method to save a new foreign exchange currency into the database.
 	 */
-=======
->>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public void persist(ForeignExchangeCurrency foreignExchangeCurrency) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo
 				.findById(foreignExchangeCurrency.getCurrencyId());

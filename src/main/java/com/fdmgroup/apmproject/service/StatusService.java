@@ -18,7 +18,7 @@ public class StatusService {
 	private StatusRepository statusRepo;
 
 	private static Logger logger = LogManager.getLogger(StatusService.class);
-<<<<<<< HEAD
+
 	
 	public StatusService(StatusRepository statusRepo) {
 		this.statusRepo = statusRepo;
@@ -33,9 +33,6 @@ public class StatusService {
 	@see StatusRepository#findById(Object) findById
 	@see StatusRepository#save(Object) save
 	*/
-=======
-
->>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public void persist(Status status) {
 		Optional<Status> returnedStatus = statusRepo.findById(status.getStatusId());
 		if (returnedStatus.isEmpty()) {
@@ -45,7 +42,7 @@ public class StatusService {
 			logger.warn("Status already exists");
 		}
 	}
-<<<<<<< HEAD
+
 	
 	/**
 	Updates a Status object in the database if it already exists.
@@ -56,9 +53,6 @@ public class StatusService {
 	@see StatusRepository#findById(Object) findById
 	@see StatusRepository#save(Object) save
 	*/
-=======
-
->>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public void update(Status status) {
 		Optional<Status> returnedStatus = statusRepo.findById(status.getStatusId());
 		if (returnedStatus.isEmpty()) {
@@ -68,7 +62,7 @@ public class StatusService {
 			logger.info("Status successfully updated");
 		}
 	}
-<<<<<<< HEAD
+
 	
 	/**
 	Finds and retrieves a Status object by its ID from the database.
@@ -78,9 +72,7 @@ public class StatusService {
 	@return The Status object with the specified ID if found, otherwise null.
 	@see StatusRepository#findById(Object) findById
 	*/
-=======
 
->>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public Status findById(int statusId) {
 		Optional<Status> returnedStatus = statusRepo.findById(statusId);
 		if (returnedStatus.isEmpty()) {

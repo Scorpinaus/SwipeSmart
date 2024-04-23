@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.creditCard.restcontroller;
+package com.fdmgroup.apmproject.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fdmgroup.apmproject.controller.AccountController;
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
+import com.fdmgroup.apmproject.model.PaymentException;
+import com.fdmgroup.apmproject.model.PaymentResponse;
+import com.fdmgroup.apmproject.model.PurchaseRequest;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.repository.CreditCardRepository;
 import com.fdmgroup.apmproject.repository.MerchantCategoryCodeRepository;

@@ -53,7 +53,7 @@ public class CreditCard {
 	@Column(name = "Currency Code")
 	private String currencyCode;
 	
-	@Column(name = "Mininum Balance Paid?")
+	@Column(name = "Mininum Balance Sum")
 	private double minBalancePaid;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -98,7 +98,7 @@ public class CreditCard {
 		setAmountUsed(amountUsed);
 		setMonthlyBalance(0);
 		setCurrencyCode(currencyCode);
-		setMinBalancePaid(50);
+		setMinBalancePaid(0);
 	}
 	
 	/**
@@ -122,7 +122,7 @@ public class CreditCard {
 		setCreditCardUser(creditCardUser);
 		setAmountUsed(amountUsed);
 		setMonthlyBalance(0);
-		setMinBalancePaid(50);
+		setMinBalancePaid(0);
 	}
 
 	public long getCreditCardId() {

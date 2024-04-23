@@ -33,7 +33,6 @@ public class CreditCardService {
 	private UserService userService;
 	@Autowired
 	private StatusService statusService;
-	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
 	private static final double interestRate = 0.1;
 
 	private static Logger logger = LogManager.getLogger(CreditCardService.class);
@@ -146,21 +145,7 @@ public class CreditCardService {
 		String pinPending = "125";
 		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
 				"SwipeSmart Platinum Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
-<<<<<<< HEAD
-=======
 		persist(createCreditCardPending);
-		
-		scheduleInterestCharging();
-	}
-	//Tests not implemented from this line onwards
-	// run this method at the start of every month
-	private long calculateDelayToNextMonth() {
-		LocalDate currentDate = LocalDate.now();
-		LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
-		LocalDateTime nextMonthStartOfDay = nextMonth.atStartOfDay();
-		Duration duration = Duration.between(LocalDateTime.now(), nextMonthStartOfDay);
-		return duration.toMillis();
->>>>>>> 709fa16f98276995321447e489496ba43fe403e2
 	}
 
 

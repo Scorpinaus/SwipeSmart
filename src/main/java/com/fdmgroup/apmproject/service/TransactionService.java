@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,6 +46,8 @@ public class TransactionService {
 
 	@Autowired
 	private StatusService statusService;
+	
+	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
 
 	private static Logger logger = LogManager.getLogger(TransactionService.class);
 
@@ -224,10 +227,11 @@ public class TransactionService {
 			@Override
 			public void run() {
 				Status statusName = statusService.findByStatusName("Approved");
-				List<CreditCard> approvedCreditCards = findCreditCardsByStatus(statusName);
-				calculateMonthlyBalance(approvedCreditCards);
-				chargeInterest(approvedCreditCards);
-				calculateMinimumBalance(approvedCreditCards);
+				List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
+				creditCardService.calculateMonthlyBalance(approvedCreditCards);
+				creditCardService.chargeInterest(approvedCreditCards);
+				chargeMinimumBalanceFee(approvedCreditCards);
+				creditCardService.calculateMinimumBalance(approvedCreditCards);
 			}
 		}, delay, ONE_MONTH_IN_MILLISECONDS);
 	}
@@ -236,6 +240,8 @@ public class TransactionService {
 	public void initTransactions() {
 		CreditCard creditCard = creditCardService.findByCreditCardNumber("1234-5678-1234-5678");
 		CreditCard creditCard2 = creditCardService.findByCreditCardNumber("2345-5678-2398-5128");
+		creditCard.setMinBalancePaid(50);
+		creditCard2.setMinBalancePaid(50);
 		MerchantCategoryCode mcc = merchantCategoryCodeService.findByMerchantCategory("Dining");
 		MerchantCategoryCode mcc1 = merchantCategoryCodeService.findByMerchantCategory("Shopping");
 		MerchantCategoryCode mcc2 = merchantCategoryCodeService.findByMerchantCategory("Travel");
@@ -292,10 +298,14 @@ public class TransactionService {
 			updateCreditCardBalance(t);
 		}
 		List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
+		chargeMinimumBalanceFee(approvedCreditCards);
 		creditCardService.calculateMonthlyBalance(approvedCreditCards);
 		creditCardService.chargeInterest(approvedCreditCards);
 		updateInterest(approvedCreditCards);
-		chargeMinimumBalanceFee(approvedCreditCards);
+		
+		
+		
+		
 	}
 
 }

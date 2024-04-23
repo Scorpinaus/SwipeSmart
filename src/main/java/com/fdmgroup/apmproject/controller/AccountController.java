@@ -56,10 +56,6 @@ public class AccountController {
 	private final int LEASTINITIALDEPOSIT = 5000;
 	private List<ForeignExchangeCurrency> currenciesList;
 
-	public AccountController(AccountService accountService) {
-		this.accountService = accountService;
-	}
-
 	/**
 	 * This method retrieves the logged-in user's bank accounts and displays them on
 	 * the "Bank Accounts" page.
@@ -167,9 +163,9 @@ public class AccountController {
 		if (session.getAttribute("loggedUser") == null) {
 			return "redirect:/login";
 		}
-		
+
 		User currentUser = (User) session.getAttribute("loggedUser");
-		
+
 		// Retrieve currentUser and selectedAccount for withdrawal
 		Account retrievedAccount = accountService.findById(accountId);
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());

@@ -1,6 +1,5 @@
 package com.fdmgroup.apmproject.service;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,14 +45,10 @@ public class TransactionService {
 
 	@Autowired
 	private StatusService statusService;
-	
+
 	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
 
 	private static Logger logger = LogManager.getLogger(TransactionService.class);
-
-	public TransactionService(TransactionRepository transactionRepo) {
-		this.transactionRepo = transactionRepo;
-	}
 
 	public void persist(Transaction transaction) {
 		Optional<Transaction> returnedTransaction = transactionRepo.findById(transaction.getTransactionId());
@@ -137,14 +132,14 @@ public class TransactionService {
 
 		return transactionRepo.findByTransactionDateBetweenAndTransactionAccount(startOfMonth, endOfMonth, account);
 	}
-	
-	 public List<Transaction> findTransactionsBeforeDateAndCreditCard(LocalDateTime date, CreditCard creditCard) {
-	        return transactionRepo.findByTransactionDateBeforeAndTransactionCreditCard(date, creditCard);
-	    }
-	 
-	 public List<Transaction> findTransactionsByCreditCard(CreditCard creditCard) {
-	        return transactionRepo.findByTransactionCreditCard(creditCard);
-	    }
+
+	public List<Transaction> findTransactionsBeforeDateAndCreditCard(LocalDateTime date, CreditCard creditCard) {
+		return transactionRepo.findByTransactionDateBeforeAndTransactionCreditCard(date, creditCard);
+	}
+
+	public List<Transaction> findTransactionsByCreditCard(CreditCard creditCard) {
+		return transactionRepo.findByTransactionCreditCard(creditCard);
+	}
 
 	public List<Transaction> getTransactionsByMonthAndYearAndTransactionCreditCard(int year, int monthValue,
 			CreditCard creditcard) {
@@ -216,13 +211,13 @@ public class TransactionService {
 	// Tests not implemented from this line onwards
 	// run this method at the start of every month
 	private long calculateDelayToNextMonth() {
-			LocalDate currentDate = LocalDate.now();
-			LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
-			LocalDateTime nextMonthStartOfDay = nextMonth.atStartOfDay();
-			Duration duration = Duration.between(LocalDateTime.now(), nextMonthStartOfDay);
-			return duration.toMillis();
+		LocalDate currentDate = LocalDate.now();
+		LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
+		LocalDateTime nextMonthStartOfDay = nextMonth.atStartOfDay();
+		Duration duration = Duration.between(LocalDateTime.now(), nextMonthStartOfDay);
+		return duration.toMillis();
 	}
-	
+
 	public void scheduleInterestCharging() {
 		Timer timer = new Timer();
 
@@ -279,8 +274,8 @@ public class TransactionService {
 				null, 0.00, creditCard2, null, mcc2, currency);
 		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Purchase", 100.10,
 				null, 0.00, creditCard2, null, mcc2, currency);
-		Transaction transaction11 = new Transaction(LocalDateTime.of(2024, 4, 23, 9, 35, 26), "CC Purchase", 1200,
-				null, 0.00, creditCard2, null, mcc1, currency);
+		Transaction transaction11 = new Transaction(LocalDateTime.of(2024, 4, 23, 9, 35, 26), "CC Purchase", 1200, null,
+				0.00, creditCard2, null, mcc1, currency);
 		Account account1 = accountService.findAccountByAccountNumber("123-123-123");
 		Account account2 = accountService.findAccountByAccountNumber("124-124-124");
 		Transaction transactionA1 = new Transaction("Initial Deposit", account1, account1.getBalance(), null, currency,
@@ -301,7 +296,7 @@ public class TransactionService {
 		transaction9.setCreditCardDescription("SIA", 1);
 		transaction10.setCreditCardDescription("SCOOT", 1);
 		transaction11.setCreditCardDescription("Rolex", 1);
-		
+
 		Transaction[] transactions = { transaction, transaction1, transaction2, transaction3, transaction4,
 				transaction5, transaction6, transaction7, transaction8, transaction9, transaction10, transaction11 };
 		for (Transaction t : transactions) {
@@ -313,10 +308,7 @@ public class TransactionService {
 		creditCardService.calculateMonthlyBalance(approvedCreditCards);
 		creditCardService.chargeInterest(approvedCreditCards);
 		updateInterest(approvedCreditCards);
-		
-		
-		
-		
+
 	}
 
 }

@@ -171,24 +171,4 @@ public class AccountService {
 		return sb.toString();
 	}
 
-	/**
-	 * Initializes the database with some sample accounts.
-	 */
-	@PostConstruct
-	public void intiAccounts() {
-		User userJacky = userService.findUserByUsername("jackytan");
-		Status statusName = statusService.findByStatusName("Approved");
-		String currencyCode = "SGD";
-		Account account = new Account("Savings", 5000, "123-123-123", userJacky, statusName, currencyCode);
-		Account account2 = new Account("Current", 10000, "124-124-124", userJacky, statusName, currencyCode);
-		Account accountPending = new Account("pending ac", 10000, "125-125-125", userJacky,
-				statusService.findByStatusName("Pending"), currencyCode);
-		Account accountPending2 = new Account("pending ac2", 10123, "126-126-126", userJacky,
-				statusService.findByStatusName("Pending"), currencyCode);
-
-		persist(account);
-		persist(account2);
-		persist(accountPending);
-		persist(accountPending2);
-	}
 }

@@ -42,10 +42,11 @@
 			<p id="headerIntro"> This is for you, at a glance: </p>	
 			<h2> Summary</h2>
 			<div class="summary-container">
+      
     			<div class="accounts-summary" >
     				<div class="view-details-button">
     					<h4>Your Accounts:</h4>
-    					<button id="view-account-number" onclick="toggleAccountNumber()"><i class="fa-solid fa-eye" style="font-size:20px;"></i></button>
+    					<button id="view-account-number" onclick="toggleAccountNumber()"><i id="account-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
     				</div>
     				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
     					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
@@ -75,7 +76,7 @@
 				<div class="cards-summary" >
 					<div class="view-details-button">
 						<h4>Your Cards:</h4>
-						<button id="view-card-number" onclick="toggleCardNumber()"><i class="fa-solid fa-eye" style="font-size:20px;"></i></button>
+						<button id="view-card-number" onclick="toggleCardNumber()"><i id="card-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
 					</div>
 					<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
 						<div th:if="${card.getCreditCardStatus.getStatusName == 'Approved'}">
@@ -112,16 +113,17 @@
 				</div>
                 
                 <h2>Insights</h2>
-				<div class="category-spending-stats">
+				<!-- <div class="category-spending-stats">
                   <div class="chart-container">
-                      <canvas class="category-chart"></canvas>
+                       
+                      <canvas class="category-chart"></canvas> 
                     <div class="chart-details">
                       <ul>
                         
                       </ul>
                     </div>
                   </div>
-			    </div>
+			    </div> -->
 		</div>
 		</div>
 		<script>
@@ -137,6 +139,7 @@
 			function toggleAccountNumber(){
 				var hiddenAccountNumbers = document.querySelectorAll('.hide-account-number');
 				var shownAccountNumbers = document.querySelectorAll('.show-account-number');
+				const eyeIcon = document.getElementById('account-eye');
 				for (var i = 0; i < hiddenAccountNumbers.length; i++){
 					if (shownAccountNumbers[i].style.display === 'none'){
 						shownAccountNumbers[i].style.display = 'block';
@@ -147,13 +150,20 @@
 						hiddenAccountNumbers[i].style.display = 'block';
 					}
 				}
+				if (eyeIcon.classList.contains('fa-eye')) {
+		            eyeIcon.classList.remove('fa-eye');
+		            eyeIcon.classList.add('fa-eye-slash');
+		        } else {
+		            eyeIcon.classList.remove('fa-eye-slash');
+		            eyeIcon.classList.add('fa-eye');
+		        }
 			}
 			
 			function toggleCardNumber(button){
 				
 				var hiddenCardNumbers = document.querySelectorAll('.hide-card-number');
 				var shownCardNumbers = document.querySelectorAll('.show-card-number');
-				var eyeIcons = document.querySelectorAll('.fa-eye');
+				const eyeIcon = document.getElementById('card-eye');
 				
 				for (var i = 0; i < hiddenCardNumbers.length; i++){
 					if (shownCardNumbers[i].style.display === 'none'){
@@ -165,15 +175,13 @@
 						hiddenCardNumbers[i].style.display = 'block';
 					}
 				}	
-				for (var j = 0; j < eyeIcons.length; j++) {
-			        if (eyeIcons[j].classList.contains('fa-eye')) {
-			            eyeIcons[j].classList.remove('fa-eye');
-			            eyeIcons[j].classList.add('fa-eye-slash');
-			        } else {
-			            eyeIcons[j].classList.remove('fa-eye-slash');
-			            eyeIcons[j].classList.add('fa-eye');
-			        }
-			    }
+			    if (eyeIcon.classList.contains('fa-eye')) {
+		            eyeIcon.classList.remove('fa-eye');
+		            eyeIcon.classList.add('fa-eye-slash');
+		        } else {
+		            eyeIcon.classList.remove('fa-eye-slash');
+		            eyeIcon.classList.add('fa-eye');
+		        }
 			}
 		</script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

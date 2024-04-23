@@ -4,6 +4,7 @@
 		<link rel="stylesheet" href="/dashboard.css">
 		<meta charset="UTF-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
 		<title>User Dashboard</title>
 	</head>
 	<body>
@@ -44,7 +45,7 @@
 			<div class="accounts-summary" >
 				<div class="view-details-button">
 					<h4>Your Accounts:</h4>
-					<button id="view-account-number" onclick="toggleAccountNumber()">&#128065;</button>
+					<button id="view-account-number" onclick="toggleAccountNumber()"><i class="fa-solid fa-eye" style="font-size:20px;"></i></button>
 				</div>
 				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
 					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
@@ -74,7 +75,7 @@
 				<div class="cards-summary" >
 					<div class="view-details-button">
 						<h4>Your Cards:</h4>
-						<button id="view-card-number" onclick="toggleCardNumber()">&#128065;</button>
+						<button id="view-card-number" onclick="toggleCardNumber()"><i class="fa-solid fa-eye" style="font-size:20px;"></i></button>
 					</div>
 					<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
 						<div th:if="${card.getCreditCardStatus.getStatusName == 'Approved'}">
@@ -139,9 +140,12 @@
 				}
 			}
 			
-			function toggleCardNumber(){
+			function toggleCardNumber(button){
+				
 				var hiddenCardNumbers = document.querySelectorAll('.hide-card-number');
 				var shownCardNumbers = document.querySelectorAll('.show-card-number');
+				var eyeIcons = document.querySelectorAll('.fa-eye');
+				
 				for (var i = 0; i < hiddenCardNumbers.length; i++){
 					if (shownCardNumbers[i].style.display === 'none'){
 						shownCardNumbers[i].style.display = 'block';
@@ -151,7 +155,16 @@
 						shownCardNumbers[i].style.display = 'none';
 						hiddenCardNumbers[i].style.display = 'block';
 					}
-				}
+				}	
+				for (var j = 0; j < eyeIcons.length; j++) {
+			        if (eyeIcons[j].classList.contains('fa-eye')) {
+			            eyeIcons[j].classList.remove('fa-eye');
+			            eyeIcons[j].classList.add('fa-eye-slash');
+			        } else {
+			            eyeIcons[j].classList.remove('fa-eye-slash');
+			            eyeIcons[j].classList.add('fa-eye');
+			        }
+			    }
 			}
 		</script>
 	</body>	

@@ -125,8 +125,7 @@ public class TransactionController {
 	public String convertToInstallments(@RequestParam("transactionId") String transactionId,
 	                                    @RequestParam(name = "creditCardId", required = false) String creditCardId,
 	                                    Model model, HttpSession session) {
-		logger.info("Running convert to installments");
-		
+		User loggedUser = (User) session.getAttribute("loggedUser");
 		// Retrieves credit card and selected transaction to convert to installments.
 		CreditCard creditCard = creditCardService.findById(Long.parseLong(creditCardId));
 		Transaction selectedTransaction = transactionService.findById(Long.parseLong(transactionId));
@@ -150,6 +149,25 @@ public class TransactionController {
 	    transactionService.persist(transaction2);
 	    transactionService.persist(transaction3);
 	    transactionService.deleteById(selectedTransaction.getTransactionId());
-	    return "viewTransactions";
+	    creditCard.setTransactions(transactionService.findTransactionsByCreditCard(creditCard));
+	    creditCardService.update(creditCard);
+	    List<CreditCard> userCreditCards = loggedUser.getCreditCards();
+		List<CreditCard> newUserCreditCards = new ArrayList<>();
+		for (CreditCard c : userCreditCards) {
+			if (c.getCreditCardId() != creditCard.getCreditCardId()) {
+				newUserCreditCards.add(c);
+			}
+			
+		}
+		
+		// Replaces current creditcard entity with updated credit card entity, updates user and their avaliable credit card list. Sorts before redirecting user back to credit card dashboard page.
+		newUserCreditCards.add(creditCard);
+		Collections.sort(newUserCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
+		loggedUser.setCreditCardList(newUserCreditCards);
+		userService.update(loggedUser);
+		session.setAttribute("loggedUser", loggedUser);
+	   
+	    return "redirect:/userCards";
+
 	}
 }

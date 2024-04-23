@@ -268,9 +268,7 @@ public class CreditCardController {
 			}
 		} else if (balanceType.equals("statement")) {
 			// Checks if balance type is credit card statement. If so, amount recorded in transaction will be the credit card monthly balance.
-			transaction = new Transaction("CC Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-
-					account, mccBill, currency);
+			transaction = new Transaction("CC Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard, account, mccBill, currency);
 		} else if (balanceType.equals("current")) {
 			//Checks if balance type is current credit card usage for the month.
 			transaction = new Transaction("CC Payment", creditCard.getAmountUsed(), null, 0.00, creditCard, account,
@@ -297,10 +295,11 @@ public class CreditCardController {
 		
 		// Replaces current creditcard entity with updated credit card entity, updates user and their avaliable credit card list. Sorts before redirecting user back to credit card dashboard page.
 		newUserCreditCards.add(creditCard);
+		Collections.sort(newUserCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
 		currentUser.setCreditCardList(newUserCreditCards);
 		userService.update(currentUser);
 		session.setAttribute("loggedUser", currentUser);
-		Collections.sort(newUserCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
+		
 		return "redirect:/userCards";
 	}
 

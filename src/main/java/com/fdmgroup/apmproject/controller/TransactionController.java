@@ -1,5 +1,6 @@
 package com.fdmgroup.apmproject.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -111,5 +112,31 @@ public class TransactionController {
 			return "view-transactions";
 
 		}
+	}
+	
+	@PostMapping("/convertToInstallments")
+	public String convertToInstallments(@RequestParam("transactionId") String transactionId,
+	                                    @RequestParam(name = "creditCardId", required = false) String creditCardId,
+	                                    Model model, HttpSession session) {
+		logger.info("Running convert to installments");
+		CreditCard creditCard = creditCardService.findById(Long.parseLong(creditCardId));
+		Transaction selectedTransaction = transactionService.findById(Long.parseLong(transactionId));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime oneMonthLater = currentDateTime.plusMonths(1);
+        LocalDateTime twoMonthsLater = currentDateTime.plusMonths(2);
+        Transaction transaction1 = new Transaction(currentDateTime, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
+				0.00, creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
+        Transaction transaction2 = new Transaction(oneMonthLater, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
+				0.00, creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
+        Transaction transaction3 = new Transaction(twoMonthsLater, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
+				0.00, creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
+	    transaction1.setDescription("1st month Installment, " +  selectedTransaction.getDescription());
+	    transaction2.setDescription("2nd month Installment, " +  selectedTransaction.getDescription());
+	    transaction3.setDescription("3rd month Installment, " +  selectedTransaction.getDescription());
+	    // Redirect the user back to the page displaying the transactions
+	    transactionService.persist(transaction1);
+	    transactionService.persist(transaction2);
+	    transactionService.persist(transaction3);
+	    return "redirect:/viewTransactions";
 	}
 }

@@ -33,8 +33,8 @@
 		<header>
 			<button class="openSidebar">☰</button>
 		</header>
-		<div class="credit-card"
-			th:if="${creditCard != null}" id="sidebarChecker">
+		<div class="credit-card" th:if="${creditCard != null}"
+			id="sidebarChecker">
 			<h2>Credit Card Transactions</h2>
 			<div class="card-details-container">
 				<div class="card-details">
@@ -64,48 +64,51 @@
 						<p th:if="${creditCard.monthlyBalance == 0}" id="cardDetails"
 							th:text="'$0.00'"></p>
 					</div>
-				</div>	
+				</div>
 			</div>
 		</div>
 
 		<div class="account" th:if="${account != null}">
-		  <h2>Account Transactions</h2>
-		  <div class="account-details-container"> 
-			<div class="account-details">	
+			<h2>Account Transactions</h2>
+			<div class="account-details-container">
+				<div class="account-details">
 					<div class="details-account-name">
-                         <p th:text="${account.accountName}"></p>
-                    </div>
-                        
-                    <div class="details-account-number">
-                       <p th:text="${account.accountNumber}"></p>
-                       <p th:if="${account.accountStatus.statusName == 'Approved'}" style="color:green" th:text="${account.accountStatus.statusName}"></p>
-                    </div>
-                        
-                    <div class="details-account-balance-status">
-                         <label class="detail-label">Account Balance </label>
-                         <p th:if="${account.balance == 0}"  th:text="'$0.00'"></p>
-                         <p th:if="${account.balance != 0}" th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
-                         
-                    </div>
+						<p th:text="${account.accountName}"></p>
+					</div>
+
+					<div class="details-account-number">
+						<p th:text="${account.accountNumber}"></p>
+						<p th:if="${account.accountStatus.statusName == 'Approved'}"
+							style="color: green"
+							th:text="${account.accountStatus.statusName}"></p>
+					</div>
+
+					<div class="details-account-balance-status">
+						<label class="detail-label">Account Balance </label>
+						<p th:if="${account.balance == 0}" th:text="'$0.00'"></p>
+						<p th:if="${account.balance != 0}"
+							th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
+
+					</div>
+				</div>
 			</div>
-			</div>
-			
+
 		</div>
-		
+
 		<div class="transactionTable">
 			<div class="transactionsHeader">
 				<h3>Your Transactions</h3>
 				<div class="filter-month">
-				<form th:action="@{/viewTransactions}" method="post">
-					<label for="month">Month:</label> <input type="month" id="month"
-						name="month"> <input type="hidden" id="accountId"
-						name="accountId" th:if="${account != null}"
-						th:value="${account.accountId}"> <input type="hidden"
-						id="creditCardId" name="creditCardId"
-						th:if="${creditCard != null}"
-						th:value="${creditCard.creditCardId}">
-					<button type="submit">Filter</button>
-				</form>
+					<form th:action="@{/viewTransactions}" method="post">
+						<label for="month">Month:</label> <input type="month" id="month"
+							name="month"> <input type="hidden" id="accountId"
+							name="accountId" th:if="${account != null}"
+							th:value="${account.accountId}"> <input type="hidden"
+							id="creditCardId" name="creditCardId"
+							th:if="${creditCard != null}"
+							th:value="${creditCard.creditCardId}">
+						<button type="submit">Filter</button>
+					</form>
 				</div>
 			</div>
 			<div th:if="${creditCard != null}">
@@ -114,19 +117,22 @@
 						<thead>
 							<tr>
 								<th>Category</th>
-								<th>Date <br>(YYYY-MM-DD) </th>
-								<th>Time <br> (HH-MM-SS)</th>
+								<th>Date <br>(YYYY-MM-DD)
+								</th>
+								<th>Time <br> (HH-MM-SS)
+								</th>
 								<th>Amount (SGD)</th>
 								<th>Transaction Type</th>
 								<th>CashBack</th>
 								<th>Description</th>
+								<th>Convert to Installments?</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:if="${#lists.isEmpty(transactions)}">
-					            <td colspan="6">No transactions available.</td>
-					        </tr>
-							
+								<td colspan="6">No transactions available.</td>
+							</tr>
+
 							<tr th:each="transaction : ${transactions}">
 								<td
 									th:text="${transaction.transactionMerchantCategoryCode.getMerchantCategory()}"></td>
@@ -136,18 +142,28 @@
 									th:text="${#strings.substring(transaction.transactionDate, 11, 19)}"></td>
 								<td th:if="${transaction.transactionType == 'CC Payment'}"
 									th:text="'-$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
-								<td
-									th:unless="${transaction.transactionType == 'CC Payment'}"
+								<td th:unless="${transaction.transactionType == 'CC Payment'}"
 									th:text="'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}"></td>
-								
+
 								<td th:text="${transaction.transactionType}"></td>
 								<td
 									th:text="'$' + ${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
 								<td th:text="${transaction.description}"></td>
+								<td>
+									<a href="#" th:onclick="submitForm(${transaction.transactionId}, ${creditCard.creditCardId})">Convert</a>
+									<!-- Form for converting transaction into installments -->
+								</td>
 							</tr>
 						</tbody>
-					</table>
+					</table>	
+					
 				</div>
+				<form id="convertToInstallments"
+						th:action="@{/convertToInstallments}" method="post"
+						style="display: none;">
+						<input type="hidden" id="transactionIdInput" name="transactionId"/> 
+						<input type="hidden" id="creditCardIdInput" name="creditCardId" />
+					</form>
 			</div>
 			<div th:if="${account != null}">
 				<div class="account-transaction-container">
@@ -164,21 +180,25 @@
 						</thead>
 						<tbody>
 							<tr th:if="${#lists.isEmpty(transactions)}">
-					            <td colspan="6">No transactions available.</td>
-					        </tr>
-							
+								<td colspan="6">No transactions available.</td>
+							</tr>
+
 							<tr th:each="transaction : ${transactions}">
-								<td th:text="${transaction.transactionType}">Transaction Type</td>
+								<td th:text="${transaction.transactionType}">Transaction
+									Type</td>
 								<td
 									th:text="${#strings.substring(transaction.transactionDate, 0, 10)}">Date</td>
 								<td
 									th:text="${#strings.substring(transaction.transactionDate, 11, 19)}">Time</td>
-								<td th:text="'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}">Amount (SGD)</td>
-								
+								<td
+									th:text="'$' + ${#numbers.formatDecimal(transaction.transactionAmount,0,'COMMA',2,'POINT')}">Amount
+									(SGD)</td>
+
 								<td th:unless="${transaction.recipientAccountNumber == null}">
 									<span
 									th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></span>
-								Recipient Account</td>
+									Recipient Account
+								</td>
 								<td th:if="${transaction.recipientAccountNumber == null}"></td>
 								<td th:text="${transaction.description}">Description</td>
 							</tr>
@@ -213,6 +233,12 @@
 				}
 			}
 			window.onload = checker;
+			
+			function submitForm(transactionId, creditCardId) {
+			    document.getElementById("transactionIdInput").value = transactionId;
+			    document.getElementById("creditCardIdInput").value = creditCardId;
+			    document.getElementById("convertToInstallments").submit();
+			}
 		</script>
 </body>
 </html>

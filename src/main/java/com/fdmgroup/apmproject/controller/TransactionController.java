@@ -97,7 +97,7 @@ public class TransactionController {
 			} else if (creditCardId != null) {
 				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
 				if (month == null || month == "") {
-					transactions = userCreditCard.getTransactions();
+					transactions = transactionService.findTransactionsBeforeDateAndCreditCard(LocalDateTime.now(), userCreditCard);
 					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				} else {
 					int year = Integer.parseInt(month.substring(0, 4));
@@ -124,12 +124,12 @@ public class TransactionController {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime oneMonthLater = currentDateTime.plusMonths(1);
         LocalDateTime twoMonthsLater = currentDateTime.plusMonths(2);
-        Transaction transaction1 = new Transaction(currentDateTime, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
-				0.00, creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
-        Transaction transaction2 = new Transaction(oneMonthLater, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
-				0.00, creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
-        Transaction transaction3 = new Transaction(twoMonthsLater, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
-				0.00, creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
+        Transaction transaction1 = new Transaction(currentDateTime, "CC Purchase", selectedTransaction.getTransactionAmount()/3, null,
+				selectedTransaction.getCashback(), creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
+        Transaction transaction2 = new Transaction(oneMonthLater, "CC Purchase", selectedTransaction.getTransactionAmount()/3, null,
+        		selectedTransaction.getCashback(), creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
+        Transaction transaction3 = new Transaction(twoMonthsLater, "CC Purchase", selectedTransaction.getTransactionAmount()/3, null,
+        		selectedTransaction.getCashback(), creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
 	    transaction1.setDescription("1st month Installment, " +  selectedTransaction.getDescription());
 	    transaction2.setDescription("2nd month Installment, " +  selectedTransaction.getDescription());
 	    transaction3.setDescription("3rd month Installment, " +  selectedTransaction.getDescription());
@@ -137,6 +137,7 @@ public class TransactionController {
 	    transactionService.persist(transaction1);
 	    transactionService.persist(transaction2);
 	    transactionService.persist(transaction3);
-	    return "redirect:/viewTransactions";
+	    transactionService.deleteById(selectedTransaction.getTransactionId());
+	    return "viewTransactions";
 	}
 }

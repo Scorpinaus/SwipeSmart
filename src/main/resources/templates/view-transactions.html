@@ -150,7 +150,7 @@
 									th:text="'$' + ${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
 								<td th:text="${transaction.description}"></td>
 								<td>
-									<a href="#" th:onclick="submitForm(${transaction.transactionId}, ${creditCard.creditCardId})">Convert</a>
+									<a href="#" th:onclick="'submitForm(' + ${transaction.transactionId} + ', ' + ${creditCard.creditCardId}+ ')'">Convert</a>
 									<!-- Form for converting transaction into installments -->
 								</td>
 							</tr>

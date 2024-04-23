@@ -41,37 +41,38 @@
 			
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
 			<p id="headerIntro"> This is for you, at a glance: </p>	
-			
+			<h2> Summary</h2>
 			<div class="summary-container">
-			<div class="accounts-summary" >
-				<div class="view-details-button">
-					<h4>Your Accounts:</h4>
-					<button id="view-account-number" onclick="toggleAccountNumber()"><i id="account-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
-				</div>
-				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
-					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
-						<div class="details-account-name">
-							<p th:text="${account.accountName}"></p>
-						</div>
-						<div class="details-account-number">
-							<p class="hide-account-number" th:text="'***-***-' + ${#strings.substring(account.accountNumber, account.accountNumber.length() - 3)}"></p>
-							<p style="display:none" class="show-account-number" th:text="${account.accountNumber}"></p>
-						</div>
-						<div class="details-account-balance">
-							<label class="detail-label">Balance </label>
-							<p th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
-						</div>
-					</div>
-					<div th:if="${account.getAccountStatus.getStatusName != 'Approved'}">
-						<div class="details-account-name">
-							<p th:text="${account.accountName}"></p>
-						</div>
-						<div class="details-account-name">
-							<p style="color:red" th:text="${account.getAccountStatus.getStatusName}"></p>
-						</div>
-					</div>
-				</div>
-			</div>
+      
+    			<div class="accounts-summary" >
+    				<div class="view-details-button">
+    					<h4>Your Accounts:</h4>
+    					<button id="view-account-number" onclick="toggleAccountNumber()"><i id="account-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
+    				</div>
+    				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
+    					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
+    						<div class="details-account-name">
+    							<p th:text="${account.accountName}"></p>
+    						</div>
+    						<div class="details-account-number">
+    							<p class="hide-account-number" th:text="'***-***-' + ${#strings.substring(account.accountNumber, account.accountNumber.length() - 3)}"></p>
+    							<p style="display:none" class="show-account-number" th:text="${account.accountNumber}"></p>
+    						</div>
+    						<div class="details-account-balance">
+    							<label class="detail-label">Balance </label>
+    							<p th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
+    						</div>
+    					</div>
+    					<div th:if="${account.getAccountStatus.getStatusName != 'Approved'}">
+    						<div class="details-account-name">
+    							<p th:text="${account.accountName}"></p>
+    						</div>
+    						<div class="details-account-name">
+    							<p style="color:red" th:text="${account.getAccountStatus.getStatusName}"></p>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
 
 				<div class="cards-summary" >
 					<div class="view-details-button">
@@ -110,10 +111,20 @@
 						</div>
 					</div>
 				</div>
-				<div class="spendingInsights">
 				</div>
-				<div class="pieChart">
-			</div>
+                
+                <h2>Insights</h2>
+				<!-- <div class="category-spending-stats">
+                  <div class="chart-container">
+                       
+                      <canvas class="category-chart"></canvas> 
+                    <div class="chart-details">
+                      <ul>
+                        
+                      </ul>
+                    </div>
+                  </div>
+			    </div> -->
 		</div>
 		</div>
 		
@@ -263,5 +274,14 @@ new Chart("myChart", {
 		        }
 			}
 		</script>
+         <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+       <script th:src="@{/account/chart.js}"></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            const userData = /*[[${user}]]*/ null;
+            /*]]>*/
+        </script>  -->
+        
+       
 	</body>	
 </html>

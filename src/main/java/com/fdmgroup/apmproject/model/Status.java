@@ -27,7 +27,7 @@ public class Status {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Status ID")
 	private int statusId;
-	@Column(name = "Status Name")
+	@Column(name = "Status Name",nullable = false,unique = true)
 	private String statusName;
 
 	@OneToMany(mappedBy = "accountStatus", fetch = FetchType.EAGER)

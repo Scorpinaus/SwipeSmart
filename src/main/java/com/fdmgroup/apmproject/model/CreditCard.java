@@ -32,11 +32,11 @@ import jakarta.persistence.Table;
 public class CreditCard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "Credit Card ID")
+	@Column(name = "Credit Card ID", unique = true, nullable = false, updatable = false)
 	private long creditCardId;
-	@Column(name = "Credit Card Number", unique = true)
+	@Column(name = "Credit Card Number", unique = true, nullable = false, updatable = false)
 	private String creditCardNumber;
-	@Column(name = "CVC/CVV")
+	@Column(name = "CVC/CVV", nullable = false)
 	private String pin;
 	@Column(name = "Credit Limit")
 	private double cardLimit;

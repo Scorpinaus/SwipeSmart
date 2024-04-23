@@ -28,9 +28,11 @@ public class PurchaseService {
 
 	        // Process the transaction
 	        creditCard.setAmountUsed(creditCard.getAmountUsed() + request.getAmount());
-	        creditCard.setMonthlyBalance(creditCard.getMonthlyBalance() + request.getAmount());
+//	        creditCard.setMonthlyBalance(creditCard.getMonthlyBalance() + request.getAmount());
 	        creditCardService.update(creditCard);
 
+	        
+	        
 	        // Update the bank account that received the money
 	        
 	        Account account = accountRepository.findByAccountNumber(request.getAccountNumber()).get();

@@ -132,14 +132,21 @@ public class PurchaseController {
 				BigDecimal exchangeRate = foreignExchangeCurrencyService.getExchangeRate(request.getCurrency(), accountService.findAccountByAccountNumber(request.getAccountNumber()).getCurrencyCode());
 				BigDecimal convertedAmount = BigDecimal.valueOf(request.getAmount()).multiply(exchangeRate);
 				request.setAmount(convertedAmount.doubleValue());
+				
+				
+				
 				// process transaction
 				Optional<MerchantCategoryCode> transactionMerchantCategoryCode = merchantCategoryCodeRepository.findByMerchantCategory(request.getMcc());
 				String currencyCode = request.getCurrency();
 				ForeignExchangeCurrency foreignExchangeCurrency = foreignExchangeCurrencyService.getCurrencyByCode( request.getCurrency());
 				
+				
+				//Jacky!!!!!! 
 				//record transaction
 				Transaction transaction = new Transaction("CC Payment",request.getAmount(),null,0,creditCard,accountService.findAccountByAccountNumber(request.getAccountNumber()),transactionMerchantCategoryCode.get(),foreignExchangeCurrency);
 				transactionService.persist(transaction);
+				
+				
 				//update creditcard and account
 				purchaseService.purchase(request);
 						

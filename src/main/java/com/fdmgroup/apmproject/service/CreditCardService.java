@@ -175,6 +175,7 @@ public class CreditCardService {
 				List<CreditCard> approvedCreditCards = findCreditCardsByStatus(statusName);
 				calculateMonthlyBalance(approvedCreditCards);
 				chargeInterest(approvedCreditCards);
+				
 			}
 		}, delay, ONE_MONTH_IN_MILLISECONDS);
 	}

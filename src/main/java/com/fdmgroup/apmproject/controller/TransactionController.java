@@ -72,34 +72,42 @@ public class TransactionController {
 			logger.warn("User Is not logged-in. Please login first");
 			return "userCards";
 		} else {
-
+			// Retrieves current logged on user and adds as a model attribute for front-end processing.
 			User loggedUser = (User) session.getAttribute("loggedUser");
 			model.addAttribute("user", loggedUser);
 			List<Transaction> transactions = new ArrayList<>();
+			// Checks if accountID is avaliable
 			if (accountId != null) {
+				// Retrieves userAccount based on present account ID
 				Account userAccount = accountService.findById(Long.parseLong(accountId));
-
+				
+				// Retrieves and sorts all bank account transactions based on userAccount only.
 				if (month == null || month == "") {
 					transactions = userAccount.getTransactions();
 					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 
 				} else {
+					//Gets and sorts bank-account transactions based on both date and userAccount
 					int year = Integer.parseInt(month.substring(0, 4));
 					int monthValue = Integer.parseInt(month.substring(5));
 					transactions = transactionService.getTransactionsByMonthAndYearAndTransactionAccount(year,
 							monthValue, userAccount);
 					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				}
-
+				
+				//Adds modelAttribute for front-end viewing
 				model.addAttribute("transactions", transactions);
 				model.addAttribute("account", userAccount);
 
 			} else if (creditCardId != null) {
+				//Retrieves user selected credit card entity
 				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
 				if (month == null || month == "") {
+					// If date is not selected, return and sort all transactions for selected credit card
 					transactions = userCreditCard.getTransactions();
 					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				} else {
+					// Return and sort transactions for selected credit card by transaction date
 					int year = Integer.parseInt(month.substring(0, 4));
 					int monthValue = Integer.parseInt(month.substring(5));
 					transactions = transactionService.getTransactionsByMonthAndYearAndTransactionCreditCard(year,
@@ -119,11 +127,17 @@ public class TransactionController {
 	                                    @RequestParam(name = "creditCardId", required = false) String creditCardId,
 	                                    Model model, HttpSession session) {
 		logger.info("Running convert to installments");
+		
+		// Retrieves credit card and selected transaction to convert to installments.
 		CreditCard creditCard = creditCardService.findById(Long.parseLong(creditCardId));
 		Transaction selectedTransaction = transactionService.findById(Long.parseLong(transactionId));
+		
+		// Determines new installment dates
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime oneMonthLater = currentDateTime.plusMonths(1);
         LocalDateTime twoMonthsLater = currentDateTime.plusMonths(2);
+        
+        // Creates 3 new installment transactions
         Transaction transaction1 = new Transaction(currentDateTime, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
 				0.00, creditCard, null, selectedTransaction.getTransactionMerchantCategoryCode(), selectedTransaction.getTransactionCurrency());
         Transaction transaction2 = new Transaction(oneMonthLater, "CC Purchase", selectedTransaction.getTransactionAmount()/2, null,
@@ -133,7 +147,8 @@ public class TransactionController {
 	    transaction1.setDescription("1st month Installment, " +  selectedTransaction.getDescription());
 	    transaction2.setDescription("2nd month Installment, " +  selectedTransaction.getDescription());
 	    transaction3.setDescription("3rd month Installment, " +  selectedTransaction.getDescription());
-	    // Redirect the user back to the page displaying the transactions
+	    
+	    // Redirect the user back to the page displaying the transactions and updates transaction to database.
 	    transactionService.persist(transaction1);
 	    transactionService.persist(transaction2);
 	    transactionService.persist(transaction3);

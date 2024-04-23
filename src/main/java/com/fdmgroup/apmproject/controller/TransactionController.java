@@ -103,12 +103,7 @@ public class TransactionController {
 				//Retrieves user selected credit card entity
 				CreditCard userCreditCard = creditCardService.findById(Long.parseLong(creditCardId));
 				if (month == null || month == "") {
-<<<<<<< HEAD
 					transactions = transactionService.findTransactionsBeforeDateAndCreditCard(LocalDateTime.now(), userCreditCard);
-=======
-					// If date is not selected, return and sort all transactions for selected credit card
-					transactions = userCreditCard.getTransactions();
->>>>>>> b9fb031d893aa5adc293e2da4acc2415b4230829
 					Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 				} else {
 					// Return and sort transactions for selected credit card by transaction date

@@ -233,30 +233,6 @@ public class CreditCardService {
 		return creditCards;
 	}
 
-	@PostConstruct
-	public void intiCreditCards() {
-		User userJacky = userService.findUserByUsername("jackytan");
-		String creditCardNumber = "1234-5678-1234-5678";
-		String pin = "123";
-		String currencyCode = "SGD";
-		Status statusName = statusService.findByStatusName("Approved");
-		CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, 3000, "Ultimate Cashback Card", statusName,
-				0, userJacky, currencyCode);
-		String creditCardNumber2 = "2345-5678-2398-5128";
-		String pin2 = "124";
-		CreditCard createCreditCard2 = new CreditCard(creditCardNumber2, pin2, 3000, "SwipeSmart Platinum Card",
-				statusName, 0, userJacky, currencyCode);
-		persist(createCreditCard);
-		persist(createCreditCard2);
-
-		String creditCardNumberPending = "3456-5678-1234-5678";
-		String pinPending = "125";
-		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
-				"SwipeSmart Platinum Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
-		persist(createCreditCardPending);
-	}
-
-
 	/**
 	 * Calculates and applies interest charges to a list of approved credit cards
 	 * based on their previous month's transactions.

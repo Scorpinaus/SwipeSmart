@@ -149,7 +149,7 @@
 								<td
 									th:text="'$' + ${#numbers.formatDecimal(transaction.cashback,1,'COMMA',2,'POINT')}"></td>
 								<td th:text="${transaction.description}"></td>
-								<td>
+								<td th:if="${currentMonth == #strings.substring(transaction.transactionDate, 5, 7) and transaction.transactionAmount >= 20 and transaction.transactionMerchantCategoryCode.getMerchantCategory() != 'Bill' and transaction.transactionMerchantCategoryCode.getMerchantCategory() != 'Interest' and not #strings.contains(transaction.description,'Installment')}">
 									<a href="#" th:onclick="'submitForm(' + ${transaction.transactionId} + ', ' + ${creditCard.creditCardId}+ ')'">Convert</a>
 									<!-- Form for converting transaction into installments -->
 								</td>

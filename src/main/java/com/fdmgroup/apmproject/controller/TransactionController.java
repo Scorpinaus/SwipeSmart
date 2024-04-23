@@ -1,7 +1,7 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -121,7 +121,8 @@ public class TransactionController {
 				model.addAttribute("creditCard", userCreditCard);
 				model.addAttribute("transactions", transactions);
 			}
-			String currentMonth = Month.of(LocalDateTime.now().getMonthValue()).toString();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM");
+			String currentMonth = LocalDateTime.now().format(formatter);
 			model.addAttribute("currentMonth", currentMonth);
 			return "view-transactions";
 

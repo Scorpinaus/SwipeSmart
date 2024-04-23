@@ -48,4 +48,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
      * @return A list of transactions for the specified account or recipient account.
      */
     List<Transaction> findByTransactionAccountOrRecipientAccount(Account transactionAccount, Account recipientAccount);
+    
+    List<Transaction> findByTransactionDateBeforeAndTransactionCreditCard(LocalDateTime date, CreditCard creditCard);
 }

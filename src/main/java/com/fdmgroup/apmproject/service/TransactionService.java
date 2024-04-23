@@ -137,6 +137,10 @@ public class TransactionService {
 
 		return transactionRepo.findByTransactionDateBetweenAndTransactionAccount(startOfMonth, endOfMonth, account);
 	}
+	
+	 public List<Transaction> findTransactionsBeforeDateAndCreditCard(LocalDateTime date, CreditCard creditCard) {
+	        return transactionRepo.findByTransactionDateBeforeAndTransactionCreditCard(date, creditCard);
+	    }
 
 	public List<Transaction> getTransactionsByMonthAndYearAndTransactionCreditCard(int year, int monthValue,
 			CreditCard creditcard) {

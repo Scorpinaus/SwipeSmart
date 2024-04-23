@@ -167,7 +167,9 @@ public class AccountController {
 		if (session.getAttribute("loggedUser") == null) {
 			return "redirect:/login";
 		}
-
+		
+		User currentUser = (User) session.getAttribute("loggedUser");
+		
 		// Retrieve currentUser and selectedAccount for withdrawal
 		Account retrievedAccount = accountService.findById(accountId);
 		BigDecimal retrievedAccountBalance = BigDecimal.valueOf(retrievedAccount.getBalance());

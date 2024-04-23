@@ -145,6 +145,8 @@ public class UserController {
 		boolean hasNumbers = false;
 		boolean hasLowercase = false;
 		boolean hasUppercase = false;
+		
+		// Password validation to set boolean settings
 		for (int i = 0; i < password.length(); i++) {
 			if (password.codePointAt(i) >= 48 && password.codePointAt(i) <= 57) {
 				hasNumbers = true;
@@ -156,11 +158,16 @@ public class UserController {
 				hasLowercase = true;
 			}
 		}
+		//Final check if password meets requirement of having upper and lower case and has numbers to meet requirements of a strong password
 		if (hasNumbers == true && hasLowercase == true && hasUppercase == true) {
 			isAlphanumeric = true;
 		}
+		
+		//Uses Spring Security's password encoder to safely encode password
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User(username, encoder.encode(password), null, null, null);
+		
+		//Error validation step
 		if (userService.findUserByUsername(username) != null || username.equals("") || password.equals("")) {
 			model.addAttribute("errorInvalid", true);
 			logger.warn("Invalid username or password to register");
@@ -194,7 +201,10 @@ public class UserController {
 			@RequestParam(name = "address", required = false) String address,
 			@RequestParam(name = "firstName", required = false) String firstName,
 			@RequestParam(name = "lastName", required = false) String lastName, HttpSession session, Model model) {
+		//Finds user by currently logged on user userId
 		User tempUser = userService.findUserById(userId);
+		
+		//Checks if respective attribute field is empty. If not empty, update current user attribute field.
 		if (!address.isEmpty()) {
 			tempUser.setAddress(address);
 		}

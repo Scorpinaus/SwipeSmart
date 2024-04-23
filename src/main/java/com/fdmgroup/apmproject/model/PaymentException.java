@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.creditCard.restcontroller;
+package com.fdmgroup.apmproject.model;
 
 /**
  * This class represents a custom exception that is thrown when a payment error

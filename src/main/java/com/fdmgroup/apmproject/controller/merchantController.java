@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.creditCard.restcontroller;
+package com.fdmgroup.apmproject.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -66,29 +66,23 @@ public class AccountController {
 	 */
 	@GetMapping("/bankaccount/dashboard")
 	public String showBankAccountDashboard(HttpSession session, Model model) {
-		// Checks for null session and if there are active logged-on users. If not
-		// logged-on, user will be redirected to log-in page.
-		if (session != null && session.getAttribute("loggedUser") != null) {
 
-			// retrieves current user from current session and addAttribute to model for
-			// front-end processing.
-			User currentUser = (User) session.getAttribute("loggedUser");
-			model.addAttribute("user", currentUser);
-			// retrieves all active bank accounts under current user
-			List<Account> userBankAccounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
-			// Checks if the user has active bank accounts, and shows the user their active
-			// bank accounts.
-			if (userBankAccounts.size() != 0) {
-				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				LOGGER.info("User is redirected to bank account dashboard");
-				return "account-dashboard";
-			} else {
-				LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
-				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				return "account-dashboard";
-			}
+		// retrieves current user from current session and addAttribute to model for
+		// front-end processing.
+		User currentUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", currentUser);
+		// retrieves all active bank accounts under current user
+		List<Account> userBankAccounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
+		// Checks if the user has active bank accounts, and shows the user their active
+		// bank accounts.
+		if (userBankAccounts.size() != 0) {
+			model.addAttribute("currentUserBankAccounts", userBankAccounts);
+			LOGGER.info("User is redirected to bank account dashboard");
+			return "account-dashboard";
 		} else {
-			return "redirect:/login";
+			LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
+			model.addAttribute("currentUserBankAccounts", userBankAccounts);
+			return "account-dashboard";
 		}
 	}
 
@@ -104,42 +98,34 @@ public class AccountController {
 	 */
 	@GetMapping("/bankaccount/withdrawal")
 	public String withdrawalBankAccount(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+		// retrieves current user from current session and addAttribute to model for
+		// front-end processing. Gets list of accounts & checks for created accounts &
+		// gets supported currencies list.
+		User currentUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", currentUser);
+		List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
+		currenciesList = currencyService.getSupportedCurrencies();
 
-		// Checks for null session and if there are active logged-on users. If not
-		// logged-on, user will be redirected to log-in page.
-		if (session != null && session.getAttribute("loggedUser") != null) {
-
-			// retrieves current user from current session and addAttribute to model for
-			// front-end processing. Gets list of accounts & checks for created accounts &
-			// gets supported currencies list.
-			User currentUser = (User) session.getAttribute("loggedUser");
-			model.addAttribute("user", currentUser);
-			List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
-			currenciesList = currencyService.getSupportedCurrencies();
-
-			// Checks for created accounts, where if empty, addAttribute to be shown to user
-			// on dashboard page.
-			if (accounts.isEmpty()) {
-				model.addAttribute("error", "No bank accounts found");
-				return "account-dashboard";
-			}
-
-			// If user has accounts, both current list of accounts and supported currencies
-			// will be added to model for front-end processing.
-			model.addAttribute("accounts", accounts);
-			LOGGER.info("Currencies List: " + currenciesList);
-			model.addAttribute("currencies", currenciesList);
-
-			// Check for the flash attribute directly in the model. If present, it adds to
-			// the current model as true. This is for redirect after a user has submitted a
-			// withdrawal request.
-			if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
-				model.addAttribute("errorInsufficient", true);
-			}
-			return "withdrawal";
-		} else {
-			return "redirect:/login";
+		// Checks for created accounts, where if empty, addAttribute to be shown to user
+		// on dashboard page.
+		if (accounts.isEmpty()) {
+			model.addAttribute("error", "No bank accounts found");
+			return "account-dashboard";
 		}
+
+		// If user has accounts, both current list of accounts and supported currencies
+		// will be added to model for front-end processing.
+		model.addAttribute("accounts", accounts);
+		LOGGER.info("Currencies List: " + currenciesList);
+		model.addAttribute("currencies", currenciesList);
+
+		// Check for the flash attribute directly in the model. If present, it adds to
+		// the current model as true. This is for redirect after a user has submitted a
+		// withdrawal request.
+		if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
+			model.addAttribute("errorInsufficient", true);
+		}
+		return "withdrawal";
 
 	}
 
@@ -160,10 +146,6 @@ public class AccountController {
 			@RequestParam("currency") String withdrawalCurrencyCode, @RequestParam BigDecimal amount,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		// Checks if user is logged on, if not user will be brought to login page.
-		if (session.getAttribute("loggedUser") == null) {
-			return "redirect:/login";
-		}
-
 		User currentUser = (User) session.getAttribute("loggedUser");
 
 		// Retrieve currentUser and selectedAccount for withdrawal
@@ -469,7 +451,6 @@ public class AccountController {
 
 				// Create transaction for transferee account and persisting it to database. Logs
 				// transaction.
-//					double cashback = 0;
 				Transaction externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
 						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode),
 						currencyCode + " " + transferAmount);

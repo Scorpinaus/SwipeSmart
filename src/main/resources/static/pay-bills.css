@@ -146,16 +146,126 @@ header {
 }
 
 .card-payment-container{
-	display: flex;
+	display: block;
 	justify-content: center;
 }
 
-.form{
-	width: 80%;
-    margin: 20px auto;
+.bills-summary, .form {
+    width: 90%;
+    margin: auto;
     padding: 20px;
-    background: var(--lightgrey);
+}
+
+.bills-summary {
+	background: var(--lightgrey);
+	border-radius: 8px;
+}
+ 
+
+table {
+	width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+  }
+  
+th {
+  
+	background-color: var(--lightgrey);
+}
+
+p{
+	margin:1px;
+}
+ 
+tr:hover {
+   background-color: var(--white);
+}
+
+.bills-summary th:nth-child(1),
+.bills-summary td:nth-child(1) {
+    width: 25%; 
+}
+
+.bills-summary th:nth-child(2),
+.bills-summary td:nth-child(2) {
+    width: 25%; 
+}
+
+.bills-summary th:nth-child(3),
+.bills-summary td:nth-child(3) {
+    width: 40%; 
+}
+
+.form{
+	display: block;
+	margin: 0px auto;
+    padding: 0px;
     border-radius: 8px;
+}
+
+.pay-from-to-container {
+	margin: 10px auto;
+    padding: 20px;
+	background: var(--lightgrey);
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.pay-methods-container {
+	margin: 10px auto;
+    padding: 20px;
+	background: var(--lightgrey);
+    border-radius: 8px;
+}
+
+.pay-methods-container h3 {
+	text-align: center;
+}
+
+.payment-amount{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.submit-buttons button {
+	display: block;
+	margin: 20px auto;
+	padding: 10px;
+	min-width: 100%;
+	background-color: var(--lightblue);
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.payment-amount input,
+.payment-amount button {
+	font-family: "Nunito Sans", sans-serif;
+    flex-grow: 1;         
+    margin: 5px;            
+}
+
+.payment-amount button {            
+    background-color: var(--lightblue);
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    min-width: 250px;  
+    padding: 10px;
+    font-size: 15px;
 }
 
 .bank-account, .credit-card, .payment-amount{
@@ -170,23 +280,12 @@ header {
     font-weight: bold;
 }
 
-.submit-button{
-	text-align: center;
+.table-text {
+	font-weight: bold;
 }
 
-
-input#submitButton, button#paymentButton{
-	font-family: "Nunito Sans", sans-serif;
-    background-color: var(--lightblue);
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-weight: bold;
-    min-width: 150px;
-    margin-top: 2%;
+.submit-button{
+	text-align: center;
 }
 
 input#submitButton:hover, button#paymentButton:hover{
@@ -195,11 +294,9 @@ input#submitButton:hover, button#paymentButton:hover{
     font-weight: bold;
 }
 
-input[type="text"],
 input[type="number"] {
     width: 100%;
     padding: 8px;
-    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;

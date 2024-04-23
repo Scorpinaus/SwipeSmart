@@ -92,20 +92,13 @@ public class CreditCardController {
 	@GetMapping("/userCards")
 	public String viewCreditCards(Model model, HttpSession session) {
 		// Checks if user is logged on. If not logged-in, user redirected to log-in page
-		if (session != null && session.getAttribute("loggedUser") != null) {
-			//Retrieves loggedUser details and list of credit card that loggedUser has. Adds these attributes and sorts them according to creditCardId
-			User loggedUser = (User) session.getAttribute("loggedUser");
-			List<CreditCard> userCreditCards = loggedUser.getCreditCards();
-			model.addAttribute("cards", userCreditCards);
-			model.addAttribute("user", loggedUser);
-			Collections.sort(userCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
-			return "card-dashboard";
-		} else {
-			model.addAttribute("error", true);
-			logger.warn("User Is not logged-in. Please login first");
-			//Should return to login page?
-			return "card-dashboard";
-		}
+		//Retrieves loggedUser details and list of credit card that loggedUser has. Adds these attributes and sorts them according to creditCardId
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		List<CreditCard> userCreditCards = loggedUser.getCreditCards();
+		model.addAttribute("cards", userCreditCards);
+		model.addAttribute("user", loggedUser);
+		Collections.sort(userCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
+		return "card-dashboard";
 
 	}
 	
@@ -119,15 +112,10 @@ public class CreditCardController {
 	@GetMapping("/applyCreditCard")
 	public String applyCreditCard(Model model, HttpSession session) {
 		// Checks if user is logged on. If user not logged on, return to login page
-		if (session != null && session.getAttribute("loggedUser") != null) {
-			//Adds currently logged on user details as a model attribute for subsequent processing.
-			User loggedUser = (User) session.getAttribute("loggedUser");
-			model.addAttribute("user", loggedUser);
-			return "apply-credit-card";
-		} else {
-			//Should return to login page?
-			return "apply-credit-card";
-		}
+		//Adds currently logged on user details as a model attribute for subsequent processing.
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", loggedUser);
+		return "apply-credit-card";
 	}
 	
 	/**
@@ -192,24 +180,18 @@ public class CreditCardController {
 	@GetMapping("/creditCard/paybills")
 	public String paybills(Model model, HttpSession session) {
 		// Checks if user logged on. If user not logged on, user will be redirected to log-in page
-		if (session != null && session.getAttribute("loggedUser") != null) {
 			
-			// Get logged user, credit card and avaliable bank accounts under current logged on user
-			User currentUser = (User) session.getAttribute("loggedUser");
-			List<CreditCard> ccList = currentUser.getCreditCards();
-			List<Account> AccountList = accountService.findAllAccountsByUserId(currentUser.getUserId());
-			
-			// add user and account list to the model, before directing user to pay-bills page.
-			model.addAttribute("AccountList", AccountList);
-			model.addAttribute("user", currentUser);
-			model.addAttribute("CcList", ccList);
+		// Get logged user, credit card and avaliable bank accounts under current logged on user
+		User currentUser = (User) session.getAttribute("loggedUser");
+		List<CreditCard> ccList = currentUser.getCreditCards();
+		List<Account> AccountList = accountService.findAllAccountsByUserId(currentUser.getUserId());
+		
+		// add user and account list to the model, before directing user to pay-bills page.
+		model.addAttribute("AccountList", AccountList);
+		model.addAttribute("user", currentUser);
+		model.addAttribute("CcList", ccList);
 
-			return "pay-bills";
-		} else {
-			model.addAttribute("error", true);
-			logger.warn("User Is not logged-in. Please login first");
-			return "login";
-		}
+		return "pay-bills";
 	}
 	
 	 /**
@@ -230,9 +212,6 @@ public class CreditCardController {
 			@RequestParam("accountId") long accountId,
 			RedirectAttributes redirectAttributes) {
 		
-		
-		
-		
 		if (accountId == 0) {
 	        redirectAttributes.addAttribute("NotChooseAccountError", "true");
 	        return "redirect:/creditCard/paybills";
@@ -249,10 +228,7 @@ public class CreditCardController {
 		Transaction transaction = null;
 
 		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
-		
-		
-		
-		
+
 		//Determines type of transaction made depending on the balance type. 
 		if (balanceType.equals("custom")) {
 			
@@ -277,6 +253,8 @@ public class CreditCardController {
 		// Processes new bank account balance, updates it onto database. Creates and uploads new transaction onto database.
 		account.setBalance(account.getBalance()-transaction.getTransactionAmount());
 		accountService.update(account);
+		currentUser.setAccountList(accountService.findAllAccountsByUserId(currentUser.getUserId()));
+		userService.update(currentUser);
 		transactionService.persist(transaction);
 		transactionService.updateCreditCardBalance(transaction);
 

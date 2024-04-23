@@ -256,6 +256,7 @@ public class CreditCardService {
 		persist(createCreditCardPending);
 	}
 
+
 	/**
 	 * Calculates and applies interest charges to a list of approved credit cards
 	 * based on their previous month's transactions.
@@ -279,6 +280,7 @@ public class CreditCardService {
 	 * @see CreditCard#setInterest(double) To update the credit card's interest
 	 *      amount.
 	 */
+
 	public void chargeInterest(List<CreditCard> approvedCreditCards) {
 		// Subtract one month from the current date
 		LocalDate curMonth = LocalDate.now().withDayOfMonth(1);

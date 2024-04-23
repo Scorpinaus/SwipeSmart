@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.creditCard.restcontroller;
+package com.fdmgroup.apmproject.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fdmgroup.apmproject.controller.AccountController;
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
+import com.fdmgroup.apmproject.model.PaymentException;
+import com.fdmgroup.apmproject.model.PaymentResponse;
+import com.fdmgroup.apmproject.model.PurchaseRequest;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.repository.CreditCardRepository;
 import com.fdmgroup.apmproject.repository.MerchantCategoryCodeRepository;
@@ -132,16 +134,22 @@ public class PurchaseController {
 				BigDecimal exchangeRate = foreignExchangeCurrencyService.getExchangeRate(request.getCurrency(), accountService.findAccountByAccountNumber(request.getAccountNumber()).getCurrencyCode());
 				BigDecimal convertedAmount = BigDecimal.valueOf(request.getAmount()).multiply(exchangeRate);
 				request.setAmount(convertedAmount.doubleValue());
+				
+				
+				
 				// process transaction
 				Optional<MerchantCategoryCode> transactionMerchantCategoryCode = merchantCategoryCodeRepository.findByMerchantCategory(request.getMcc());
 				String currencyCode = request.getCurrency();
 				ForeignExchangeCurrency foreignExchangeCurrency = foreignExchangeCurrencyService.getCurrencyByCode( request.getCurrency());
 				
+				
+				//Jacky!!!!!! 
 				//record transaction
-				Transaction transaction = new Transaction("CC Payment",request.getAmount(),null,0,creditCard,accountService.findAccountByAccountNumber(request.getAccountNumber()),transactionMerchantCategoryCode.get(),foreignExchangeCurrency);
+				Transaction transaction = new Transaction("CC Purchase",request.getAmount(),null,0,creditCard,accountService.findAccountByAccountNumber(request.getAccountNumber()),transactionMerchantCategoryCode.get(),foreignExchangeCurrency);
 				transaction.setCreditCardDescription(request.getDescription(), exchangeRate.doubleValue());
 				transactionService.persist(transaction);
 				
+
 				//update creditcard and account
 				purchaseService.purchase(request);
 						

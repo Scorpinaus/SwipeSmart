@@ -1,4 +1,4 @@
-package com.fdmgroup.apmproject.creditCard.restcontroller;
+package com.fdmgroup.apmproject.model;
 
 /**
  * This class represents a response object for payment operations.

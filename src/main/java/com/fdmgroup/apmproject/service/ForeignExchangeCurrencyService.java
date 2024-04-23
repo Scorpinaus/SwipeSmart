@@ -32,6 +32,13 @@ import com.fdmgroup.apmproject.repository.ForeignExchangeCurrencyRepository;
 
 import jakarta.annotation.PostConstruct;
 
+/**
+ * This class is responsible for handling all business logic related to ForeignExchangeCurrency.
+ * 
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Service
 public class ForeignExchangeCurrencyService {
 	@Autowired
@@ -44,6 +51,21 @@ public class ForeignExchangeCurrencyService {
 
 	private static final String URL = "http://www.floatrates.com/daily/usd.json";
 
+	public ForeignExchangeCurrencyService(ForeignExchangeCurrencyRepository currencyRepo) {
+		this.currencyRepo = currencyRepo;
+	}
+
+	/**
+	 * Registers a new foreign exchange currency or logs a warning if it already exists.
+	 * <p>
+	 * This method checks the repository to determine if a foreign exchange currency with the same identifier already exists. If the currency does not exist, it is saved to the repository, and an informational message is logged indicating successful registration. If the currency is already registered, a warning message is logged, and no further action is taken. This method helps in maintaining an accurate and non-duplicate list of available foreign exchange currencies.
+	 *
+	 * @param foreignExchangeCurrency The ForeignExchangeCurrency object to be registered or checked.
+	 * @return void This method does not return a value but logs the outcome of the registration attempt.
+	 * @throws DataAccessException If there are issues accessing the database or during the save operation.
+	 * @see CurrencyRepo#findById(Object) Method to check if a foreign exchange currency already exists.
+	 * @see CurrencyRepo#save(Object) Method to save a new foreign exchange currency into the database.
+	 */
 	public void persist(ForeignExchangeCurrency foreignExchangeCurrency) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo
 				.findById(foreignExchangeCurrency.getCurrencyId());
@@ -55,6 +77,17 @@ public class ForeignExchangeCurrencyService {
 		}
 	}
 
+	/**
+	 * Updates an existing foreign exchange currency's information in the database.
+	 * <p>
+	 * This method first checks if a foreign exchange currency with the specified identifier exists in the repository. If no such currency is found, a warning is logged indicating its absence. If the currency exists, it is updated with the provided details, and a confirmation message is logged. This process ensures that only existing currencies are updated, preventing the inadvertent creation of duplicate entries.
+	 *
+	 * @param foreignExchangeCurrency The ForeignExchangeCurrency object containing updated information to be saved.
+	 * @return void This method does not return a value, but logs the outcome of the update operation.
+	 * @throws DataAccessException If there are issues accessing the database or saving the updated currency data.
+	 * @see CurrencyRepo#findById(Object) Method to verify the existence of the currency based on its identifier.
+	 * @see CurrencyRepo#save(Object) Method to save the updated currency data into the database.
+	 */
 	public void update(ForeignExchangeCurrency foreignExchangeCurrency) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo
 				.findById(foreignExchangeCurrency.getCurrencyId());
@@ -66,6 +99,16 @@ public class ForeignExchangeCurrencyService {
 		}
 	}
 
+	/**
+	 * Retrieves a foreign exchange currency from the database by its identifier.
+	 * <p>
+	 * This method searches the repository for a foreign exchange currency using the provided ID. If the currency is found, it is returned along with an informational log message. If no such currency is found, a warning is logged and the method returns null. This method is typically used to verify the existence and retrieve details of specific currencies.
+	 *
+	 * @param currencyId The unique identifier for the foreign exchange currency to be retrieved.
+	 * @return ForeignExchangeCurrency object if found; null if no currency matches the given ID.
+	 * @throws DataAccessException If there are issues accessing the database or retrieving the currency data.
+	 * @see CurrencyRepo#findById(int) Method used to locate the currency by its identifier.
+	 */
 	public ForeignExchangeCurrency findById(int currencyId) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo.findById(currencyId);
 		if (returnedCurrency.isEmpty()) {
@@ -77,6 +120,17 @@ public class ForeignExchangeCurrencyService {
 		}
 	}
 
+	/**
+	 * Deletes a foreign exchange currency from the database by its identifier.
+	 * <p>
+	 * This method first checks if a foreign exchange currency with the specified identifier exists in the repository. If the currency is found, it is removed from the database and a confirmation message is logged. If no such currency exists, a warning is logged indicating that the currency could not be found, and no further action is taken. This method ensures precise management of currency data by preventing the deletion of non-existent entries.
+	 *
+	 * @param currencyId The unique identifier of the foreign exchange currency to be deleted.
+	 * @return void This method does not return a value, but logs the outcome of the deletion process.
+	 * @throws DataAccessException If there are issues accessing the database or executing the delete operation.
+	 * @see CurrencyRepo#findById(int) Method to verify the existence of the currency based on its identifier.
+	 * @see CurrencyRepo#deleteById(int) Method to remove the currency from the database.
+	 */
 	public void deleteById(int currencyId) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo.findById(currencyId);
 		if (returnedCurrency.isEmpty()) {
@@ -162,15 +216,43 @@ public class ForeignExchangeCurrencyService {
 		}
 	}
 
+	/**
+	 * Retrieves a foreign exchange currency from the database by its currency code.
+	 * <p>
+	 * This method searches the repository for a currency using the provided code. If the currency is found, it is returned, and an informational message is logged stating that the currency was obtained. This method is commonly used to access currency details necessary for financial transactions and reporting.
+	 *
+	 * @param currencyCode The code of the foreign exchange currency to be retrieved, such as "USD" or "EUR".
+	 * @return ForeignExchangeCurrency object if a currency with the specified code exists; otherwise, null.
+	 * @throws DataAccessException If there are issues accessing the database or retrieving the currency data.
+	 * @see CurrencyRepo#findByCurrencyCode(String) Method used to locate the currency by its code.
+	 */
 	public ForeignExchangeCurrency getCurrencyByCode(String currencyCode) {
 		logger.info("Currency obtained");
 		return currencyRepo.findByCurrencyCode(currencyCode);
 	}
 
+	/**
+	 * Retrieves all foreign exchange currencies from the database.
+	 * <p>
+	 * This method fetches a list of all the currencies stored in the currency repository. It is typically used to provide an overview of available currencies for trading, analysis, or reporting purposes. The returned list may vary in size based on the number of currencies currently stored.
+	 *
+	 * @return List of ForeignExchangeCurrency objects representing all the currencies in the database; this list can be empty if no currencies are stored.
+	 * @throws DataAccessException If there are issues accessing the database or retrieving the currencies.
+	 * @see CurrencyRepo#findAll() Method to fetch all records from the currency repository.
+	 */
 	public List<ForeignExchangeCurrency> getAllCurrencies() {
 		return currencyRepo.findAll();
 	}
 
+	/**
+	 * Retrieves a list of supported foreign exchange currencies from the database.
+	 * <p>
+	 * This method filters the complete list of currencies to include only those with codes specified as supported (SGD, USD, HKD). It is used to provide a subset of currencies that are actively traded or recognized by this service. The method leverages streaming and filtering operations to efficiently gather the supported currencies based on pre-defined codes.
+	 *
+	 * @return List of ForeignExchangeCurrency objects that are supported, filtered by specific currency codes. This list may be empty if none of the specified currencies are stored.
+	 * @throws DataAccessException If there are issues accessing the database or processing the currency data.
+	 * @see CurrencyRepo#findAll() Indirectly used through getAllCurrencies to fetch all currency records.
+	 */
 	public List<ForeignExchangeCurrency> getSupportedCurrencies() {
 		List<String> supportedCurrencyCodes = List.of("SGD", "USD", "HKD");
 		List<ForeignExchangeCurrency> supportedCurrencies = getAllCurrencies().stream()
@@ -178,6 +260,17 @@ public class ForeignExchangeCurrencyService {
 		return supportedCurrencies;
 	}
 
+	/**
+	 * Calculates the exchange rate between two specified currencies.
+	 * <p>
+	 * This method retrieves the exchange rates for the base and target currencies from the database. If both currencies are the same, the exchange rate is set to 1. For conversions involving USD, it directly uses the stored rate for the non-USD currency. For other currency pairs, this method might require additional logic to calculate cross rates not shown here. This function ensures that accurate and up-to-date exchange rates are used for financial calculations and transactions.
+	 *
+	 * @param baseCurrencyCode The code of the currency from which to convert.
+	 * @param targetCurrencyCode The code of the currency to which to convert.
+	 * @return BigDecimal representing the exchange rate from the base currency to the target currency.
+	 * @throws CurrencyNotFoundException If either the base or target currency does not exist in the database.
+	 * @see CurrencyRepo#findByCurrencyCode(String) Method used to fetch currency details by code.
+	 */
 	public BigDecimal getExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
 		ForeignExchangeCurrency localCurrency = currencyRepo.findByCurrencyCode(baseCurrencyCode);
 		ForeignExchangeCurrency foreignCurrency = currencyRepo.findByCurrencyCode(targetCurrencyCode);
@@ -225,6 +318,17 @@ public class ForeignExchangeCurrencyService {
 		return exchangeRate;
 	}
 
+	/**
+	 * Fetches and stores the latest foreign exchange rates from an external API.
+	 * <p>
+	 * This method checks for the existence of a local JSON file containing exchange rates. If the file exists, the update is skipped, and a log entry is made. If the file does not exist, the method fetches exchange rates from a predefined URL using an HTTP GET request. The fetched data is parsed into a map of currency codes to `ForeignExchangeCurrency` objects. If successful, this data is serialized to JSON and written to the local file system. If any part of the fetch or save process fails, appropriate warnings are logged.
+	 *
+	 * @return void This method does not return a value but logs the outcome of fetching and saving operations.
+	 * @throws DataAccessException If there are issues accessing the API or local file system.
+	 * @throws Exception If there are issues during the HTTP request, data parsing, or file writing processes.
+	 * @see RestTemplate#exchange(String, HttpMethod, HttpEntity, ParameterizedTypeReference) For fetching data from the external API.
+	 * @see ObjectMapper#writeValueAsString(Object) For serializing the currency data to JSON.
+	 */
 	public void fetchAndSaveExchangeRates() {
 		// Check if fx_rates file exists
 		if (Files.exists(Paths.get("src/main/resources/fx_rates.json"))) {

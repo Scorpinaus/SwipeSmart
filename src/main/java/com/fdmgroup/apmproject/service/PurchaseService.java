@@ -21,6 +21,17 @@ public class PurchaseService {
 	@Autowired
 	private AccountService accountService;
 	
+	/**
+	 * Processes a purchase request using a specified credit card and credits the recipient's account.
+	 * <p>
+	 * This method validates the credit card's status, credit limit, and available balance before proceeding with the transaction. If the card is valid, the purchase amount is added to the card's used amount and the corresponding account is credited. The method ensures that all financial adjustments are recorded accurately and returns a response indicating the success of the transaction.
+	 *
+	 * @param request The PurchaseRequest containing details such as the credit card number, account number, and transaction amount.
+	 * @return ResponseEntity<PaymentResponse> containing the transaction status and a message indicating success or failure.
+	 * @throws PaymentException If the transaction cannot be processed due to issues with the credit card or account, such as exceeding credit limits or invalid card status.
+	 * @see CreditCardService#findByCreditCardNumber(String) For retrieving and validating credit card details.
+	 * @see AccountService#update(Account) For updating the account balance after receiving funds.
+	 */
 	 public ResponseEntity<PaymentResponse> purchase(PurchaseRequest request) throws PaymentException {
 	        // Validate credit card status, credit limit, and monthly balance
 	        CreditCard creditCard = creditCardService.findByCreditCardNumber(request.getCreditCardNumber());

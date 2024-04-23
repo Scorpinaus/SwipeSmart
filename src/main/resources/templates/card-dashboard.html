@@ -42,9 +42,11 @@
 			<a id="cardTransactions" href="/creditCard/paybills">Pay</a> <a
 				id="cardTransactions" href="/applyCreditCard">Apply</a>
 		</div>
-
-		<h2>Your Credit Cards</h2>
-
+		<div class="view-details-button">
+			<h2>Your Credit Cards</h2>
+			<button id="view-card-number" onclick="toggleCardNumber()">&#128065;</button>
+		</div>
+	
 		<div class="card-details-container">
 			<div class="card-details" th:each="creditCard : ${cards}">
 				<a id="card-details"
@@ -55,7 +57,8 @@
 						<p th:text="${creditCard.cardType}"></p>
 					</div>
 					<div class="details-card-number">
-						<p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
+						<p class="hide-card-number" id="cardDetails" th:text="'****-****-****-' + ${#strings.substring(creditCard.creditCardNumber, creditCard.creditCardNumber.length() - 4)}"></p>
+						<p style="display:none" class="show-card-number" id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
 						<p
 							th:if="${creditCard.getCreditCardStatus.getStatusName == 'Approved'}"
 							id="cardDetails" style="color: green"
@@ -120,6 +123,21 @@
 					    document.getElementById("creditCardIdInput").value = creditCardId;
 					    document.getElementById("viewTransactionsForm").submit();
 					}
+			
+			function toggleCardNumber(){
+				var hiddenCardNumbers = document.querySelectorAll('.hide-card-number');
+				var shownCardNumbers = document.querySelectorAll('.show-card-number');
+				for (var i = 0; i < hiddenCardNumbers.length; i++){
+					if (shownCardNumbers[i].style.display === 'none'){
+						shownCardNumbers[i].style.display = 'block';
+						hiddenCardNumbers[i].style.display = 'none';
+					}
+					else {
+						shownCardNumbers[i].style.display = 'none';
+						hiddenCardNumbers[i].style.display = 'block';
+					}
+				}
+			}
 		</script>
 </body>
 </html>

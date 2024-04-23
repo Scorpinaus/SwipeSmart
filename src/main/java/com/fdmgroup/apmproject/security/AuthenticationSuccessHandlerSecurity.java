@@ -18,6 +18,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * This class handles successful authentication events.
+ * 
+ * @author Bard
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Component
 public class AuthenticationSuccessHandlerSecurity implements AuthenticationSuccessHandler {
 

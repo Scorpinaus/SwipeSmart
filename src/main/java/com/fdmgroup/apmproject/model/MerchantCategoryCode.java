@@ -12,7 +12,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+/**
+ * This class represents a merchant category code (MCC) in the banking system.
+*
+* @author 
+* @version 1.0
+* @since 2024-04-22
+*/
 @Entity
 @Table(name = "listOfMerchantCategoryCode")
 public class MerchantCategoryCode {
@@ -28,46 +34,94 @@ public class MerchantCategoryCode {
 	@OneToMany(mappedBy = "transactionMerchantCategoryCode", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
 	
+	/**
+     * Constructs a new MerchantCategoryCode object with the specified details.
+     */
 	public MerchantCategoryCode() {};
 	
+	/**
+     * Constructs a new MerchantCategoryCode object with the specified details.
+     *
+     * @param merchantCategoryCodeNumber The merchant category code number.
+     * @param merchantCategory           The merchant category.
+     */
 	public MerchantCategoryCode(int merchantCategoryCodeNumber, String merchantCategory) {
 		setMerchantCategoryCodeNumber(merchantCategoryCodeNumber);
 		setMerchantCategory(merchantCategory);
 	}
 	
 	
-	// getters and setters
-	public int getMerchantCategoryCodeId() {
-		return merchantCategoryCodeId;
-	}
+	/**
+     * Returns the ID of the merchant category code.
+     *
+     * @return The merchant category code ID.
+     */
+    public int getMerchantCategoryCodeId() {
+        return merchantCategoryCodeId;
+    }
 
-	public void setMerchantCategoryCodeId(int merchantCategoryCodeId) {
-		this.merchantCategoryCodeId = merchantCategoryCodeId;
-	}
+    /**
+     * Sets the ID of the merchant category code.
+     *
+     * @param merchantCategoryCodeId The merchant category code ID to set.
+     */
+    public void setMerchantCategoryCodeId(int merchantCategoryCodeId) {
+        this.merchantCategoryCodeId = merchantCategoryCodeId;
+    }
 
-	public int getMerchantCategoryCodeNumber() {
-		return merchantCategoryCodeNumber;
-	}
+    /**
+     * Returns the merchant category code number.
+     *
+     * @return The merchant category code number.
+     */
+    public int getMerchantCategoryCodeNumber() {
+        return merchantCategoryCodeNumber;
+    }
 
-	public void setMerchantCategoryCodeNumber(int merchantCategoryCodeNumber) {
-		this.merchantCategoryCodeNumber = merchantCategoryCodeNumber;
-	}
+    /**
+     * Sets the merchant category code number.
+     *
+     * @param merchantCategoryCodeNumber The merchant category code number to set.
+     */
+    public void setMerchantCategoryCodeNumber(int merchantCategoryCodeNumber) {
+        this.merchantCategoryCodeNumber = merchantCategoryCodeNumber;
+    }
 
-	public String getMerchantCategory() {
-		return merchantCategory;
-	}
+    /**
+     * Returns the merchant category.
+     *
+     * @return The merchant category.
+     */
+    public String getMerchantCategory() {
+        return merchantCategory;
+    }
 
-	public void setMerchantCategory(String merchantCategory) {
-		this.merchantCategory = merchantCategory;
-	}
+    /**
+     * Sets the merchant category.
+     *
+     * @param merchantCategory The merchant category to set.
+     */
+    public void setMerchantCategory(String merchantCategory) {
+        this.merchantCategory = merchantCategory;
+    }
 
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
+    /**
+     * Returns the list of transactions associated with the merchant category code.
+     *
+     * @return The list of transactions.
+     */
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
 
-	public void setTransactions(Transaction transaction) {
-		this.transactions.add(transaction);
-	}
+    /**
+     * Sets the list of transactions associated with the merchant category code.
+     *
+     * @param transaction The transaction to add.
+     */
+    public void setTransactions(Transaction transaction) {
+        this.transactions.add(transaction);
+    }
 	
 	// Override 
 	@Override

@@ -25,6 +25,14 @@ import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * This class is a Spring MVC controller responsible for handling requests related to transactions.
+ * It provides methods for viewing transactions for credit cards and accounts.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Controller
 public class TransactionController {
 
@@ -40,7 +48,18 @@ public class TransactionController {
 	private static Logger logger = LogManager.getLogger(CreditCardController.class);
 
 	private List<ForeignExchangeCurrency> currencies;
-
+	
+	
+	 /**
+     * This method displays a list of transactions for a given credit card or account.
+     *
+     * @param month           The month for which to filter transactions (optional).
+     * @param creditCardId    The ID of the credit card to filter transactions for (optional).
+     * @param accountId        The ID of the account to filter transactions for (optional).
+     * @param model           The model to be used for rendering the view.
+     * @param session         The HTTP session containing the logged-in user information.
+     * @return The name of the view to be rendered.
+     */
 	@PostMapping("/viewTransactions")
 	public String viewCardTransactions(
 			@RequestParam(name = "month", required = false) String month,

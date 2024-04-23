@@ -18,6 +18,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * This class represents a transaction in the banking system.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Entity
 @Table(name = "listOfTransactions")
 public class Transaction {
@@ -70,10 +77,26 @@ public class Transaction {
 	@JoinColumn(name = "FK Foreign Exchange Currency ID")
 	private ForeignExchangeCurrency transactionCurrency;
 	
+	/**
+     * Constructs a new Transaction object with the specified details.
+     */
 	public Transaction() {
 		
 	};
-
+	
+	/**
+     * Constructs a new Transaction object with the specified details.
+     *
+     * @param transactionDate              The date of the transaction.
+     * @param transactionType              The type of transaction.
+     * @param transactionAmount            The amount of the transaction.
+     * @param recipientAccountNumber       The account number of the recipient.
+     * @param cashback                     The amount of cashback earned on the transaction.
+     * @param transactionCreditCard         The credit card used for the transaction.
+     * @param transactionAccount           The account used for the transaction.
+     * @param transactionMerchantCategoryCode The merchant category code for the transaction.
+     * @param transactionCurrency           The currency used for the transaction.
+     */
 	public Transaction(LocalDateTime transactionDate, String transactionType,
 			double transactionAmount, String recipientAccountNumber, double cashback, CreditCard transactionCreditCard,
 			Account transactionAccount, MerchantCategoryCode mcc,
@@ -89,6 +112,18 @@ public class Transaction {
 		setTransactionCurrency(transactionCurrency);
 	}
 	
+	/**
+     * Constructs a new Transaction object with the specified details.
+     *
+     * @param transactionType              The type of transaction.
+     * @param transactionAmount            The amount of the transaction.
+     * @param recipientAccountNumber       The account number of the recipient.
+     * @param cashback                     The amount of cashback earned on the transaction.
+     * @param transactionCreditCard         The credit card used for the transaction.
+     * @param transactionAccount           The account used for the transaction.
+     * @param transactionMerchantCategoryCode The merchant category code for the transaction.
+     * @param transactionCurrency           The currency used for the transaction.
+     */
 	public Transaction(String transactionType,
 			double transactionAmount, String recipientAccountNumber, double cashback, CreditCard transactionCreditCard,
 			Account transactionAccount, MerchantCategoryCode mcc,

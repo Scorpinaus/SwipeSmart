@@ -85,11 +85,11 @@ public class AccountController {
 			if (userBankAccounts.size() != 0) {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 				LOGGER.info("User is redirected to bank account dashboard");
-				return "account-dashboard";
+				return "account/account-dashboard";
 			} else {
 				LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				return "account-dashboard";
+				return "account/account-dashboard";
 			}
 		} else {
 			return "redirect:/login";
@@ -125,7 +125,7 @@ public class AccountController {
 			// on dashboard page.
 			if (accounts.isEmpty()) {
 				model.addAttribute("error", "No bank accounts found");
-				return "account-dashboard";
+				return "account/account-dashboard";
 			}
 
 			// If user has accounts, both current list of accounts and supported currencies
@@ -140,7 +140,7 @@ public class AccountController {
 			if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
 				model.addAttribute("errorInsufficient", true);
 			}
-			return "withdrawal";
+			return "account/withdrawal";
 		} else {
 			return "redirect:/login";
 		}
@@ -231,7 +231,7 @@ public class AccountController {
 		model.addAttribute("AccountList", AccountList);
 		model.addAttribute("currencies", currenciesList);
 
-		return ("deposit");
+		return ("account/deposit");
 	}
 
 	/**
@@ -288,7 +288,7 @@ public class AccountController {
 		// request.
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", loggedUser);
-		return "create-bank-account";
+		return "account/create-bank-account";
 	}
 
 	/**
@@ -372,7 +372,7 @@ public class AccountController {
 		model.addAttribute("AccountList", AccountList);
 		model.addAttribute("currencies", currenciesList);
 
-		return "transfer";
+		return "account/transfer";
 	}
 
 	/**

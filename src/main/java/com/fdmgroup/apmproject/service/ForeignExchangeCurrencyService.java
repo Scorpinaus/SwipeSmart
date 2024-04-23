@@ -33,6 +33,13 @@ import com.fdmgroup.apmproject.repository.ForeignExchangeCurrencyRepository;
 
 import jakarta.annotation.PostConstruct;
 
+/**
+ * This class is responsible for handling all business logic related to ForeignExchangeCurrency.
+ * 
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Service
 public class ForeignExchangeCurrencyService {
 	@Autowired

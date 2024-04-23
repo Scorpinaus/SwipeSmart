@@ -236,6 +236,10 @@ public class User {
     public void setCreditCardList(List<CreditCard> creditCards) {
         this.creditCards = creditCards;
     }
+    
+    public void setAccountList(List<Account> accounts) {
+        this.accounts = accounts;
+    }
 
     /**
      * Returns the list of accounts associated with the user.

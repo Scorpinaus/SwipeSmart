@@ -98,7 +98,7 @@ public class CreditCardController {
 		model.addAttribute("cards", userCreditCards);
 		model.addAttribute("user", loggedUser);
 		Collections.sort(userCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
-		return "card-dashboard";
+		return "card/card-dashboard";
 
 	}
 	
@@ -115,7 +115,7 @@ public class CreditCardController {
 		//Adds currently logged on user details as a model attribute for subsequent processing.
 		User loggedUser = (User) session.getAttribute("loggedUser");
 		model.addAttribute("user", loggedUser);
-		return "apply-credit-card";
+		return "card/apply-credit-card";
 	}
 	
 	/**
@@ -136,13 +136,13 @@ public class CreditCardController {
 		if (monthlySalary.isBlank() || cardType.isBlank()) {
 			logger.warn("There are empty fields, please fill up");
 			model.addAttribute("error", true);
-			return "apply-credit-card";
+			return "card/apply-credit-card";
 		} 	else {
 			// Checks for users monthly salary. If monthly salary is lower than specified limit, user is not allowed to apply and shown error after redirected.
 			if (Double.parseDouble(monthlySalary) < 1000) {
 				logger.warn("Your salary is too low. You are required to have a monthly salary above $1000");
 				model.addAttribute("error2", true);
-				return "apply-credit-card";
+				return "card/apply-credit-card";
 			} else {
 				//Generates data required for credit card creation
 				String creditCardNumber = creditCardService.generateCreditCardNumber();
@@ -191,7 +191,7 @@ public class CreditCardController {
 		model.addAttribute("user", currentUser);
 		model.addAttribute("CcList", ccList);
 
-		return "pay-bills";
+		return "card/pay-bills";
 	}
 	
 	 /**

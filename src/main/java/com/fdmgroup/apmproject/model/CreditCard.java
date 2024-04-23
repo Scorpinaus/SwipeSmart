@@ -45,7 +45,7 @@ public class CreditCard {
 	private String currencyCode;
 	
 	@Column(name = "Mininum Balance Paid?")
-	private int minBalancePaid;
+	private double minBalancePaid;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -74,7 +74,7 @@ public class CreditCard {
 		setAmountUsed(amountUsed);
 		setMonthlyBalance(0);
 		setCurrencyCode(currencyCode);
-		setMinBalancePaid(0);
+		setMinBalancePaid(50);
 	}
 
 	public CreditCard(String creditCardNumber, String pin, double cardLimit, String cardType, Status status,
@@ -87,7 +87,7 @@ public class CreditCard {
 		setCreditCardUser(creditCardUser);
 		setAmountUsed(amountUsed);
 		setMonthlyBalance(0);
-		setMinBalancePaid(0);
+		setMinBalancePaid(50);
 	}
 
 	public long getCreditCardId() {
@@ -187,12 +187,12 @@ public class CreditCard {
 	}
 		
 	
-	public int getMinBalancePaid() {
+	public double getMinBalancePaid() {
 		return minBalancePaid;
 	}
 
-	public void setMinBalancePaid(int minBalancePaid) {
-		this.minBalancePaid = minBalancePaid;
+	public void setMinBalancePaid(double d) {
+		this.minBalancePaid = d;
 	}
 
 	// Add balance when transactions are made

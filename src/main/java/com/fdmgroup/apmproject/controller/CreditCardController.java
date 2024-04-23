@@ -247,12 +247,12 @@ public class CreditCardController {
 			transaction = new Transaction("CC Payment", paymentAmount, null, 0.00, creditCard, account, mccBill,
 					currency);
 		} else if (balanceType.equals("minimum")) {
-			if (creditCard.getMonthlyBalance() < 50)
-				transaction = new Transaction("CC Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
-						account, mccBill, currency);
-
-			else
-				transaction = new Transaction("CC Payment", 50, null, 0.00, creditCard, account, mccBill, currency);
+			if (creditCard.getMinBalancePaid() <= 0 ) {
+				logger.info("Minimum balance is zero, no payment made") ;
+				return "redirect:/userCards";
+			} else {
+				transaction = new Transaction("CC Payment", creditCard.getMinBalancePaid(), null, 0.00, creditCard, account, mccBill, currency);
+			}
 		} else if (balanceType.equals("statement")) {
 			transaction = new Transaction("CC Payment", creditCard.getMonthlyBalance(), null, 0.00, creditCard,
 

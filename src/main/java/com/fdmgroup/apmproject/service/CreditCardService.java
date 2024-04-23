@@ -33,7 +33,6 @@ public class CreditCardService {
 	private UserService userService;
 	@Autowired
 	private StatusService statusService;
-	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
 	private static final double interestRate = 0.1;
 
 	private static Logger logger = LogManager.getLogger(CreditCardService.class);
@@ -147,37 +146,8 @@ public class CreditCardService {
 		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
 				"SwipeSmart Platinum Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
 		persist(createCreditCardPending);
-		
-		scheduleInterestCharging();
-	}
-	//Tests not implemented from this line onwards
-	// run this method at the start of every month
-	private long calculateDelayToNextMonth() {
-		LocalDate currentDate = LocalDate.now();
-		LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
-		LocalDateTime nextMonthStartOfDay = nextMonth.atStartOfDay();
-		Duration duration = Duration.between(LocalDateTime.now(), nextMonthStartOfDay);
-		return duration.toMillis();
 	}
 
-	public void scheduleInterestCharging() {
-		Timer timer = new Timer();
-
-		// Calculate the delay until the next 1st day of the month
-		long delay = calculateDelayToNextMonth();
-
-		// Schedule the task to run every month, starting from the next 1st day of the
-		// month
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				Status statusName = statusService.findByStatusName("Approved");
-				List<CreditCard> approvedCreditCards = findCreditCardsByStatus(statusName);
-				calculateMonthlyBalance(approvedCreditCards);
-				chargeInterest(approvedCreditCards);
-			}
-		}, delay, ONE_MONTH_IN_MILLISECONDS);
-	}
 
 	public void chargeInterest(List<CreditCard> approvedCreditCards) {
 		// Subtract one month from the current date
@@ -220,6 +190,13 @@ public class CreditCardService {
 				creditCard.setMonthlyBalance(monthlyBalance);
 				update(creditCard);
 			}
+		}
+	}
+	
+	public void calculateMinimumBalance(List<CreditCard> approvedCreditCards) {
+		for (CreditCard creditCard : approvedCreditCards) {
+			if (creditCard.getMonthlyBalance() < 50) creditCard.setMinBalancePaid(creditCard.getMonthlyBalance());
+			else creditCard.setMonthlyBalance(50);
 		}
 	}
 	

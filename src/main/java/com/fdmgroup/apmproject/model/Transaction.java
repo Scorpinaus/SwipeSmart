@@ -278,7 +278,7 @@ public class Transaction {
 		BigDecimal value = new BigDecimal(this.transactionAmount / rate);
 		DecimalFormat df = new DecimalFormat("#.##");
 		String formattedString = df.format(value);
-		String finalDescription = text + " " + formattedString + " " + this.getTransactionCurrency().getCode();
+		String finalDescription = text + " " + this.getTransactionCurrency().getCode() + " " + formattedString;
 		setDescription(finalDescription);
 	}
 

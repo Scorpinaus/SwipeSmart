@@ -233,3 +233,17 @@ h4 {
 	background-color: var(--lightblue);
 	cursor: pointer;
 }
+
+.category-spending-stats {
+	display: flex;
+	justify-content: center;
+    align-items: center;
+}
+.chart-container{
+	display: flex;
+	justify-content: center;
+    align-items: center;
+	width: 500px;
+	height: 400px;
+}
+

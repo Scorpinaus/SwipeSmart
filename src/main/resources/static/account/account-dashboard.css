@@ -126,6 +126,10 @@ a#accounts{
 	min-width: 600px;
 }
 
+.below-header {
+	animation: transitionIn 0.75s;
+}
+
 .openSidebar{
 	color: white;
 	border:none;
@@ -147,6 +151,23 @@ header {
 body{
 	font-family: "Nunito Sans", sans-serif;
 	min-width: 600px;
+}
+
+.view-details-button {
+	display: flex;
+    align-items: center;
+}
+
+.view-details-button h2 {
+	margin-right: 10px;
+}
+
+.view-details-button button{
+	text-align: right;
+	border: none;
+    outline: none;
+    background-color: var(--white);
+    min-width: 40px;
 }
 
 .noAccounts{

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/account/account-dashboard.css">
+<script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
 <title>Accounts</title>
 </head>
 <body>
@@ -34,6 +35,7 @@
               <button class="openSidebar">☰</button>
             </header>
 		
+        <div class="below-header">
 		<h1 th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
 		
 		<div class="accountLinkContainer">
@@ -47,7 +49,7 @@
 				</div>
         	<div class="view-details-button">
 				<h2>Your Bank Accounts</h2>
-				<button id="view-account-number" onclick="toggleAccountNumber()">&#128065;</button>
+				<button id="view-account-number" onclick="toggleAccountNumber()"><i id="account-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
         	</div>
 				<div class="account-details-container">
                   <div class="account-details" th:each="account : ${currentUserBankAccounts}">
@@ -97,6 +99,7 @@
 				<p>No active bank accounts. Would you like to create one?</p>
 			</div>
 		</div>
+      </div>
 	</div>
 	<script>
 			let menuOpen = false;
@@ -118,6 +121,7 @@
 			function toggleAccountNumber(){
 				var hiddenAccountNumbers = document.querySelectorAll('.hide-account-number');
 				var shownAccountNumbers = document.querySelectorAll('.show-account-number');
+				const eyeIcon = document.getElementById('account-eye');
 				for (var i = 0; i < hiddenAccountNumbers.length; i++){
 					if (shownAccountNumbers[i].style.display === 'none'){
 						shownAccountNumbers[i].style.display = 'block';
@@ -128,6 +132,13 @@
 						hiddenAccountNumbers[i].style.display = 'block';
 					}
 				}
+				if (eyeIcon.classList.contains('fa-eye')) {
+		            eyeIcon.classList.remove('fa-eye');
+		            eyeIcon.classList.add('fa-eye-slash');
+		        } else {
+		            eyeIcon.classList.remove('fa-eye-slash');
+		            eyeIcon.classList.add('fa-eye');
+		        }
 			}
 			
 		</script>

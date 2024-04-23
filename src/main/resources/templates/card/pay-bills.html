@@ -18,10 +18,10 @@
 					<a id="dashboard" href="/dashboard">Dashboard</a>
 				</div>
 				<div class="cards">
-					<a class="cardsText" id="cards" href="/userCards">Cards</a>
+					<a class="cards" id="cards" href="/userCards">Cards</a>
 				</div>
 				<div class="accounts">
-					<a class="accountsText" id="accounts" href="/bankaccount/dashboard">Accounts</a>
+					<a class="accounts" id="accounts" href="/bankaccount/dashboard">Accounts</a>
 				</div>
 				<div class="logout">
 					<a id="logout" href="/logout">Logout</a>
@@ -120,14 +120,14 @@
 			</div>		
 		</div>
 		<script>
-			let menuOpen = false;
-			const sidebar = document.querySelector('.linkContainerSideBar');
-			const mainpage = document.querySelector('.mainPage');
-			const button = document.querySelector('.openSidebar')
-			
-			button.addEventListener('click', () => {menuOpen = !menuOpen;
-			mainpage.style.marginLeft = menuOpen ? '0' : '200px';
-			sidebar.style.width = menuOpen ? '0' : '200px';})
+		let menuOpen = false;
+		const sidebar = document.querySelector('.linkContainerSideBar');
+		const mainpage = document.querySelector('.mainPage');
+		const button = document.querySelector('.openSidebar')
+		
+		button.addEventListener('click', () => {menuOpen = !menuOpen;
+		mainpage.style.marginLeft = menuOpen ? '0' : '200px';
+		sidebar.style.width = menuOpen ? '0' : '200px';})
 			
 			function getBalance(balanceType) {
 		        document.getElementById("balanceType").value = balanceType;

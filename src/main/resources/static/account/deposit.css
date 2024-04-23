@@ -120,6 +120,10 @@ a#cards{
 	padding-top: 5px;
 }
 
+.below-header {
+	animation: transitionIn 0.75s;
+}
+
 .openSidebar{
 	color: white;
 	border:none;

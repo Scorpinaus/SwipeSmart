@@ -38,6 +38,7 @@
               <button class="openSidebar">☰</button>
             </header>
 			
+            <div class="below-header">
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
 			<p id="headerIntro"> This is for you, at a glance: </p>	
 			<h2> Summary</h2>
@@ -97,6 +98,11 @@
 								<p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
 	                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
 							</div>
+                            <div class="details-card-amount">
+                              <label class="detail-label">Amount Left</label>
+                              <p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal((card.cardLimit-card.getAmountUsed),0,'COMMA',2,'POINT')}"></p>
+                                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
+                            </div>
 						</div>
 						<div th:if="${card.getCreditCardStatus.getStatusName != 'Approved'}">
 							<div class="details-card-type">
@@ -124,7 +130,7 @@
                     </div>
                   </div>
 			    </div> -->
-		</div>
+		  </div>
 		</div>
 		<script>
 			let menuOpen = false;

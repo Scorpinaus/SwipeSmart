@@ -121,6 +121,10 @@ a#cards{
 	min-width: 600px;
 }
 
+.below-header {
+	animation: transitionIn 0.75s;
+}
+
 .openSidebar{
 	color: white;
 	border:none;

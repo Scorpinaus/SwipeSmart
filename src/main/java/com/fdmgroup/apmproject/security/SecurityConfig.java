@@ -11,6 +11,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+/**
+ * This class configures the security for the application.
+ * 
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -18,17 +26,32 @@ public class SecurityConfig {
 
 	@Autowired
 	AuthenticationSuccessHandlerSecurity authenticationSuccessHandlerSecurity;
-
+	
+	/**
+     * Creates a BCryptPasswordEncoder bean.
+     *
+     * @return A BCryptPasswordEncoder bean.
+     */
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
+	
+	 /**
+     * Creates a UserDetailsService bean.
+     *
+     * @return A UserDetailsService bean.
+     */
 	@Bean
 	public UserDetailsService getDetailsService() {
 		return new UserSecurityDetailsService();
 	}
-
+	
+	/**
+     * Creates a DaoAuthenticationProvider bean.
+     *
+     * @return A DaoAuthenticationProvider bean.
+     */
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -36,7 +59,14 @@ public class SecurityConfig {
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 		return daoAuthenticationProvider;
 	}
-
+	
+	/**
+     * Creates a SecurityFilterChain bean.
+     *
+     * @param http The HttpSecurity object.
+     * @return A SecurityFilterChain bean.
+     * @throws Exception If an error occurs.
+     */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth

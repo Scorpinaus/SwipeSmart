@@ -146,6 +146,21 @@ public class CreditCardService {
 		String pinPending = "125";
 		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
 				"SwipeSmart Platinum Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
+<<<<<<< HEAD
+=======
+		persist(createCreditCardPending);
+		
+		scheduleInterestCharging();
+	}
+	//Tests not implemented from this line onwards
+	// run this method at the start of every month
+	private long calculateDelayToNextMonth() {
+		LocalDate currentDate = LocalDate.now();
+		LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
+		LocalDateTime nextMonthStartOfDay = nextMonth.atStartOfDay();
+		Duration duration = Duration.between(LocalDateTime.now(), nextMonthStartOfDay);
+		return duration.toMillis();
+>>>>>>> 709fa16f98276995321447e489496ba43fe403e2
 	}
 
 

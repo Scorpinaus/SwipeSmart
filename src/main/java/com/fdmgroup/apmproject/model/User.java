@@ -13,6 +13,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+/**
+ * This class represents a user in the banking system.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Entity
 @Table(name = "listOfUsers")
 public class User {
@@ -38,13 +45,29 @@ public class User {
 
 	@OneToMany(mappedBy = "accountUser", fetch = FetchType.EAGER)
 	private List<Account> accounts = new ArrayList<>();
+	
+	/**
+     * Constructs a new User object with the specified details.
+     *
+     * @param username The username of the user.
+     * @param password The password of the user.
+     */
 
 	public User(String username, String password) {
 		setUsername(username);
 		setPassword(password);
 		setRole("ROLE_USER");
 	}
-
+	
+	/**
+     * Constructs a new User object with the specified details.
+     *
+     * @param username  The username of the user.
+     * @param password  The password of the user.
+     * @param address   The address of the user.
+     * @param firstName The first name of the user.
+     * @param lastName  The last name of the user.
+     */
 	public User(String username, String password, String address, String firstName, String lastName) {
 		setUsername(username);
 		setPassword(password);
@@ -54,85 +77,183 @@ public class User {
 		setRole("ROLE_USER");
 	}
 
-	public User() {
+	/**
+     * Constructs a new User object without any details.
+     */
+    public User() {
 
-	};
+    }
 
-	public long getUserId() {
-		return userId;
-	}
+    /**
+     * Returns the ID of the user.
+     *
+     * @return The user ID.
+     */
+    public long getUserId() {
+        return userId;
+    }
 
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
+    /**
+     * Sets the ID of the user.
+     *
+     * @param userId The user ID to set.
+     */
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    /**
+     * Returns the username of the user.
+     *
+     * @return The username.
+     */
+    public String getUsername() {
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    /**
+     * Sets the username of the user.
+     *
+     * @param username The username to set.
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    /**
+     * Returns the password of the user.
+     *
+     * @return The password.
+     */
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    /**
+     * Sets the password of the user.
+     *
+     * @param password The password to set.
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    /**
+     * Returns the address of the user.
+     *
+     * @return The address.
+     */
+    public String getAddress() {
+        return address;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    /**
+     * Sets the address of the user.
+     *
+     * @param address The address to set.
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    /**
+     * Returns the first name of the user.
+     *
+     * @return The first name.
+     */
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    /**
+     * Sets the first name of the user.
+     *
+     * @param firstName The first name to set.
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    /**
+     * Returns the last name of the user.
+     *
+     * @return The last name.
+     */
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    /**
+     * Sets the last name of the user.
+     *
+     * @param lastName The last name to set.
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public String getRole() {
-		return role;
-	}
+    /**
+     * Returns the role of the user.
+     *
+     * @return The role.
+     */
+    public String getRole() {
+        return role;
+    }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+    /**
+     * Sets the role of the user.
+     *
+     * @param role The role to set.
+     */
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-	public List<CreditCard> getCreditCards() {
-		return creditCards;
-	}
+    /**
+     * Returns the list of credit cards associated with the user.
+     *
+     * @return The list of credit cards.
+     */
+    public List<CreditCard> getCreditCards() {
+        return creditCards;
+    }
 
-	public void setCreditCards(CreditCard creditCard) {
-		this.creditCards.add(creditCard);
-	}
+    /**
+     * Sets the list of credit cards associated with the user.
+     *
+     * @param creditCard The credit card to add.
+     */
+    public void setCreditCards(CreditCard creditCard) {
+        this.creditCards.add(creditCard);
+    }
 
-	public void setCreditCardList(List<CreditCard> creditCards) {
-		this.creditCards = creditCards;
-	}
+    /**
+     * Sets the list of credit cards associated with the user.
+     *
+     * @param creditCards The list of credit cards to set.
+     */
+    public void setCreditCardList(List<CreditCard> creditCards) {
+        this.creditCards = creditCards;
+    }
 
-	public List<Account> getAccounts() {
-		return accounts;
-	}
+    /**
+     * Returns the list of accounts associated with the user.
+     *
+     * @return The list of accounts.
+     */
+    public List<Account> getAccounts() {
+        return accounts;
+    }
 
-	public void setAccounts(Account account) {
-		this.accounts.add(account);
-	}
+    /**
+     * Sets the list of accounts associated with the user.
+     *
+     * @param account The account to add.
+     */
+    public void setAccounts(Account account) {
+        this.accounts.add(account);
+    }
 
 	@Override
 	public String toString() {

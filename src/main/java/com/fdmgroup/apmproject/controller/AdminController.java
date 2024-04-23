@@ -26,6 +26,14 @@ import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * This class is a Spring MVC controller responsible for handling requests related to admin functionalities.
+ * It provides methods for managing user accounts, credit cards, and transactions.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
@@ -43,6 +51,15 @@ public class AdminController {
 
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
+	/**
+	 * This method displays the user's bank accounts and allows the admin to set the
+	 * status of each account.
+	 *
+	 * @param userId  The ID of the user whose accounts are to be displayed.
+	 * @param session The HTTP session object.
+	 * @param model   The model object used to pass data to the view.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/admin/accounts")
 	public String accountPage(@RequestParam("userId") long userId, HttpSession session, Model model) {
 		// add returned user to the model
@@ -54,6 +71,15 @@ public class AdminController {
 		return "admin/admin-account";
 	}
 
+	/**
+	 * This method displays the user's credit cards and allows the admin to set the
+	 * status of each card.
+	 *
+	 * @param userId  The ID of the user whose credit cards are to be displayed.
+	 * @param session The HTTP session object.
+	 * @param model   The model object used to pass data to the view.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/admin/creditcards")
 	public String creditcardPage(@RequestParam("userId") long userId, HttpSession session, Model model) {
 		// add returned user to the model
@@ -65,23 +91,16 @@ public class AdminController {
 
 		model.addAttribute("requiredCreditCards", requiredCreditCards);
 
-//		List<CreditCard> ccList = creditCardService.findAllCreditCards();
-//		
-//		List<Transaction> transactionList = new ArrayList<Transaction>();
-//		for (CreditCard cc : ccList) {
-//			List<Transaction> transaction = cc.getTransactions();
-//			transactionList.addAll(transaction);
-//		}
-//		
-//		model.addAttribute("transactions", transactionList);
-//		
-//		model.addAttribute("user", returnedUser);
-//		
-//		model.addAttribute("creditCards", ccList);
-
 		return "admin/admin-creditcard";
 	}
 
+	/**
+	 * This method displays the admin dashboard.
+	 *
+	 * @param session The HTTP session object.
+	 * @param model   The model object used to pass data to the view.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/admin/dashboard")
 	public String adminDashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");
@@ -90,6 +109,13 @@ public class AdminController {
 		return "admin/admin-dashboard";
 	}
 
+	/**
+	 * This method displays a list of all users.
+	 *
+	 * @param session The HTTP session object.
+	 * @param model   The model object used to pass data to the view.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/admin/users")
 	public String adminUserPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");
@@ -101,44 +127,78 @@ public class AdminController {
 		return "admin/admin-user";
 	}
 
+	/**
+	 * This method sets the status of a bank account.
+	 *
+	 * @param status        The new status of the account.
+	 * @param accountNumber The account number of the account to be updated.
+	 * @param session       The HTTP session object.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/admin/bankaccountStatus")
-	public String setBankAccountStatus(@RequestParam("status") String status,@RequestParam("accountNumber") String accountNumber,HttpSession session) {
-		
+	public String setBankAccountStatus(@RequestParam("status") String status,
+			@RequestParam("accountNumber") String accountNumber, HttpSession session) {
+
 		Account account = accountService.findAccountByAccountNumber(accountNumber);
 
 		account.setAccountStatus(statusService.findByStatusName(status));
 		accountService.update(account);
-		
-		LOGGER.info("Account Id: " +account.getAccountId()+ "'s status has been setted to " + status +" by " + ((User) session.getAttribute("loggedUser")).getUsername() );
-		long userId = account.getAccountUser().getUserId();
-		return "redirect:/admin/accounts?userId=" +userId;
-	}
-	
 
+		LOGGER.info("Account Id: " + account.getAccountId() + "'s status has been setted to " + status + " by "
+				+ ((User) session.getAttribute("loggedUser")).getUsername());
+		long userId = account.getAccountUser().getUserId();
+		return "redirect:/admin/accounts?userId=" + userId;
+	}
+
+	/**
+	 * This method approves a credit card.
+	 *
+	 * @param creditCardNumber The credit card number of the card to be approved.
+	 * @param session          The HTTP session object.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/admin/credicardApproval")
-	public String approveCredicard(@RequestParam("creditCardNumber") String creditCardNumber,HttpSession session) {
-		
+	public String approveCredicard(@RequestParam("creditCardNumber") String creditCardNumber, HttpSession session) {
+
 		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
 
 		creditCard.setCreditCardStatus(statusService.findByStatusName("Approved"));
 		creditCardService.update(creditCard);
-		LOGGER.info("creditcard Id: " +creditCard.getCreditCardId()+ " has been approved by " + ((User) session.getAttribute("loggedUser")).getUsername() );
+		LOGGER.info("creditcard Id: " + creditCard.getCreditCardId() + " has been approved by "
+				+ ((User) session.getAttribute("loggedUser")).getUsername());
 		long userId = creditCard.getCreditCardUser().getUserId();
-		return "redirect:/admin/creditcards?userId=" +userId;
+		return "redirect:/admin/creditcards?userId=" + userId;
 	}
 	
+	/**
+	 * This method sets the status of a credit card.
+	 *
+	 * @param status The new status of the credit card.
+	 * @param creditCardNumber The credit card number of the card to be updated.
+	 * @param session The HTTP session object.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/admin/credicardStatus")
-	public String setCredicardStatus(@RequestParam("status") String status,@RequestParam("creditCardNumber") String creditCardNumber,HttpSession session) {
-		
+	public String setCredicardStatus(@RequestParam("status") String status,
+			@RequestParam("creditCardNumber") String creditCardNumber, HttpSession session) {
+
 		CreditCard creditCard = creditCardService.findByCreditCardNumber(creditCardNumber);
 
 		creditCard.setCreditCardStatus(statusService.findByStatusName(status));
 		creditCardService.update(creditCard);
-		LOGGER.info("creditcard Id: " +creditCard.getCreditCardId()+  "'s status has been setted to " + status +" by " + ((User) session.getAttribute("loggedUser")).getUsername() );
+		LOGGER.info("creditcard Id: " + creditCard.getCreditCardId() + "'s status has been setted to " + status + " by "
+				+ ((User) session.getAttribute("loggedUser")).getUsername());
 		long userId = creditCard.getCreditCardUser().getUserId();
-		return "redirect:/admin/creditcards?userId=" +userId;
+		return "redirect:/admin/creditcards?userId=" + userId;
 	}
-
+	
+	/**
+	 * This method displays a list of all transactions.
+	 *
+	 * @param session The HTTP session object.
+	 * @param model The model object used to pass data to the view.
+	 * @return The name of the view to render.
+	 */
 	@GetMapping("/admin/transactions")
 	public String transactionPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");
@@ -159,7 +219,18 @@ public class AdminController {
 		model.addAttribute("users", userList);
 		return "admin/admin-transactions";
 	}
-
+	
+	
+	/**
+	 * This method filters and displays transactions based on the selected month, user, and type.
+	 *
+	 * @param month The month for which transactions are to be displayed.
+	 * @param pickedUser The username of the user whose transactions are to be displayed.
+	 * @param pickedType The type of transaction to be displayed (card or account).
+	 * @param model The model object used to pass data to the view.
+	 * @param session The HTTP session object.
+	 * @return The name of the view to render.
+	 */
 	@PostMapping("/admin/transactions")
 	public String adminViewAllTransactions(@RequestParam(name = "month", required = false) String month,
 			@RequestParam(name = "pickedUser", required = false) String pickedUser,
@@ -316,7 +387,5 @@ public class AdminController {
 		model.addAttribute("transactions", transactions);
 		return "admin-transactions";
 	}
-
-	
 
 }

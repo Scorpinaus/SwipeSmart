@@ -13,6 +13,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+/**
+ * This class represents a status in the banking system.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Entity
 @Table(name = "listOfStatuses")
 public class Status {
@@ -29,45 +36,92 @@ public class Status {
 	@OneToMany(mappedBy = "creditCardStatus", fetch = FetchType.EAGER)
 	private List<CreditCard> creditCards = new ArrayList<>();
 	
-	public Status() {} ;
-	
-	public Status(String statusName) {
-		setStatusName(statusName);
-	}
-	
-	// getters and setters
-	public int getStatusId() {
-		return statusId;
-	}
+	/**
+     * Constructs a new Status object with the specified details.
+     */
+    public Status() {
+    }
 
-	public void setStatusId(int statusId) {
-		this.statusId = statusId;
-	}
+    /**
+     * Constructs a new Status object with the specified details.
+     *
+     * @param statusName The name of the status.
+     */
+    public Status(String statusName) {
+        setStatusName(statusName);
+    }
 
-	public String getStatusName() {
-		return statusName;
-	}
+    /**
+     * Returns the ID of the status.
+     *
+     * @return The status ID.
+     */
+    public int getStatusId() {
+        return statusId;
+    }
 
-	public void setStatusName(String statusName) {
-		this.statusName = statusName;
-	}
+    /**
+     * Sets the ID of the status.
+     *
+     * @param statusId The status ID to set.
+     */
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
+    }
 
-	public List<Account> getAccounts() {
-		return accounts;
-	}
+    /**
+     * Returns the name of the status.
+     *
+     * @return The status name.
+     */
+    public String getStatusName() {
+        return statusName;
+    }
 
-	public void setAccounts(Account account) {
-		this.accounts.add(account);
-	}
+    /**
+     * Sets the name of the status.
+     *
+     * @param statusName The status name to set.
+     */
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
 
-	public List<CreditCard> getCreditCards() {
-		return creditCards;
-	}
+    /**
+     * Returns the list of accounts associated with the status.
+     *
+     * @return The list of accounts.
+     */
+    public List<Account> getAccounts() {
+        return accounts;
+    }
 
-	public void setCreditCards(CreditCard creditCard) {
-		this.creditCards.add(creditCard);
-	}
+    /**
+     * Sets the list of accounts associated with the status.
+     *
+     * @param account The account to add.
+     */
+    public void setAccounts(Account account) {
+        this.accounts.add(account);
+    }
 
+    /**
+     * Returns the list of credit cards associated with the status.
+     *
+     * @return The list of credit cards.
+     */
+    public List<CreditCard> getCreditCards() {
+        return creditCards;
+    }
+
+    /**
+     * Sets the list of credit cards associated with the status.
+     *
+     * @param creditCard The credit card to add.
+     */
+    public void setCreditCards(CreditCard creditCard) {
+        this.creditCards.add(creditCard);
+    }
 	@Override
 	public String toString() {
 		return "Status [statusId=" + statusId + ", statusName=" + statusName + "]";

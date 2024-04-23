@@ -18,6 +18,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+
+/**
+ * This class represents an account in the banking system.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Entity
 @Table(name = "listOfAccounts")
 public class Account {
@@ -59,10 +67,22 @@ public class Account {
 
 	@OneToMany(mappedBy = "transactionAccount", fetch = FetchType.EAGER)
 	private List<Transaction> transactions = new ArrayList<>();
-
+	
+    /**
+     * Constructs a new Account object with the specified details.
+     */
 	public Account() {
 	};
-
+	
+    /**
+     * Constructs a new Account object with the specified details.
+     *
+     * @param accountName The name of the account.
+     * @param balance The initial balance of the account.
+     * @param accountNumber The account number.
+     * @param accountUser The user associated with the account.
+     * @param accountStatus The status of the account.
+     */
 	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus) {
 		setAccountName(accountName);
 		setBalance(balance);
@@ -70,7 +90,17 @@ public class Account {
 		setAccountUser(accountUser);
 		setAccountStatus(accountStatus);
 	}
-
+	
+    /**
+     * Constructs a new Account object with the specified details.
+     *
+     * @param accountName The name of the account.
+     * @param balance The initial balance of the account.
+     * @param accountNumber The account number.
+     * @param accountUser The user associated with the account.
+     * @param accountStatus The status of the account.
+     * @param currencyCode The currency code of the account.
+     */
 	public Account(String accountName, double balance, String accountNumber, User accountUser, Status accountStatus,
 			String currencyCode) {
 		setAccountName(accountName);

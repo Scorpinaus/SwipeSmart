@@ -1,6 +1,7 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +33,14 @@ import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * This class is a Spring MVC controller responsible for handling requests related to credit cards.
+ * It provides methods for viewing, applying, and paying bills for credit cards.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Controller
 public class CreditCardController {
 
@@ -72,7 +81,14 @@ public class CreditCardController {
 		this.merchantCategoryCodeService = merchantCategoryCodeService;
 		this.transactionService = transactionService;
 	}
-
+	
+	/**
+     * This method displays a list of credit cards associated with the logged-in user.
+     *
+     * @param model  The model to be used for rendering the view.
+     * @param session The HTTP session containing the logged-in user information.
+     * @return The name of the view to be rendered.
+     */
 	@GetMapping("/userCards")
 	public String viewCreditCards(Model model, HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
@@ -89,7 +105,14 @@ public class CreditCardController {
 		}
 
 	}
-
+	
+	 /**
+     * This method displays a form for applying for a new credit card.
+     *
+     * @param model  The model to be used for rendering the view.
+     * @param session The HTTP session containing the logged-in user information.
+     * @return The name of the view to be rendered.
+     */
 	@GetMapping("/applyCreditCard")
 	public String applyCreditCard(Model model, HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
@@ -100,7 +123,16 @@ public class CreditCardController {
 			return "apply-credit-card";
 		}
 	}
-
+	
+	/**
+     * This method handles the submission of a credit card application form.
+     *
+     * @param model        The model to be used for rendering the view.
+     * @param session      The HTTP session containing the logged-in user information.
+     * @param monthlySalary The applicant's monthly salary.
+     * @param cardType     The type of credit card being applied for.
+     * @return The name of the view to be rendered.
+     */
 	@PostMapping("/applyCreditCard")
 	public String applyCreditCard(Model model, HttpSession session, @RequestParam String monthlySalary,
 			@RequestParam String cardType) {
@@ -119,15 +151,12 @@ public class CreditCardController {
 				String creditCardNumber = creditCardService.generateCreditCardNumber();
 				String pin = creditCardService.generatePinNumber();
 				double cardLimit = Double.parseDouble(monthlySalary) * 3;
-				// Default approved
+				
 
 				ForeignExchangeCurrency localCurrency = currencyService.getCurrencyByCode("SGD");
 
 				// set credit card as pending when they apply for the card
 				Status statusName = statusService.findByStatusName("Pending");
-
-//				//set credit card as Approved when they apply for the card
-//				Status statusName = statusService.findByStatusName("Approved");
 
 				CreditCard createCreditCard = new CreditCard(creditCardNumber, pin, cardLimit, cardType, statusName, 0,
 						loggedUser, localCurrency.getCode());
@@ -140,7 +169,14 @@ public class CreditCardController {
 			}
 		}
 	}
-
+     
+	 /**
+	  * This method displays a form for paying bills using a credit card.
+	  *
+	  * @param model  The model to be used for rendering the view.
+	  * @param session The HTTP session containing the logged-in user information.
+	  * @return The name of the view to be rendered.
+	  */
 	@GetMapping("/creditCard/paybills")
 	public String paybills(Model model, HttpSession session) {
 		if (session != null && session.getAttribute("loggedUser") != null) {
@@ -164,7 +200,18 @@ public class CreditCardController {
 			return "login";
 		}
 	}
-
+	
+	 /**
+     * This method handles the submission of a bill payment form.
+     *
+     * @param model          The model to be used for rendering the view.
+     * @param session        The HTTP session containing the logged-in user information.
+     * @param creditCardId   The ID of the credit card being used for payment.
+     * @param paymentAmount  The amount of the payment.
+     * @param balanceType    The type of balance being paid (custom, minimum, statement, current).
+     * @param redirectAttributes The redirect attributes to be used for passing data to the redirect.
+     * @return The name of the view to be rendered.
+     */
 	@PostMapping("/creditCard/paybills")
 	public String makeCcbills(Model model, HttpSession session, @RequestParam("creditCardId") Long creditCardId,
 			@RequestParam(name = "payment", required = false) Double paymentAmount,

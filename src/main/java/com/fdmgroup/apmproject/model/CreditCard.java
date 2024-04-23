@@ -53,8 +53,8 @@ public class CreditCard {
 	@Column(name = "Currency Code")
 	private String currencyCode;
 	
-	@Column(name = "Mininum Balance Paid?")
-	private int minBalancePaid;
+	@Column(name = "Mininum Balance Sum")
+	private double minBalancePaid;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -222,12 +222,12 @@ public class CreditCard {
 	}
 		
 	
-	public int getMinBalancePaid() {
+	public double getMinBalancePaid() {
 		return minBalancePaid;
 	}
 
-	public void setMinBalancePaid(int minBalancePaid) {
-		this.minBalancePaid = minBalancePaid;
+	public void setMinBalancePaid(double d) {
+		this.minBalancePaid = d;
 	}
 
 	// Add balance when transactions are made

@@ -143,10 +143,11 @@ public class PurchaseController {
 				
 				//Jacky!!!!!! 
 				//record transaction
-				Transaction transaction = new Transaction("CC Payment",request.getAmount(),null,0,creditCard,accountService.findAccountByAccountNumber(request.getAccountNumber()),transactionMerchantCategoryCode.get(),foreignExchangeCurrency);
+				Transaction transaction = new Transaction("CC Purchase",request.getAmount(),null,0,creditCard,accountService.findAccountByAccountNumber(request.getAccountNumber()),transactionMerchantCategoryCode.get(),foreignExchangeCurrency);
+				transaction.setCreditCardDescription(request.getDescription(), exchangeRate.doubleValue());
 				transactionService.persist(transaction);
 				
-				
+
 				//update creditcard and account
 				purchaseService.purchase(request);
 						

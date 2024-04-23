@@ -1,12 +1,16 @@
 package com.fdmgroup.apmproject.service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +34,7 @@ public class TransactionService {
 
 	@Autowired
 	private CreditCardService creditCardService;
-	
+
 	@Autowired
 	private AccountService accountService;
 
@@ -42,6 +46,8 @@ public class TransactionService {
 
 	@Autowired
 	private StatusService statusService;
+	
+	private static final long ONE_MONTH_IN_MILLISECONDS = TimeUnit.DAYS.toMillis(30);
 
 	private static Logger logger = LogManager.getLogger(TransactionService.class);
 
@@ -118,9 +124,7 @@ public class TransactionService {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
 			creditCard.addTransaction(-transaction.getTransactionAmount());
 			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
-			if (transaction.getTransactionAmount() >= 50 || transaction.getTransactionAmount() == creditCard.getMonthlyBalance()) {
-				creditCard.setMinBalancePaid(1);
-			}
+			creditCard.setMinBalancePaid(creditCard.getMinBalancePaid() - transaction.getTransactionAmount());
 			creditCardService.update(creditCard);
 		}
 	}
@@ -186,14 +190,14 @@ public class TransactionService {
 			}
 		}
 	}
-	
+
 	public void chargeMinimumBalanceFee(List<CreditCard> approvedCreditCards) {
 		MerchantCategoryCode mcc4 = merchantCategoryCodeService.findByMerchantCategory("Interest");
 		ForeignExchangeCurrency currency = currencyService.getCurrencyByCode("SGD");
 		for (CreditCard creditCard : approvedCreditCards) {
-			if (creditCard.getMinBalancePaid() == 0) {
-				Transaction transaction = new Transaction(LocalDateTime.now(), "CC Purchase", 100,
-						null, 0.00, creditCard, null, mcc4, currency);
+			if (creditCard.getMinBalancePaid() > 0) {
+				Transaction transaction = new Transaction(LocalDateTime.now(), "CC Purchase", 100, null, 0.00,
+						creditCard, null, mcc4, currency);
 				transaction.setDescription("Unpaid Minimum Balance Fee");
 				persist(transaction);
 				updateCreditCardBalance(transaction);
@@ -201,10 +205,43 @@ public class TransactionService {
 		}
 	}
 
+	// Tests not implemented from this line onwards
+	// run this method at the start of every month
+	private long calculateDelayToNextMonth() {
+			LocalDate currentDate = LocalDate.now();
+			LocalDate nextMonth = currentDate.plusMonths(1).withDayOfMonth(1);
+			LocalDateTime nextMonthStartOfDay = nextMonth.atStartOfDay();
+			Duration duration = Duration.between(LocalDateTime.now(), nextMonthStartOfDay);
+			return duration.toMillis();
+	}
+	
+	public void scheduleInterestCharging() {
+		Timer timer = new Timer();
+
+		// Calculate the delay until the next 1st day of the month
+		long delay = calculateDelayToNextMonth();
+
+		// Schedule the task to run every month, starting from the next 1st day of the
+		// month
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Status statusName = statusService.findByStatusName("Approved");
+				List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
+				creditCardService.calculateMonthlyBalance(approvedCreditCards);
+				creditCardService.chargeInterest(approvedCreditCards);
+				chargeMinimumBalanceFee(approvedCreditCards);
+				creditCardService.calculateMinimumBalance(approvedCreditCards);
+			}
+		}, delay, ONE_MONTH_IN_MILLISECONDS);
+	}
+
 	@PostConstruct
 	public void initTransactions() {
 		CreditCard creditCard = creditCardService.findByCreditCardNumber("1234-5678-1234-5678");
 		CreditCard creditCard2 = creditCardService.findByCreditCardNumber("2345-5678-2398-5128");
+		creditCard.setMinBalancePaid(50);
+		creditCard2.setMinBalancePaid(50);
 		MerchantCategoryCode mcc = merchantCategoryCodeService.findByMerchantCategory("Dining");
 		MerchantCategoryCode mcc1 = merchantCategoryCodeService.findByMerchantCategory("Shopping");
 		MerchantCategoryCode mcc2 = merchantCategoryCodeService.findByMerchantCategory("Travel");
@@ -220,27 +257,30 @@ public class TransactionService {
 				0.00, creditCard, null, mcc1, currencyUSD);
 		Transaction transaction3 = new Transaction(LocalDateTime.of(2024, 3, 28, 11, 33, 56), "CC Purchase", 50, null,
 				0.00, creditCard, null, mcc2, currency);
-		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Purchase", 150.10, null,
-				0.00, creditCard, null, mcc2, currencyUSD);
+		Transaction transaction4 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Purchase", 150.10,
+				null, 0.00, creditCard, null, mcc2, currencyUSD);
 		Transaction transaction5 = new Transaction(LocalDateTime.of(2024, 2, 12, 11, 33, 56), "CC Purchase", 20, null,
 				0.00, creditCard, null, mcc, currency);
-		Transaction transaction6 = new Transaction(LocalDateTime.of(2024, 2, 13, 11, 33, 56), "CC Payment", 20,
-				null, 0.00, creditCard, null, mcc3, currency);
-		Transaction transaction7 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 33, 56), "CC Payment", 100,
-				null, 0.00, creditCard, null, mcc3, currency);
-		Transaction transaction8 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Purchase", 1100.10, null,
-				0.00, creditCard2, null, mcc1, currency);
-		Transaction transaction9 = new Transaction(LocalDateTime.of(2024, 2, 9, 11, 33, 56), "CC Purchase", 100.10, null,
-				0.00, creditCard2, null, mcc2, currency);
-		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Purchase", 100.10, null,
-				0.00, creditCard2, null, mcc2, currency);
+		Transaction transaction6 = new Transaction(LocalDateTime.of(2024, 2, 13, 11, 33, 56), "CC Payment", 20, null,
+				0.00, creditCard, null, mcc3, currency);
+		Transaction transaction7 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 33, 56), "CC Payment", 100, null,
+				0.00, creditCard, null, mcc3, currency);
+		Transaction transaction8 = new Transaction(LocalDateTime.of(2024, 3, 9, 11, 33, 56), "CC Purchase", 1100.10,
+				null, 0.00, creditCard2, null, mcc1, currency);
+		Transaction transaction9 = new Transaction(LocalDateTime.of(2024, 2, 9, 11, 33, 56), "CC Purchase", 100.10,
+				null, 0.00, creditCard2, null, mcc2, currency);
+		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Purchase", 100.10,
+				null, 0.00, creditCard2, null, mcc2, currency);
 		Account account1 = accountService.findAccountByAccountNumber("123-123-123");
 		Account account2 = accountService.findAccountByAccountNumber("124-124-124");
-		Transaction transactionA1 = new Transaction("Initial Deposit", account1, account1.getBalance(), null, currency, currency.getCode() + " " + account1.getBalance());
-		Transaction transactionA2 = new Transaction("Initial Deposit", account2, account2.getBalance(), null, currency, currency.getCode() + " " + account2.getBalance());
+		Transaction transactionA1 = new Transaction("Initial Deposit", account1, account1.getBalance(), null, currency,
+				currency.getCode() + " " + account1.getBalance());
+		Transaction transactionA2 = new Transaction("Initial Deposit", account2, account2.getBalance(), null, currency,
+				currency.getCode() + " " + account2.getBalance());
 		persist(transactionA1);
 		persist(transactionA2);
-		Double exchangeRateUSD = currencyService.getExchangeRate(currencyUSD.getCode(), currency.getCode()).doubleValue();
+		Double exchangeRateUSD = currencyService.getExchangeRate(currencyUSD.getCode(), currency.getCode())
+				.doubleValue();
 		transaction.setCreditCardDescription("Astons", 1);
 		transaction1.setCreditCardDescription("Kopitiam", 1);
 		transaction2.setCreditCardDescription("Amzaon", exchangeRateUSD);
@@ -250,19 +290,22 @@ public class TransactionService {
 		transaction8.setCreditCardDescription("Hermes", 1);
 		transaction5.setCreditCardDescription("SIA", 1);
 		transaction5.setCreditCardDescription("SCOOT", 1);
-		
-		Transaction[] transactions = { transaction, transaction1, transaction2, transaction3, transaction4, 
-                transaction5, transaction6, transaction7, transaction8, transaction9,
-                transaction10 };
+
+		Transaction[] transactions = { transaction, transaction1, transaction2, transaction3, transaction4,
+				transaction5, transaction6, transaction7, transaction8, transaction9, transaction10 };
 		for (Transaction t : transactions) {
-				persist(t);
-				updateCreditCardBalance(t);
+			persist(t);
+			updateCreditCardBalance(t);
 		}
 		List<CreditCard> approvedCreditCards = creditCardService.findCreditCardsByStatus(statusName);
+		chargeMinimumBalanceFee(approvedCreditCards);
 		creditCardService.calculateMonthlyBalance(approvedCreditCards);
 		creditCardService.chargeInterest(approvedCreditCards);
 		updateInterest(approvedCreditCards);
-		chargeMinimumBalanceFee(approvedCreditCards);
+		
+		
+		
+		
 	}
 
 }

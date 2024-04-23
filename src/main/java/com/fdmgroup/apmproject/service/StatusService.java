@@ -16,8 +16,9 @@ import jakarta.annotation.PostConstruct;
 public class StatusService {
 	@Autowired
 	private StatusRepository statusRepo;
-	
+
 	private static Logger logger = LogManager.getLogger(StatusService.class);
+<<<<<<< HEAD
 	
 	public StatusService(StatusRepository statusRepo) {
 		this.statusRepo = statusRepo;
@@ -32,6 +33,9 @@ public class StatusService {
 	@see StatusRepository#findById(Object) findById
 	@see StatusRepository#save(Object) save
 	*/
+=======
+
+>>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public void persist(Status status) {
 		Optional<Status> returnedStatus = statusRepo.findById(status.getStatusId());
 		if (returnedStatus.isEmpty()) {
@@ -41,6 +45,7 @@ public class StatusService {
 			logger.warn("Status already exists");
 		}
 	}
+<<<<<<< HEAD
 	
 	/**
 	Updates a Status object in the database if it already exists.
@@ -51,6 +56,9 @@ public class StatusService {
 	@see StatusRepository#findById(Object) findById
 	@see StatusRepository#save(Object) save
 	*/
+=======
+
+>>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public void update(Status status) {
 		Optional<Status> returnedStatus = statusRepo.findById(status.getStatusId());
 		if (returnedStatus.isEmpty()) {
@@ -60,6 +68,7 @@ public class StatusService {
 			logger.info("Status successfully updated");
 		}
 	}
+<<<<<<< HEAD
 	
 	/**
 	Finds and retrieves a Status object by its ID from the database.
@@ -69,6 +78,9 @@ public class StatusService {
 	@return The Status object with the specified ID if found, otherwise null.
 	@see StatusRepository#findById(Object) findById
 	*/
+=======
+
+>>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public Status findById(int statusId) {
 		Optional<Status> returnedStatus = statusRepo.findById(statusId);
 		if (returnedStatus.isEmpty()) {
@@ -79,7 +91,7 @@ public class StatusService {
 			return returnedStatus.get();
 		}
 	}
-	
+
 	public Status findByStatusName(String statusName) {
 		Optional<Status> returnedStatus = statusRepo.findByStatusName(statusName);
 		if (returnedStatus.isEmpty()) {
@@ -90,7 +102,7 @@ public class StatusService {
 			return returnedStatus.get();
 		}
 	}
-	
+
 	public void deleteById(int statusId) {
 		Optional<Status> returnedStatus = statusRepo.findById(statusId);
 		if (returnedStatus.isEmpty()) {
@@ -100,13 +112,13 @@ public class StatusService {
 			logger.info("Status deleted from Database");
 		}
 	}
-	
+
 	@PostConstruct
 	public void initStatus() {
 		Status status = new Status("Pending");
 		Status status2 = new Status("Approved");
 		Status status3 = new Status("Disabled");
-		
+
 		persist(status);
 		persist(status2);
 		persist(status3);

@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
 /**
  * This class handles successful authentication events.
  * 
- * @author Bard
+ * @author 
  * @version 1.0
  * @since 2024-04-22
  */

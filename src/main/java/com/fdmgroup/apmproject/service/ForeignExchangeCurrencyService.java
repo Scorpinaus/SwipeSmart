@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +51,7 @@ public class ForeignExchangeCurrencyService {
 
 	private static final String URL = "http://www.floatrates.com/daily/usd.json";
 
+<<<<<<< HEAD
 	public ForeignExchangeCurrencyService(ForeignExchangeCurrencyRepository currencyRepo) {
 		this.currencyRepo = currencyRepo;
 	}
@@ -67,6 +67,8 @@ public class ForeignExchangeCurrencyService {
 	 * @see CurrencyRepo#findById(Object) Method to check if a foreign exchange currency already exists.
 	 * @see CurrencyRepo#save(Object) Method to save a new foreign exchange currency into the database.
 	 */
+=======
+>>>>>>> f356b6ac136e76d59e23c119c25e997a4dd83d0d
 	public void persist(ForeignExchangeCurrency foreignExchangeCurrency) {
 		Optional<ForeignExchangeCurrency> returnedCurrency = currencyRepo
 				.findById(foreignExchangeCurrency.getCurrencyId());
@@ -342,8 +344,8 @@ public class ForeignExchangeCurrencyService {
 		ResponseEntity<Map<String, ForeignExchangeCurrency>> response;
 		try {
 			response = restTemplate.exchange(URL, HttpMethod.GET, null,
-				new ParameterizedTypeReference<Map<String, ForeignExchangeCurrency>>() {
-				});
+					new ParameterizedTypeReference<Map<String, ForeignExchangeCurrency>>() {
+					});
 			if (response.getBody() == null) {
 				throw new Exception("Failed to fetch data: No data received");
 			}
@@ -351,7 +353,7 @@ public class ForeignExchangeCurrencyService {
 			logger.warn("Error fetching currency data: " + e.getMessage());
 			return;
 		}
-		
+
 		Map<String, ForeignExchangeCurrency> foreignCurrencies = response.getBody();
 		logger.info("Foreign Currencies Object ready for fetching");
 

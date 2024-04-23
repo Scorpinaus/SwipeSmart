@@ -50,4 +50,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByTransactionAccountOrRecipientAccount(Account transactionAccount, Account recipientAccount);
     
     List<Transaction> findByTransactionDateBeforeAndTransactionCreditCard(LocalDateTime date, CreditCard creditCard);
+    
+    List<Transaction> findByTransactionCreditCard(CreditCard creditCard);
+    
 }

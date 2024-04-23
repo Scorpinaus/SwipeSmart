@@ -23,6 +23,7 @@ import com.fdmgroup.apmproject.service.AccountService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.StatusService;
 import com.fdmgroup.apmproject.service.TransactionService;
+import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -50,15 +51,14 @@ public class AccountController {
 
 	@Autowired
 	private TransactionService transactionService;
+	
+	@Autowired
+	private UserService userService;
 
 	private static final Logger LOGGER = LogManager.getLogger(AccountController.class);
 
 	private final int LEASTINITIALDEPOSIT = 5000;
 	private List<ForeignExchangeCurrency> currenciesList;
-
-	public AccountController(AccountService accountService) {
-		this.accountService = accountService;
-	}
 
 	/**
 	 * This method retrieves the logged-in user's bank accounts and displays them on
@@ -70,9 +70,6 @@ public class AccountController {
 	 */
 	@GetMapping("/bankaccount/dashboard")
 	public String showBankAccountDashboard(HttpSession session, Model model) {
-		// Checks for null session and if there are active logged-on users. If not
-		// logged-on, user will be redirected to log-in page.
-		if (session != null && session.getAttribute("loggedUser") != null) {
 
 			// retrieves current user from current session and addAttribute to model for
 			// front-end processing.
@@ -91,9 +88,6 @@ public class AccountController {
 				model.addAttribute("currentUserBankAccounts", userBankAccounts);
 				return "account/account-dashboard";
 			}
-		} else {
-			return "redirect:/login";
-		}
 	}
 
 	/**
@@ -108,11 +102,7 @@ public class AccountController {
 	 */
 	@GetMapping("/bankaccount/withdrawal")
 	public String withdrawalBankAccount(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-
-		// Checks for null session and if there are active logged-on users. If not
-		// logged-on, user will be redirected to log-in page.
-		if (session != null && session.getAttribute("loggedUser") != null) {
-
+		
 			// retrieves current user from current session and addAttribute to model for
 			// front-end processing. Gets list of accounts & checks for created accounts &
 			// gets supported currencies list.
@@ -141,9 +131,6 @@ public class AccountController {
 				model.addAttribute("errorInsufficient", true);
 			}
 			return "account/withdrawal";
-		} else {
-			return "redirect:/login";
-		}
 
 	}
 
@@ -164,9 +151,7 @@ public class AccountController {
 			@RequestParam("currency") String withdrawalCurrencyCode, @RequestParam BigDecimal amount,
 			HttpSession session, RedirectAttributes redirectAttributes) {
 		// Checks if user is logged on, if not user will be brought to login page.
-		if (session.getAttribute("loggedUser") == null) {
-			return "redirect:/login";
-		}
+		User currentUser = (User) session.getAttribute("loggedUser");
 
 		// Retrieve currentUser and selectedAccount for withdrawal
 		Account retrievedAccount = accountService.findById(accountId);
@@ -202,6 +187,8 @@ public class AccountController {
 		transactionService.persist(transaction);
 		retrievedAccount.setTransactions(transaction);
 		accountService.update(retrievedAccount);
+		currentUser.setAccountList(accountService.findAllAccountsByUserId(currentUser.getUserId()));
+		userService.update(currentUser);
 		return "redirect:/bankaccount/dashboard";
 	}
 
@@ -249,6 +236,7 @@ public class AccountController {
 
 		// get the required account
 		Account accountDeposited = accountService.findById(accountId);
+		User currentUser = accountDeposited.getAccountUser();
 		ForeignExchangeCurrency accountCurrency = currencyService.getCurrencyByCode(accountDeposited.getCurrencyCode());
 
 		// Get the exchange rate and the converted amount after exchange
@@ -270,6 +258,8 @@ public class AccountController {
 				currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + depositAmount);
 
 		transactionService.persist(transaction);
+		currentUser.setAccountList(accountService.findAllAccountsByUserId(currentUser.getUserId()));
+		userService.update(currentUser);
 		accountDeposited.setTransactions(transaction);
 		accountService.update(accountDeposited);
 		return "redirect:/bankaccount/dashboard";
@@ -340,6 +330,8 @@ public class AccountController {
 			Transaction transaction = new Transaction("Initial Deposit", accountCreated, initialDeposit, null,
 					localCurrency, localCurrency.getCode() + " " + initialDeposit);
 			transactionService.persist(transaction);
+			currentUser.setAccountList(accountService.findAllAccountsByUserId(currentUser.getUserId()));
+			userService.update(currentUser);
 			LOGGER.info("Bank account number " + accountCreated.getAccountNumber() + "created");
 			return "redirect:/bankaccount/dashboard";
 		}
@@ -441,6 +433,9 @@ public class AccountController {
 				// Update internal account for both recipient and originalAccount
 				recipientAccount.get().setBalance(recipientAccount.get().getBalance() + convertedAmount);
 				accountService.update(recipientAccount.get());
+				
+				//Retrieve relevant userAccounts
+				User transfereeUser = accountFromBalance.getAccountUser();
 
 				// Transaction
 				// double cashback = 0;
@@ -461,6 +456,8 @@ public class AccountController {
 				// Creating both transactions onto database and logging.
 				transactionService.persist(internalTransactionOutflow);
 				transactionService.persist(internalTransactionInflow);
+				transfereeUser.setAccountList(accountService.findAllAccountsByUserId(transfereeUser.getUserId()));
+				userService.update(transfereeUser);
 				LOGGER.info("Internal Transfer Success!");
 				return "redirect:/bankaccount/dashboard";
 			} else {
@@ -468,14 +465,16 @@ public class AccountController {
 				// update the transferee accounts' balance on database
 				accountFromBalance.setBalance(accountFromBalance.getBalance() - convertedAmount);
 				accountService.update(accountFromBalance);
+				User transfereeUser = accountFromBalance.getAccountUser();
 
 				// Create transaction for transferee account and persisting it to database. Logs
 				// transaction.
-//					double cashback = 0;
 				Transaction externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
 						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode),
 						currencyCode + " " + transferAmount);
 				transactionService.persist(externalTransactionOutflow);
+				transfereeUser.setAccountList(accountService.findAllAccountsByUserId(transfereeUser.getUserId()));
+				userService.update(transfereeUser);
 				LOGGER.info("External Transfer Success!");
 				return "redirect:/bankaccount/dashboard";
 			}

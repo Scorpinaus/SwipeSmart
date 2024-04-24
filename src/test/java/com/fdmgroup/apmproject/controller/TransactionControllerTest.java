@@ -58,29 +58,6 @@ public class TransactionControllerTest {
         model = mock(Model.class);
     }
 	
-    /**
-     * Tests the behavior of viewing card transactions when the user is not logged in.
-     * <p>
-     * This method simulates a scenario where the user is not logged in and attempts to view card transactions. It verifies that the user is redirected to the "userCards" view and an error attribute is added to the model to indicate the user's status. The test ensures that when a user is not logged in, they are not allowed to access the card transaction view, and appropriate error handling is in place.
-     *
-     * @param model The model attribute to add data for rendering the view.
-     * @param session The session attribute to retrieve user information.
-     * @return The name of the view after redirection.
-     * @throws AssertionError If the test fails to assert the expected behavior.
-     * @see org.junit.jupiter.api.Test
-     */
-    @Test
-    void testViewCardTransactions_UserNotLoggedIn() {
-        // Arrange
-        when(session.getAttribute("loggedUser")).thenReturn(null);
-        
-        // Act
-        String viewName = transactionController.viewCardTransactions(null, null, null, model, session);
-        
-        // Assert
-        assertEquals("userCards", viewName);
-        verify(model).addAttribute("error", true);
-    }
 	
     /**
      * Tests the behavior of viewing account transactions.

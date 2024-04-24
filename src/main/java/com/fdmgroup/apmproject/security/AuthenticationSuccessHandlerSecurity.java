@@ -64,8 +64,6 @@ public class AuthenticationSuccessHandlerSecurity implements AuthenticationSucce
 			logger.info("User has logged in");
 			redirectStrategy.sendRedirect(request, response, "/dashboard");
 		}
-
-		;
 	}
 
 }

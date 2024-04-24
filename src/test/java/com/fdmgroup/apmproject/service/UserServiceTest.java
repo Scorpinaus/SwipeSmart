@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.UserRepository;
-import com.fdmgroup.apmproject.service.UserService;
 
 @SpringBootTest
 class UserServiceTest {

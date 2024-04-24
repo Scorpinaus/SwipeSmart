@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.repository.MerchantCategoryCodeRepository;
-import com.fdmgroup.apmproject.service.MerchantCategoryCodeService;
 
 @SpringBootTest
 class MerchantCategoryCodeServiceTest {

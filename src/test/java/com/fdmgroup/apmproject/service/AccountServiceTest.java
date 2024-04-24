@@ -2,7 +2,6 @@ package com.fdmgroup.apmproject.service;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -126,7 +125,6 @@ public class AccountServiceTest {
 		assertEquals(existingAccount, actualAccount);
 	}
 	
-	@SuppressWarnings("null")
 	@Test
 	@DisplayName("Test for failure to find Bank Account by AccountID")
 	public void testFindAccountByAccountIDTwo() {
@@ -266,7 +264,6 @@ public class AccountServiceTest {
 		//Arrange
 		User currentUser = user;
 		currentUser.setUserId(111L);
-		List<Account> expectedAccounts = currentUser.getAccounts();
 		when(accountRepo.findByAccountUserUserId(currentUser.getUserId())).thenReturn(new ArrayList<>());
 		
 		//Act

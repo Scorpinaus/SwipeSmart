@@ -20,12 +20,26 @@ public class UserTest {
 		user = new User("jackytan", "Qwerty1", "Sentosa", "Jacky", "Tan");
 	}
 	
+	/**
+	 * Tests if the instantiation of the user class results in the same instance.
+	 *
+	 * @return True if the instantiation of the user class results in the same instance, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see User
+	 */
 	@Test
 	@DisplayName("The intansiation of user class is of the same instance")
     public void testEqualsSameInstance() {
         assertTrue(user.equals(user));
     }
 	
+	/**
+	 * Tests if the instantiation of the user class provides the same attribute values.
+	 *
+	 * @return True if the instantiation of the user class provides the same attribute values, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see User
+	 */
 	@Test
 	@DisplayName("The intansiation of user class gives the same attribute values")
     public void testUserValue() {
@@ -52,6 +66,13 @@ public class UserTest {
 		assertEquals(expectedLName, resultLName);
     }
 	
+	/**
+	 * Tests if two objects instantiated with the same arguments are equal to each other.
+	 *
+	 * @return True if two objects instantiated with the same arguments are equal to each other, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see User
+	 */
 	@Test
 	@DisplayName("Two objects instansiated with the same argument are equals to each other")
     public void testEqualsSameFields() {
@@ -59,6 +80,13 @@ public class UserTest {
         assertTrue(user.equals(user1));
     }
 
+	/**
+	 * Tests if two objects instantiated with different arguments are different from each other.
+	 *
+	 * @return True if two objects instantiated with different arguments are different from each other, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see User
+	 */
     @Test
     @DisplayName("Two objects instansiated with different argument are different to each other")
     public void testEquals_DifferentFields() {

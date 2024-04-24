@@ -1,14 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
-
 @keyframes transitionIn {
 	from{
 		opacity:0;
-		transform:rotateX(-10deg);
 	}
 	
 	to {
 		opacity:1;
-		transform:rotateX(0);
 	}
 }
 
@@ -33,9 +30,25 @@
     position: fixed;
 }
 
+#sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarLinks {
+    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+}
+
 .sidebarHeader{
 	display: flex;
 	justify-content: center;
+}
+
+.sidebarHeader img {
+	width: 150px;
 }
 
 p#sidebarHeader{
@@ -43,42 +56,42 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
-.closeSidebar:hover{
-	opacity: 0.5;
-}
-
-.sidebarLinks{
-	padding-left: 20px;
+i {
+	min-width: 25px;
 }
 
 .dashboard{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .profile{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .cards{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .accounts{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 	background-color: white;
-	animation:transitionIn 0.75s;
+	animation: transitionIn 0.75s;
 }
 
 .logout{
@@ -86,6 +99,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-top: auto;
 }
 
 a#dashboard {

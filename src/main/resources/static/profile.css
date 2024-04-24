@@ -1,14 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
-
 @keyframes transitionIn {
 	from{
 		opacity:0;
-		transform:rotateX(-10deg);
 	}
 	
 	to {
 		opacity:1;
-		transform:rotateX(0);
 	}
 }
 
@@ -19,11 +16,6 @@
   --lightgrey:#f2f2f2;
   --lightgreen:#52ab98;
   --fadedgreen:#4F96A9;
-}
-
-body{
-	font-family: "Nunito Sans", sans-serif;
-	min-width: 500px;
 }
 
 .linkContainerSideBar{
@@ -38,9 +30,25 @@ body{
     position: fixed;
 }
 
+#sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarLinks {
+    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+}
+
 .sidebarHeader{
 	display: flex;
 	justify-content: center;
+}
+
+.sidebarHeader img {
+	width: 150px;
 }
 
 p#sidebarHeader{
@@ -48,28 +56,24 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
-.sidebarLinks{
-	padding-left: 20px;
-}
-
-header {
-	background-color: var(--darkgreen);
-	padding-top:0px;
-	margin:0px;
+i {
+	min-width: 25px;
 }
 
 .dashboard{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .profile{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 	background-color: white;
 	animation: transitionIn 0.75s;
 }
@@ -77,15 +81,17 @@ header {
 .cards{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .accounts{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .logout{
@@ -93,10 +99,17 @@ header {
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-top: auto;
 }
 
 a#dashboard {
 	color: white;
+	text-decoration:none;
+	padding: 10px;
+}
+
+a#profile {
+	color: black;
 	text-decoration:none;
 	padding: 10px;
 }
@@ -119,10 +132,38 @@ a#cards{
 	padding: 10px;
 }
 
-a#profile{
-	color: black;
-	text-decoration:none;
+.mainPage{
+	transition: margin-left .5s;
+	margin-left: 200px;
 	padding: 10px;
+	padding-top: 5px;
+	min-width: 600px;
+}
+
+.below-header {
+	animation: transitionIn 0.75s;
+}
+
+.openSidebar{
+	color: white;
+	border:none;
+	background-color:var(--darkgreen);
+	padding: 15px;
+	border-radius: 15px;
+}
+
+.openSidebar:hover{
+	opacity: 0.6;
+}
+
+header {
+	background-color: var(--darkgreen);
+	padding-top:0px;
+	margin:0px;
+}
+
+#headerIntro {
+    font-size: 25px;
 }
 
 .mainPage{
@@ -130,6 +171,12 @@ a#profile{
 	margin-left: 200px;
 	padding: 10px;
 	padding-top: 5px;
+}
+
+
+body{
+	font-family: "Nunito Sans", sans-serif;
+	min-width: 500px;
 }
 
 .profile-summary-container {
@@ -156,7 +203,7 @@ a#profile{
 	border-radius: 8px;
 }
 
-p {
+.profile-summary-container p {
 	margin: 0px;
 }
 

@@ -10,6 +10,8 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.apmproject.service.UserService;
 
@@ -51,8 +53,6 @@ public class AuthenticationSuccessHandlerSecurity implements AuthenticationSucce
 			logger.info("User has logged in");
 			redirectStrategy.sendRedirect(request, response, "/dashboard");
 		}
-
-		;
 	}
 
 }

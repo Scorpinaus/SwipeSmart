@@ -7,7 +7,7 @@
         <script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
 		<title>User Dashboard</title>
 	</head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script async src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<body>
 		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
@@ -119,8 +119,8 @@
 				</div>
 				</div>
                 
-                <h2>Insights</h2>
-				<!-- <div class="category-spending-stats">
+              <!--  <h2>Insights</h2>
+				<div class="category-spending-stats">
                   <div class="chart-container">
                        
                       <canvas class="category-chart"></canvas> 
@@ -130,99 +130,29 @@
                       </ul>
                     </div>
                   </div>
-			    </div> -->
+			    </div>
+			    <table border="1">
+			    <thead>
+			      <tr>
+			        <th>Date</th>
+			        <th>Description</th>
+			        <th>Amount</th>
+			        <th>MCC</th>
+			      </tr>
+			    </thead>
+			    <tbody>
+			      <tr th:each="transaction : ${transactions}">
+			        <td th:text="${transaction.transactionDate}"></td>
+			        <td th:text="${transaction.description}"></td>
+			        <td th:text="${transaction.transactionAmount}"></td>
+			        <td th:text="${transaction.transactionMerchantCategoryCode.merchantCategory}"></td>
+			      </tr>
+			    </tbody>
+			  </table> -->
 		  </div>
 		</div>
-		
-		<table border="1">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Description</th>
-        <th>Amount</th>
-        <th>MCC</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="transaction : ${transactions}">
-        <td th:text="${transaction.transactionDate}"></td>
-        <td th:text="${transaction.description}"></td>
-        <td th:text="${transaction.transactionAmount}"></td>
-        <td th:text="${transaction.transactionMerchantCategoryCode.merchantCategory}"></td>
-      </tr>
-    </tbody>
-  </table>
-		<!-- In your dashboard.html template -->
-<canvas id="transactionChart"style="width:100%;max-width:700px"></canvas>
-
-
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
-</script>
+	
 <script>
-var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-var yValues = [55, 49, 44, 24, 15,12];
-var barColors = [
-	  "#b91d47",
-	  "#00aba9",
-	  "#2b5797",
-	  "#e8c3b9",
-	  "#1e7145"
-	]
-new Chart("transactionChart", {
-	  type: "doughnute",
-	  data: {
-	    labels: xValues,
-	    datasets: [{
-	      backgroundColor: barColors,
-	      data: yValues
-	    }]
-	  },
-	  options: {
-	    title: {
-	      display: true,
-	      text: "transactionChart"
-	    }
-	  }
-	});
-</script>
-
-
-
-<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-
-<script>
-var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-var yValues = [55, 49, 44, 24, 15];
-var barColors = [
-  "#b91d47",
-  "#00aba9",
-  "#2b5797",
-  "#e8c3b9",
-  "#1e7145"
-];
-
-new Chart("myChart", {
-  type: "pie",
-  data: {
-    labels: xValues,
-    datasets: [{
-     
-      data: yValues
-    }]
-  },
-  options: {
-    title: {
-      display: true,
-      text: "World Wide Wine Production 2018"
-    }
-  }
-});
-</script>
-		
-		
-		
-		<script>
 			let menuOpen = false;
 			const sidebar = document.querySelector('.linkContainerSideBar');
 			const mainpage = document.querySelector('.mainPage');
@@ -280,14 +210,14 @@ new Chart("myChart", {
 		        }
 			}
 		</script>
-         <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-       <script th:src="@{/account/chart.js}"></script>
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-            const userData = /*[[${user}]]*/ null;
-            /*]]>*/
-        </script>  -->
-        
-       
+		<!-- In your dashboard.html template -->
+<!--  <canvas id="transactionChart"style="width:100%;max-width:700px"></canvas>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	      <script src="/account/chart.js"></script>
+	      <script th:inline="javascript">
+	            /*<![CDATA[*/
+	            const userData = /*[[${user}]]*/ null;
+	            /*]]>*/
+	      </script> -->
 	</body>	
 </html>

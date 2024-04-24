@@ -37,8 +37,10 @@ public class UserSecurityDetailsService implements UserDetailsService {
 
         if (user == null) {
             throw new UsernameNotFoundException(username + " not found");
+        } else if (!user.get().getUsername().equals(username)){
+        	throw new UsernameNotFoundException(username + " not found");
         } else {
-            return new UserSecurityDetails(user.get());
+        	return new UserSecurityDetails(user.get());
         }
     }
 }

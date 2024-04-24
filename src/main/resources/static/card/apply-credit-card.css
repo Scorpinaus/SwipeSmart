@@ -2,14 +2,13 @@
 @keyframes transitionIn {
 	from{
 		opacity:0;
-		transform:rotateX(-10deg);
 	}
 	
 	to {
 		opacity:1;
-		transform:rotateX(0);
 	}
 }
+
 :root {
   --darkgreen: #2b6777;
   --lightblue:#c8d8e4;
@@ -31,9 +30,25 @@
     position: fixed;
 }
 
+#sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarLinks {
+    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+}
+
 .sidebarHeader{
 	display: flex;
 	justify-content: center;
+}
+
+.sidebarHeader img {
+	width: 150px;
 }
 
 p#sidebarHeader{
@@ -41,38 +56,42 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
-.sidebarLinks{
-	padding-left: 20px;
+i {
+	min-width: 25px;
 }
 
 .dashboard{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
-	
+	margin-left: 20px;
 }
 
 .profile{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .cards{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
 	background-color: white;
+	margin-left: 20px;
+	animation: transitionIn 0.75s;
 }
 
 .accounts{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .logout{
@@ -80,6 +99,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-top: auto;
 }
 
 a#dashboard {

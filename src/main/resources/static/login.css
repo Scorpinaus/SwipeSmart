@@ -2,12 +2,10 @@
 @keyframes transitionIn {
 	from{
 		opacity:0;
-		transform:rotateX(-10deg);
 	}
 	
 	to {
 		opacity:1;
-		transform:rotateX(0);
 	}
 }
 
@@ -29,7 +27,7 @@ body {
 	text-align: center;
 	background-color: var(--darkgreen);
     background-image: url("mainpagebackground.jpeg");
-	animation:transitionIn 0.75s;
+	animation: transitionIn 0.75s;
 }
 
 .login-page-container {

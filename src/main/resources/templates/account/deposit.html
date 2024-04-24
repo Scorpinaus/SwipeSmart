@@ -4,29 +4,29 @@
   <head>
   <link rel="stylesheet" href="/account/deposit.css">
   <meta charset="UTF-8">
-  <title>Deposit page</title>
+  <script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
+  <title>Deposit</title>
   </head>
   <body>
   	<div class="linkContainerSideBar" id="sidebar">
   		<div class="sidebarHeader">
-  			<p id="sidebarHeader">SwipeSmart</p>
+  			<p id="sidebarHeader"><img src="/logo-transparent.png"></p>
   		</div>
   		<div class="sidebarLinks">
   			<div class="profile">
-  				<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile
-  					Page</a>
+  				<a id="profile" th:href="@{/users/{id}(id=${user.userId})}"> <i class="fa-solid fa-user"></i>Profile</a>
   			</div>
   			<div class="dashboard">
-  				<a id="dashboard" href="/dashboard">Dashboard</a>
+  				<a id="dashboard" href="/dashboard"><i class="fa-solid fa-clipboard"></i>Dashboard</a>
   			</div>
   			<div class="cards">
-  				<a class="cardsText" id="cards" href="/userCards">Cards</a>
+  				<a class="cardsText" id="cards" href="/userCards"><i class="fa-solid fa-credit-card"></i>Cards</a>
   			</div>
   			<div class="accounts">
-  				<a class="accountsText" id="accounts" href="/bankaccount/dashboard">Accounts</a>
+  				<a class="accountsText" id="accounts" href="/bankaccount/dashboard"><i class="fa-solid fa-briefcase"></i>Accounts</a>
   			</div>
   			<div class="logout">
-  				<a id="logout" href="/logout">Logout</a>
+  				<a id="logout" href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
   			</div>
   		</div>
   	</div>

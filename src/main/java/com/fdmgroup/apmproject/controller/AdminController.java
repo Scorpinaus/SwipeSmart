@@ -423,7 +423,7 @@ public class AdminController {
 		Collections.sort(transactions, Comparator.comparing(Transaction::getTransactionDate));
 		model.addAttribute("users", userList);
 		model.addAttribute("transactions", transactions);
-		return "admin-transactions";
+		return "/admin/admin-transactions";
 	}
 
 }

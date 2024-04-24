@@ -24,6 +24,14 @@ import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.annotation.PostConstruct;
 
+/**
+ * This class is a Spring MVC controller responsible for preparing database entities when the application starts.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
+
 @Component
 public class DemoConstruct {
 	@Autowired
@@ -44,8 +52,19 @@ public class DemoConstruct {
 	@Autowired
 	private CreditCardService creditCardService;
 	
-	@Autowired
+	@Autowired/**
+	 * Initializes the application with default data.
+	 * <p>
+	 * This method is annotated with @PostConstruct, indicating it runs after the bean has been constructed and the dependencies have been injected. It initializes various entities such as Status, User, MerchantCategoryCode, ForeignExchangeCurrency, Account, CreditCard, and Transaction with default values and persists them in the database.
+	 * <p>
+	 * It sets up default users, statuses, merchant category codes, currency rates, accounts, credit cards, and transactions for demonstration purposes.
+	 *
+	 * @see org.example.StatusService
+	 * @throws org.springframework.security.core.userdetails.UsernameNotFoundException if the user is not found
+	 */
+
 	private TransactionService transactionService;
+	
 	
 	@PostConstruct
     public void init() {

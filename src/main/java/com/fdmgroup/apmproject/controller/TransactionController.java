@@ -1,11 +1,16 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fdmgroup.apmproject.model.Account;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
+import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.service.AccountService;
@@ -170,4 +176,59 @@ public class TransactionController {
 	   
 	    return "redirect:/userCards";
 	}
+	
+//	// Gets list of merchant category per user
+//	public List<String> retrieveMerchantCategory(Model model, HttpSession session) {
+//		Set<String> category = new HashSet<> ();
+//		//Retrieves currentUser 
+//		List<Transaction> transactions = transactionService.getAllTransactions();
+//		for (Transaction transaction: transactions) {
+//			String merchantCode = transaction.getTransactionMerchantCategoryCode().getMerchantCategory();
+//			//Adds unique merchant categories to the set
+//			if (merchantCode != null) {
+//				category.add(merchantCode);
+//			}
+//		}
+//		//Converts set to ArrayList
+//		List<String> categories = new ArrayList<>(category);
+//		return categories;
+//	}
+	
+//	// Gets a list of monthly user spending per merchant category
+//	public List<Double> retrieveUserSpendingPerMerchantCategory(Model model, HttpSession session) {
+//		
+//		List<String> merchantCategory = retrieveMerchantCategory(model, session);
+//		User currentUser = (User) model.getAttribute("loggedUser");
+//		List<CreditCard> creditCardList = currentUser.getCreditCards();
+//		
+//		Map<String, Double> monthlyCategorySpending = new HashMap<>();
+//		for (String category : merchantCategory) {
+//			monthlyCategorySpending.put(category, 0.0);
+//		}
+//		
+//		//Get current date details
+//		YearMonth currentYearMonth = YearMonth.now();
+//		int month = currentYearMonth.getMonthValue();
+//		int year = currentYearMonth.getYear();
+//		
+//		for (CreditCard card: creditCardList) {
+//			List<Transaction> transactionList = card.getTransactions();
+//			for (Transaction transaction: transactionList) {
+//				LocalDateTime transactionDate = transaction.getTransactionDate();
+//				String merchantCat = transaction.getTransactionMerchantCategoryCode().getMerchantCategory();
+//				double amount = transaction.getTransactionAmount();
+//				
+//				//Check if transactionDate is in current month and category is one we track
+//				if (transactionDate.getYear() == year && transactionDate.getMonthValue() ==month && monthlyCategorySpending.containsKey(merchantCat)) {
+//					monthlyCategorySpending.merge(merchantCat, amount, Double::sum);
+//				}
+//				
+//				
+//			}
+//		}
+//		
+//		//Convert map values into a list
+//		List<Double> spendingPerCategory = new ArrayList<>(monthlyCategorySpending.values());
+//		return spendingPerCategory;
+//	}
 }

@@ -11,6 +11,13 @@ import com.fdmgroup.apmproject.model.PaymentResponse;
 import com.fdmgroup.apmproject.model.PurchaseRequest;
 import com.fdmgroup.apmproject.repository.AccountRepository;
 
+/**
+ * This class is responsible for handling all business logic related to purchases.
+ * 
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Service
 public class PurchaseService {
 	@Autowired

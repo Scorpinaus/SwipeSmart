@@ -49,8 +49,29 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
      */
     List<Transaction> findByTransactionAccountOrRecipientAccount(Account transactionAccount, Account recipientAccount);
     
+    /**
+     * Retrieves transactions before a specified date associated with a given credit card.
+     * <p>
+     * This method queries the database for transactions that occurred before the specified date and were made using the provided credit card. It returns a list of transactions matching the criteria.
+     *
+     * @param date         The date before which transactions occurred.
+     * @param creditCard   The credit card associated with the transactions.
+     * @return A list of Transaction objects that meet the specified criteria.
+     * @throws IllegalArgumentException if the date or credit card is null
+     * @see org.example.Transaction
+     */
     List<Transaction> findByTransactionDateBeforeAndTransactionCreditCard(LocalDateTime date, CreditCard creditCard);
     
+    /**
+     * Retrieves transactions associated with a specified credit card.
+     * <p>
+     * This method queries the database for transactions made using the provided credit card and returns a list of all matching transactions.
+     *
+     * @param creditCard The credit card associated with the transactions.
+     * @return A list of Transaction objects associated with the specified credit card.
+     * @throws IllegalArgumentException if the credit card is null
+     * @see org.example.Transaction
+     */
     List<Transaction> findByTransactionCreditCard(CreditCard creditCard);
     
     

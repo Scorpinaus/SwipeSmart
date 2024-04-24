@@ -12,6 +12,13 @@ import com.fdmgroup.apmproject.repository.StatusRepository;
 
 import jakarta.annotation.PostConstruct;
 
+/**
+ * This class is responsible for handling all business logic related to Status.
+ * 
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 @Service
 public class StatusService {
 	@Autowired
@@ -84,6 +91,16 @@ public class StatusService {
 		}
 	}
 
+	/**
+	 * Retrieves a Status entity by its name.
+	 * <p>
+	 * This method queries the database to find a Status entity with the specified name. If found, it returns the Status entity; otherwise, it returns null. It logs a warning if the Status entity is not found in the database.
+	 *
+	 * @param statusName The name of the status to retrieve.
+	 * @return The Status entity with the specified name if found, otherwise null.
+	 * @see org.example.StatusService
+	 * @see org.example.Status
+	 */
 	public Status findByStatusName(String statusName) {
 		Optional<Status> returnedStatus = statusRepo.findByStatusName(statusName);
 		if (returnedStatus.isEmpty()) {
@@ -95,6 +112,15 @@ public class StatusService {
 		}
 	}
 
+	/**
+	 * Deletes a Status entity by its ID.
+	 * <p>
+	 * This method attempts to find a Status entity in the database using the provided ID. If the Status entity exists, it is deleted from the database; otherwise, a warning is logged. 
+	 *
+	 * @param statusId The ID of the status to delete.
+	 * @throws IllegalArgumentException if the statusId is null
+	 * @see org.example.StatusService
+	 */
 	public void deleteById(int statusId) {
 		Optional<Status> returnedStatus = statusRepo.findById(statusId);
 		if (returnedStatus.isEmpty()) {

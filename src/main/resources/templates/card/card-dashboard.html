@@ -3,7 +3,8 @@
 <head>
 <link rel="stylesheet" href="/card/card-dashboard.css">
 <meta charset="UTF-8">
-<script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
+<script th:src="@{/dashboardJSLib.js}"></script>
+<script th:src="@{/Chart.js}"></script>
 <title>Cards</title>
 </head>
 <body>
@@ -78,6 +79,9 @@
 							th:text="'$' + ${#numbers.formatDecimal(creditCard.getMonthlyBalance,0,'COMMA',2,'POINT')}"></p>
 						<p th:if="${creditCard.monthlyBalance == 0}" id="cardDetails"
 							th:text="'$0.00'"></p>
+						<label class="detail-label">Amount Left</label>
+                         <p th:if="${creditCard.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal((creditCard.cardLimit-creditCard.getAmountUsed),0,'COMMA',2,'POINT')}"></p>
+                         <p th:if="${creditCard.cardLimit-creditCard.getAmountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
 					</div>
 
 				</a>

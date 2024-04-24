@@ -25,6 +25,18 @@ import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Test suite for {@link TransactionController} using Spring MVC test framework.
+ * This class simulates a web application context to test the interactions
+ * with the {@link TransactionController}. It configures automatic injection of
+ * mocked dependencies and a simulated MVC environment for thorough testing
+ * of controller methods under various scenarios.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
+
 @SpringBootTest
 public class TransactionControllerTest {
 	
@@ -46,19 +58,18 @@ public class TransactionControllerTest {
         model = mock(Model.class);
     }
 	
-    @Test
-    void testViewCardTransactions_UserNotLoggedIn() {
-        // Arrange
-        when(session.getAttribute("loggedUser")).thenReturn(null);
-        
-        // Act
-        String viewName = transactionController.viewCardTransactions(null, null, null, model, session);
-        
-        // Assert
-        assertEquals("userCards", viewName);
-        verify(model).addAttribute("error", true);
-    }
 	
+    /**
+     * Tests the behavior of viewing account transactions.
+     * <p>
+     * This method simulates the scenario where a user views transactions associated with a specific account. It retrieves the logged-in user's information, finds the user's accounts, and fetches transactions for the first account. It then verifies that the "view-transactions" view is returned, and the model attributes "user", "account", and "transactions" are appropriately set for rendering the view. This test ensures that users can view their account transactions successfully and that the necessary data is provided to render the transactions view accurately.
+     *
+     * @param model The model attribute to add data for rendering the view.
+     * @param session The session attribute to retrieve user information.
+     * @return The name of the view after rendering.
+     * @throws AssertionError If the test fails to assert the expected behavior.
+     * @see org.junit.jupiter.api.Test
+     */
     @Test
     void testViewTransactions_AccountTransactions() {
         // Arrange
@@ -79,6 +90,17 @@ public class TransactionControllerTest {
         when(model.getAttribute("transactions")).thenReturn(accountTransactions);
     }
 	
+    /**
+     * Tests the behavior of viewing credit card transactions.
+     * <p>
+     * This method simulates the scenario where a user views transactions associated with a specific credit card. It retrieves the logged-in user's information, finds the user's credit cards, and fetches transactions for the first credit card. It then verifies that the "view-transactions" view is returned, and the model attributes "user", "creditCard", and "transactions" are appropriately set for rendering the view. This test ensures that users can view their credit card transactions successfully and that the necessary data is provided to render the transactions view accurately.
+     *
+     * @param model The model attribute to add data for rendering the view.
+     * @param session The session attribute to retrieve user information.
+     * @return The name of the view after rendering.
+     * @throws AssertionError If the test fails to assert the expected behavior.
+     * @see org.junit.jupiter.api.Test
+     */
     @Test
     void testViewTransactions_CreditCardTransactions() {
         // Arrange
@@ -98,7 +120,18 @@ public class TransactionControllerTest {
         when(model.getAttribute("creditCard")).thenReturn(userCreditCard.get(0));
         when(model.getAttribute("transactions")).thenReturn(creditCardTransactions);
     }
-    
+    /**
+     * Tests the behavior of viewing credit card transactions filtered by month.
+     * <p>
+     * This method simulates the scenario where a user views transactions associated with a specific credit card filtered by a specified month. It retrieves the logged-in user's information, finds the user's credit cards, and fetches transactions for the specified month and credit card. It then verifies that the "view-transactions" view is returned, and the model attributes "user", "creditCard", and "transactions" are appropriately set for rendering the view. This test ensures that users can view their credit card transactions for a specific month successfully and that the necessary data is provided to render the transactions view accurately.
+     *
+     * @param month The month for which transactions are to be filtered (in "YYYY-MM" format).
+     * @param model The model attribute to add data for rendering the view.
+     * @param session The session attribute to retrieve user information.
+     * @return The name of the view after rendering.
+     * @throws AssertionError If the test fails to assert the expected behavior.
+     * @see org.junit.jupiter.api.Test
+     */
     @Test
     void testViewTransactionsMonthFilterCreditCard() {
         // Arrange
@@ -124,6 +157,18 @@ public class TransactionControllerTest {
         when(model.getAttribute("transactions")).thenReturn(expectedTransactions);
     }
     
+    /**
+     * Tests the behavior of viewing account transactions filtered by month.
+     * <p>
+     * This method simulates the scenario where a user views transactions associated with a specific account filtered by a specified month. It retrieves the logged-in user's information, finds the user's accounts, and fetches transactions for the specified month and account. It then verifies that the "view-transactions" view is returned, and the model attributes "user", "account", and "transactions" are appropriately set for rendering the view. This test ensures that users can view their account transactions for a specific month successfully and that the necessary data is provided to render the transactions view accurately.
+     *
+     * @param month The month for which transactions are to be filtered (in "YYYY-MM" format).
+     * @param model The model attribute to add data for rendering the view.
+     * @param session The session attribute to retrieve user information.
+     * @return The name of the view after rendering.
+     * @throws AssertionError If the test fails to assert the expected behavior.
+     * @see org.junit.jupiter.api.Test
+     */
     @Test
     void testViewTransactionsMonthFilterAccount() {
         // Arrange

@@ -8,6 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test suite for {@link MerchantCategoryCode} for unit testing of merchant category code entities.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 
 public class MechantCateogoryCodeTest {
 	
@@ -22,12 +29,26 @@ public class MechantCateogoryCodeTest {
         mcc1 = new MerchantCategoryCode(2, "Electronics");
     }
 	
+	/**
+	 * Tests if the instantiation of the MerchantCategoryCode class results in the same instance.
+	 *
+	 * @return True if the instantiation results in the same instance, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see MerchantCategoryCode
+	 */
 	@Test
 	@DisplayName("The intansiation of MerchantCategoryCode class is of the same instance")
     public void testEqualsSameInstance() {
         assertTrue(mcc.equals(mcc));
     }
 	
+	/**
+	 * Tests if the instantiation of the MerchantCategoryCode class results in the same attribute values.
+	 *
+	 * @return True if the instantiation results in the same attribute values, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see MerchantCategoryCode
+	 */
 	@Test
 	@DisplayName("The intansiation of MerchantCategoryCode class gives the same attribute values")
     public void testMccValue() {
@@ -45,6 +66,13 @@ public class MechantCateogoryCodeTest {
 		assertEquals(expectedNumber, resultNumber);
     }
 	
+	/**
+	 * Tests if two objects instantiated with the same argument are equal to each other.
+	 *
+	 * @return True if the two objects instantiated with the same argument are equal, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see MerchantCategoryCode
+	 */
 	@Test
 	@DisplayName("Two objects instansiated with the same argument are equals to each other")
     public void testEqualsSameFields() {
@@ -52,6 +80,13 @@ public class MechantCateogoryCodeTest {
         assertTrue(mcc.equals(mcc2));
     }
 	
+	/**
+	 * Tests if two objects instantiated with different arguments are different from each other.
+	 *
+	 * @return True if the two objects instantiated with different arguments are different, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see MerchantCategoryCode
+	 */
 	@Test
     @DisplayName("Two objects instansiated with different argument are different to each other")
     public void testEquals_DifferentFields() {

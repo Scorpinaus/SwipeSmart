@@ -3,13 +3,17 @@ package com.fdmgroup.apmproject.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test suite for {@link Transaction} for unit testing of transaction entities.
+ *
+ * @author 
+ * @version 1.0
+ * @since 2024-04-22
+ */
 
 public class TransactionTest {
 
@@ -35,6 +39,13 @@ public class TransactionTest {
 		transaction1 = new Transaction("Withdraw", 10, null, 1, creditCard, null, mcc, null);
 	}
 	
+	/**
+	 * Tests if the instantiation of a transaction class is of the same instance for both account and credit card transactions.
+	 *
+	 * @return True if the instantiation of the transaction class is of the same instance for both account and credit card transactions, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see Transaction
+	 */
 	@Test
 	@DisplayName("The intansiation of transaction class is of the same instance for both account and credit card transaction")
     public void testEqualsSameInstance() {
@@ -42,6 +53,13 @@ public class TransactionTest {
         assertTrue(transaction1.equals(transaction1));
     }
 	
+	/**
+	 * Tests if the instantiation of a transaction class gives the same attribute values.
+	 *
+	 * @return True if the instantiation of the transaction class gives the same attribute values, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see Transaction
+	 */
 	@Test
 	@DisplayName("The intansiation of trasaction class gives the same attribute values")
     public void testTransactionValue() {
@@ -69,6 +87,13 @@ public class TransactionTest {
 		assertEquals(expectedtransactionType, resultTransactionType);
     }
 	
+	/**
+	 * Tests if the transaction shows the correct credit card or amount.
+	 *
+	 * @return True if the transaction shows the correct credit card or amount, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see Transaction
+	 */
 	@Test
 	@DisplayName("The transaction shows the correct credit card or amount")
     public void testTransaction() {
@@ -85,7 +110,13 @@ public class TransactionTest {
 		assertEquals(expectedAccount, resultAccount);
 	}
 	
-
+	/**
+	 * Tests if two transactions instantiated with different arguments are different from each other.
+	 *
+	 * @return True if two transactions instantiated with different arguments are different from each other, otherwise false.
+	 * @throws ExceptionType If the method encounters an unexpected condition.
+	 * @see Transaction
+	 */
     @Test
     @DisplayName("Two objects instansiated with different argument are different to each other")
     public void testEquals_DifferentFields() {

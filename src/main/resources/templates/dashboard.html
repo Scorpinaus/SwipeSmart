@@ -4,10 +4,10 @@
 		<link rel="stylesheet" href="/dashboard.css">
 		<meta charset="UTF-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
+        <script th:src="@{/dashboardJSLib.js}"></script>
 		<title>Dashboard</title>
 	</head>
-	<script async src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script th:src="@{/Chart.js}"></script>
 	<body>
 		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
@@ -102,7 +102,7 @@
                             <div class="details-card-amount">
                               <label class="detail-label">Amount Left</label>
                               <p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal((card.cardLimit-card.getAmountUsed),0,'COMMA',2,'POINT')}"></p>
-                                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
+                                         <p th:if="${card.cardLimit-card.getAmountUsed == 0 }" id="cardDetails" th:text="'$0.00'"></p>
                             </div>
 						</div>
 						<div th:if="${card.getCreditCardStatus.getStatusName != 'Approved'}">

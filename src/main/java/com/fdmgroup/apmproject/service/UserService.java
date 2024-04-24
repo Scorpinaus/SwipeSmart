@@ -6,13 +6,10 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.UserRepository;
-
-import jakarta.annotation.PostConstruct;
 
 /**
  * This class is responsible for handling all business logic related to users.

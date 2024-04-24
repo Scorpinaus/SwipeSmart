@@ -11,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.apmproject.model.Account;
-import com.fdmgroup.apmproject.model.Status;
-import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
 
-import jakarta.annotation.PostConstruct;
 
 /**
  * This class is responsible for handling all business logic related to
@@ -30,10 +27,6 @@ public class AccountService {
 
 	@Autowired
 	private AccountRepository accountRepo;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private StatusService statusService;
 
 	private static final Logger logger = LogManager.getLogger(AccountService.class);
 

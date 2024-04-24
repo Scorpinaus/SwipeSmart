@@ -30,7 +30,6 @@ import com.fdmgroup.apmproject.config.CurrencyDeserializer;
 import com.fdmgroup.apmproject.model.ForeignExchangeCurrency;
 import com.fdmgroup.apmproject.repository.ForeignExchangeCurrencyRepository;
 
-import jakarta.annotation.PostConstruct;
 
 /**
  * This class is responsible for handling all business logic related to ForeignExchangeCurrency.

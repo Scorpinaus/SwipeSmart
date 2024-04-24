@@ -118,6 +118,11 @@ a#cards{
 	margin-left: 200px;
 	padding: 10px;
 	padding-top: 5px;
+	min-width: 600px;
+}
+
+.below-header {
+	animation: transitionIn 0.75s;
 }
 
 .openSidebar{
@@ -138,6 +143,10 @@ header {
 	margin:0px;
 }
 
+#headerIntro {
+    font-size: 25px;
+}
+
 body{
 	font-family: "Nunito Sans", sans-serif;
 	min-width: 500px;
@@ -148,6 +157,26 @@ body{
     flex-wrap: wrap;
     justify-content: space-between;
     gap:2px;   
+}
+
+.view-details-button {
+	display: flex;
+	justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+h4 {
+	margin: 0;
+}
+
+.view-details-button button{
+	text-align: right;
+	border: none;
+    outline: none;
+    background-color: var(--lightgrey);
+    min-width: 40px;
 }
 
 .accounts-summary,
@@ -215,8 +244,21 @@ h4 {
 .account-details:hover, 
 .card-details:hover {
 	background-color: var(--lightblue);
-	cursor: pointer;
 }
 
+.category-spending-stats {
+	display: flex;
+	justify-content: center;
+    align-items: center;
+}
+.chart-container{
+	display: flex;
+	justify-content: center;
+    align-items: center;
+	width: 500px;
+	height: 400px;
+}
 
-
+.chart-container canvas {
+	width: 100%;
+}

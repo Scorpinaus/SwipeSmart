@@ -32,7 +32,7 @@ public class Account {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "Account ID")
+	@Column(name = "Account ID", nullable = false, updatable = false)
 	private long accountId;
 
 	@Column(name = "Account Name")
@@ -41,7 +41,7 @@ public class Account {
 	@Column(name = "Account Balance")
 	private double balance;
 
-	@Column(name = "Account Number")
+	@Column(name = "Account Number", unique = true, nullable = false, updatable = false)
 	private String accountNumber;
 
 	@Column(name = "Currency Code")
@@ -57,12 +57,12 @@ public class Account {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "FK User ID")
+	@JoinColumn(name = "FK User ID", nullable = false)
 	private User accountUser;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "FK Status ID")
+	@JoinColumn(name = "FK Status ID", nullable = false)
 	private Status accountStatus;
 
 	@OneToMany(mappedBy = "transactionAccount", fetch = FetchType.EAGER)

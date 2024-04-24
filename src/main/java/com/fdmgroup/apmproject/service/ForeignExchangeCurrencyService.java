@@ -364,19 +364,4 @@ public class ForeignExchangeCurrencyService {
 		}
 	}
 
-	@PostConstruct
-	public void initCurrency() {
-		fetchAndSaveExchangeRates();
-		loadAndSaveForeignCurrencyJSON();
-		ForeignExchangeCurrency currencyOne = new ForeignExchangeCurrency();
-		currencyOne.setCode("USD");
-		currencyOne.setAlphaCode("USD");
-		currencyOne.setNumericCode("USD");
-		currencyOne.setName("United States Dollar");
-		currencyOne.setInverseRate(1.00);
-		currencyOne.setRate(1.00);
-		persist(currencyOne);
-
-	}
-
 }

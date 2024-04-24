@@ -150,16 +150,5 @@ public class UserService {
 		List<User> users = userRepo.findAll();
 		return users;
 	}
-
-	@PostConstruct
-	public void initUsers() {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		User user = new User("jackytan", encoder.encode("Qwerty1"), "Sentosa", "Jacky", "Tan");
-		User user2 = new User("admin", encoder.encode("Fdm123456"), "admin's house", "admin", "chan");
-		user2.setRole("ROLE_ADMIN");
-		persist(user);
-		persist(user2);
-	}
-	
 	
 }

@@ -1,10 +1,12 @@
 package com.fdmgroup.apmproject.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 
 /**
@@ -24,4 +26,12 @@ public interface MerchantCategoryCodeRepository extends JpaRepository<MerchantCa
      * @return An optional MerchantCategoryCode object.
      */
     public Optional<MerchantCategoryCode> findByMerchantCategory(String merchantCategory);
+    
+    /**
+     * Retrieves all merchant category codes from the database.
+     *
+     * @return A list of all merchant category codes.
+     * @throws DataAccessException If an error occurs while accessing the database.
+     */
+    public List<MerchantCategoryCode> findAll();
 }

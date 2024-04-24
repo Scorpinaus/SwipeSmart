@@ -4,8 +4,10 @@
 		<link rel="stylesheet" href="/dashboard.css">
 		<meta charset="UTF-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
 		<title>User Dashboard</title>
 	</head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<body>
 		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
@@ -37,44 +39,46 @@
               <button class="openSidebar">☰</button>
             </header>
 			
+            <div class="below-header">
 			<h1 th:text="'Hello ' + ${user.username} + ','"></h1>
 			<p id="headerIntro"> This is for you, at a glance: </p>	
-			
+			<h2> Summary</h2>
 			<div class="summary-container">
-			<div class="accounts-summary" >
-				<div class="view-details-button">
-					<h4>Your Accounts:</h4>
-					<button id="view-account-number" onclick="toggleAccountNumber()">&#128065;</button>
-				</div>
-				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
-					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
-						<div class="details-account-name">
-							<p th:text="${account.accountName}"></p>
-						</div>
-						<div class="details-account-number">
-							<p class="hide-account-number" th:text="'***-***-' + ${#strings.substring(account.accountNumber, account.accountNumber.length() - 3)}"></p>
-							<p style="display:none" class="show-account-number" th:text="${account.accountNumber}"></p>
-						</div>
-						<div class="details-account-balance">
-							<label class="detail-label">Balance </label>
-							<p th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
-						</div>
-					</div>
-					<div th:if="${account.getAccountStatus.getStatusName != 'Approved'}">
-						<div class="details-account-name">
-							<p th:text="${account.accountName}"></p>
-						</div>
-						<div class="details-account-name">
-							<p style="color:red" th:text="${account.getAccountStatus.getStatusName}"></p>
-						</div>
-					</div>
-				</div>
-			</div>
+      
+    			<div class="accounts-summary" >
+    				<div class="view-details-button">
+    					<h4>Your Accounts:</h4>
+    					<button id="view-account-number" onclick="toggleAccountNumber()"><i id="account-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
+    				</div>
+    				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
+    					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
+    						<div class="details-account-name">
+    							<p th:text="${account.accountName}"></p>
+    						</div>
+    						<div class="details-account-number">
+    							<p class="hide-account-number" th:text="'***-***-' + ${#strings.substring(account.accountNumber, account.accountNumber.length() - 3)}"></p>
+    							<p style="display:none" class="show-account-number" th:text="${account.accountNumber}"></p>
+    						</div>
+    						<div class="details-account-balance">
+    							<label class="detail-label">Balance </label>
+    							<p th:text="'$' + ${#numbers.formatDecimal(account.balance,0,'COMMA',2,'POINT')}"></p>
+    						</div>
+    					</div>
+    					<div th:if="${account.getAccountStatus.getStatusName != 'Approved'}">
+    						<div class="details-account-name">
+    							<p th:text="${account.accountName}"></p>
+    						</div>
+    						<div class="details-account-name">
+    							<p style="color:red" th:text="${account.getAccountStatus.getStatusName}"></p>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
 
 				<div class="cards-summary" >
 					<div class="view-details-button">
 						<h4>Your Cards:</h4>
-						<button id="view-card-number" onclick="toggleCardNumber()">&#128065;</button>
+						<button id="view-card-number" onclick="toggleCardNumber()"><i id="card-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
 					</div>
 					<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
 						<div th:if="${card.getCreditCardStatus.getStatusName == 'Approved'}">
@@ -95,6 +99,11 @@
 								<p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal(card.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
 	                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
 							</div>
+                            <div class="details-card-amount">
+                              <label class="detail-label">Amount Left</label>
+                              <p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal((card.cardLimit-card.getAmountUsed),0,'COMMA',2,'POINT')}"></p>
+                                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
+                            </div>
 						</div>
 						<div th:if="${card.getCreditCardStatus.getStatusName != 'Approved'}">
 							<div class="details-card-type">
@@ -108,12 +117,111 @@
 						</div>
 					</div>
 				</div>
-				<div class="spendingInsights">
 				</div>
-				<div class="pieChart">
-			</div>
+                
+                <h2>Insights</h2>
+				<!-- <div class="category-spending-stats">
+                  <div class="chart-container">
+                       
+                      <canvas class="category-chart"></canvas> 
+                    <div class="chart-details">
+                      <ul>
+                        
+                      </ul>
+                    </div>
+                  </div>
+			    </div> -->
+		  </div>
 		</div>
-		</div>
+		
+		<table border="1">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>MCC</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="transaction : ${transactions}">
+        <td th:text="${transaction.transactionDate}"></td>
+        <td th:text="${transaction.description}"></td>
+        <td th:text="${transaction.transactionAmount}"></td>
+        <td th:text="${transaction.transactionMerchantCategoryCode.merchantCategory}"></td>
+      </tr>
+    </tbody>
+  </table>
+		<!-- In your dashboard.html template -->
+<canvas id="transactionChart"style="width:100%;max-width:700px"></canvas>
+
+
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+<script>
+var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+var yValues = [55, 49, 44, 24, 15,12];
+var barColors = [
+	  "#b91d47",
+	  "#00aba9",
+	  "#2b5797",
+	  "#e8c3b9",
+	  "#1e7145"
+	]
+new Chart("transactionChart", {
+	  type: "doughnute",
+	  data: {
+	    labels: xValues,
+	    datasets: [{
+	      backgroundColor: barColors,
+	      data: yValues
+	    }]
+	  },
+	  options: {
+	    title: {
+	      display: true,
+	      text: "transactionChart"
+	    }
+	  }
+	});
+</script>
+
+
+
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<script>
+var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+var yValues = [55, 49, 44, 24, 15];
+var barColors = [
+  "#b91d47",
+  "#00aba9",
+  "#2b5797",
+  "#e8c3b9",
+  "#1e7145"
+];
+
+new Chart("myChart", {
+  type: "pie",
+  data: {
+    labels: xValues,
+    datasets: [{
+     
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "World Wide Wine Production 2018"
+    }
+  }
+});
+</script>
+		
+		
+		
 		<script>
 			let menuOpen = false;
 			const sidebar = document.querySelector('.linkContainerSideBar');
@@ -127,6 +235,7 @@
 			function toggleAccountNumber(){
 				var hiddenAccountNumbers = document.querySelectorAll('.hide-account-number');
 				var shownAccountNumbers = document.querySelectorAll('.show-account-number');
+				const eyeIcon = document.getElementById('account-eye');
 				for (var i = 0; i < hiddenAccountNumbers.length; i++){
 					if (shownAccountNumbers[i].style.display === 'none'){
 						shownAccountNumbers[i].style.display = 'block';
@@ -137,11 +246,21 @@
 						hiddenAccountNumbers[i].style.display = 'block';
 					}
 				}
+				if (eyeIcon.classList.contains('fa-eye')) {
+		            eyeIcon.classList.remove('fa-eye');
+		            eyeIcon.classList.add('fa-eye-slash');
+		        } else {
+		            eyeIcon.classList.remove('fa-eye-slash');
+		            eyeIcon.classList.add('fa-eye');
+		        }
 			}
 			
-			function toggleCardNumber(){
+			function toggleCardNumber(button){
+				
 				var hiddenCardNumbers = document.querySelectorAll('.hide-card-number');
 				var shownCardNumbers = document.querySelectorAll('.show-card-number');
+				const eyeIcon = document.getElementById('card-eye');
+				
 				for (var i = 0; i < hiddenCardNumbers.length; i++){
 					if (shownCardNumbers[i].style.display === 'none'){
 						shownCardNumbers[i].style.display = 'block';
@@ -151,8 +270,24 @@
 						shownCardNumbers[i].style.display = 'none';
 						hiddenCardNumbers[i].style.display = 'block';
 					}
-				}
+				}	
+			    if (eyeIcon.classList.contains('fa-eye')) {
+		            eyeIcon.classList.remove('fa-eye');
+		            eyeIcon.classList.add('fa-eye-slash');
+		        } else {
+		            eyeIcon.classList.remove('fa-eye-slash');
+		            eyeIcon.classList.add('fa-eye');
+		        }
 			}
 		</script>
+         <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+       <script th:src="@{/account/chart.js}"></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            const userData = /*[[${user}]]*/ null;
+            /*]]>*/
+        </script>  -->
+        
+       
 	</body>	
 </html>

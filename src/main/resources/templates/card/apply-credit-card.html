@@ -32,6 +32,8 @@
 			<header>
 				<button class="openSidebar">☰</button>
 			</header>
+      
+            <div class="below-header">
 			<h1 th:text="'Hi ' + ${session.loggedUser.username} + ', ready to join the family?'"></h1>
 			
 			<h2>Credit Card Application</h2>
@@ -63,6 +65,7 @@
 					</div>
 				</div>
 			</div>
+          </div>
 		</div>
 		<script>
 			let menuOpen = false;

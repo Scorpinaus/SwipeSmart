@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="/card/card-dashboard.css">
 <meta charset="UTF-8">
+<script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
 <title>Cards</title>
 </head>
 <body>
@@ -34,9 +35,8 @@
 		<header>
 			<button class="openSidebar">☰</button>
 		</header>
-
-		<h1
-			th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
+        <div class="below-header">
+		<h1 th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
 
 		<div class="button-container">
 			<a id="cardTransactions" href="/creditCard/paybills">Pay</a> <a
@@ -44,7 +44,7 @@
 		</div>
 		<div class="view-details-button">
 			<h2>Your Credit Cards</h2>
-			<button id="view-card-number" onclick="toggleCardNumber()">&#128065;</button>
+			<button id="view-card-number" onclick="toggleCardNumber()"><i id="card-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
 		</div>
 	
 		<div class="card-details-container">
@@ -99,7 +99,7 @@
 				</div>
 
 			</div>
-
+          </div>
 
 		</div>
 
@@ -124,9 +124,12 @@
 					    document.getElementById("viewTransactionsForm").submit();
 					}
 			
-			function toggleCardNumber(){
+			function toggleCardNumber(button){
+				
 				var hiddenCardNumbers = document.querySelectorAll('.hide-card-number');
 				var shownCardNumbers = document.querySelectorAll('.show-card-number');
+				const eyeIcon = document.getElementById('card-eye');
+				
 				for (var i = 0; i < hiddenCardNumbers.length; i++){
 					if (shownCardNumbers[i].style.display === 'none'){
 						shownCardNumbers[i].style.display = 'block';
@@ -136,7 +139,14 @@
 						shownCardNumbers[i].style.display = 'none';
 						hiddenCardNumbers[i].style.display = 'block';
 					}
-				}
+				}	
+			    if (eyeIcon.classList.contains('fa-eye')) {
+		            eyeIcon.classList.remove('fa-eye');
+		            eyeIcon.classList.add('fa-eye-slash');
+		        } else {
+		            eyeIcon.classList.remove('fa-eye-slash');
+		            eyeIcon.classList.add('fa-eye');
+		        }
 			}
 		</script>
 </body>

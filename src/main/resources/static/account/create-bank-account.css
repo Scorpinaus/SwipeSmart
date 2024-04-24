@@ -119,6 +119,9 @@ a#cards{
 	padding: 10px;
 	padding-top: 5px;
 }
+.create-account-form-container {
+	animation: transitionIn 0.75s;
+}
 
 .openSidebar{
 	color: white;

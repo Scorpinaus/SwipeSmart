@@ -3,7 +3,8 @@
 	<head>
 		<link rel="stylesheet" href="/card/apply-credit-card.css">
 		<meta charset="UTF-8">
-		<script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
+		<script th:src="@{/dashboardJSLib.js}"></script>
+		<script th:src="@{/Chart.js}"></script>
 		<title>Credit Card Application</title>
 	</head>
 	<body>
@@ -39,7 +40,7 @@
 			
 			<h2>Credit Card Application</h2>
 			
-			<div class="secondary-content-container">   
+			<div class="application-form-container">   
 				<div class="form"> 
 		           	<form method="post" action="applyCreditCard" class="applyCreditCard">	
 		           		<div class="monthly-salary">
@@ -66,6 +67,55 @@
 					</div>
 				</div>
 			</div>
+			<h2>Card Information</h2>
+			<div class="card-info-container">
+				<div class="card-info">
+					<div class="card-name-container">
+						<h3>Ultimate Cashback Card</h3>
+					</div>
+					
+					<div class="card-image-container">
+						<img src="/ultimate-card.png">
+					</div>
+					<div class="card-description-cashback-container">
+						<label class="info-label"> Card Description: </label>
+						<p class="card-description">
+							Introducing the Ultimate Cashback Card — your go-to choice for maximizing savings with every swipe! 
+							Tailored for trendsetting youths and dynamic executives, this card transforms everyday dining purchases into a rewarding experience.  
+							Embrace the smart way to spend and watch your savings accumulate swiftly with every dining transaction. 
+							Join the savvy spenders who make every dollar count and apply for your Ultimate Cashback Card today!
+						</p>
+						<div class="cashback-info">
+							<label class="info-label"> Cashback: </label>
+							<p> 2% cashback on all Dining transactions </p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card-info">
+					<div class="card-name-container">
+						<h3>SwipeSmart Platinum Card</h3>
+					</div>
+					
+					<div class="card-image-container">
+						<img class="platinum-card-img" src="/platinum-card.png">
+					</div>
+					<div class="card-description-cashback-container">
+						<label class="info-label"> Card Description: </label>
+						<p class="card-description">
+							Introducing the SwipeSmart Platinum Card — the ultimate choice for the discerning high-flyer who demands nothing less than premium service and exclusive rewards. 
+							Designed with the elite traveler and sophisticated shopper in mind, this card offers unparalleled access to a world of luxury and privilege. 
+							From first-class travel upgrades to elite dining experiences and access to private events, the SwipeSmart Platinum Card caters to every aspect of the upscale lifestyle.
+							Elevate your status and embark on a journey of refined elegance with the SwipeSmart Platinum Card, where premium is the standard.
+						</p>
+						<div class="cashback-info">
+							<label class="info-label"> Cashback: </label>
+							<p> 1.5% cashback on all transactions </p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
           </div>
 		</div>
 		<script>

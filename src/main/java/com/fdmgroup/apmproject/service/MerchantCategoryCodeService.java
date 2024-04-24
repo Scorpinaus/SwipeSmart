@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.repository.MerchantCategoryCodeRepository;
 
-import jakarta.annotation.PostConstruct;
-
 /**
  * This class is responsible for handling all business logic related to MerchantCategoryCode.
  * 

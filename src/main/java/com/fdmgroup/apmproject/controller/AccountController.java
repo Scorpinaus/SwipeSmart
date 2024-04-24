@@ -250,9 +250,6 @@ public class AccountController {
 		accountDeposited.setBalance(updatedBalance);
 		accountService.update(accountDeposited);
 
-		// Creates transaction, calculates if there is any cashback and updates
-		// transaction and affected account details to database.
-		double cashback = 0;
 
 		Transaction transaction = new Transaction("Deposit", accountDeposited, convertedAmount.doubleValue(), null,
 				currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + depositAmount);
@@ -326,7 +323,6 @@ public class AccountController {
 			// Creating transaction to document initial deposit into newly created bank
 			// account, persisting it to database and redirecting user back to account
 			// dashboard.
-			double cashback = 0;
 			Transaction transaction = new Transaction("Initial Deposit", accountCreated, initialDeposit, null,
 					localCurrency, localCurrency.getCode() + " " + initialDeposit);
 			transactionService.persist(transaction);
@@ -438,7 +434,6 @@ public class AccountController {
 				User transfereeUser = accountFromBalance.getAccountUser();
 
 				// Transaction
-				// double cashback = 0;
 
 				// Creates new transaction for account where there are outflow of funds during
 				// internal transfer

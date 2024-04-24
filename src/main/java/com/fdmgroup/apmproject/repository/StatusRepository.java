@@ -10,7 +10,7 @@ import com.fdmgroup.apmproject.model.Status;
 /**
  * This interface extends the JpaRepository interface to provide additional methods for accessing and manipulating Status entities.
  * 
- * @author Bard
+ * @author 
  * @version 1.0
  * @since 2024-04-22
  */

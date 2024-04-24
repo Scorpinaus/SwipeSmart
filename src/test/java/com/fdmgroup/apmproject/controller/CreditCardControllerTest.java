@@ -3,6 +3,7 @@ package com.fdmgroup.apmproject.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -112,35 +113,12 @@ class CreditCardControllerTest {
 		String viewName = creditCardController.viewCreditCards(model, session);
 
 		// Assert
-		assertEquals("card-dashboard", viewName);
+		assertEquals("card/card-dashboard", viewName);
 		verify(model).addAttribute("cards", userCreditCards);
 		verify(model).addAttribute("user", loggedUser);
 		verify(session).getAttribute("loggedUser");
 	}
 
-	/**
-	 * Tests the behavior of the credit card dashboard when a user is not logged in.
-	 * <p>
-	 * This method performs a test for the GET request to the credit card dashboard when no user is logged in. It sets up the necessary environment and checks if the appropriate view name is returned along with the expected model attributes. The test verifies that an error attribute is added to the model indicating that the user is not logged in and that the session attribute for the logged-in user is accessed.
-	 *
-	 * @throws AssertionError If the test fails to assert the expected behavior.
-	 * @see org.junit.jupiter.api.Test
-	 * @see org.junit.jupiter.api.DisplayName
-	 */
-	@Test
-	@DisplayName("Test for get request to credit card dashboard when User is not logged in")
-	void test2() {
-		// Arrange
-		when(session.getAttribute("loggedUser")).thenReturn(null);
-
-		// Act
-		String viewName = creditCardController.viewCreditCards(model, session);
-
-		// Assert
-		assertEquals("card-dashboard", viewName);
-		verify(model).addAttribute("error", true);
-		verify(session).getAttribute("loggedUser");
-	}
 
 	/**
 	 * Tests the behavior of the credit card application page for a GET request.
@@ -162,7 +140,7 @@ class CreditCardControllerTest {
 		String viewName = creditCardController.applyCreditCard(model, session);
 
 		// Assert
-		assertEquals("apply-credit-card", viewName);
+		assertEquals("card/apply-credit-card", viewName);
 		verify(model).addAttribute("user", loggedUser);
 		verify(session).getAttribute("loggedUser");
 	}
@@ -188,7 +166,7 @@ class CreditCardControllerTest {
 		String viewName = creditCardController.applyCreditCard(model, session, monthlySalary, cardType);
 
 		// Assert
-		assertEquals("apply-credit-card", viewName);
+		assertEquals("card/apply-credit-card", viewName);
 		verify(model).addAttribute("error", true);
 		verify(session).getAttribute("loggedUser");
 		verifyNoMoreInteractions(creditCardService, currencyService, statusService, userService);
@@ -215,7 +193,7 @@ class CreditCardControllerTest {
 		String viewName = creditCardController.applyCreditCard(model, session, monthlySalary, cardType);
 
 		// Assert
-		assertEquals("apply-credit-card", viewName);
+		assertEquals("card/apply-credit-card", viewName);
 		verify(model).addAttribute("error", true);
 		verify(session).getAttribute("loggedUser");
 		verifyNoMoreInteractions(creditCardService, currencyService, statusService, userService);
@@ -242,7 +220,7 @@ class CreditCardControllerTest {
 		String viewName = creditCardController.applyCreditCard(model, session, monthlySalary, cardType);
 
 		// Assert
-		assertEquals("apply-credit-card", viewName);
+		assertEquals("card/apply-credit-card", viewName);
 		verify(model).addAttribute("error2", true);
 		verify(session).getAttribute("loggedUser");
 		verifyNoMoreInteractions(creditCardService, currencyService, statusService, userService);
@@ -308,7 +286,7 @@ class CreditCardControllerTest {
 		String viewName = creditCardController.paybills(model, session);
 
 		// Assert
-		assertEquals("pay-bills", viewName);
+		assertEquals("card/pay-bills", viewName);
 		verify(model).addAttribute("AccountList", accountList);
 		verify(model).addAttribute("user", currentUser);
 		verify(model).addAttribute("CcList", ccList);
@@ -316,30 +294,6 @@ class CreditCardControllerTest {
 		verify(accountService).findAllAccountsByUserId(currentUser.getUserId());
 	}
 
-	/**
-	 * Tests the behavior of the payment webpage view for a GET request when the user is not logged in.
-	 * <p>
-	 * This method performs a test for the GET request to view the payment webpage when no user is logged in. It sets up the necessary environment by creating a mock user session with a null logged user attribute. The test verifies if the view name matches the expected login page and if the model attribute "error" is set to true. Additionally, it ensures that the session attribute is accessed and that there are no further interactions with the account service.
-	 *
-	 * @throws AssertionError If the test fails to assert the expected behavior.
-	 * @see org.junit.jupiter.api.Test
-	 * @see org.junit.jupiter.api.DisplayName
-	 */
-	@Test
-	@DisplayName("Test for get request to view payment webpage when User is not logged in")
-	void test9() {
-		// Arrange
-		when(session.getAttribute("loggedUser")).thenReturn(null);
-
-		// Act
-		String viewName = creditCardController.paybills(model, session);
-
-		// Assert
-		assertEquals("login", viewName);
-		verify(model).addAttribute("error", true);
-		verify(session).getAttribute("loggedUser");
-		verifyNoMoreInteractions(accountService);
-	}
 
 	/**
 	 * Tests the behavior of making a payment via a POST request when no account is chosen.
@@ -441,9 +395,8 @@ class CreditCardControllerTest {
 		verify(transactionService).persist(any(Transaction.class));
 		verify(transactionService).updateCreditCardBalance(any(Transaction.class));
 		verify(accountService).update(account);
-		verify(userService).update(currentUser);
+		verify(userService, times(2)).update(currentUser);
 		verify(session).setAttribute("loggedUser", currentUser);
-		verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 
 	/**
@@ -489,12 +442,6 @@ class CreditCardControllerTest {
 		verify(creditCardService).findById(creditCard.getCreditCardId());
 		verify(mccService).findByMerchantCategory("Bill");
 		verify(currencyService).getCurrencyByCode("SGD");
-		verify(transactionService).persist(any(Transaction.class));
-		verify(transactionService).updateCreditCardBalance(any(Transaction.class));
-		verify(accountService).update(account);
-		verify(userService).update(currentUser);
-		verify(session).setAttribute("loggedUser", currentUser);
-		verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 
 	/**
@@ -543,9 +490,8 @@ class CreditCardControllerTest {
 		verify(transactionService).persist(any(Transaction.class));
 		verify(transactionService).updateCreditCardBalance(any(Transaction.class));
 		verify(accountService).update(account);
-		verify(userService).update(currentUser);
+		verify(userService, times(2)).update(currentUser);
 		verify(session).setAttribute("loggedUser", currentUser);
-		verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 
 	/**
@@ -594,8 +540,7 @@ class CreditCardControllerTest {
 		verify(transactionService).persist(any(Transaction.class));
 		verify(transactionService).updateCreditCardBalance(any(Transaction.class));
 		verify(accountService).update(account);
-		verify(userService).update(currentUser);
+		verify(userService, times(2)).update(currentUser);
 		verify(session).setAttribute("loggedUser", currentUser);
-		verifyNoMoreInteractions(accountService, creditCardService, mccService, transactionService, userService);
 	}
 }

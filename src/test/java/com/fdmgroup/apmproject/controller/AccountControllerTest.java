@@ -143,7 +143,7 @@ public class AccountControllerTest {
 		String viewName = accountController.showBankAccountDashboard(session, model);
 		
 		//Assert
-		assertEquals("account-dashboard", viewName);	
+		assertEquals("account/account-dashboard", viewName);	
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public class AccountControllerTest {
 		String viewName = accountController.showBankAccountDashboard(session, model);
 		
 		//Assert
-		assertEquals("account-dashboard", viewName);
+		assertEquals("account/account-dashboard", viewName);
 	}
 	
 	
@@ -217,7 +217,7 @@ public class AccountControllerTest {
 		String viewName = accountController.withdrawalBankAccount(session, model, redirectAttributes);
 		
 		//Assert
-		assertEquals("withdrawal", viewName);
+		assertEquals("account/withdrawal", viewName);
 	}
 	
 	/**
@@ -258,7 +258,7 @@ public class AccountControllerTest {
 		String viewName = accountController.withdrawalBankAccount(session, model, redirectAttributes);
 		
 		//Assert
-		assertEquals("account-dashboard", viewName);
+		assertEquals("account/account-dashboard", viewName);
 	}
 	
 	/**
@@ -379,7 +379,7 @@ public class AccountControllerTest {
 		String viewName = accountController.goToDepositPage(model, session);
 
 		//Assert
-		assertEquals("deposit", viewName);
+		assertEquals("account/deposit", viewName);
 	}
 	
 	/**
@@ -421,7 +421,7 @@ public class AccountControllerTest {
 			String viewName = accountController.goToDepositPage(model, session);
 
 			//Assert
-			assertEquals("deposit", viewName);
+			assertEquals("account/deposit", viewName);
 }
 	
 	/**
@@ -446,15 +446,21 @@ public class AccountControllerTest {
 	@DisplayName("Test deposit method for successful deposits")
 	void testDepositOne() {
 		//Arrange
+		User currentUser = user;
+		currentUser.setUserId(1L);
+		model.addAttribute("loggedUser", currentUser);
+		List<Account> accountList = new ArrayList<>();
+		accountList.add(account);
 		Account accountOne = account;
 		accountOne.setAccountId(1L);
 		accountOne.setCurrencyCode("USD");
 		accountOne.setBalance(10.00);
+		accountOne.setAccountUser(currentUser);
 		BigDecimal depositAmount = BigDecimal.valueOf(50.0);
 		ForeignExchangeCurrency currencyUSD = foreignCurrency;
 		currencyUSD.setCode("USD");
 		BigDecimal exchangeRate = BigDecimal.ONE;
-		
+		when(accountService.findAllAccountsByUserId(currentUser.getUserId())).thenReturn(accountList);
 		when(accountService.findById(1)).thenReturn(accountOne);
 		when(currencyService.getCurrencyByCode("USD")).thenReturn(currencyUSD);
 		when(currencyService.getExchangeRate("USD", "USD")).thenReturn(exchangeRate);
@@ -490,10 +496,16 @@ public class AccountControllerTest {
 	@DisplayName("Test for deposit with currency conversion")
 	void testDepositTwo() {
 		//Arrange
+		User currentUser = user;
+		currentUser.setUserId(1L);
+		model.addAttribute("loggedUser", currentUser);
+		List<Account> accountList = new ArrayList<>();
+		accountList.add(account);
 		Account accountOne = account;
 		accountOne.setAccountId(1L);
 		accountOne.setCurrencyCode("USD");
 		accountOne.setBalance(10.00);
+		accountOne.setAccountUser(currentUser);
 		BigDecimal depositAmount = BigDecimal.valueOf(100.0);
 		BigDecimal exchangeRate = new BigDecimal("1.2");
 		BigDecimal expectedConvertedAmount = depositAmount.multiply(exchangeRate);
@@ -538,7 +550,7 @@ public class AccountControllerTest {
 		String viewName = accountController.goToCreateBankAccountPage(session, model);
 		
 		//Assert
-		assertEquals("create-bank-account", viewName);
+		assertEquals("account/create-bank-account", viewName);
 		verify(model).addAttribute("user", currentUser);
 	}
 	
@@ -567,7 +579,7 @@ public class AccountControllerTest {
 		String viewName = accountController.goToCreateBankAccountPage(session, model);
 		
 		//Assert
-		assertEquals("create-bank-account", viewName);
+		assertEquals("account/create-bank-account", viewName);
 	}
 	
 	/**
@@ -592,13 +604,19 @@ public class AccountControllerTest {
 		String accountName = "Savings Account";
 		double initialDeposit = 6000.0;
 		User currentUser = user;
-		session.setAttribute("loggerUser", currentUser);
+		currentUser.setUserId(1L);
+		session.setAttribute("loggedUser", currentUser);
+		
 		Account accountOne = account;
-		accountOne.setAccountName(accountName);
-		accountOne.setBalance(initialDeposit);
-		accountOne.setAccountNumber("1234567890");
+		accountOne.setAccountId(1L);
+		accountOne.setCurrencyCode("USD");
+		accountOne.setBalance(10.00);
 		accountOne.setAccountUser(currentUser);
 		accountOne.setAccountStatus(new Status("Pending"));
+		accountOne.setAccountName(accountName);
+		
+		List<Account> accountList = new ArrayList<>();
+		accountList.add(accountOne);
 		
 		when(currencyService.getCurrencyByCode("SGD")).thenReturn(foreignCurrency);
 		when(statusService.findByStatusName("Pending")).thenReturn(new Status("Pending"));
@@ -609,7 +627,7 @@ public class AccountControllerTest {
 		
 		//Assert
 		assertEquals("redirect:/bankaccount/dashboard", viewName);
-		verify(accountService).persist(accountOne);
+		verify(accountService).persist(any(Account.class));
 		verify(transactionService).persist(any(Transaction.class));
 	}
 	
@@ -718,7 +736,7 @@ public class AccountControllerTest {
         String viewName = accountController.goToTransferPage(model, session);
         
         //Assert
-       assertEquals("transfer", viewName);
+       assertEquals("account/transfer", viewName);
        verify(model).addAttribute("AccountList", accountList);		
 	}
 	
@@ -821,11 +839,15 @@ public class AccountControllerTest {
 	@DisplayName("Test bankAccount Transfer for successful internal transfer")
 	void testBankAccountTransferThree() {
 		//Arrange
+		User currentUser = user;
+		currentUser.setUserId(1L);
+		
 		Account accountOne = new Account();
         accountOne.setAccountNumber("111111111");
         accountOne.setAccountId(1L);
         accountOne.setBalance(1000.0);
         accountOne.setCurrencyCode("USD");
+        accountOne.setAccountUser(currentUser);
 				
         Account accountTwo = new Account();
         accountTwo.setAccountNumber("999999999");
@@ -867,12 +889,17 @@ public class AccountControllerTest {
 	@DisplayName("Test bankAccount transfer to pending Account")
 	void testBankAccountTransferFour() {
 	//Arrange
+		User currentUser = user;
+		currentUser.setUserId(1L);
+		
 		Account accountOne = new Account();
         accountOne.setAccountNumber("111111111");
         accountOne.setAccountId(1L);
         accountOne.setBalance(1000.0);
         accountOne.setCurrencyCode("USD");
         accountOne.setAccountStatus(new Status("Active"));
+        accountOne.setAccountUser(currentUser);
+        
 		Status pendingStatus = new Status("Pending");
         Account accountTwo = new Account();
         accountTwo.setAccountNumber("999999999");
@@ -916,12 +943,16 @@ public class AccountControllerTest {
 	@DisplayName("Test bankAccount transfer for external transfer")
 	void testBankAccountTransferFive() {
 		//Arrange
+		User currentUser = user;
+		currentUser.setUserId(1L);
+		
 		Account accountOne = new Account();
         accountOne.setAccountNumber("111111111");
         accountOne.setAccountId(1L);
         accountOne.setBalance(1000.0);
         accountOne.setCurrencyCode("USD");
         accountOne.setAccountStatus(new Status("Active"));
+        accountOne.setAccountUser(currentUser);
 				        when(accountService.findById(accountOne.getAccountId())).thenReturn(accountOne);
         when(currencyService.getExchangeRate("USD", "USD")).thenReturn(BigDecimal.ONE);
         when(accountService.findAccountByAccountNumber("external-1")).thenReturn(null);

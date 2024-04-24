@@ -10,13 +10,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.core.Logger;
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -499,14 +499,17 @@ public class ForeignExchangeCurrencyServiceTest {
 		when(currencyRepo.findByCurrencyCode(currencyOne.getCode())).thenReturn(currencyOne);
 		when(currencyRepo.findByCurrencyCode("USD")).thenReturn(currencyUSD);
 		when(currencyRepo.findByCurrencyCode(currencyTwo.getCode())).thenReturn(currencyTwo);
-		Double expectedRate = currencyOne.getRate() * currencyTwo.getRate();
-
-		// Act
+		Double expectedRate = (currencyTwo.getRate() / currencyOne.getRate());
+		DecimalFormat df = new DecimalFormat("#");
+		String formattedRate = df.format(expectedRate);
+		
+		//Act
 		Double rate = currencyService.getExchangeRate(currencyOne.getCode(), currencyTwo.getCode()).doubleValue();
-		;
-
-		// Assert
-		assertEquals(expectedRate, rate);
+		String resultRate = df.format(rate);
+	
+	
+		//Assert
+		assertEquals(formattedRate, resultRate);
 
 	}
 

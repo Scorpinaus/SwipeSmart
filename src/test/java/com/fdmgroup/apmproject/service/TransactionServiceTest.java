@@ -7,14 +7,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.core.Logger;
@@ -25,10 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.fdmgroup.apmproject.model.Account;
-import com.fdmgroup.apmproject.model.CreditCard;
-import com.fdmgroup.apmproject.model.MerchantCategoryCode;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.repository.TransactionRepository;
 
@@ -53,11 +41,7 @@ public class TransactionServiceTest {
 
 	@InjectMocks
 	private TransactionService transactionService;
-
 	private Transaction transactions;
-
-	private CreditCard creditCard;
-	private MerchantCategoryCode mcc;
 
 	/**
 	 * Sets up the test environment before each test method execution. Initializes a
@@ -67,8 +51,6 @@ public class TransactionServiceTest {
 	private void setUp() {
 		transactions = new Transaction();
 		transactions.setTransactionId(1L);
-		creditCard = new CreditCard();
-		mcc = new MerchantCategoryCode();
 	}
 
 	/**

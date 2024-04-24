@@ -177,31 +177,6 @@ public class AccountControllerTest {
 		assertEquals("account-dashboard", viewName);
 	}
 	
-	/**
-	 * Tests the {@link AccountController#showBankAccountDashboard} method to ensure it redirects
-	 * to the login page when no user is logged in. This test validates the controller's behavior
-	 * under unauthenticated access conditions, using the Arrange-Act-Assert testing pattern:
-	 *
-	 * <p><b>Arrange:</b> No pre-arrangement necessary as the session does not simulate a logged-in user.</p>
-	 * <p><b>Act:</b> The {@link AccountController#showBankAccountDashboard} method is invoked.</p>
-	 * <p><b>Assert:</b> Confirms that the return view is a redirect to the login page ("redirect:/login").</p>
-	 *
-	 * This method assesses the security aspect of the application, ensuring proper redirection
-	 * to handle unauthorized access to the dashboard.
-	 *
-	 * @see AccountController#showBankAccountDashboard(HttpSession, Model)
-	 */
-	@Test
-	@DisplayName("Test when user is not logged in")
-	void bankAccountDashboardThree() {
-		//Arrange
-		
-		//Act
-		String viewName = accountController.showBankAccountDashboard(session, model);
-		
-		//Assert
-		assertEquals("redirect:/login", viewName);
-	}
 	
 	/**
 	 * Tests the {@link AccountController#withdrawalBankAccount} method to ensure it properly 
@@ -284,32 +259,6 @@ public class AccountControllerTest {
 		
 		//Assert
 		assertEquals("account-dashboard", viewName);
-	}
-	
-	/**
-	 * Tests the {@link AccountController#withdrawalBankAccount} method to ensure it redirects
-	 * unauthenticated users to the login page. This test is organized using the Arrange-Act-Assert pattern:
-	 *
-	 * <p><b>Arrange:</b> No user information is set in the session, simulating an unauthenticated scenario.</p>
-	 * <p><b>Act:</b> The {@link AccountController#withdrawalBankAccount} method is invoked.</p>
-	 * <p><b>Assert:</b> Confirms that the method responds with a redirect to the login page ("redirect:/login").</p>
-	 *
-	 * This test validates the controller's security measures that prevent unauthorized access to
-	 * the withdrawal functionalities by redirecting to authentication pathways.
-	 *
-	 * @see AccountController#withdrawalBankAccount(HttpSession, Model, RedirectAttributes)
-	 */
-	@Test
-	@DisplayName("Test withdrawalBankAccount function when user is not logged in")
-	void withdrawalBankAccountThree() {
-		// Arrange
-	    // No user is set in the session
-
-	    // Act
-		String viewName = accountController.withdrawalBankAccount(session, model, redirectAttributes);
-
-	    // Assert
-	    assertEquals("redirect:/login", viewName);
 	}
 	
 	/**

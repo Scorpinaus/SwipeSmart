@@ -17,13 +17,13 @@ import org.junit.jupiter.api.Test;
  */
 
 public class CreditCardTest {
-	
-	//Global Variable 
+
+	// Global Variable
 	User user;
 	CreditCard creditCard;
 	Status status;
 	CreditCard creditCard1;
-	
+
 	@BeforeEach
 	public void setUp() {
 		user = new User("jackytan", "Qwerty1", "Sentosa", "Jacky", "Tan");
@@ -32,6 +32,7 @@ public class CreditCardTest {
 		String pin = "123";
 		creditCard = new CreditCard(creditCardNumber, pin, 3000, "Ultimate Cashback Card", status, 0, user);
 	}
+
 	
 	/**
 	 * Tests whether the instantiation of the CreditCard class results in the same instance.
@@ -60,32 +61,32 @@ public class CreditCardTest {
 	 */
 	@Test
 	@DisplayName("The intansiation of CreditCard class gives the same attribute values")
-    public void testCreditCardValue() {
-		//arrange
+	public void testCreditCardValue() {
+		// arrange
 		String expectedType = "Ultimate Cashback Card";
 		double expectedLimit = 3000;
 		String expectedPin = "123";
 		User expectedUser = user;
 		Status expectedStatus = status;
 		double expectedAmountUsed = 0;
-		
-		//act
+
+		// act
 		String resultType = creditCard.getCardType();
 		double resultLimit = creditCard.getCardLimit();
 		String resultPin = creditCard.getPin();
 		User resultUser = creditCard.getCreditCardUser();
 		Status resultStatus = creditCard.getCreditCardStatus();
 		double resultAmountUsed = creditCard.getAmountUsed();
-		
-		
-		//assert
+
+		// assert
 		assertEquals(expectedType, resultType);
 		assertEquals(expectedLimit, resultLimit);
 		assertEquals(expectedPin, resultPin);
 		assertEquals(expectedUser, resultUser);
 		assertEquals(expectedStatus, resultStatus);
 		assertEquals(expectedAmountUsed, resultAmountUsed);
-    }
+	}
+
 	
 	/**
 	 * Tests whether two CreditCard objects instantiated with the same arguments are equal to each other.
@@ -102,10 +103,10 @@ public class CreditCardTest {
 	 */
 	@Test
 	@DisplayName("Two objects instansiated with the same argument are equals to each other")
-    public void testEqualsSameFields() {
+	public void testEqualsSameFields() {
 		creditCard1 = new CreditCard("1234-5678-1234-5678", "123", 3000, "Ultimate Cashback Card", status, 0, user);
-        assertTrue(creditCard.equals(creditCard1));
-    }
+		assertTrue(creditCard.equals(creditCard1));
+	}
 
 	/**
 	 * Tests whether two CreditCard objects instantiated with different arguments are different from each other.

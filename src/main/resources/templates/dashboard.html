@@ -102,7 +102,7 @@
                             <div class="details-card-amount">
                               <label class="detail-label">Amount Left</label>
                               <p th:if="${card.amountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal((card.cardLimit-card.getAmountUsed),0,'COMMA',2,'POINT')}"></p>
-                                         <p th:if="${card.amountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
+                                         <p th:if="${card.cardLimit-card.getAmountUsed == 0 }" id="cardDetails" th:text="'$0.00'"></p>
                             </div>
 						</div>
 						<div th:if="${card.getCreditCardStatus.getStatusName != 'Approved'}">

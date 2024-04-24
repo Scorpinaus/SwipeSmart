@@ -24,8 +24,6 @@ import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
 import com.fdmgroup.apmproject.repository.TransactionRepository;
 
-import jakarta.annotation.PostConstruct;
-
 /**
  * This class is responsible for handling all business logic related to Transactions.
  * 
@@ -41,9 +39,6 @@ public class TransactionService {
 
 	@Autowired
 	private CreditCardService creditCardService;
-
-	@Autowired
-	private AccountService accountService;
 
 	@Autowired
 	private MerchantCategoryCodeService merchantCategoryCodeService;
@@ -150,7 +145,6 @@ public class TransactionService {
 	 * @see org.example.Transaction
 	 */
 	public void updateCreditCardBalance(Transaction transaction) {
-		LocalDate previousMonth = LocalDate.now().withDayOfMonth(1);
 		// ensure amount used in credit card is updated
 		if (transaction.getTransactionCreditCard() != null && transaction.getTransactionType().equals("CC Purchase")) {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
@@ -166,17 +160,12 @@ public class TransactionService {
 				}
 			}
 			creditCard.addTransaction(transaction.getTransactionAmount() - transaction.getCashback());
-			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
-//			if (transactionDateAsLocalDate.isBefore(previousMonth)) {
-//				creditCard.addTransactionMonthly(transaction.getTransactionAmount() - transaction.getCashback());
-//			}
 			creditCardService.update(creditCard);
 
 		} else if (transaction.getTransactionCreditCard() != null
 				&& transaction.getTransactionType().equals("CC Payment")) {
 			CreditCard creditCard = transaction.getTransactionCreditCard();
 			creditCard.addTransaction(-transaction.getTransactionAmount());
-			LocalDate transactionDateAsLocalDate = transaction.getTransactionDate().toLocalDate();
 			creditCard.setMinBalancePaid(creditCard.getMinBalancePaid() - transaction.getTransactionAmount());
 			creditCardService.update(creditCard);
 		}

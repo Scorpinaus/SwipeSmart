@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.Status;
 import com.fdmgroup.apmproject.model.Transaction;
-import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.CreditCardRepository;
-
-import jakarta.annotation.PostConstruct;
 
 /**
  * This class is responsible for handling the business logic for credit cards
@@ -32,10 +29,6 @@ import jakarta.annotation.PostConstruct;
 public class CreditCardService {
 	@Autowired
 	private CreditCardRepository creditCardRepo;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private StatusService statusService;
 	private static final double interestRate = 0.1;
 
 	private static Logger logger = LogManager.getLogger(CreditCardService.class);

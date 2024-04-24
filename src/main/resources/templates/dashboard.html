@@ -5,30 +5,30 @@
 		<meta charset="UTF-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/87c4d319f6.js" crossorigin="anonymous"></script>
-		<title>User Dashboard</title>
+		<title>Dashboard</title>
 	</head>
 	<script async src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<body>
 		<!-- side bar -->
 		<div class="linkContainerSideBar" id="sidebar">
 			<div class="sidebarHeader">
-				<p id="sidebarHeader" >SwipeSmart</p>
+				<p id="sidebarHeader" ><img src="/logo-transparent.png"></p>
 			</div>
 			<div class="sidebarLinks">
 				<div class="profile">
-					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}">Profile Page</a>
+					<a id="profile" th:href="@{/users/{id}(id=${user.userId})}"> <i class="fa-solid fa-user"></i>Profile</a>
 				</div>
 				<div class="dashboard">
-					<a id="dashboard" href="/dashboard">Dashboard</a>
+					<a id="dashboard" href="/dashboard"><i class="fa-solid fa-clipboard"></i>Dashboard</a>
 				</div>
 				<div class="cards">
-					<a id="cards" href="/userCards">Cards</a>
+					<a id="cards" href="/userCards"><i class="fa-solid fa-credit-card"></i>Cards</a>
 				</div>
 				<div class="accounts">
-					<a id="accounts" href="/bankaccount/dashboard">Accounts</a>
+					<a id="accounts" href="/bankaccount/dashboard"><i class="fa-solid fa-briefcase"></i>Accounts</a>
 				</div>
 				<div class="logout">
-					<a id="logout" href="/logout">Logout</a>
+					<a id="logout" href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
 				</div>
 			</div>
 		</div>

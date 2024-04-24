@@ -310,5 +310,9 @@ public class TransactionService {
 		updateInterest(approvedCreditCards);
 
 	}
+	
+	public List<Transaction> getAllTransactions() {
+		return transactionRepo.findAll();
+	}
 
 }

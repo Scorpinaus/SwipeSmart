@@ -2,12 +2,10 @@
 @keyframes transitionIn {
 	from{
 		opacity:0;
-		transform:rotateX(-10deg);
 	}
 	
 	to {
 		opacity:1;
-		transform:rotateX(0);
 	}
 }
 
@@ -30,6 +28,15 @@ header {
 	margin:0px;
 }
 
+.closeSidebar:hover{
+	opacity: 0.5;
+}
+
+body{
+	font-family: "Nunito Sans", sans-serif;
+	min-width: 500px;
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
@@ -42,9 +49,25 @@ header {
     position: fixed;
 }
 
+#sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarLinks {
+    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+}
+
 .sidebarHeader{
 	display: flex;
 	justify-content: center;
+}
+
+.sidebarHeader img {
+	width: 150px;
 }
 
 p#sidebarHeader{
@@ -52,17 +75,8 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
-.closeSidebar:hover{
-	opacity: 0.5;
-}
-
-.sidebarLinks{
-	padding-left: 20px;
-}
-
-body{
-	font-family: "Nunito Sans", sans-serif;
-	min-width: 500px;
+i {
+	min-width: 25px;
 }
 
 .dashboard{
@@ -70,6 +84,7 @@ body{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .user{
@@ -78,6 +93,7 @@ body{
 	text-align: center;
 	padding: 20px;
 	background-color: white;
+	margin-left: 20px;
 }
 
 .profile{
@@ -85,14 +101,15 @@ body{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-left: 20px;
 }
-
 
 .logout{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-top: auto;
 }
 
 .transactions{

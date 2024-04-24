@@ -264,20 +264,3 @@ h4 {
 .card-details:hover {
 	background-color: var(--lightblue);
 }
-
-.category-spending-stats {
-	display: flex;
-	justify-content: center;
-    align-items: center;
-}
-.chart-container{
-	display: flex;
-	justify-content: center;
-    align-items: center;
-	width: 500px;
-	height: 400px;
-}
-
-.chart-container canvas {
-	width: 100%;
-}

@@ -31,6 +31,10 @@ header {
 	margin:0px;
 }
 
+.closeSidebar:hover{
+	opacity: 0.5;
+}
+
 .linkContainerSideBar{
 	height: 100%;
 	top:0;
@@ -43,9 +47,25 @@ header {
     position: fixed;
 }
 
+#sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarLinks {
+    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+}
+
 .sidebarHeader{
 	display: flex;
 	justify-content: center;
+}
+
+.sidebarHeader img {
+	width: 150px;
 }
 
 p#sidebarHeader{
@@ -53,12 +73,8 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
-.closeSidebar:hover{
-	opacity: 0.5;
-}
-
-.sidebarLinks{
-	padding-left: 20px;
+i {
+	min-width: 25px;
 }
 
 .dashboard{
@@ -66,6 +82,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .user{
@@ -73,27 +90,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
-}
-
-.profile{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-}
-
-.cards{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
-}
-
-.accounts{
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-	text-align: center;
-	padding: 20px;
+	margin-left: 20px;
 }
 
 .logout{
@@ -101,6 +98,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-top: auto;
 }
 
 .transactions{
@@ -108,8 +106,8 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-left: 20px;
 	background-color: white;
-	animation: transitionIn 0.75s;
 }
 
 a#dashboard {

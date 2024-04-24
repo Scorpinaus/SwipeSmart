@@ -43,9 +43,18 @@ header {
     position: fixed;
 }
 
+#sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
 .sidebarHeader{
 	display: flex;
 	justify-content: center;
+}
+
+.sidebarHeader img {
+	width: 150px;
 }
 
 p#sidebarHeader{
@@ -53,40 +62,51 @@ p#sidebarHeader{
 	padding: 10px;
 }
 
+i {
+	min-width: 25px;
+}
+
 .closeSidebar:hover{
 	opacity: 0.5;
 }
 
-.sidebarLinks{
-	padding-left: 20px;
+.sidebarLinks {
+    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
 }
 
 .dashboard{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .profile{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .cards{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .accounts{
 	border-top-left-radius: 15px;
 	border-bottom-left-radius: 15px;
-	text-align: center;
+	text-align: left;
 	padding: 20px;
+	margin-left: 20px;
 }
 
 .logout{
@@ -94,6 +114,7 @@ p#sidebarHeader{
 	border-bottom-left-radius: 15px;
 	text-align: center;
 	padding: 20px;
+	margin-top: auto;
 }
 
 a#dashboard {
@@ -434,7 +455,7 @@ table thead {
 
 .card-transaction-container th:nth-child(2),
 .card-transaction-container td:nth-child(2) {
-    width: 10%;
+    width: 12%;
 }
 
 .card-transaction-container th:nth-child(3),
@@ -460,5 +481,10 @@ table thead {
 .card-transaction-container th:nth-child(7),
 .card-transaction-container td:nth-child(7) {
     width: 15%;
+}
+
+.card-transaction-container th:nth-child(8),
+.card-transaction-container td:nth-child(8) {
+    width: 5%;
 }
 

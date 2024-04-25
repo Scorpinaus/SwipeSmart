@@ -37,6 +37,9 @@ public class PurchaseService {
 	private AccountService accountService;
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private TransactionService transactionService;
 
 	/**
 	 * Processes a purchase request using a specified credit card and credits the

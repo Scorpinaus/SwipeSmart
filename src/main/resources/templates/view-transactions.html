@@ -44,6 +44,7 @@
 					</div>
 					<div class="details-card-number">
 						<p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
+						<p id="cardDetails" th:text="${creditCard.getPin}"></p>
 						<p
 							th:if="${creditCard.getCreditCardStatus.getStatusName == 'Approved'}"
 							id="cardDetails" style="color: green"
@@ -200,7 +201,7 @@
 								<td th:unless="${transaction.recipientAccountNumber == null}">
 									<span
 									th:text="${#strings.length(transaction.recipientAccountNumber) >= 3 ? '***-***-' + #strings.substring(transaction.recipientAccountNumber, #strings.length(transaction.recipientAccountNumber) - 3) : transaction.recipientAccountNumber}"></span>
-									Recipient Account
+									
 								</td>
 								<td th:if="${transaction.recipientAccountNumber == null}"></td>
 								<td th:text="${transaction.description}">Description</td>

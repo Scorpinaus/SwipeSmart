@@ -190,7 +190,7 @@ public class DemoConstruct {
 				.doubleValue();
 		transaction.setCreditCardDescription("Astons", 1);
 		transaction1.setCreditCardDescription("Kopitiam", 1);
-		transaction2.setCreditCardDescription("Amzaon", exchangeRateUSD);
+		transaction2.setCreditCardDescription("Amazon", exchangeRateUSD);
 		transaction3.setCreditCardDescription("SIA", 1);
 		transaction4.setCreditCardDescription("United", exchangeRateUSD);
 		transaction5.setCreditCardDescription("Collins", 1);

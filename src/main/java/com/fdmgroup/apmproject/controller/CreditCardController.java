@@ -96,7 +96,7 @@ public class CreditCardController {
 		// Retrieves loggedUser details and list of credit card that loggedUser has.
 		// Adds these attributes and sorts them according to creditCardId
 		User loggedUser = (User) session.getAttribute("loggedUser");
-		List<CreditCard> userCreditCards = loggedUser.getCreditCards();
+		List<CreditCard> userCreditCards = creditCardService.findAllCreditCardByUserId(loggedUser.getUserId());
 		model.addAttribute("cards", userCreditCards);
 		model.addAttribute("user", loggedUser);
 		Collections.sort(userCreditCards, Comparator.comparing(CreditCard::getCreditCardId));

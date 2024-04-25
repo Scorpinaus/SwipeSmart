@@ -1,5 +1,7 @@
 package com.fdmgroup.apmproject.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fdmgroup.apmproject.model.Account;
+import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.User;
+import com.fdmgroup.apmproject.service.AccountService;
+import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +36,12 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired 
+	private CreditCardService creditCardService;
+	
+	@Autowired
+	private AccountService accountService;
 
 	private static Logger logger = LogManager.getLogger(UserController.class);
 	/**
@@ -97,7 +109,11 @@ public class UserController {
 	@GetMapping("/dashboard")
 	public String dashboardPage(HttpSession session, Model model) {
 		User returnedUser = (User) session.getAttribute("loggedUser");
+		List<CreditCard> userCreditCards = creditCardService.findAllCreditCardByUserId(returnedUser.getUserId());
+		List<Account> userBankAccounts = accountService.findAllAccountsByUserId(returnedUser.getUserId());
 		model.addAttribute("user", returnedUser);
+		model.addAttribute("cards", userCreditCards);
+		model.addAttribute("currentUserBankAccounts", userBankAccounts);
 		logger.info("Redirecting to dashboard");
 		return "dashboard";
 	}

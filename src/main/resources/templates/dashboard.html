@@ -50,7 +50,7 @@
     					<h4>Your Accounts:</h4>
     					<button id="view-account-number" onclick="toggleAccountNumber()"><i id="account-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
     				</div>
-    				<div class="account-details" th:each="account : ${user.accounts}" th:object=${user}>
+    				<div class="account-details" th:each="account : ${currentUserBankAccounts}" th:object=${user}>
     					<div th:if="${account.getAccountStatus.getStatusName == 'Approved'}">
     						<div class="details-account-name">
     							<p th:text="${account.accountName}"></p>
@@ -80,7 +80,7 @@
 						<h4>Your Cards:</h4>
 						<button id="view-card-number" onclick="toggleCardNumber()"><i id="card-eye" class="fa-solid fa-eye" style="font-size:20px;"></i></button>
 					</div>
-					<div class="card-details" th:each="card: ${user.creditCards}" th:object="${user}">
+					<div class="card-details" th:each="card: ${cards}" th:object="${user}">
 						<div th:if="${card.getCreditCardStatus.getStatusName == 'Approved'}">
 							<div class="details-card-type">
 								<p th:text="${card.cardType}"></p>

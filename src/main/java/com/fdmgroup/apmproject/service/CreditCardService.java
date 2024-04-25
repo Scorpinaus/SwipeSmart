@@ -348,5 +348,9 @@ public class CreditCardService {
 				creditCard.setMonthlyBalance(50);
 		}
 	}
+	
+	public List<CreditCard> findAllCreditCardByUserId(long userId) {
+		return creditCardRepo.findByCreditCardUserUserId(userId);
+	}
 
 }

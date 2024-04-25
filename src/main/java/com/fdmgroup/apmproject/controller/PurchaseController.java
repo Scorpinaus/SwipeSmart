@@ -1,10 +1,6 @@
 package com.fdmgroup.apmproject.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -152,28 +148,11 @@ public class PurchaseController {
 						transactionMerchantCategoryCode.get(), foreignExchangeCurrency);
 				transaction.setCreditCardDescription(request.getDescription(), exchangeRate.doubleValue());
 				transactionService.persist(transaction);
-				transactionService.updateCreditCardBalance(transaction);
 
 				// update creditcard and account
 				purchaseService.purchase(request);
-				User currentUser = creditCard.getCreditCardUser();
-				List<CreditCard> userCreditCards = currentUser.getCreditCards();
-				List<CreditCard> newUserCreditCards = new ArrayList<>();
-				for (CreditCard c : userCreditCards) {
-					if (c != creditCard) {
-						newUserCreditCards.add(c);
-					}
-
-				}
-
-				// Replaces current creditcard entity with updated credit card entity, updates
-				// user and their avaliable credit card list. Sorts before redirecting user back
-				// to credit card dashboard page.
-				newUserCreditCards.add(creditCard);
-				Collections.sort(newUserCreditCards, Comparator.comparing(CreditCard::getCreditCardId));
-				currentUser.setCreditCardList(newUserCreditCards);
-				userService.update(currentUser);
-				session.setAttribute("loggedUser", currentUser);
+				User user = creditCard.getCreditCardUser();
+				session.setAttribute("loggedUser", user);
 
 				return ResponseEntity.ok(new PaymentResponse(true, "Transaction completed successfully."));
 			}

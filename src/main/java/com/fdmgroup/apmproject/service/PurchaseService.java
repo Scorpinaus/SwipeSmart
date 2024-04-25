@@ -65,11 +65,6 @@ public class PurchaseService {
 		// Validate credit card status, credit limit, and monthly balance
 		CreditCard creditCard = creditCardService.findByCreditCardNumber(request.getCreditCardNumber());
 
-		// Process the transaction
-		creditCard.setAmountUsed(creditCard.getAmountUsed() + request.getAmount());
-
-		creditCardService.update(creditCard);
-
 		// Update the user
 
 		User user = userRepository.findByUsername(creditCard.getCreditCardUser().getUsername()).get();

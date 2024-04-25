@@ -147,6 +147,7 @@ public class PurchaseController {
 						transactionMerchantCategoryCode.get(), foreignExchangeCurrency);
 				transaction.setCreditCardDescription(request.getDescription(), exchangeRate.doubleValue());
 				transactionService.persist(transaction);
+				transactionService.updateCreditCardBalance(transaction);
 
 				// update creditcard and account
 				purchaseService.purchase(request);

@@ -37,6 +37,9 @@ public class PurchaseService {
 	private AccountService accountService;
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private TransactionService transactionService;
 
 	/**
 	 * Processes a purchase request using a specified credit card and credits the
@@ -64,11 +67,6 @@ public class PurchaseService {
 	public ResponseEntity<PaymentResponse> purchase(PurchaseRequest request) throws PaymentException {
 		// Validate credit card status, credit limit, and monthly balance
 		CreditCard creditCard = creditCardService.findByCreditCardNumber(request.getCreditCardNumber());
-
-		// Process the transaction
-		creditCard.setAmountUsed(creditCard.getAmountUsed() + request.getAmount());
-
-		creditCardService.update(creditCard);
 
 		// Update the user
 

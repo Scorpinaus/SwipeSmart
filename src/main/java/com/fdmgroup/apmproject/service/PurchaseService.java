@@ -1,5 +1,8 @@
 package com.fdmgroup.apmproject.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -9,7 +12,9 @@ import com.fdmgroup.apmproject.model.CreditCard;
 import com.fdmgroup.apmproject.model.PaymentException;
 import com.fdmgroup.apmproject.model.PaymentResponse;
 import com.fdmgroup.apmproject.model.PurchaseRequest;
+import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.AccountRepository;
+import com.fdmgroup.apmproject.repository.UserRepository;
 
 /**
  * This class is responsible for handling all business logic related to
@@ -25,9 +30,13 @@ public class PurchaseService {
 	private CreditCardService creditCardService;
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * Processes a purchase request using a specified credit card and credits the
@@ -67,6 +76,21 @@ public class PurchaseService {
 		account.setBalance(account.getBalance() + request.getAmount());
 		accountService.update(account);
 
+		// Update the user
+
+		User user = userRepository.findByUsername(creditCard.getCreditCardUser().getUsername()).get();
+		user.setAccountList(accountService.findAllAccountsByUserId(user.getUserId()));
+		List<CreditCard> userCreditCards = user.getCreditCards();
+		List<CreditCard> newUserCreditCards = new ArrayList<>();
+		for (CreditCard c : userCreditCards) {
+			if (c.getCreditCardNumber() != creditCard.getCreditCardNumber()) {
+				newUserCreditCards.add(c);
+			}
+
+		}
+		newUserCreditCards.add(creditCard);
+		user.setCreditCardList(newUserCreditCards);
+		userService.update(user);
 		// Return a successful response
 		return ResponseEntity.ok(new PaymentResponse(true, "Transaction completed successfully."));
 	}

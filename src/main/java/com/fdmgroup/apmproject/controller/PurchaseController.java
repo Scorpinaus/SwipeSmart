@@ -20,6 +20,7 @@ import com.fdmgroup.apmproject.model.PaymentException;
 import com.fdmgroup.apmproject.model.PaymentResponse;
 import com.fdmgroup.apmproject.model.PurchaseRequest;
 import com.fdmgroup.apmproject.model.Transaction;
+import com.fdmgroup.apmproject.model.User;
 import com.fdmgroup.apmproject.repository.MerchantCategoryCodeRepository;
 import com.fdmgroup.apmproject.repository.StatusRepository;
 import com.fdmgroup.apmproject.service.AccountService;
@@ -27,6 +28,8 @@ import com.fdmgroup.apmproject.service.CreditCardService;
 import com.fdmgroup.apmproject.service.ForeignExchangeCurrencyService;
 import com.fdmgroup.apmproject.service.PurchaseService;
 import com.fdmgroup.apmproject.service.TransactionService;
+
+import jakarta.servlet.http.HttpSession;
 
 /**
  * This class is a REST controller that handles purchase requests for credit
@@ -87,7 +90,7 @@ public class PurchaseController {
 	 * @return A response entity containing the result of the purchase transaction.
 	 */
 	@PostMapping("/purchase")
-	public ResponseEntity<PaymentResponse> purchase(@RequestBody PurchaseRequest request) {
+	public ResponseEntity<PaymentResponse> purchase(@RequestBody PurchaseRequest request, HttpSession session) {
 		try {
 			// validation
 			if (request.getAccountName() == null || request.getAccountNumber() == null
@@ -144,6 +147,8 @@ public class PurchaseController {
 
 				// update creditcard and account
 				purchaseService.purchase(request);
+				User user = creditCard.getCreditCardUser();
+				session.setAttribute("loggedUser", user);
 
 				return ResponseEntity.ok(new PaymentResponse(true, "Transaction completed successfully."));
 			}

@@ -70,16 +70,9 @@ public class PurchaseService {
 
 		creditCardService.update(creditCard);
 
-		// Update the bank account that received the money
-
-		Account account = accountRepository.findByAccountNumber(request.getAccountNumber()).get();
-		account.setBalance(account.getBalance() + request.getAmount());
-		accountService.update(account);
-
 		// Update the user
 
 		User user = userRepository.findByUsername(creditCard.getCreditCardUser().getUsername()).get();
-		user.setAccountList(accountService.findAllAccountsByUserId(user.getUserId()));
 		List<CreditCard> userCreditCards = user.getCreditCards();
 		List<CreditCard> newUserCreditCards = new ArrayList<>();
 		for (CreditCard c : userCreditCards) {

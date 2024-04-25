@@ -143,8 +143,7 @@ public class PurchaseController {
 						.getCurrencyByCode(request.getCurrency());
 
 				// record transaction
-				Transaction transaction = new Transaction("CC Purchase", request.getAmount(), null, 0, creditCard,
-						accountService.findAccountByAccountNumber(request.getAccountNumber()),
+				Transaction transaction = new Transaction("CC Purchase", request.getAmount(), null, 0, creditCard, null,
 						transactionMerchantCategoryCode.get(), foreignExchangeCurrency);
 				transaction.setCreditCardDescription(request.getDescription(), exchangeRate.doubleValue());
 				transactionService.persist(transaction);

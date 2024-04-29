@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="/locationcreation.css">
+		<meta charset="UTF-8">
+		<title>Location Creation Page</title>
+	</head>
+	<body>
+		<h1>Create a location entity</h1>
+		<div class="form">
+			<form method="post" action="locations">
+				<input type="text" name="country" placeholder="Country">
+				<input type="text" name="city" placeholder="City">
+				<input id="createButton" type="submit" value="Create Location">
+			</form>
+			<div class="errorMessage" th:if="${error}">
+					<p>Invalid location input</p>
+			</div>
+		</div>
+		<div class="link">	
+			<a href="/locations/delete">Go to Location Deletion Page</a>
+			<a href="/admindashboard">Go back to Admin Dashboard</a>
+		</div>
+	</body>
+</html>

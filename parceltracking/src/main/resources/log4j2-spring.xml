@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30">
+	<Properties>
+	    <Property name="LOG_PATTERN">
+	        %d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5p [%F:%L] %m%n
+	    </Property>
+	</Properties>
+	<Appenders>
+		<Console name="StdOut" target="SYSTEM_OUT" follow="true">
+			<PatternLayout pattern="%-5p %msg%n" />
+		</Console>
+		<RollingFile name="FileAppender" filename="src/main/logs/output.log" filePattern="src/main/logs/output-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<Policies>
+               <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="warn">
+		</Root>
+		<Logger name="com.fdmgroup.parceltracking" level="trace">
+			<AppenderRef ref="StdOut"></AppenderRef>
+			<AppenderRef ref="FileAppender"></AppenderRef>
+		</Logger>
+	</Loggers>
+</Configuration>

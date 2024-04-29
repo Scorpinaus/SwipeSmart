@@ -388,7 +388,7 @@ public class AccountController {
 		String accountNumber = accountNumberTransferTo.replace(" ", "-");
 
 		// Handle currency conversion
-		double exchangeRate = currencyService.getExchangeRate(accountFromBalance.getCurrencyCode(), currencyCode)
+		double exchangeRate = currencyService.getExchangeRate(currencyCode, accountFromBalance.getCurrencyCode())
 				.doubleValue();
 		double convertedAmount = transferAmount * exchangeRate;
 

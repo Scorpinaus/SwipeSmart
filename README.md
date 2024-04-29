@@ -14,11 +14,12 @@ To start the webApp, run the ApmProjectApplication.java from within your IDE.
 
 ## Authors
 
-Bryant Pang
-May Lwin 
-Hafiz Saffie 
-Corwin Yip 
-Jacky Tan 
+- Bryant Pang
+- May Lwin 
+- Hafiz Saffie 
+- Corwin Yip 
+- Jacky Tan 
+
 
 
 ## Future Developments

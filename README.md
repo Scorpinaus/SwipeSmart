@@ -10,6 +10,8 @@ Simple Admin Mode for administrators to approve bank account or credit card appl
 
 ## Getting Started
 
+Create application.properties file and place it in the resource folder with settings for your database
+
 To start the webApp, run the ApmProjectApplication.java from within your IDE.
 
 ## Authors

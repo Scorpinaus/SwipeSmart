@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.fdmgroup.parceltracking"},{"l":"com.fdmgroup.parceltracking.controller"},{"l":"com.fdmgroup.parceltracking.model"},{"l":"com.fdmgroup.parceltracking.repository"},{"l":"com.fdmgroup.parceltracking.service"}];updateSearchResults();

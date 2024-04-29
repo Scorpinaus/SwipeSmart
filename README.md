@@ -1,6 +1,4 @@
-#SwipeSmart
-
-One Paragraph of project description goes here. It can include the intentions of the project and its utility.
+## SwipeSmart
 
 The objectives of this project is to design a banking webApp using Java Spring Boot MVC and front-end (HTML, CSS and JS). It has the following functionality:
 

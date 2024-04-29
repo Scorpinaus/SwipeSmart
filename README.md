@@ -24,7 +24,8 @@ To start the webApp, run the ApmProjectApplication.java from within your IDE.
 
 ## Future Developments
 
-Addition of bank account & credit card deletion features
-Addition of custom filters
+- Addition of bank account & credit card deletion features
+- Addition of custom filters
+
 
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="/parceldetails.css">
+		<meta charset="UTF-8">
+		<title>Parcel Address Edit Page</title>
+	</head>
+	<body>
+		<div class="form">
+			<form method="post">
+				<input type="text" name="shippingAddress" placeholder="Shipping Address">
+				<input id="updateButton" type="submit" value="Update">
+			</form>
+		</div>
+		<div class="link">
+			<a th:href="@{/customers/{id}(id=${customer.id})}">Profile Page</a>
+			<a href="/dashboard">Return to dashboard</a>
+			<a href="/logout">Logout</a>
+		</div>
+	</body>
+</html>

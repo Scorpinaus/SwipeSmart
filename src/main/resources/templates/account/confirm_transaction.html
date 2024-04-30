@@ -1,0 +1,44 @@
+<!DOCTYPE  html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<title>Confirm Transaction</title>
+</head>
+
+<body>
+	<h2>Transaction Confirmation</h2>
+	<p>
+		Type: <span th:text="${transaction.type}"></span>
+	</p>
+	<p>
+		Account ID:
+		<span:th:text="${transaction.accountId">
+			</span>
+	</p>
+	<p>
+		Amount: <span th:text="${transaction.amount}"></span>
+	</p>
+	<p>
+		Currency: <span th:text="${transaction.currency}"></span>
+	</p>
+	<p>
+		Date & Time: <span th:text="${transaction.dateTime}"></span>
+	</p>
+	<p th:if="${transaction.recipientAccountId !=null}">
+		Recipient Account ID: <span th:text="{transaction.recipientAccuntId}"></span>
+	</p>
+
+	<form th:action="@{/bankaccount/process_transaction}" method="post">
+		<input type="hidden" th:value="${transaction.accountId}"
+			name="accountId"> <input type="hidden"
+			th:value="${transaction.amount}" name="amount"> <input
+			type="hidden" th:value="${transaction.currency}" name="currency">
+		<input type="hidden" th:value="${transaction.type}" name="type">
+		<input type="hidden" th:if="${transaction.recipientAccountId != null}"
+			th:value="${transaction.recipientAccountId}"
+			name="recipientAccountId">
+		<button type="submit">Confirm</button>
+	</form>
+
+</body>
+
+</html>

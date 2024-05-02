@@ -475,4 +475,9 @@ public class AccountController {
 			}
 		}
 	}
+	
+//	@GetMapping("/bankaccount/prepare_transaction")
+//	public String prepareTransaction(Model mode, HttpSession session, @RequestParam("type") String type, @RequestParam("accountId") long accountId, @RequestParam("amount") double amount, @RequestParam("currency") String currency, @RequestParam(required = false) Long recipientAccountId) {
+//		
+//	}
 }

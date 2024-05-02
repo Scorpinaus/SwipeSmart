@@ -117,15 +117,9 @@ public class DemoConstruct {
 		String currencyCode = "SGD";
 		Account account = new Account("Savings", 5000, "123-123-123", userJacky, statusName, currencyCode);
 		Account accountA2 = new Account("Current", 10000, "124-124-124", userJacky, statusName, currencyCode);
-		Account accountPending = new Account("pending ac", 10000, "125-125-125", userJacky,
-				statusService.findByStatusName("Pending"), currencyCode);
-		Account accountPending2 = new Account("pending ac2", 10123, "126-126-126", userJacky,
-				statusService.findByStatusName("Pending"), currencyCode);
 
 		accountService.persist(account);
 		accountService.persist(accountA2);
-		accountService.persist(accountPending);
-		accountService.persist(accountPending2);
 		
 		// Initialize Credit Card
 		String creditCardNumber = "1234-5678-1234-5678";
@@ -138,12 +132,6 @@ public class DemoConstruct {
 				statusName, 0, userJacky, currencyCode);
 		creditCardService.persist(createCreditCard);
 		creditCardService.persist(createCreditCard2);
-
-		String creditCardNumberPending = "3456-5678-1234-5678";
-		String pinPending = "125";
-		CreditCard createCreditCardPending = new CreditCard(creditCardNumberPending, pinPending, 3000,
-				"SwipeSmart Platinum Card", statusService.findByStatusName("Pending"), 0, userJacky, currencyCode);
-		creditCardService.persist(createCreditCardPending);
 		
 		// Initialize Transactions
 		CreditCard creditCard = creditCardService.findByCreditCardNumber("1234-5678-1234-5678");

@@ -62,7 +62,7 @@
                         <select id="currency" name="currency" required>
     					 <option th:each="currency : ${currencies}"
     							 th:value="${currency.code}"
-    							 th:text="${currency.name}" th:selected="${currency.code} == 'SGD'">
+    							 th:text="${currency.name}" th:selected="${currency.code == 'SGD'}">
                          </option>
     					</select>
     				</div>

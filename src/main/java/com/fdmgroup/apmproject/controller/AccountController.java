@@ -187,10 +187,10 @@ public class AccountController {
 		if (withdrawalCurrencyCode.equals(baseCurrencyCode)) {
 			transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
 					currencyService.getCurrencyByCode(withdrawalCurrencyCode),
-					withdrawalCurrencyCode + " " + amount.toString());
+					withdrawalCurrencyCode + " " + amount.setScale(1, RoundingMode.HALF_UP).toString());
 		} else {
 			String description = String.format("%s %s, Exchange Rate %s:%s is %.3f", withdrawalCurrencyCode,
-					amount.toString(), withdrawalCurrencyCode, baseCurrencyCode,
+					amount.setScale(1, RoundingMode.HALF_UP).toString(), withdrawalCurrencyCode, baseCurrencyCode,
 					exchangeRate.setScale(3, RoundingMode.HALF_UP).doubleValue());
 			transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
 					currencyService.getCurrencyByCode(withdrawalCurrencyCode), description);

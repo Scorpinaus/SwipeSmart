@@ -72,7 +72,7 @@
 							th:text="${creditCard.getCreditCardStatus.getStatusName}"></p>
 					</div>
 					<div class="details-card-amount">
-						<label class="detail-label">Amount Used </label>
+						<label class="detail-label">Outstanding Balance </label>
 						<p th:if="${creditCard.amountUsed != 0}" id="cardDetails"
 							th:text="'$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
 						<p th:if="${creditCard.amountUsed == 0}" id="cardDetails"
@@ -82,7 +82,7 @@
 							th:text="'$' + ${#numbers.formatDecimal(creditCard.getMonthlyBalance,0,'COMMA',2,'POINT')}"></p>
 						<p th:if="${creditCard.monthlyBalance == 0}" id="cardDetails"
 							th:text="'$0.00'"></p>
-						<label class="detail-label">Amount Left</label>
+						<label class="detail-label">Available Balance</label>
                          <p th:if="${creditCard.cardLimit-creditCard.getAmountUsed != 0}" id="cardDetails" th:text="'$' + ${#numbers.formatDecimal((creditCard.cardLimit-creditCard.getAmountUsed),0,'COMMA',2,'POINT')}"></p>
                          <p th:if="${creditCard.cardLimit-creditCard.getAmountUsed == 0}" id="cardDetails" th:text="'$0.00'"></p>
 					</div>

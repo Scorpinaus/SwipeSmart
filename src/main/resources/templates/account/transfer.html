@@ -70,9 +70,8 @@
               <div class="select-currency">
                 <label class="input-label" for="currency">Currency: </label> 
                 <select name="currency">
-                  <option value="" disabled selected hidden>Select Currency...</option>
                   <option th:each="currency : ${currencies}"
-                          th:value="${currency.code}" th:text="${currency.name}">
+                          th:value="${currency.code}" th:text="${currency.name}" th:selected="${currency.code == 'SGD'}">
                   </option>
                  </select>
               </div>

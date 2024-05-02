@@ -51,7 +51,7 @@ public class AccountController {
 
 	@Autowired
 	private TransactionService transactionService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -71,23 +71,23 @@ public class AccountController {
 	@GetMapping("/bankaccount/dashboard")
 	public String showBankAccountDashboard(HttpSession session, Model model) {
 
-			// retrieves current user from current session and addAttribute to model for
-			// front-end processing.
-			User currentUser = (User) session.getAttribute("loggedUser");
-			model.addAttribute("user", currentUser);
-			// retrieves all active bank accounts under current user
-			List<Account> userBankAccounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
-			// Checks if the user has active bank accounts, and shows the user their active
-			// bank accounts.
-			if (userBankAccounts.size() != 0) {
-				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				LOGGER.info("User is redirected to bank account dashboard");
-				return "account/account-dashboard";
-			} else {
-				LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
-				model.addAttribute("currentUserBankAccounts", userBankAccounts);
-				return "account/account-dashboard";
-			}
+		// retrieves current user from current session and addAttribute to model for
+		// front-end processing.
+		User currentUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", currentUser);
+		// retrieves all active bank accounts under current user
+		List<Account> userBankAccounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
+		// Checks if the user has active bank accounts, and shows the user their active
+		// bank accounts.
+		if (userBankAccounts.size() != 0) {
+			model.addAttribute("currentUserBankAccounts", userBankAccounts);
+			LOGGER.info("User is redirected to bank account dashboard");
+			return "account/account-dashboard";
+		} else {
+			LOGGER.info("User is redirected to bank account. User has no active bank accounts with the bank");
+			model.addAttribute("currentUserBankAccounts", userBankAccounts);
+			return "account/account-dashboard";
+		}
 	}
 
 	/**
@@ -102,35 +102,35 @@ public class AccountController {
 	 */
 	@GetMapping("/bankaccount/withdrawal")
 	public String withdrawalBankAccount(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-		
-			// retrieves current user from current session and addAttribute to model for
-			// front-end processing. Gets list of accounts & checks for created accounts &
-			// gets supported currencies list.
-			User currentUser = (User) session.getAttribute("loggedUser");
-			model.addAttribute("user", currentUser);
-			List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
-			currenciesList = currencyService.getSupportedCurrencies();
 
-			// Checks for created accounts, where if empty, addAttribute to be shown to user
-			// on dashboard page.
-			if (accounts.isEmpty()) {
-				model.addAttribute("error", "No bank accounts found");
-				return "account/account-dashboard";
-			}
+		// retrieves current user from current session and addAttribute to model for
+		// front-end processing. Gets list of accounts & checks for created accounts &
+		// gets supported currencies list.
+		User currentUser = (User) session.getAttribute("loggedUser");
+		model.addAttribute("user", currentUser);
+		List<Account> accounts = accountService.findAllAccountsByUserId(currentUser.getUserId());
+		currenciesList = currencyService.getSupportedCurrencies();
 
-			// If user has accounts, both current list of accounts and supported currencies
-			// will be added to model for front-end processing.
-			model.addAttribute("accounts", accounts);
-			LOGGER.info("Currencies List: " + currenciesList);
-			model.addAttribute("currencies", currenciesList);
+		// Checks for created accounts, where if empty, addAttribute to be shown to user
+		// on dashboard page.
+		if (accounts.isEmpty()) {
+			model.addAttribute("error", "No bank accounts found");
+			return "account/account-dashboard";
+		}
 
-			// Check for the flash attribute directly in the model. If present, it adds to
-			// the current model as true. This is for redirect after a user has submitted a
-			// withdrawal request.
-			if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
-				model.addAttribute("errorInsufficient", true);
-			}
-			return "account/withdrawal";
+		// If user has accounts, both current list of accounts and supported currencies
+		// will be added to model for front-end processing.
+		model.addAttribute("accounts", accounts);
+		LOGGER.info("Currencies List: " + currenciesList);
+		model.addAttribute("currencies", currenciesList);
+
+		// Check for the flash attribute directly in the model. If present, it adds to
+		// the current model as true. This is for redirect after a user has submitted a
+		// withdrawal request.
+		if (Boolean.TRUE.equals(model.asMap().get("errorInsufficient"))) {
+			model.addAttribute("errorInsufficient", true);
+		}
+		return "account/withdrawal";
 
 	}
 
@@ -183,8 +183,19 @@ public class AccountController {
 		LOGGER.info("Processing withdrawal for account " + retrievedAccount.getAccountNumber());
 		BigDecimal newAccountBalance = retrievedAccountBalance.subtract(adjustedAmount);
 		retrievedAccount.setBalance(newAccountBalance.doubleValue());
-		Transaction transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
-				currencyService.getCurrencyByCode(withdrawalCurrencyCode), withdrawalCurrencyCode + amount.toString() +" , "+ withdrawalCurrencyCode + ":"+ baseCurrencyCode  + " Exchange Rate is: " + exchangeRate.setScale(3, RoundingMode.HALF_UP));
+		Transaction transaction;
+		if (withdrawalCurrencyCode.equals(baseCurrencyCode)) {
+			transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
+					currencyService.getCurrencyByCode(withdrawalCurrencyCode),
+					withdrawalCurrencyCode + " " + amount.toString());
+		} else {
+			String description = String.format("%s %s, Exchange Rate %s:%s is %.3f", withdrawalCurrencyCode,
+					amount.toString(), withdrawalCurrencyCode, baseCurrencyCode,
+					exchangeRate.setScale(3, RoundingMode.HALF_UP).doubleValue());
+			transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
+					currencyService.getCurrencyByCode(withdrawalCurrencyCode), description);
+		}
+
 		transactionService.persist(transaction);
 		retrievedAccount.setTransactions(transaction);
 		accountService.update(retrievedAccount);
@@ -251,9 +262,17 @@ public class AccountController {
 		accountDeposited.setBalance(updatedBalance);
 		accountService.update(accountDeposited);
 
-
-		Transaction transaction = new Transaction("Deposit", accountDeposited, convertedAmount.doubleValue(), null,
-				currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + depositAmount + " , "+ accountCurrency.getCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate.setScale(3, RoundingMode.HALF_UP));
+		Transaction transaction;
+		if (currencyCode.equals(accountCurrency.getCode())) {
+			transaction = new Transaction("Deposit", accountDeposited, convertedAmount.doubleValue(), null,
+					currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + depositAmount);
+		} else {
+			String description = String.format("%s %s, Exchange Rate %s:%s is %.3f", currencyCode, depositAmount,
+					currencyCode, accountCurrency.getCode(),
+					exchangeRate.setScale(3, RoundingMode.HALF_UP).doubleValue());
+			transaction = new Transaction("Deposit", accountDeposited, convertedAmount.doubleValue(), null,
+					currencyService.getCurrencyByCode(currencyCode), description);
+		}
 
 		transactionService.persist(transaction);
 		currentUser.setAccountList(accountService.findAllAccountsByUserId(currentUser.getUserId()));
@@ -430,25 +449,34 @@ public class AccountController {
 				// Update internal account for both recipient and originalAccount
 				recipientAccount.get().setBalance(recipientAccount.get().getBalance() + convertedAmount);
 				accountService.update(recipientAccount.get());
-				
-				//Retrieve relevant userAccounts
+
+				// Retrieve relevant userAccounts
 				User transfereeUser = accountFromBalance.getAccountUser();
 
 				// Transaction
 
 				// Creates new transaction for account where there are outflow of funds during
 				// internal transfer
-				Transaction internalTransactionOutflow = new Transaction("Internal Transfer - Outflow",
-						accountFromBalance, recipientAccount.get(), convertedAmount,
-						recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
+				Transaction internalTransactionOutflow;
+				Transaction internalTransactionInflow;
+				if (currencyCode.equals(accountFromBalance.getCurrencyCode())) {
+					internalTransactionOutflow = new Transaction("Internal Transfer - Outflow", accountFromBalance,
+							recipientAccount.get(), convertedAmount, recipientAccount.get().getAccountNumber(),
+							currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + transferAmount);
+					internalTransactionInflow = new Transaction("Internal Transfer - Inflow", recipientAccount.get(),
+							accountFromBalance, convertedAmount, accountFromBalance.getAccountNumber(),
+							currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + transferAmount);
+				} else {
+					String description = String.format("%s %s, Exchange Rate %s:%s is %.3f", currencyCode,
+							transferAmount, currencyCode, accountFromBalance.getCurrencyCode(), exchangeRate);
+					internalTransactionOutflow = new Transaction("Internal Transfer - Outflow", accountFromBalance,
+							recipientAccount.get(), convertedAmount, recipientAccount.get().getAccountNumber(),
+							currencyService.getCurrencyByCode(currencyCode), description);
+					internalTransactionInflow = new Transaction("Internal Transfer - Inflow", recipientAccount.get(),
+							accountFromBalance, convertedAmount, accountFromBalance.getAccountNumber(),
+							currencyService.getCurrencyByCode(currencyCode), description);
+				}
 
-				// Creates new transaction for account where there are inflow of funds during
-				// internal transfer
-				Transaction internalTransactionInflow = new Transaction("Internal Transfer - Inflow",
-						recipientAccount.get(), accountFromBalance, convertedAmount,
-						accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
 				// Creating both transactions onto database and logging.
 				transactionService.persist(internalTransactionOutflow);
 				transactionService.persist(internalTransactionInflow);
@@ -465,9 +493,18 @@ public class AccountController {
 
 				// Create transaction for transferee account and persisting it to database. Logs
 				// transaction.
-				Transaction externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
-						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
+				Transaction externalTransactionOutflow;
+				if (currencyCode.equals(accountFromBalance.getCurrencyCode())) {
+					externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
+							convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode),
+							currencyCode + " " + transferAmount);
+				} else {
+					String description = String.format("%s %s, Exchange Rate %s:%s is %.3f", currencyCode,
+							transferAmount, currencyCode, accountFromBalance.getCurrencyCode(), exchangeRate);
+					externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
+							convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode),
+							description);
+				}
 				transactionService.persist(externalTransactionOutflow);
 				transfereeUser.setAccountList(accountService.findAllAccountsByUserId(transfereeUser.getUserId()));
 				userService.update(transfereeUser);
@@ -476,7 +513,7 @@ public class AccountController {
 			}
 		}
 	}
-	
+
 //	@GetMapping("/bankaccount/prepare_transaction")
 //	public String prepareTransaction(Model mode, HttpSession session, @RequestParam("type") String type, @RequestParam("accountId") long accountId, @RequestParam("amount") double amount, @RequestParam("currency") String currency, @RequestParam(required = false) Long recipientAccountId) {
 //		

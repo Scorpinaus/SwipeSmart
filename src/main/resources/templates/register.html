@@ -24,7 +24,7 @@
               
               <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="password" name="password" placeholder="must be alphanumeric and at least 8 characters long">
+                <input id="password" type="password" name="password" placeholder="Password must have both letters and numbers and at least 8 characters long">
               </div>
               
               <div class="register-button-container">
@@ -35,13 +35,13 @@
           </div>
           
           <div class="errorMessage" th:if="${errorInvalid}">
-            <p>Invalid Username or Password.</p>
+            <p>Invalid username or password.</p>
           </div>
           <div class="errorMessage" th:if="${errorAlphanumeric}">
-            <p>Password needs to be alphanumeric.</p>
+            <p>Password needs to have a combination of letters and numbers.</p>
           </div>
           <div class="errorMessage" th:if="${errorLength}">
-            <p>Password needs to be 8 characters long.</p>
+            <p>Password length has to be atleast 8 characters long.</p>
           </div>
           
           <div class="login-container">

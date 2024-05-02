@@ -44,7 +44,6 @@
 					</div>
 					<div class="details-card-number">
 						<p id="cardDetails" th:text="${creditCard.creditCardNumber}"></p>
-						<p id="cardDetails" th:text="${creditCard.getPin}"></p>
 						<p
 							th:if="${creditCard.getCreditCardStatus.getStatusName == 'Approved'}"
 							id="cardDetails" style="color: green"

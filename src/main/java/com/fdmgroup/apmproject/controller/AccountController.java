@@ -163,8 +163,9 @@ public class AccountController {
 		// Conversion of withdrawal amount from target currency to base currency if
 		// required, where amount is the amount requested in target currency
 		BigDecimal adjustedAmount = amount;
+		BigDecimal exchangeRate = new BigDecimal(1.00);
 		if (!withdrawalCurrencyCode.equals(baseCurrencyCode)) {
-			BigDecimal exchangeRate = currencyService.getExchangeRate(withdrawalCurrencyCode, baseCurrencyCode);
+			exchangeRate = currencyService.getExchangeRate(withdrawalCurrencyCode, baseCurrencyCode);
 			adjustedAmount = amount.multiply(exchangeRate).setScale(2, RoundingMode.HALF_UP);
 			LOGGER.info("Converted amount: {} (Exchange rate: {})", adjustedAmount, exchangeRate);
 		}
@@ -183,7 +184,7 @@ public class AccountController {
 		BigDecimal newAccountBalance = retrievedAccountBalance.subtract(adjustedAmount);
 		retrievedAccount.setBalance(newAccountBalance.doubleValue());
 		Transaction transaction = new Transaction("Withdrawal", retrievedAccount, adjustedAmount.doubleValue(), null,
-				currencyService.getCurrencyByCode(withdrawalCurrencyCode), withdrawalCurrencyCode + amount.toString());
+				currencyService.getCurrencyByCode(withdrawalCurrencyCode), withdrawalCurrencyCode + amount.toString() +" , "+ withdrawalCurrencyCode + ":"+ baseCurrencyCode  + " Exchange Rate is: " + exchangeRate.setScale(3, RoundingMode.HALF_UP));
 		transactionService.persist(transaction);
 		retrievedAccount.setTransactions(transaction);
 		accountService.update(retrievedAccount);
@@ -252,7 +253,7 @@ public class AccountController {
 
 
 		Transaction transaction = new Transaction("Deposit", accountDeposited, convertedAmount.doubleValue(), null,
-				currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + depositAmount);
+				currencyService.getCurrencyByCode(currencyCode), currencyCode + " " + depositAmount + " , "+ accountCurrency.getCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate.setScale(3, RoundingMode.HALF_UP));
 
 		transactionService.persist(transaction);
 		currentUser.setAccountList(accountService.findAllAccountsByUserId(currentUser.getUserId()));
@@ -440,14 +441,14 @@ public class AccountController {
 				Transaction internalTransactionOutflow = new Transaction("Internal Transfer - Outflow",
 						accountFromBalance, recipientAccount.get(), convertedAmount,
 						recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount);
+						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
 
 				// Creates new transaction for account where there are inflow of funds during
 				// internal transfer
 				Transaction internalTransactionInflow = new Transaction("Internal Transfer - Inflow",
 						recipientAccount.get(), accountFromBalance, convertedAmount,
 						accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount);
+						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
 				// Creating both transactions onto database and logging.
 				transactionService.persist(internalTransactionOutflow);
 				transactionService.persist(internalTransactionInflow);
@@ -466,7 +467,7 @@ public class AccountController {
 				// transaction.
 				Transaction externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
 						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount);
+						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
 				transactionService.persist(externalTransactionOutflow);
 				transfereeUser.setAccountList(accountService.findAllAccountsByUserId(transfereeUser.getUserId()));
 				userService.update(transfereeUser);

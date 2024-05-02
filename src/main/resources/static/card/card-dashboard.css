@@ -177,7 +177,7 @@ body{
 	min-width: 450px;
 }
 
-a#cardTransactions{
+a#cardTransactions, .hasCreditCards{
 	color: black;
 	font-weight: bold;
 	min-width: 100px;
@@ -188,7 +188,17 @@ a#cardTransactions{
 	text-align: center;
 }
 
-a#cardTransactions:hover {
+a#cardTransaction{
+	color: black;
+	font-weight: bold;
+	min-width: 100px;
+	text-decoration:none;
+	border-radius: 15px;
+	padding: 20px;
+	text-align: center;
+}
+
+a#cardTransactions:hover, .hasCreditCards:hover {
 	background-color: var(--lightblue);
 }
 

@@ -441,14 +441,14 @@ public class AccountController {
 				Transaction internalTransactionOutflow = new Transaction("Internal Transfer - Outflow",
 						accountFromBalance, recipientAccount.get(), convertedAmount,
 						recipientAccount.get().getAccountNumber(), currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount + accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
+						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
 
 				// Creates new transaction for account where there are inflow of funds during
 				// internal transfer
 				Transaction internalTransactionInflow = new Transaction("Internal Transfer - Inflow",
 						recipientAccount.get(), accountFromBalance, convertedAmount,
 						accountFromBalance.getAccountNumber(), currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount + accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
+						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
 				// Creating both transactions onto database and logging.
 				transactionService.persist(internalTransactionOutflow);
 				transactionService.persist(internalTransactionInflow);
@@ -467,7 +467,7 @@ public class AccountController {
 				// transaction.
 				Transaction externalTransactionOutflow = new Transaction("External Transfer", accountFromBalance, null,
 						convertedAmount, accountNumber, currencyService.getCurrencyByCode(currencyCode),
-						currencyCode + " " + transferAmount + accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
+						currencyCode + " " + transferAmount + " "+ accountFromBalance.getCurrencyCode() + ":"+ currencyCode  + " Exchange Rate is: " + exchangeRate);
 				transactionService.persist(externalTransactionOutflow);
 				transfereeUser.setAccountList(accountService.findAllAccountsByUserId(transfereeUser.getUserId()));
 				userService.update(transfereeUser);

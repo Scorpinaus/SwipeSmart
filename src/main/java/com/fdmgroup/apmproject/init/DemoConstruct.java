@@ -178,7 +178,7 @@ public class DemoConstruct {
 				null, 0.00, creditCard2, null, mcc2, currency);
 		Transaction transaction10 = new Transaction(LocalDateTime.of(2024, 4, 13, 11, 12, 26), "CC Purchase", 100.10,
 				null, 0.00, creditCard2, null, mcc2, currency);
-		Transaction transaction11 = new Transaction(LocalDateTime.of(2024, 4, 23, 9, 35, 26), "CC Purchase", 1200, null,
+		Transaction transaction11 = new Transaction(LocalDateTime.of(2024, 5, 1, 9, 35, 26), "CC Purchase", 1200, null,
 				0.00, creditCard2, null, mcc1, currency);
 		Transaction transactionA1 = new Transaction("Initial Deposit", account, account.getBalance(), null, currency,
 				currency.getCode() + " " + account.getBalance());

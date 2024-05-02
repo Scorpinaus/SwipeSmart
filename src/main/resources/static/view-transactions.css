@@ -412,9 +412,23 @@ table thead {
     font-weight: bold;
 }
 
+.convert-link {
+	display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--lightgrey);
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.convert-link:hover {
+	background-color: var(--darkgreen);
+	color: white;
+}
+
 .card-transaction-container tbody tr:hover {
         background-color: var(--lightblue);
-    }
+}
 
 .account-transaction-container th:nth-child(1),
 .account-transaction-container td:nth-child(1) {
@@ -483,6 +497,6 @@ table thead {
 
 .card-transaction-container th:nth-child(8),
 .card-transaction-container td:nth-child(8) {
-    width: 5%;
+    width: 2%;
 }
 

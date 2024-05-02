@@ -188,7 +188,7 @@ a#cardTransactions, .hasCreditCards{
 	text-align: center;
 }
 
-a#cardTransactions:hover {
+a#cardTransactions:hover, .hasCreditCards:hover {
 	background-color: var(--lightblue);
 }
 

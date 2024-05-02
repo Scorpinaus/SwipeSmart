@@ -177,7 +177,7 @@ body{
 	min-width: 450px;
 }
 
-a#cardTransactions{
+a#cardTransactions, .hasCreditCards{
 	color: black;
 	font-weight: bold;
 	min-width: 100px;

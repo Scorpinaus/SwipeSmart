@@ -39,11 +39,11 @@
 		<h1 th:text="'What can we do for you today, ' + ${user.username} + '?'"></h1>
 
 		<div class="button-container">
-		<div class="hasCreditCards"
-				th:if="${not #lists.isEmpty(cards)}">
-			<a id="cardTransactions" href="/creditCard/paybills">Pay</a> </div>
-			<a
-				id="cardTransactions" href="/applyCreditCard">Apply</a>
+			<div class="hasCreditCards"
+					th:if="${not #lists.isEmpty(cards)}">
+				<a id="cardTransactions" href="/creditCard/paybills">Pay</a>
+			</div>
+			<a id="cardTransactions" href="/applyCreditCard">Apply</a>
 		</div>
 		<div class="view-details-button">
 			<h2>Your Credit Cards</h2>

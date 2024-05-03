@@ -57,8 +57,8 @@
                                           <p th:if="${creditCard.monthlyBalance == 0}" th:text="'Statement Balance: ' + '$' + '$0.00'"></p>
                                         </td></tr>
                                       <tr><td>
-                                    <p th:if="${creditCard.amountUsed != 0}" th:text="'Amount Used: ' + '$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
-                                    <p th:if="${creditCard.amountUsed == 0}" th:text="'Amount Used: ' + '$0.00'"></p>
+                                    <p th:if="${creditCard.amountUsed != 0}" th:text="'Outstanding Balance: ' + '$' + ${#numbers.formatDecimal(creditCard.getAmountUsed,0,'COMMA',2,'POINT')}"></p>
+                                    <p th:if="${creditCard.amountUsed == 0}" th:text="'Outstanding Balance: ' + '$0.00'"></p>
                                   </td></tr>
                                       <tr><td>
                                     <p th:if="${creditCard.minBalancePaid > 0}" th:text="'Minimum Balance: ' + '$' + ${#numbers.formatDecimal(creditCard.getMinBalancePaid,0,'COMMA',2,'POINT')}"></p>
